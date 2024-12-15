@@ -1,0 +1,112 @@
+\begin{thebibliography}{10}
+
+\bibitem{RN4}
+P.~Ioannou and B.~Fidan, {\em Adaptive control tutorial}.
+\newblock SIAM, 2006.
+
+\bibitem{RN2}
+G.~Tao, {\em Adaptive control design and analysis}, vol.~37.
+\newblock John Wiley \& Sons, 2003.
+
+\bibitem{RN1}
+J.~A. Farrell and M.~M. Polycarpou, {\em Adaptive approximation based control: unifying neural, fuzzy and traditional adaptive approximation approaches}.
+\newblock John Wiley \& Sons, 2006.
+
+\bibitem{RN29}
+S.~S. Ge, C.~C. Hang, T.~H. Lee, and T.~Zhang, {\em Stable adaptive neural network control}, vol.~13.
+\newblock Springer Science \& Business Media, 2013.
+
+\bibitem{RN44}
+A.~Yeşildirek and F.~L. Lewis, ``Feedback linearization using neural networks,'' {\em Automatica}, vol.~31, no.~11, pp.~1659--1664, 1995.
+
+\bibitem{RN26}
+J.~Liu, {\em Radial Basis Function (RBF) neural network control for mechanical systems: design, analysis and Matlab simulation}.
+\newblock Springer Science \& Business Media, 2013.
+
+\bibitem{RN10}
+S.~S. Ge and C.~Wang, ``Direct adaptive nn control of a class of nonlinear systems,'' {\em IEEE Transactions on Neural Networks}, vol.~13, no.~1, pp.~214--21, 2002.
+
+\bibitem{RN16}
+O.~S. Patil, D.~M. Le, M.~L. Greene, and W.~E. Dixon, ``Lyapunov-derived control and adaptive update laws for inner and outer layer weights of a deep neural network,'' {\em IEEE Control Systems Letters}, vol.~6, pp.~1855--1860, 2021.
+
+\bibitem{RN56}
+K.~Esfandiari, F.~Abdollahi, and H.~Talebi, ``A stable nonlinear in parameter neural network controller for a class of saturated nonlinear systems,'' {\em International Federation of Automatic Control Proceedings Volumes (IFAC)}, vol.~47, no.~3, pp.~2533--2538, 2014.
+
+\bibitem{RN3}
+K.~Esfandiari, F.~Abdollahi, and H.~A. Talebi, ``Adaptive control of uncertain nonaffine nonlinear systems with input saturation using neural networks,'' {\em IEEE Transactions on Neural Networks and Learning Systems}, vol.~26, no.~10, pp.~2311--22, 2015.
+
+\bibitem{RN41}
+W.~Gao and R.~R. Selmic, ``Neural network control of a class of nonlinear systems with actuator saturation,'' {\em IEEE Transactions on Neural Networks}, vol.~17, no.~1, pp.~147--156, 2006.
+
+\bibitem{RN25}
+D.~Rolnick and M.~Tegmark, ``The power of deeper networks for expressing natural functions. arxiv 2017,'' {\em arXiv preprint arXiv:1705.05502}.
+
+\bibitem{RN14}
+E.~J. Griffis, O.~S. Patil, Z.~I. Bell, and W.~E. Dixon, ``Lyapunov-based long short-term memory {(Lb-LSTM)} neural network-based control,'' {\em IEEE Control Systems Letters}, 2023.
+
+\bibitem{RN15}
+R.~G. Hart, E.~J. Griffis, O.~S. Patil, and W.~E. Dixon, ``Lyapunov-based physics-informed long short-term memory {(LSTM)} neural network-based adaptive control,'' {\em IEEE Control Systems Letters}, 2023.
+
+\bibitem{RN18}
+K.~Esfandiari, F.~Abdollahi, and H.~A. Talebi, {\em Neural network-based adaptive control of uncertain nonlinear systems}.
+\newblock Springer, 2022.
+
+\bibitem{RN11}
+X.~Zhou, H.~Shen, Z.~Wang, H.~Ahn, and J.~Wang, ``Driver-centric lane-keeping assistance system design: A noncertainty-equivalent neuro-adaptive control approach,'' {\em IEEE/ASME Transactions on Mechatronics}, vol.~28, no.~6, pp.~3017--3028, 2023.
+
+\bibitem{RN55}
+S.~P. Karason and A.~M. Annaswamy, ``Adaptive control in the presence of input constraints,'' in {\em 1993 american control conference}, pp.~1370--1374, IEEE.
+
+\bibitem{RN34}
+W.~He, Y.~Dong, and C.~Sun, ``Adaptive neural impedance control of a robotic manipulator with input saturation,'' {\em IEEE Transactions on Systems, Man, and Cybernetics: Systems}, vol.~46, no.~3, pp.~334--344, 2015.
+
+\bibitem{RN38}
+E.~Arefinia, H.~A. Talebi, and A.~Doustmohammadi, ``A robust adaptive model reference impedance control of a robotic manipulator with actuator saturation,'' {\em IEEE Transactions on Systems, Man, and Cybernetics: Systems}, vol.~50, no.~2, pp.~409--420, 2017.
+
+\bibitem{RN37}
+G.~Peng, C.~Yang, W.~He, and C.~P. Chen, ``Force sensorless admittance control with neural learning for robots with actuator saturation,'' {\em IEEE Transactions on Industrial Electronics}, vol.~67, no.~4, pp.~3138--3148, 2019.
+
+\bibitem{RN22}
+J.~Nocedal and S.~J. Wright, {\em Numerical optimization}.
+\newblock Springer, 1999.
+
+\bibitem{RN60}
+B.~Evens, P.~Latafat, A.~Themelis, J.~Suykens, and P.~Patrinos, ``Neural network training as an optimal control problem:—an augmented lagrangian approach—,'' in {\em 2021 60th IEEE Conference on Decision and Control (CDC)}, pp.~5136--5143, IEEE.
+
+\bibitem{RN58}
+J.~Wang, F.~Yu, X.~Chen, and L.~Zhao, ``Admm for efficient deep learning with global convergence,'' in {\em Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery \& Data Mining}, pp.~111--119.
+
+\bibitem{RN59}
+G.~Taylor, R.~Burmeister, Z.~Xu, B.~Singh, A.~Patel, and T.~Goldstein, ``Training neural networks without gradients: A scalable admm approach,'' in {\em International conference on machine learning}, pp.~2722--2731, PMLR.
+
+\bibitem{RN17}
+D.~S. Bernstein, {\em Matrix mathematics: theory, facts, and formulas}.
+\newblock Princeton university press, 2009.
+
+\bibitem{RN20}
+M.~Krstic, P.~V. Kokotovic, and I.~Kanellakopoulos, {\em Nonlinear and adaptive control design}.
+\newblock John Wiley \& Sons, Inc., 1995.
+
+\bibitem{RN33}
+P.~Kidger and T.~Lyons, ``Universal approximation with deep narrow networks,'' in {\em Conference on learning theory}, pp.~2306--2327, PMLR.
+
+\bibitem{RN27}
+A.~L. Maas, A.~Y. Hannun, and A.~Y. Ng, ``Rectifier nonlinearities improve neural network acoustic models,'' in {\em International conference on machine learning}, vol.~30, p.~3, Atlanta, GA.
+
+\bibitem{RN12}
+B.~Sengupta, K.~J. Friston, and W.~D. Penny, ``Efficient gradient computation for dynamical models,'' {\em Neuroimage}, vol.~98, pp.~521--7, 2014.
+
+\bibitem{RN62}
+K.~Choi, J.~Kim, and K.-B. Park, ``Generalized model predictive torque control of synchronous machines,'' {\em IEEE/ASME Transactions on Mechatronics}, 2024.
+
+\bibitem{RN13}
+C.~A. Desoer and M.~Vidyasagar, {\em Feedback systems: input-output properties}.
+\newblock SIAM, 2009.
+
+\bibitem{RN32}
+E.~D. Markus, J.~T. Agee, and A.~A. Jimoh, ``Trajectory control of a two-link robot manipulator in the presence of gravity and friction,'' in {\em 2013 Africon}, pp.~1--5, IEEE.
+
+\bibitem{RN28}
+J.~D. Vasquez-Plaza, J.~M.~R. Scarpetta, T.~M. Hansen, R.~Tonkoski, and F.~A. Rengifo, ``Smooth mathematical representation of the der$_a$ aggregated model,'' {\em IEEE Access}, vol.~11, pp.~101398--101408, 2023.
+
+\end{thebibliography}

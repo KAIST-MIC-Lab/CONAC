@@ -1,0 +1,55 @@
+This is BibTeX, Version 0.99d (TeX Live 2024)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: ieeetr.bst
+Database file #1: refs.bib
+Warning--empty year in RN25
+Warning--empty year in RN55
+Warning--empty year in RN60
+Warning--empty year in RN58
+Warning--empty year in RN59
+Warning--empty year in RN33
+Warning--empty year in RN27
+Warning--empty year in RN32
+You've used 33 entries,
+            1876 wiz_defined-function locations,
+            686 strings with 8850 characters,
+and the built_in function-call counts, 9153 in all, are:
+= -- 877
+> -- 357
+< -- 0
++ -- 131
+- -- 98
+* -- 621
+:= -- 1248
+add.period$ -- 43
+call.type$ -- 33
+change.case$ -- 23
+chr.to.int$ -- 0
+cite$ -- 41
+duplicate$ -- 490
+empty$ -- 905
+format.name$ -- 98
+if$ -- 2294
+int.to.chr$ -- 0
+int.to.str$ -- 33
+missing$ -- 43
+newline$ -- 112
+num.names$ -- 33
+pop$ -- 140
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 322
+stack$ -- 0
+substring$ -- 579
+swap$ -- 201
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 8
+while$ -- 70
+width$ -- 35
+write$ -- 317
+(There were 8 warnings)
