@@ -44,7 +44,8 @@ dot_L_hist = zeros(1, num_t); dot_L_hist(:,1) = 0;
 V_hist = zeros(nnOpt.l_size-1, num_t); V_hist(:, 1) = nn_V_norm_cal(nn.V, nnOpt);
 aux_hist = zeros(num_x/2, num_t);
 
-
+comp_control_hist = zeros(1, num_t);
+comp_train_hist = zeros(1, num_t);
 %% 
 k1 = ctrlOpt.k1;
 k2 = ctrlOpt.k2;
@@ -94,13 +95,22 @@ for t_idx = 2:1:num_t
    
     % control input
     if strcmp(ctrlOpt.type, "CTRL1")
+        tic;
         u = -M*k2*e2 -M*e1 + C*x(3:4) + G +M*r2d;
+        comp_control_hist(t_idx) = toc;
+
         dot_L = 0;
 
     elseif strcmp(ctrlOpt.type, "CTRL2")
         x_in = r1;
+
+        tic;
         [nn, u_NN, info] = nn_forward(nn, nnOpt, x_in);
+        comp_control_hist(t_idx) = toc;
+
+        tic;
         [nn, nnOpt, dot_L, info] = nn_backward(nn, nnOpt, ctrlOpt, e, u_NN);
+        comp_train_hist(t_idx) = toc;
 
         % u_NN = zeros(size(u_NN));
         u1 = - M * k2 * e2 - M * e1 + C * x(3:4) + G + M * r2d -u_NN;
@@ -109,8 +119,14 @@ for t_idx = 2:1:num_t
 
     elseif strcmp(ctrlOpt.type, "CTRL3")
         x_in = r1;
+        
+        tic;
         [nn, u_NN, info] = nn_forward(nn, nnOpt, x_in);
+        comp_control_hist(t_idx) = toc;
+
+        tic;
         [nn, nnOpt, dot_L, info] = nn_backward(nn, nnOpt, ctrlOpt, e+[0;0;zeta], u_NN);
+        comp_train_hist(t_idx) = toc;
 
         % u_NN = zeros(size(u_NN));
         u = - M * k2 * e2 - M * e1 + C * x(3:4) + G + M * r2d -u_NN;
@@ -118,8 +134,14 @@ for t_idx = 2:1:num_t
 
     elseif strcmp(ctrlOpt.type, "CTRL4")
         x_in = r1;
+        
+        tic;
         [nn, u_NN, info] = nn_forward(nn, nnOpt, x_in);
+        comp_control_hist(t_idx) = toc;
+
+        tic;
         [nn, nnOpt, dot_L, info] = nn_backward(nn, nnOpt, ctrlOpt, e, u_NN);
+        comp_train_hist(t_idx) = toc;
         
         u = -u_NN;
         
@@ -154,9 +176,15 @@ for t_idx = 2:1:num_t
         a2_g = p2^sign(1-abs(zeta(2)));
 
         x_in = r1;
+        
+        tic;
         [nn, u_NN, info] = nn_forward(nn, nnOpt, x_in);
+        comp_control_hist(t_idx) = toc;
+        
+        tic;
         [nn, nnOpt, dot_L, info] = nn_backward(nn, nnOpt, [0;0;z2], u_NN);
-       
+        comp_train_hist(t_idx) = toc;
+
         % u_NN = zeros(size(u_NN));
         % u = -u_NN;
         u = M * ( -z1 -l3*sig_alp(z2,b3) -l4*sig_alp(z2,b4) - z2 -u_NN ...
@@ -266,7 +294,8 @@ if RESULT_SAVE_FLAG
     [~,~] = mkdir("sim_result/"+ctrl_name);
     save("sim_result/"+ctrl_name+"/"+ctrl_name+"_result.mat", ...
         "t", "x_hist", "r_hist", "rd_hist", "nnOpt", "ctrlOpt",...
-        "u_hist", "uSat_hist", "L_hist", "V_hist", "dot_L_hist" ...
+        "u_hist", "uSat_hist", "L_hist", "V_hist", "dot_L_hist", ...
+        "comp_control_hist", "comp_train_hist" ...
         );
     clear("nnOpt", "ctrlOpt");
 end

@@ -39,6 +39,9 @@ function [ctrlOpt, nnOpt] = opt_load(c_idx, opts, dt)
         ctrlOpt.G = str2num(opts{G_idx, c_idx});
         ctrlOpt.inv_M = inv(ctrlOpt.M);
 
+        % dummy
+        nnOpt.beta = str2num(opts{beta_idx, c_idx});
+
         ctrlOpt.u_ball = str2num(opts{u_ball_idx, c_idx});
 
         % nnOpt.v_size = 1;
@@ -69,6 +72,9 @@ function [ctrlOpt, nnOpt] = opt_load(c_idx, opts, dt)
         ctrlOpt.G = str2num(opts{G_idx, c_idx});
         ctrlOpt.inv_M = inv(ctrlOpt.M);
 
+        % dummy
+        nnOpt.beta = str2num(opts{beta_idx, c_idx});
+
         ctrlOpt.u_ball = str2num(opts{u_ball_idx, c_idx});
 
         nnOpt.alpha = str2num(opts{alpha_idx, c_idx});
@@ -97,6 +103,8 @@ function [ctrlOpt, nnOpt] = opt_load(c_idx, opts, dt)
         ctrlOpt.C = str2num(opts{C_idx, c_idx});
         ctrlOpt.G = str2num(opts{G_idx, c_idx});
         ctrlOpt.inv_M = inv(ctrlOpt.M);
+    % dummy
+        nnOpt.beta = str2num(opts{beta_idx, c_idx});
 
         ctrlOpt.u_ball = str2num(opts{u_ball_idx, c_idx});
 
