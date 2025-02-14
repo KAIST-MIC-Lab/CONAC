@@ -1,0 +1,33 @@
+stages:
+  - compilation
+  - deploy
+  # - archive
+  # - backup
+
+variables:
+  LATEX_FILENAME: "Dissertation" 
+
+# Compile latex 
+compilation:
+  image: texlive/texlive:latest
+  stage: compilation
+  variables:
+    GIT_SUBMODULE_STRATEGY: normal
+  script:
+    - latexmk -pdf $LATEX_FILENAME.tex
+  artifacts:
+    paths:
+      - ./$LATEX_FILENAME.pdf
+
+# deploy pdf to gitlab pages
+pages:
+  image: alpine:latest
+  stage: deploy
+  only: 
+    refs:
+      - main
+  script:
+    - mv ./$LATEX_FILENAME.pdf ./public/$LATEX_FILENAME.pdf
+  artifacts:
+    paths:
+      - public

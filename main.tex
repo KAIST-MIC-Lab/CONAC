@@ -1,46 +1,7 @@
 \documentclass[lettersize,journal]{IEEEtran}
 % code
-% MY PACKAGES ===================================
-\usepackage{epsfig}
-\usepackage{lipsum}  
-\usepackage{kotex}
-% \usepackage{natbib}
-\usepackage{cite}
-\usepackage{amssymb}
-\usepackage{xcolor}
-\usepackage{enumitem}
-\newlist{steps}{enumerate}{1}
-\setlist[steps, 1]{label = Step \arabic*: }
-\usepackage{hyperref}
-\hypersetup{
-    linkbordercolor=blue,
-    filebordercolor=red,
-    citebordercolor = green,      
-    urlbordercolor=red,
-    %
-    % colorlinks=true,
-    % linkcolor=blue,
-    % filecolor=blue,
-    % citecolor = blue,      
-    % urlcolor=cyan,
- }
- \usepackage{algorithm}
- \usepackage{svg}
 
-% MY PACKAGES ===================================
-
-\usepackage{amsmath,amsfonts}
-\usepackage{algorithmic}
-\usepackage{array}
-% \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
-\usepackage{subfig}
-\usepackage{textcomp}
-\usepackage{stfloats}
-\usepackage{url}
-\usepackage{verbatim}
-\usepackage{graphicx}
-\usepackage{multirow}
-\usepackage{multicol}
+\input{dding_template/tex_packages/tex_packages_general.tex}
 
 \hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
@@ -190,7 +151,7 @@ Section \ref{sec:NAC} presents the neuro‒adaptive controller along with the re
 
 \begin{figure*}[!t]
     \centering
-    \includegraphics[width=0.7\linewidth]{Controller.drawio.png}
+    \includegraphics[width=0.7\linewidth]{fig/Controller.drawio.png}
     % \includesvg[width=0.75\linewidth]{Controller.drawio.svg}
     \caption{Architecture of the constrained optimization-based neuro‒adaptive controller (CoNAC).}
     \label{fig: controller}
@@ -973,7 +934,7 @@ In addition to this physically imposed control input saturation, the input norm 
 % SYSTEM FIGURE AND TABLE
 \begin{figure}[!t]
     \centering
-    \includegraphics[width=0.7\linewidth]{RobotModel.drawio.png}
+    \includegraphics[width=0.7\linewidth]{fig/RobotModel.drawio.png}
     \caption{Two-link manipulator model.}
     \label{fig: manipulator}
 \end{figure}
@@ -1003,7 +964,7 @@ In addition to this physically imposed control input saturation, the input norm 
 
 \begin{figure}[!t]
     \centering
-    \includegraphics[width=0.9\linewidth]{fig13.eps}
+    \includegraphics[width=0.9\linewidth]{fig/fig13.eps}
     \caption{Effect of parameter $p$ in the control input saturation function $h$ and boundedness of $\Vert\partial h/\partial \tau\Vert_F$.}
     \label{fig: h func}
 \end{figure}
@@ -1120,16 +1081,16 @@ The sampling time of the simulations was selected as $T_s=10^{-4}$.
 % SIMULATION FIGURES
 \begin{figure*}[!t]
     \centering
-        \subfloat[BSC]{\includegraphics[width=0.49\linewidth]{fig1.eps}%
+        \subfloat[BSC]{\includegraphics[width=0.49\linewidth]{fig/fig1.eps}%
         \label{fig: tracking_CM1}}
     \hfill
-        \subfloat[DNN-BSC]{\includegraphics[width=0.49\linewidth]{fig2.eps}%
+        \subfloat[DNN-BSC]{\includegraphics[width=0.49\linewidth]{fig/fig2.eps}%
         \label{fig: tracking_CM2}}
     \vfill
-        \subfloat[DNN-BSC-A]{\includegraphics[width=0.49\linewidth]{fig3.eps}%
+        \subfloat[DNN-BSC-A]{\includegraphics[width=0.49\linewidth]{fig/fig3.eps}%
         \label{fig: tracking_CM3}}
     \hfill
-        \subfloat[CoNAC]{\includegraphics[width=0.49\linewidth]{fig4.eps}%
+        \subfloat[CoNAC]{\includegraphics[width=0.49\linewidth]{fig/fig4.eps}%
         \label{fig: tracking_CoNAC}}
     \caption{Comparison of the tracking performance across the selected controllers.}
     \label{fig: tracking}
@@ -1137,16 +1098,16 @@ The sampling time of the simulations was selected as $T_s=10^{-4}$.
 
 \begin{figure*}[!t]
     \centering
-        \subfloat[BSC]{\includegraphics[width=0.49\linewidth]{fig5.eps}%
+        \subfloat[BSC]{\includegraphics[width=0.49\linewidth]{fig/fig5.eps}%
         \label{fig: control_CM1}}
     \hfill
-        \subfloat[DNN-BSC]{\includegraphics[width=0.49\linewidth]{fig6.eps}%
+        \subfloat[DNN-BSC]{\includegraphics[width=0.49\linewidth]{fig/fig6.eps}%
         \label{fig: control_CM2}}
     \vfill
-        \subfloat[DNN-BSC-A]{\includegraphics[width=0.49\linewidth]{fig7.eps}%
+        \subfloat[DNN-BSC-A]{\includegraphics[width=0.49\linewidth]{fig/fig7.eps}%
         \label{fig: control_CM3}}
     \hfill
-        \subfloat[CoNAC]{\includegraphics[width=0.49\linewidth]{fig8.eps}%
+        \subfloat[CoNAC]{\includegraphics[width=0.49\linewidth]{fig/fig8.eps}%
         \label{fig: control_CoNAC}}
     \caption{Comparison of the control input $\tau$ and the physically saturated control input $h(\tau)$ across the selected controllers.}
     \label{fig: control}
@@ -1154,23 +1115,23 @@ The sampling time of the simulations was selected as $T_s=10^{-4}$.
 
 \begin{figure}[!t]
     \centering
-    {\includegraphics[width=0.9\linewidth]{fig16.eps}
+    {\includegraphics[width=0.9\linewidth]{fig/fig16.eps}
     \caption{Control input paths of DNN-BSC and CoNAC during the time interval from 5 s to 8 s.}
     \label{fig: ball control}}
 \end{figure}
 
 \begin{figure*}[!t]
     \centering
-        \subfloat[Multipliers of CoNAC]{\includegraphics[width=0.49\linewidth]{fig12.eps}%
+        \subfloat[Multipliers of CoNAC]{\includegraphics[width=0.49\linewidth]{fig/fig12.eps}%
         \label{fig: multiplier_CoNAC}}
     \hfill
-        \subfloat[Weight norms of DNN-BSC]{\includegraphics[width=0.49\linewidth]{fig9.eps}%
+        \subfloat[Weight norms of DNN-BSC]{\includegraphics[width=0.49\linewidth]{fig/fig9.eps}%
         \label{fig: weight_CM2}}
     \vfill
-        \subfloat[Weight norms of DNN-BSC-A]{\includegraphics[width=0.49\linewidth]{fig10.eps}%
+        \subfloat[Weight norms of DNN-BSC-A]{\includegraphics[width=0.49\linewidth]{fig/fig10.eps}%
         \label{fig: weight_CM3}}
     \hfill
-        \subfloat[Weight norms of CoNAC]{\includegraphics[width=0.49\linewidth]{fig11.eps}%
+        \subfloat[Weight norms of CoNAC]{\includegraphics[width=0.49\linewidth]{fig/fig11.eps}%
         \label{fig: weight_CoNAC}}       
     \caption{Lagrange multipliers of CoNAC and weight norms of DNN-BSC, DNN-BSC-A, and CoNAC.}
     \label{fig: weight and multiplier}
@@ -1242,77 +1203,6 @@ The controller effectively incorporated both the input (bound or norm) constrain
 Simulation results validated the superior performance of CoNAC compared to conventional methods, such as DNN-BSC and DNN-BSC-A. CoNAC not only handled complex input constraints but also managed the weight norm constraints rigorously, leading to improved tracking accuracy and stability without notable oscillations.
 
 Future work may extend this approach to address constraints on both the system inputs and states, further enhancing the flexibility and robustness of neuro‒adaptive control systems using constrained optimization.
-
-%  SECTION APPENDIX ======================================
-%  \appendices
-
-% \section{Proof of Lemma \ref{lem1}}\label{sec:proof lem1}
-
-
-% Let $\omega^*\triangleq [\theta_k^{*T}; [\hat\theta_i]_{i\in[0,\cdots,k-1]}]$ and $\hat\omega\triangleq [\hat\theta_k^{T}; [\hat\theta_i]_{i\in[0,\cdots,k-1]}]$. 
-% If the Assumption \ref{assum1} holds (i.e., $c(\omega^*)<0,c(\hat\omega)\ge 0$), then $\nabla c_{j,k}^T\hat\theta_k>0$ also implies $\nabla c_{j,k}^T\tilde\theta_k>0$, as demonstrated by the following analysis: 
-% \begin{equation}
-%     \begin{aligned}
-%         -\nabla c_{j,k}^T \tilde\theta_k=&\nabla c_{j,k}^T(\theta_k^*-\hat\theta_k)
-%         =
-%         {d\over d\delta } c_j(\hat\omega +\delta (\omega^*-\hat\omega))\bigg\vert _{\delta=0} \\
-%         =& \lim_{\delta\to 0} {c_j(\hat\theta-\delta(\omega^*-\hat\omega)) + c_j(\hat\omega)\over \delta}\\
-%         \le& \lim_{\delta\to0} {\delta c_j(\omega^*) + (1-\delta) c_j(\hat\omega)-c_j(\hat\omega)\over \delta}
-%         \\
-%         =& c_j(\omega^*) - c_j(\hat\omega) < 0
-%         \end{aligned}
-% \end{equation}
-
-% It follows that $\nabla c_{j,k}^T\hat\theta_k>0$ holds for all the constraints introduced in Section \ref{sec:cstr candidates}.
-
-% \section{Details of CM3}\label{sec:detail CM3}
-
-% As motivated by 
-% \color{red}
-% \cite{RN111}-\cite{RN110}
-% \color{black}
-% , the auxiliary system is introduced to compensate the control input saturation, as
-% \begin{equation}
-%     \dot \zeta  = 
-%     \begin{cases}
-%         -K_\zeta \zeta - 
-%         \bigg({
-%         \vert {\tilde z}^TM_0^{-1}k_\zeta\Delta\tau\vert +0.5k_\zeta^2\Delta \tau^T\Delta \tau
-%         \over
-%         \Vert\zeta\Vert^2
-%         }\bigg)
-%         \zeta
-%         +
-%         k_\zeta
-%         \Delta \tau,
-%         \\
-%         \quad\quad\quad
-%         \quad\quad\quad
-%         \quad\quad\quad
-%         \quad\quad\quad
-%         \quad\quad\quad\quad
-
-%         \Vert \zeta\Vert \ge \mu
-%         \\
-%         -K_\zeta \zeta+ k_\zeta\Delta \tau, 
-%         \quad\quad\quad
-%         \quad\quad\quad
-%         \quad\quad\quad\ 
-%         \Vert\zeta\Vert < \mu
-%     \end{cases}
-%     \label{eq. aux system}
-% \end{equation}
-% where $\zeta$ denotes the auxiliary state variables, $\Delta\tau \triangleq h(\tau) - \tau$, $\mu\in\mathbb R_{>0}$ is a positive constant, and $K_\zeta=K_\zeta^T>0$.
-% To scale the difference of the magnitude between ${\tilde z}$ and $\Delta\tau$, $k_\zeta\in\mathbb R_{>0}$ is used.
-
-% Let the control law be defined as 
-% \begin{equation}
-%     \tau =-{k_z}M_0{\tilde z}-M_0K_p \zeta -M_0{\tilde q}+C_0{z}+G_0-\hat f+M_0 \dot {z^*}
-%     \label{eq: control law CM3}
-% \end{equation}
-% where $K_p$ denotes the gain matrix.
-% Then the system is bounded with the following criteria: ${k_q} > 0, {k_z} >1/2, k_\zeta>1, \mu>1, K_p > 0, K_\zeta >{1\over 2}(K_p^TK_p+I),\dot{\hat\theta } = \text{Proj}_{\Omega}[\alpha\nabla\hat\Phi^T{M^{-1}}^{T} {\tilde z}]$.
-% The proof of the boundedness can be readily obtained using the Lyapunov function $V=(1/2){\tilde q}^T{\tilde q}+(1/2){\tilde z}^T{\tilde z}+(1/2\alpha)\tilde\theta^T\tilde\theta + (1/2)\zeta^T\zeta$.
 
 %  BIBLIOGRAPHY ============================================
 \bibliographystyle{ieeetr}
