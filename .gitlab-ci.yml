@@ -5,7 +5,7 @@ stages:
   # - backup
 
 variables:
-  LATEX_FILENAME: "Dissertation" 
+  LATEX_FILENAME: "manuscript" 
 
 # Compile latex 
 compilation:
