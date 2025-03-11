@@ -1,0 +1,3 @@
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QMore recently, neuro–adaptive control approaches have been developed using neural networks (NNs) to approximate unknown system dynamics \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qrow\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q denotes the \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q row of \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qvec\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Qrow\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q,row\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q for \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
