@@ -1,30 +1,18 @@
 \documentclass[lettersize,journal]{IEEEtran}
 % code
 
-\input{dding_template/tex_packages/tex_packages_general.tex}
-
 \hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
-    T\kern-.1667em\lower.7ex\hbox{q}\kern-.125emX}}
-\usepackage{balance}
-
-% MY PACKAGES ===================================
-% \let\proof\relax
-% \let\endproof\relax
-\usepackage{amsthm}
-\newtheorem{remark}{Remark}
-\newtheorem{assum}{Assumption}
-\newtheorem{lem}{Lemma}
-\newtheorem{theorem}{Theorem}
-
-% MY PACKAGES ===================================
+T\kern-.1667em\lower.7ex\hbox{q}\kern-.125emX}}
+% \usepackage{balance}
+\input{dding_template/tex_packages/tex_packages_general.tex}
+\input{dding_template/tex_macros/tex_macros_general.tex}
 
 \begin{document}
 \title{
 Constrained Optimization-Based Neuro‒Adaptive Control (CoNAC) for Uncertain Euler‒Lagrange Systems Under Weight and Input Constraints 
 %Constrained Optimization-Based neuro‒Adaptive Control (CoNAC) for Uncertain Euler‒Lagrange Systems With Input Constraints/
 }
-
 
 \markboth{IEEE TRANSACTIONS ON NEURAL NETWORKS AND LEARNING SYSTEMS,
 ~Vol.~00, No.~0, Month~2024
@@ -237,7 +225,7 @@ The error dynamics \eqref{eq. error dynamics1} can be represented as a first-ord
 where 
 $\xi\triangleq[{\tilde q}^T  , {\tilde z}^T  ]^T  \in\mathbb{R}^{2n}$ denotes the augmented error,
 and
-\begin{equation*}
+\begin{equation}
     A_\xi \triangleq 
     \begin{bmatrix}
         -{k_q} I_n &I_n\\-I_n& -{k_z} I_n
@@ -247,7 +235,7 @@ and
     \begin{bmatrix}
         0_{n\times n}\\M_0^{-1}
     \end{bmatrix}.
-\end{equation*}
+\end{equation}
 Note that $A_\xi$ is a stable matrix, and $\Vert B_\xi\Vert_F<\infty$.
 % According to \eqref{eq. xi dynamics}, $\xi$ will be regulated as $\hat\theta \rightarrow \theta^*$.
 
@@ -259,20 +247,20 @@ The DNN architecture presented in \cite{RN16} is utilized in this study and is d
     \label{eq. DNN structure 1}
 \end{equation}
 where $V_i\in\mathbb{R}^{(l_i+1)\times l_{i+1}}$ is the weight matrix of the $i\textsuperscript{th}$ layer, and $\phi_i: \mathbb{R}^{l_i}\to\mathbb{R}^{l_i+1}$ represents the activation function of the $i\textsuperscript{th}$ layer. The activation function is defined as $\phi_i(x)=[\sigma(x_{(1)}),\sigma(x_{(2)}),\cdots, \sigma(x_{(l_{i})}), 1]^T$, where $\sigma: \mathbb{R}\to\mathbb{R}$ is a nonlinear function, and the augmentation of $1$ is used to account for bias terms in the weight matrices. Notice that the output size of $\Phi(\cdot)$ is the same as that of the control input $\tau$ (i.e., $l_{k+1}=n$). For a better understanding, \eqref{eq. DNN structure 1} also can be represented recursively as 
-\begin{equation*}
+\begin{equation}
     \Phi_i \triangleq
     \begin{cases}
         V_i^T  \phi_i(\Phi_{i-1}), &i\in[1,\dots,k],\\
         V_0^T  q_{NN},&i=0,
     \end{cases}
     \label{eq. DNN structure 2}
-\end{equation*}
+\end{equation}
 where $\Phi_k = \Phi(q_{NN};\theta)$.
 
 One of the widely used activation functions for large DNNs is from the ReLU family \cite{RN27}, which effectively avoids the gradient vanishing problem during error backpropagation. However, for control applications, where relatively shallow DNNs are typically sufficient and the gradient vanishing issue is less severe, the sigmoid function or the hyperbolic tangent function is commonly used as the activation function. These functions simplify stability analysis due to their continuous differentiability, and their outputs and gradients satisfy $\Vert \phi_i(\cdot)\Vert < \infty$ and  $\Vert \nabla\phi_i(\cdot)\Vert_F < \infty$. In this study, the hyperbolic tangent function $\tanh(\cdot)$ was selected as the activation function (i.e., $\sigma(\cdot) = \tanh(\cdot))$, which provides desirable boundedness with $\Vert\sigma(\cdot)\Vert<1$ and $\Vert\nabla\sigma(\cdot)\Vert< 1$.
 
 For simplicity, each layer's weights are vectorized as $\theta_i\triangleq\text{vec}(V_i)\in\mathbb{R}^{\Xi_i}$, where $\Xi_i\triangleq (l_i+1)l_{i+1}$ is the number of weights in the $i\textsuperscript{th}$ layer. The total weight vector $\theta\in\mathbb{R}^{\Xi}$ is defined by augmentating $\theta_i$ for all $i\in \left[0,\cdots,k\right]$ as 
-\begin{equation*}
+\begin{equation}
     \theta \triangleq 
     \begin{bmatrix}
         \theta_k\\
@@ -287,7 +275,7 @@ For simplicity, each layer's weights are vectorized as $\theta_i\triangleq\text{
         \vdots\\
         \text{vec}(V_0)
     \end{bmatrix},
-\end{equation*}
+\end{equation}
 where $\Xi={\sum_{i=0}^{k} \Xi_i}$ represents the total number of weights. The gradient of $ \Phi(q_{NN};\theta)$ with respect to $\theta$ is defined as
 \begin{equation}
     {\partial\Phi\over\partial \theta}=
@@ -301,7 +289,7 @@ where $\Xi={\sum_{i=0}^{k} \Xi_i}$ represents the total number of weights. The g
     \label{eq. nabla phi}
 \end{equation}
 where
-\begin{equation*}
+\begin{equation}
     \frac{\partial \Phi}{\partial \theta_i} = 
     \begin{cases}
         (I_{l_{k+1}}\otimes \phi_{k}^T  ), & i=k \\
@@ -309,7 +297,7 @@ where
         &\vdots \\
         V_k^T   \phi'_{k} \cdots V_1^T  \phi_1' (I_{l_1}\otimes q_{NN}^T  ), & i = 0
     \end{cases},
-\end{equation*}
+\end{equation}
 where $\phi_i\triangleq \phi_i(\Phi_{i-1})$ and $\phi_i'\triangleq \partial \phi_i/\partial \Phi_{i-1}$.
 
 In the following sections, let $\Phi^*_i$ represent the output of the $i\textsuperscript{th}$ layer with the ideal weight vector $\theta^*$. Additionally, define $\phi^*_i\triangleq\phi_i(\Phi^*_{i-1})$ and $\phi^{*'}_i\triangleq \partial \phi^*_i/\partial \Phi^*_{i-1}$. Similarly, $\hat\Phi_i$ denotes the output of the $i\textsuperscript{th}$ layer with the estimated weight vector $\hat \theta$, and define $\hat\phi_i\triangleq\phi_i(\hat\Phi_{i-1})$ and $\hat\phi_i'\triangleq \partial \hat\phi_i/\partial \hat\Phi_{i-1}$, respectively.
@@ -321,7 +309,7 @@ In the following sections, let $\Phi^*_i$ represent the output of the $i\textsup
 \subsection{Weight Optimizer Design}
 
 Consider a positive definite objective function defined as 
-\begin{equation*}
+\begin{equation}
     J(\xi;\hat\theta)\triangleq 
     % {1\over 2}
     % \begin{bmatrix}
@@ -333,7 +321,7 @@ Consider a positive definite objective function defined as
     % \end{bmatrix}
     % =
     {1\over 2} \xi^T   W\xi
-\end{equation*}
+\end{equation}
 where $W=W^T  >0$ is a weighting matrix.
 %Note that $\xi$ is considered a function of $\hat\theta$.
 % Equality constraints $c_i,\ i\in\mathcal{q}$ and 
@@ -352,12 +340,12 @@ Inequality constraints $c_j,\ j\in\mathcal{I}$, are imposed during the weight ad
 \end{equation}
 % where $q_a$ is an additional vector in the constraints.
 Here, $\xi$ is considered a pre-defined data or parameter for this optimization problem. The Lagrangian function is defined as
-\begin{equation*}
+\begin{equation}
     L(\xi,\hat\theta,[\lambda_j]_{j\in\mathcal A}) \triangleq J(\xi;\hat\theta) + 
     \sum_{j\in\mathcal A}
     \lambda_{j}
     c_{j}(\hat\theta)
-\end{equation*}
+\end{equation}
 where $\lambda_j$ denotes the Lagrange multiplier for each constraint, and $\mathcal A \triangleq \{j\in\mathcal I\ |\ c_j\ge 0\}$ represents the active set.
 
 The adaptation laws for $\hat\theta$ and $[\lambda]_{j\in\mathcal A}$ are derived to solve the dual problem of \eqref{eq. train obj} (i.e.,  $\min_{\hat\theta} \max_{[\lambda]_{j\in\mathcal A}}L(\xi,\hat\theta,[\lambda]_{j\in\mathcal A})$), as follows:
@@ -432,7 +420,7 @@ Equations \eqref{eq. eta dynamics 1} and \eqref{eq. dJdth} can be decomposed for
     \label{eq. eta dynamics}
 \end{equation}
 and
-\begin{equation*}\label{eq. grad_J}
+\begin{equation}\label{eq. grad_J}
     {\partial J\over\partial\hat\theta}
     =
     \begin{bmatrix}
@@ -443,7 +431,7 @@ and
     \end{bmatrix}
     W
     \xi
-\end{equation*}
+\end{equation}
 where $\eta_i \triangleq \partial \xi/\partial \hat\theta_i\in\mathbb R^{2n\times \Xi_i}$. The exact gradient of the objective function is calculated based on \eqref{eq. dJdth}, with the value of $\eta$ obtained by simulating the sensitivity equation \eqref{eq. eta dynamics 1}.
 
 The proposed controller is implemented using Algorithm \ref{alg: alg1}. For implementation in the discrete-time domain, it is recommended to use a sufficiently small sampling time $T_s$. If a large $T_s$ is used, $\alpha$ and $\beta_j$ should satisfy the Armijo condition \cite[Chap.~3 eq.~(3.4)]{RN22} to ensure that the objective function decreases.
@@ -665,9 +653,9 @@ that $(\partial c_j/\partial \hat\theta_k)^T\hat\theta_k>0$.
 \begin{proof}
 
 The derivative of $c_j,\ \forall j\in\mathcal I \setminus \{\theta_i\}_{i\in[0,\cdots,k]}$, with respect to $\hat\theta_i$ is represented as
-\begin{equation*}
+\begin{equation}
     {\partial c_j\over\partial \hat\theta_i} = {\partial c_j\over\partial \tau} {\partial \tau\over\partial \hat\Phi} {\partial \hat\Phi\over\partial \hat\theta_i}
-\end{equation*}
+\end{equation}
 where $\partial \tau/\partial \hat\Phi=-I_n$, which is bounded. From the linear mapping in \eqref{eq linear map}, $\tau$ is bounded as long as $\hat\theta_k$ is bounded (by the condition of the lemma), and $\Vert\phi_k(\cdot)\Vert$ is bounded due to the properties of the activation functions. By Assumption \ref{assum1}, the function $c_j$ is convex. The convex function has a bounded derivative with respect to $\tau$, since $\tau$ is a bounded variable (i.e., $\partial c_j/\partial\tau$ is bounded). Furthermore, $\partial \hat\Phi/\partial \hat\theta_i$ is bounded, provided that the norms of $\hat\theta_i,\ \forall i \in[k,\cdots,i+1]$, are bounded. This can be verfied by using the definition of $\partial \hat\Phi/\partial\hat\theta_i$ given in \eqref{eq. nabla phi}.
 Consequently, $\Vert\partial c_j/\partial \hat\theta_i\Vert,\ \forall j\in\mathcal I \setminus \{\theta_i\}_{i\in[0,\cdots,k]}$, is bounded, when $\hat\theta_i,\ \forall i\in [k,\cdots,i+1]$ are bounded.
 
@@ -707,7 +695,7 @@ The boundedness of $\xi$ follows from \eqref{eq. xi dynamics}, using the result 
 %Additional constraints that satisfy Assumptions \ref{assum1}, \ref{assum2} and \ref{assum3} can be imposed and the constraint candidates are introduced in Section \ref{sec:cstr candidates}.
 
 Assume that all constraints are actve in $\mathcal A$ without loss of generality. The dynamics of $\eta_k$ and $\hat\theta_k$ can be decomposed from \eqref{eq. adaptation law th} and \eqref{eq. eta dynamics} as 
-\begin{equation*}
+\begin{equation}
     \begin{aligned}
         \dot\eta_k =
         & 
@@ -722,7 +710,7 @@ Assume that all constraints are actve in $\mathcal A$ without loss of generality
             \lambda_j{\partial c_j\over\partial \hat\theta_k}
         \bigg]
     \end{aligned} 
-\end{equation*}
+\end{equation}
 According to \cite[Chap.~4 T.~1.9]{RN13}, $\Vert \eta_k\Vert_F$ is bounded, since $A_\xi$ is a stable matrix and the term $-B_\xi(\partial h/\partial \tau)(I_{l_{k+1}}\otimes\hat\phi_k^T)$ is also bounded.
 
 Let $\mathcal{V}: \mathbb{R}^{2n} \times \mathbb{R}^{\Xi} \to \mathbb{R}_{>0}$ denote the Lyapunov function:
@@ -837,7 +825,7 @@ If $\lambda_j$ increases sufficiently such that $\dot{\mathcal V} \approx -\sum_
 % To analyze the boundedness of the Lagrange multipliers, assume that $\lambda_j$ dominantly increased such that $\dot{\mathcal V} \approx -\sum_{j\in\mathcal{A}-\{\theta_k\}}\lambda_j\hat\theta_k^T(\partial c_j/\partial \hat\theta_k)<0$. Then $\hat\theta_k$ approaches into $\Theta_\xi\cap\Theta_{\hat\theta_k}\cap\Theta_\gamma$. It means that the Lagrange multipliers are bounded satisfying the constraints.
 
 %  subset of $\hat\theta_k$ which satisfy the constraints in $\mathcal A$, can be represented as 
-% \begin{equation*}
+% \begin{equation}
 %    \Theta_\gamma=
 %    \{
 %        \hat\theta_k
@@ -845,16 +833,16 @@ If $\lambda_j$ increases sufficiently such that $\dot{\mathcal V} \approx -\sum_
 %        \Vert\hat\theta_k\Vert
 %        \le \gamma
 %    \}
-% \end{equation*}
+% \end{equation}
 % where $\gamma \le \bar\theta_k$, since if $\gamma$ is greater than $\bar\theta_k$, the constraint can be handled by $c_{\theta_k}$. %, as shown in Fig~\ref{fig: V space}.
 
 
 %To analyze the Lagrange multipliers, assume that the Lagrange multipliers are increased such that
-% \begin{equation*}
+% \begin{equation}
 %    \dot V \le - \underbrace{
 %     \sum_{j\in\mathcal{A}-b_k}\lambda_j\tilde\theta_k^T\nabla c_{j,k}
 %     }_{>0}	\le -\gamma_k <0
-% \end{equation*}
+% \end{equation}
 %with $\gamma_k\in\mathbb R_{>0}$.
 %It imples that there is a finite time $t_f$ for $\hat\theta_k$ to converge to the point that satisfies the every constraint, while approaching to the $\theta^*$.
 %When the constraints are satisfied, the reminders of the multipliers in $\mathcal A$ converges.
@@ -870,13 +858,13 @@ If $\lambda_j$ increases sufficiently such that $\dot{\mathcal V} \approx -\sum_
 The boundedness of the Frobenius norm of the gradient $\partial\hat\Phi/\partial \hat\theta_i$ can be obtained from its definition in \eqref{eq. nabla phi}. This relies on the fact that the boundedness of $\Vert\hat\theta_i\Vert,\ \forall i\in[k,\cdots,i+1]$, was already shown in the previous step (i.e., Step 1 to Step $i+1$) and the activation functions $\hat\phi_i$ and their derivative $\hat\phi_i'$ are bounded.
 
 The dynamics of $\eta_i$ and $\hat\theta_i$ for all $i\in [k-1,\cdots,0]$ are represented as
-\begin{equation*}
+\begin{equation}
     \dot\eta_i = 
     A_\xi\eta_i -B_\xi {\partial h\over\partial\tau}
     {\partial \hat\Phi\over \partial \hat\theta_i}
-\end{equation*}
+\end{equation}
 and
-\begin{equation*}
+\begin{equation}
     \begin{aligned}
         \dot{\hat\theta}_i 
         =&
@@ -887,7 +875,7 @@ and
             \sum_{j\in\mathcal{A}\setminus \{\theta_i\}_{i\in[0,\cdots,k]}}\lambda_j{\partial c_j\over\partial \hat\theta_i}
         \bigg].
     \end{aligned}
-\end{equation*}
+\end{equation}
 According to \cite[Chap.~4 T.~1.9]{RN13}, $\Vert\eta_i\Vert_F$ is bounded because $A_\xi$ is a stable matrix and the terms $\Vert B_\xi\Vert, \Vert(\partial h/\partial \tau)\Vert_F$, and $\Vert\partial \hat\Phi/\partial\hat\theta_i\Vert_F$ are bounded.
 When $\lambda_{\theta_i}$ is generated due to a violation of the weight norm constraint, $\hat\theta_i$ remains bounded because the term $-2\alpha\lambda_{\theta_i}$ is stable, and the residual terms $\Vert\eta_iW\xi\Vert$, $\lambda_j$, and $\Vert(\partial c_j/\partial \hat\theta_i)\Vert_F$ for all $j\in\mathcal{A}\setminus \{\theta_i\}_{i\in[0,\cdots,k]}$ are bounded, as demonstrated in Step 1 and by Lemma \ref{lem2}.
 The boundedness of each $\lambda_{\theta_i}$ also can be obtained, assuming that $\lambda_{\theta_i}$ is sufficiently increased regulating $\Vert\theta_i\Vert$ into the origin until $c_{\theta_i}$ is satisfied.
@@ -907,7 +895,7 @@ The parameters $q_p,{q_d}_p,\tau_p,m_p,l_p,{l_c}_p,b_p$, and ${f_c}_p$ denote th
 %These terms make system functions in \eqref{eq. system dynamics 1} nonlinear.
 %and can be considered as the disturbance of the system.
 The values of the system model parameters are provided in Table~\ref{table: system parameters}. The desired trajectory for ${q}=[q_1,q_2]^T$ was defined as
-\begin{equation*}
+\begin{equation}
     {q_d}(t) = 
     \begin{bmatrix}
         {q_d}_1\\{q_d}_2
@@ -917,7 +905,7 @@ The values of the system model parameters are provided in Table~\ref{table: syst
         +\cos(0.5\pi t) + 1 \\
         -\cos(0.5\pi t) - 1 
     \end{bmatrix}.
-\end{equation*}
+\end{equation}
 %\color{red}
 %Considering the power limitation of the power source for the actuators [], 
 The control input saturation function was defined as $h(\tau)\triangleq \tau/\Vert\tau\Vert \cdot \text{SSF}_L^U(\Vert\tau\Vert)$, where smooth saturation function (SSF) was adopted from \cite{RN28} and is given by
