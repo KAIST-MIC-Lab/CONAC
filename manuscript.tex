@@ -11,112 +11,18 @@
 
 \overrideIEEEmargins                                      % Needed to meet printer requirements.
 
-%In case you encounter the following error:
-%Error 1010 The PDF file may be corrupt (unable to open PDF file) OR
-%Error 1000 An error occurred while parsing a content stream. Unable to analyze the PDF file.
-%This is a known problem with pdfLaTeX conversion filter. The file cannot be opened with acrobat reader
-%Please use one of the alternatives below to circumvent this error by uncommenting one or the other
-%\pdfobjcompresslevel=0
-%\pdfminorversion=4
+% \makeatletter
+% \let\NAT@parse\undefined
+% \makeatother
 
-% See the \addtolength command later in the file to balance the column lengths
-% on the last page of the document
-
-% The following packages can be found on http:\\www.ctan.org
-%\usepackage{graphics} % for pdf, bitmapped graphics files
-%\usepackage{epsfig} % for postscript graphics files
-%\usepackage{mathptmx} % assumes new font selection scheme installed
-%\usepackage{times} % assumes new font selection scheme installed
-%\usepackage{amsmath} % assumes amsmath package installed
-%\usepackage{amssymb}  % assumes amsmath package installed
-
-% MY PAKEAGES ========================================
-\usepackage{epsfig}
-% \usepackage{lipsum}  
-\usepackage{kotex}
-% \usepackage{natbib}
-\usepackage{cite}
-\usepackage{amssymb}
-\usepackage{xcolor}
-% \usepackage{enumitem}
-% \newlist{steps}{enumerate}{1}
-% \setlist[steps, 1]{label = Step \arabic*: }
-
-\usepackage{algorithm}
-\usepackage{svg}
-
-\usepackage{amsmath,amsfonts}
-\usepackage{algorithmic}
-\usepackage{array}
-% \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
-\usepackage{subfig}
-% \usepackage{textcomp}
-\usepackage{stfloats}
-\usepackage{url}
-\usepackage{verbatim}
-\usepackage{graphicx}
-% \hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
-% \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
- % T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
-% \usepackage{balance}
-
-\let\proof\relax
-\let\endproof\relax
-\usepackage{amsthm}
-
-\makeatletter
-\let\NAT@parse\undefined
-\makeatother
-\usepackage[colorlinks=true,linkcolor=black,citecolor=black]{hyperref}
-% \usepackage[]{hyperref}
-% \hypersetup{
-%     % bookmarksnumbered=true,
-%     %   linkbordercolor=blue,
-%     %   filebordercolor=red,
-%     %   citebordercolor = green,      
-%     %   urlbordercolor=red,
-%       %
-%       colorlinks=false
-%       % linkcolor=blue,
-%       % filecolor=blue,
-%       % citecolor = blue,      
-%       % urlcolor=cyan,
-% }
-
-\usepackage{cleveref, autonum}
-
-\newtheorem{remark}{Remark}
-\newtheorem{assum}{Assumption}
-\newtheorem{lem}{Lemma}
-\newtheorem{theorem}{Theorem}
-
-\newcommand{\etal}{\textit{et~al.\ }}
-\newcommand\eg{\textit{e.g.\ }}
-\newcommand\ie{\textrm{i.e.\ }}
-\newcommand\R{\mathbb{R}}
-
-\newcommand*{\mv}[1]{\boldsymbol{#1}}
-\newcommand*{\mm}[1]{\boldsymbol{#1}}
-\newcommand*{\norm}[1]{\lVert #1 \rVert}
-
-\newcommand\bx{\mv x}
-\newcommand\bu{\mv u}
-
-\newcommand\der{\mathrm d}
-\newcommand*{\ddfrac}[2]{
-    \frac{\der {#1}}{\der {#2}}
-}
-\newcommand*{\ddtfrac}[2]{
-    \tfrac{\der {#1}}{\der {#2}}
-}
+\input{dding_template/tex_packages/tex_packages_general.tex}
+\input{dding_template/tex_macros/tex_macros_general.tex}
 
 % MY PAKEAGES ========================================
 
 \title{\LARGE \bf
 Imposing a Weight Norm Constraint for Neuro–Adaptive Control
 }
-% Constrained Optimization-Based neuro–Adaptive Control With Weight Constraint
-
 
 \author{Myeongseok Ryu$^{1}$, Jiyun Kim$^{2}$, and Kyunghwan Choi$^{1}$% <-this % stops a space
 \thanks{*This work was supported by a Korea Institute for Advancement of Technology (KIAT) grant funded by the Korea Government (MOTIE) (P0020535, The Competency Development Program for Industry Specialist) \it{(Corresponding author: Kyunghwan Choi)}}% <-this % stops a space
@@ -134,7 +40,13 @@ Imposing a Weight Norm Constraint for Neuro–Adaptive Control
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 
-In this paper, a neuro–adaptive controller with weight norm constraints is proposed for uncertain Euler‒Lagrange systems. The boundedness of the weights in the neuro–adaptive controller design is important to prevent excessively large control inputs and system instability. To ensure the boundedness of the weights, the weight norm constraints are imposed as inequality constraints in the weight adaptation. The adaptation law is derived based on the constrained optimization method. The stability of the proposed controller is analyzed in the sense of Lyapunov, ensuring the boundedness of the tracking error and weight estimation. For the comparative study, two benchmark controllers and the proposed controller were evaluated through a numerical simulation of a two-link manipulator system and compared in terms of tracking performance and parameter dependency. The comparative study verified that the proposed controller has better tracking performance and lower parameter dependency.
+In this paper, a neuro–adaptive controller with weight norm constraints is proposed for uncertain Euler‒Lagrange systems. 
+The boundedness of the weights in the neuro–adaptive controller design is important to prevent excessively large control inputs and system instability. 
+To ensure the boundedness of the weights, the weight norm constraints are imposed as inequality constraints in the weight adaptation. 
+The adaptation law is derived based on the constrained optimization method. 
+The stability of the proposed controller is analyzed in the sense of Lyapunov, ensuring the boundedness of the tracking error and weight estimation. 
+For the comparative study, two benchmark controllers and the proposed controller were evaluated through a numerical simulation of a two-link manipulator system and compared in terms of tracking performance and parameter dependency. 
+The comparative study verified that the proposed controller has better tracking performance and lower parameter dependency.
 
 \end{abstract}
 
@@ -437,7 +349,6 @@ For the dynamical system in \eqref{eq. system dynamics 1}, the proposed controll
 \end{theorem}
 
 \begin{proof}
-
 The boundedness is proven from the last layer to the first layer.
 
 \subsection*{Step 1: Boundedness of ${\hat{\mv\theta}}_1,{\mm \eta}_1,\mv \xi$}
