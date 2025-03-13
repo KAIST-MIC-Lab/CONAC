@@ -1,4 +1,4 @@
-function [nn, out, info] = nnForward(nn, nnOpt, in)
+function [nn, out] = nnForward(nn, opt, in)
     
     %% POINTER TO START POINT
     pt_V = 1;
@@ -6,12 +6,12 @@ function [nn, out, info] = nnForward(nn, nnOpt, in)
 
     %% FORWARD
     % save to gradient tape
-    nn.tape(1: 1+nnOpt.NN_size(1)-1) = in;
-    pt_tape = pt_tape + nnOpt.NN_size(1);
+    nn.tape(1: 1+opt.NN_size(1)-1) = in;
+    pt_tape = pt_tape + opt.NN_size(1);
 
-    for l_idx = 1:1:nnOpt.l_size-1
-        n = nnOpt.NN_size(l_idx)+1;
-        m = nnOpt.NN_size(l_idx+1);
+    for l_idx = 1:1:opt.l_size-1
+        n = opt.NN_size(l_idx)+1;
+        m = opt.NN_size(l_idx+1);
 
         % get V weight
         V = reshape(nn.V(pt_V: pt_V+(n*m)-1), n,m);
@@ -27,7 +27,7 @@ function [nn, out, info] = nnForward(nn, nnOpt, in)
         in = V'*in;
         
         % save to gradient tape
-        if l_idx~=nnOpt.l_size-1
+        if l_idx~=opt.l_size-1
             nn.tape(pt_tape: pt_tape+m-1) = in;
         end
 
@@ -37,12 +37,10 @@ function [nn, out, info] = nnForward(nn, nnOpt, in)
     end
 
     %% ERROR CHECK
-    assert(pt_V-1 == nnOpt.v_size);
-%     assert(pt_tape-1 == nnOpt.t_size);
+    assert(pt_V-1 == opt.v_size);
+%     assert(pt_tape-1 == opt.t_size);
 
     %% TERMINATION
-    out = in;
-    info = NaN;
-    
+    out = in;    
 
 end

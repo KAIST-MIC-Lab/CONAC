@@ -1,12 +1,6 @@
-function [grad_x, IC] = model1_load()
+function grad_x = model1_load()
 % The Cartesian Coordinates are ignored
 % x = [q1 q2 \dot{q1} \dot{q2}]
-
-%% INITIAL CONDITION
-% ********************************************************
-% IC.x = [1;-1;0;0];  
-IC.x = [2;-2;0;0];  
-IC.u = [0; 0];
 
 %% SYSTEM DYNAMICS
 % ********************************************************

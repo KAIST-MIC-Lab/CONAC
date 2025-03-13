@@ -3,7 +3,6 @@ clear
 clc
 
 addpath("models");
-addpath("controllers");
 
 fprintf("                                   \n");
 fprintf("***********************************\n");
@@ -23,14 +22,22 @@ t = 0:dt:T;
 rpt_dt = 1;
 
 %% SYSTEM DECLARE
-[grad_x, IC] = model1_load();
-[r_f, rd_f, rdd_f] = ref1_load(); % sin func
+grad_x = model1_load();
+[xd1_f, xd2_f] = ref1_load(); % sin func
 % [r_f, rd_f, rdd_f] = ref2_load(); % step func
 
+x1 = [2;-2];  
+x2 = [0;0];
+u = [0;0];
+
 %% CONTROLLER LOAD
+addpath("controllers/CoNAC");
+addpath(genpath('controllers/CoNAC'))
 opt = loadOpts(dt);
+initControl;
 
 %% RECORDER INITIALIZATION
+addpath("recorder");
 recInit;
 
 %% MAIN SIMULATION
@@ -38,45 +45,37 @@ recInit;
 fprintf("[INFO] Simulation Start\n");
 
 for t_idx = 2:1:num_t
-    r1 = r_f(x, t(t_idx));
-    r1d = rd_f(x, t(t_idx));
-    r1dd = rdd_f(x, t(t_idx));
-  
-    % backstep check
-    e1 = x(1:2) - r1;
-    r2 = r1d - k1*e1;
-    e2 = x(3:4) - r2;
-    e = [e1;e2];
-    r2d = r1dd - k1*(x(3:4) - r1d);
-   
-    x_in = r1;
+    xd1 = xd1_f(x1, t(t_idx));
+    xd2 = xd2_f(x2, t(t_idx));
     
-    tic;
-    [nn, u_NN, info] = nn_forward(nn, nnOpt, x_in);
-    comp_control_hist(t_idx) = toc;
+    e1 = x1 - xd1;
+    e2 = x2 - xd2;
 
-    tic;
-    [nn, nnOpt, dot_L, info] = nn_backward(nn, nnOpt, ctrlOpt, e, u_NN);
-    comp_train_hist(t_idx) = toc;
-    
-    u = -u_NN;
+    r = e2 + opt.Gamma * e1;
+
+    x_in = [x1;x2;r];
+
+    [nn, u_NN] = nnForward(nn, opt, x_in);
+    [nn, opt] = nnBackward(nn, opt, r, u_NN);
+    u = u_NN;
 
     % control input saturation
-    u_bar = ctrlOpt.u_ball;
-    u_sat = u / norm(u) * u_bar; 
-
-    % gradient calculation
-    grad = grad_x(x, u_sat, t(t_idx));
+    if norm(u) > opt.cstr.u_ball
+        u_bar = opt.cstr.u_ball;
+        u_sat = u / norm(u) * u_bar;
+    else
+        u_sat = u;
+    end 
 
     % error check
     assert(~isnan(norm(u)));
-    assert(~isnan(norm(grad)));
-
+    
     % step forward
-    x = x + grad * dt;
+    grad = grad_x([x1;x2], u_sat, t(t_idx));
+    x1 = x1 + grad(1:2) * dt;
+    x2 = x2 + grad(3:4) * dt;
 
     recRecord;
-
 
     % simulation report
     if rem(t(t_idx)/dt, rpt_dt/dt) == 0
@@ -86,3 +85,8 @@ for t_idx = 2:1:num_t
 end
 fprintf("[INFO] Simulation End\n");
 fprintf("\n");
+
+if FIGURE_PLOT_FLAG
+    addpath("utils");
+    plot_wrapper;
+end

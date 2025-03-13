@@ -15,9 +15,9 @@ fig_len = length(fig_names);
 %% FIG.1: STATE vs REFERENCE
 % ********************************************************
 figure(1); clf
-tl = tiledlayout(2, 1);
+hF = gcf; 
+hF.Position(3:4) = [fig_width, fig_height];
 
-nexttile
 p1 = plot(t, r1, "Color", "green", "LineWidth", line_width, "LineStyle", "-"); hold on
 p2 = plot(t, x1, "Color", "blue", "LineWidth", line_width, "LineStyle", "-."); hold on
 xlabel("Time $[\rm s]$", "Interpreter", "latex")
@@ -28,7 +28,10 @@ grid on
 % ylim([-0.5, 2.5])
 legend([p1, p2], ["$r_1$","$x_1$"], "Interpreter","latex", "FontSize", lgd_size, "FontWeight", "bold", "Location", "northwest")
 
-nexttile
+figure(2); clf
+hF = gcf; 
+hF.Position(3:4) = [fig_width, fig_height];
+
 p1 = plot(t, r2, "Color", "green", "LineWidth", line_width, "LineStyle", "-"); hold on
 p2 = plot(t, x2, "Color", "blue", "LineWidth", line_width, "LineStyle", "-."); hold on
 xlabel("Time $[\rm s]$", "Interpreter", "latex")
@@ -42,10 +45,10 @@ legend([p1, p2], ["$r_2$","$x_2$"], "Interpreter","latex", "FontSize", lgd_size,
 %% FIG.2: DOT STATE vs REFERENCE
 % ********************************************************
 
-figure(2); clf
-tl = tiledlayout(2, 1);
+figure(3); clf
+hF = gcf; 
+hF.Position(3:4) = [fig_width, fig_height];
 
-nexttile
 p1 = plot(t, rd1, "Color", "green", "LineWidth", line_width, "LineStyle", "-"); hold on
 p2 = plot(t, xd1, "Color", "blue", "LineWidth", line_width, "LineStyle", "-."); hold on
 xlabel("Time $[\rm s]$", "Interpreter", "latex")
@@ -55,7 +58,10 @@ grid on
 ylim([min(rd1) * 1.25, max(rd1) * 1.25])
 legend([p1, p2], ["$\dot r_1$","$\dot x_1$"], "Interpreter","latex", "FontSize", lgd_size, "FontWeight", "bold", "Location", "northwest")
 
-nexttile
+figure(4); clf
+hF = gcf; 
+hF.Position(3:4) = [fig_width, fig_height];
+
 p1 = plot(t, rd2, "Color", "green", "LineWidth", line_width, "LineStyle", "-"); hold on
 p2 = plot(t, xd2, "Color", "blue", "LineWidth", line_width, "LineStyle", "-."); hold on
 xlabel("Time $[\rm s]$", "Interpreter", "latex")
@@ -67,13 +73,10 @@ legend([p1, p2], ["$\dot r_2$","$\dot x_2$"], "Interpreter","latex", "FontSize",
 
 %% FIG.3: CONTROL INPUT 
 % ********************************************************
-figure(3); clf
-tl = tiledlayout(2, 1);
+figure(5); clf
+hF = gcf; 
+hF.Position(3:4) = [fig_width, fig_height];
 
-% actset1 = find(u1 > cstr.U_max(1) | u1 < cstr.U_min(1));
-% actset2 = find(u2 > cstr.U_max(2) | u2 < cstr.U_min(2));
-
-nexttile
 plot(t, u1, "Color", "red", "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\tau$"); hold on
 plot(t, u1_sat, "Color", "blue", "LineWidth", line_width, "LineStyle", "-", "DisplayName", "Saturated $\tau$"); hold on
 % plot(t(actset1), u1(actset1), "Color", "red", "LineWidth", line_width, "LineStyle", "."); hold on
@@ -89,7 +92,10 @@ lgd.Location = 'northoutside';
 lgd.Interpreter = 'latex';
 lgd.FontSize = lgd_size;    
 
-nexttile
+figure(6); clf
+hF = gcf; 
+hF.Position(3:4) = [fig_width, fig_height];
+
 plot(t, u2, "Color", "red", "LineWidth", line_width, "LineStyle", "-"); hold on
 plot(t, u2_sat, "Color", "blue", "LineWidth", line_width, "LineStyle", "-"); hold on
 xlabel("Time $[\rm s]$", "Interpreter", "latex")
@@ -98,22 +104,24 @@ set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on
 ylim([min(u2_sat) * 1.25, max(u2_sat) * 1.25])
 
-    axes('Position',[.75 .75 .2 .2])
-    ang = 0:0.01:2*pi;
-    plot(cstr.u_ball*cos(ang), cstr.u_ball*sin(ang), "color", 'black', "LineWidth", line_width, "LineStyle", "-."); hold on
-    plot(u1, u2, "color", 'red', "LineWidth", 2, "LineStyle", "-"); hold on
-    plot(u1_sat, u2_sat, "color", 'blue', "LineWidth", 2, "LineStyle", "-"); hold on
-    xlabel("$\tau_1$", "Interpreter", "latex")
-    ylabel("$\tau_2$", "Interpreter", "latex")
-    set(gca, 'FontSize', 12, 'FontName', 'Times New Roman')
-    grid on 
-    xlim([-cstr.u_ball*1.25, cstr.u_ball*1.25])
-    ylim([-cstr.u_ball*1.25, cstr.u_ball*1.25])
-    pbaspect([1 1 1])
+    % axes('Position',[.75 .75 .2 .2])
+    % ang = 0:0.01:2*pi;
+    % plot(cstr.u_ball*cos(ang), cstr.u_ball*sin(ang), "color", 'black', "LineWidth", line_width, "LineStyle", "-."); hold on
+    % plot(u1, u2, "color", 'red', "LineWidth", 2, "LineStyle", "-"); hold on
+    % plot(u1_sat, u2_sat, "color", 'blue', "LineWidth", 2, "LineStyle", "-"); hold on
+    % xlabel("$\tau_1$", "Interpreter", "latex")
+    % ylabel("$\tau_2$", "Interpreter", "latex")
+    % set(gca, 'FontSize', 12, 'FontName', 'Times New Roman')
+    % grid on 
+    % xlim([-cstr.u_ball*1.25, cstr.u_ball*1.25])
+    % ylim([-cstr.u_ball*1.25, cstr.u_ball*1.25])
+    % pbaspect([1 1 1])
 
 %% FIG.4: WEIGHTS BALL CONTSRAINT
 % ********************************************************
-figure(4); clf
+figure(7); clf
+hF = gcf; 
+hF.Position(3:4) = [fig_width, fig_height];
 
 l_len = size(th, 1);
 % c_list = rand(l_len, 3);
@@ -131,7 +139,7 @@ lgd = legend;
 lgd.Orientation = 'Vertical';
 lgd.Location = 'northwest';
 lgd.Interpreter = 'latex';
-lgd.NumColumns = nnOpt.l_size-1;
+lgd.NumColumns = opt.l_size-1;
 lgd.FontSize = lgd_size;
 
 xlabel("Time $[\rm s]$", "Interpreter", "latex")
@@ -144,7 +152,9 @@ ylim([0, max(cstr.V_max) * 1.25])
 
 %% FIG.5: CONTROL BALL CONSTRAINT
 % ********************************************************
-figure(5); clf
+figure(8); clf
+hF = gcf; 
+hF.Position(3:4) = [fig_width, fig_height];
 
 ang = 0:0.01:2*pi;
 
@@ -162,10 +172,12 @@ legend([p1, p2], ["$\tau$", "Saturated $\tau$"], "Interpreter","latex", "FontSiz
 
 %% FIG.6: MULTIPLIERS & DOT LAGRANGIAN
 % ********************************************************
-figure(6); clf
+figure(9); clf
+hF = gcf; 
+hF.Position(3:4) = [fig_width, fig_height];
 tl = tiledlayout(2, 1);
 
-nexttile
+
 for l_idx = 1:1:size(L, 1)
     c = rand(1,3);
 
@@ -184,9 +196,12 @@ lgd.Location = 'northoutside';
 lgd.Interpreter = 'latex';
 lgd.FontSize = lgd_size;
 
-nexttile
-semilogy(t, dot_L, 'color', 'blue', 'DisplayName', "$\dot L$" ...
-        , "LineWidth", line_width, "LineStyle", "-"); hold on
+figure(10); clf
+hF = gcf; 
+hF.Position(3:4) = [fig_width, fig_height];
+
+% semilogy(t, dot_L, 'color', 'blue', 'DisplayName', "$\dot L$" ...
+        % , "LineWidth", line_width, "LineStyle", "-"); hold on
 xlabel("Time $[\rm s]$", "Interpreter", "latex")
 ylabel("$\dot L$", "Interpreter", "latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')

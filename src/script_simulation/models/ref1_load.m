@@ -1,20 +1,16 @@
-function [r, rd, rdd] = ref1_load()
+function [r1, r2] = ref1_load()
 %% REFERENCE SIGNAL
 % ********************************************************
+freq = 0.5*pi;
 
-r = @(x, t)[ % desired trajectory
-    +1*cos(0.5*pi*t) + 1
-    -1*cos(0.5*pi*t) - 1
+r1 = @(x, t)[ % desired trajectory
+    +1*cos(freq*t) + 1
+    -1*cos(freq*t) - 1
     ] ;
 
-rd = @(x,t) [ 
-    -1*sin(0.5*pi*t)*0.5*pi
-    +1*sin(0.5*pi*t)*0.5*pi
-];
-
-rdd = @(x, t) [
-    -1*cos(0.5*pi*t)*(0.5*pi)^2
-    +1*cos(0.5*pi*t)*(0.5*pi)^2
+r2 = @(x,t) [ 
+    -1*sin(freq*t)*freq
+    +1*sin(freq*t)*freq
 ];
 
 end

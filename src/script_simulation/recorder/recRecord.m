@@ -1,14 +1,11 @@
+x1_hist(:, t_idx) = x1;
+x2_hist(:, t_idx) = x2;
+xd1_hist(:, t_idx) = xd1;
+xd2_hist(:, t_idx) = xd2;
 
-
-x_hist(:, t_idx) = x;
-r_hist(:, t_idx) = r1;
-rd_hist(:, t_idx) = r2;
 u_hist(:, t_idx) = u;
 uSat_hist(:, t_idx) = u_sat;
-if strcmp(nnOpt.alg,"Proposed")
-    L_hist(:, t_idx) = nnOpt.Lambda;
-end
-V_hist(:, t_idx) = nn_V_norm_cal(nn.V, nnOpt);
-dot_L_hist(:, t_idx) = dot_L;
+L_hist(:, t_idx) = opt.Lambda;
+V_hist(:, t_idx) = nnWeightNorm(nn.V, opt);
 
-aux_hist(:, t_idx) = zeta;
+% aux_hist(:, t_idx) = zeta;
