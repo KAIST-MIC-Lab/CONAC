@@ -26,10 +26,6 @@ u = IC.u;
 r1 = r_f(x, 0);
 r2 = rd_f(x, 0);
 
-%% NUERAL NETWORK DECLARE
-nn = nn_init(nnOpt);
-
-
 %% RECORDER
 num_x = length(x); num_u = length(u);
 num_t = length(t);
@@ -46,31 +42,6 @@ aux_hist = zeros(num_x/2, num_t);
 
 comp_control_hist = zeros(1, num_t);
 comp_train_hist = zeros(1, num_t);
-%% 
-k1 = ctrlOpt.k1;
-k2 = ctrlOpt.k2;
-M = ctrlOpt.M;
-if strcmp(ctrlOpt.type, "CTRL1")
-    C = ctrlOpt.C;
-    G = ctrlOpt.G;
-    
-elseif strcmp(ctrlOpt.type, "CTRL2")
-    alg = nnOpt.alg;
-    C = ctrlOpt.C;
-    G = ctrlOpt.G;
-
-elseif strcmp(ctrlOpt.type, "CTRL3")
-    C = ctrlOpt.C;
-    G = ctrlOpt.G;
-    Azeta = ctrlOpt.Azeta;
-    Bzeta = ctrlOpt.Bzeta;
-    inv_M = ctrlOpt.inv_M;
-
-elseif strcmp(ctrlOpt.type, "CTRL4")
-
-else
-    error()
-end
 
 %% MAIN SIMULATION
 % ********************************************************
@@ -194,9 +165,8 @@ for t_idx = 2:1:num_t
     end
 
     % control input saturation
-    p = 100;
     u_bar = ctrlOpt.u_ball;
-    u_sat = u / norm(u) * u_bar * ( norm(u)/u_bar / (1+(norm(u)/u_bar)^p)^(1/p) ); 
+    u_sat = u / norm(u) * u_bar; 
 
     % Auxiliary Systems
     if strcmp(ctrlOpt.type, "CTRL3")
@@ -298,12 +268,5 @@ if RESULT_SAVE_FLAG
         "comp_control_hist", "comp_train_hist" ...
         );
     clear("nnOpt", "ctrlOpt");
-end
-
-% save_weights
-
-% LOCAL FUNCTIONS
-function out = sig_alp(in, alp)
-    out = abs(in).^alp .* sign(in);
 end
 
