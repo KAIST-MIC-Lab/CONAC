@@ -6,16 +6,16 @@ function opt = loadOpts(dt)
     
     opt.Gamma = diag([1 1]);
 
-    opt.alpha = 1e-0;
+    opt.alpha = 1e+1;
     opt.rho = opt.alpha*0e-0;
-    opt.NN_size = [6,8,2];
+    opt.NN_size = [6,8,8,2];
     opt.W = 1;
     opt.e_size = 2;
 
     % opt.beta = [1 1 1] * 1e-1;
-    opt.beta(1:2) = [1 1] * 1e0;
-    opt.beta(3) = 5e1; % control ipnut
-    opt.cstr.V_max = [10;40] * 1e0;
+    opt.beta(1:3) = [1 1 1] * 1e0;
+    opt.beta(4) = 5e1; % control ipnut
+    opt.cstr.V_max = [10;10;40] * 1e0;
     opt.cstr.u_ball = 50;
 
     c_num = length(opt.beta);

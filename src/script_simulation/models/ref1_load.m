@@ -1,7 +1,7 @@
 function [r1, r2] = ref1_load()
 %% REFERENCE SIGNAL
 % ********************************************************
-freq = 0.5*pi;
+freq = .5*pi;
 
 r1 = @(x, t)[ % desired trajectory
     +1*cos(freq*t) + 1

@@ -20,3 +20,5 @@ ADMM
 backpropagation
 Karush-Kuhn-Tucker
 Lyapunov-based
+neuro-adaptive
+Neuro-Adaptive
