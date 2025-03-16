@@ -1,2 +1,3 @@
 {"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\Qop-tical net-works semi-conduc-tor IEEE-Xplore B-.05em i-.025em b-.08em T-.1667em.7exq-.125emX\\E$"}
 {"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qop-tical net-works semi-conduc-tor IEEE-Xplore B-.05em i-.025em b-.08em T-.1667em.7exq-.125emX\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qrow\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q denotes the \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q row of the matrix \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}

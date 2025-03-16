@@ -1,14 +1,14 @@
 \documentclass{article}
 \usepackage{pgfplots}
-\pgfplotsset{compat=1.5}
+% \pgfplotsset{compat=1.5}
 \begin{document}
 \begin{tikzpicture}
-    \begin{loglogaxis}[
+    \begin{axis}[
     title=Convergence Plot,
     xlabel={Degrees of freedom},
     ylabel={$L_2$ Error},
     ]
     \addplot table {data.dat};
-    \end{loglogaxis}
+    \end{axis}
     \end{tikzpicture}
 \end{document}
