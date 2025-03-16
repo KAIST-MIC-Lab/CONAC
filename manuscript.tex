@@ -1,7 +1,3 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%2345678901234567890123456789012345678901234567890123456789012345678901234567890
-%        1         2         3         4         5         6         7         8
-
 \documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out if you need a4paper
 
 %\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4 paper
@@ -17,7 +13,6 @@
 
 \input{dding_template/tex_packages/tex_packages_general.tex}
 \input{dding_template/tex_macros/tex_macros_general.tex}
-
 % MY PAKEAGES ========================================
 
 \title{\LARGE \bf
@@ -59,13 +54,13 @@ The comparative study verified that the proposed controller has better tracking 
 In various practical applications, Euler‒Lagrange systems generally have uncertainties due to their unknown and unmodeled dynamics.
 These uncertainties degrade the control performance index.
 Furthermore, if uncertainties dominate the system, they may lead to instability.
-By compensating for these uncertainties, adaptive control methods have been widely used to attenuate the effects of system uncertainties \cite{RN26, RN30}.
+By compensating for these uncertainties, adaptive control methods have been widely used to attenuate the effects of system uncertainties \cite{Tao:2003aa,Ioannou:2006aa}.
 Most conventional adaptive control methods focus on estimating unknown parameters in systems or controllers.
 
-More recently, neuro–adaptive control approaches have been developed using neural networks (NNs) to approximate unknown system dynamics \cite{RN24}.
-It uses the approximation capability of NNs with any arbitrary sigmoidal activation function \cite{RN35}, which can approximate sufficiently smooth functions with minimum approximation error through ideal weights in a compact set.
+More recently, neuro–adaptive control approaches have been developed using neural networks (NNs) to approximate unknown system dynamics \cite{Farrell:2006aa}.
+It uses the approximation capability of NNs with any arbitrary sigmoidal activation function \cite{Cybenko:1989aa}, which can approximate sufficiently smooth functions with minimum approximation error through ideal weights in a compact set.
 This property allows the NNs to be synthesized in the controllers to approximate the unknown dynamics.
-Various architectures of NNs have been proposed for neuro–adaptive control, such as single-hidden-layer NN (SHLNN) \cite{RN16, RN18}, radial basis function NN (RBFNN) \cite{RN17, RN31} and deep NN (DNN) \cite{RN36}.
+Various architectures of NNs have been proposed for neuro–adaptive control, such as single-hidden-layer NN (SHLNN) \cite{Esfandiari:2015aa,Gao:2006aa}, radial basis function NN (RBFNN) \cite{Ge:2002aa,Zhou:2023aa} and deep NN (DNN) \cite{Patil:2022aa}.
 The literature has shown that NNs can improve the system's performance index and stability by approximating the unknown dynamics.
 
 % The corresponding issue in the adaptive control is the parameter drift.
@@ -73,24 +68,24 @@ The literature has shown that NNs can improve the system's performance index and
 
 % One of the common issues in neuro–adaptive control is that the boundedness of the control inputs is not guaranteed.
 One of the common issues in using NNs is that the outputs of NNs are not predictable.
-This is because the input‒output relationships of the NNs are not interpretable (\ie the NNs are usually called black boxes \cite{RN8, RN9}).
+This is because the input‒output relationships of the NNs are not interpretable (\ie the NNs are usually called black boxes \cite{Sheu:2020aa,Rudin:2019aa}).
 This issue should be addressed for safety because the unpredictable control input may reach the actuator's physical limitations and result in system collapse.
 
 Most studies modify their adaptation laws to ensure the boundedness of the weights, noting that the boundedness of the NNs' output can be ensured by the boundedness of the weights.
-In \cite{RN31, RN36}, the projection operator is utilized to prevent weight divergence by projecting the adaptation direction on the convex set of weights.
+In \cite{Zhou:2023aa,Patil:2022aa}, the projection operator is utilized to prevent weight divergence by projecting the adaptation direction on the convex set of weights.
 However, in the literature, the convex set is usually selected to be as large as possible since there is no information on the ideal weights' norm.
 Hence, the projection operator guarantees only the boundedness of the weights without theoretical optimality.
-In addition, the $\sigma$-modification \cite{RN17} and the $\epsilon$-modification \cite{RN16, RN18} are widely used to regulate the magnitude of the weights by adding a stabilizing function in the adaptation law, therby making the invariance set of the estimation error of the weights. 
+In addition, the $\sigma$-modification\cite{Ge:2002aa} and the $\epsilon$-modification \cite{Esfandiari:2015aa,Gao:2006aa} are widely used to regulate the magnitude of the weights by adding a stabilizing function in the adaptation law, therby making the invariance set of the estimation error of the weights. 
 The existing methods have shown their effectiveness in ensuring the boundedness of the weights via numerical simulations.
 However, they lack theoretical analysis regarding the optimality of the adapted weights.
 
 Similarly, approaches that regulate the magnitude of the weights have also been introduced in the deep learning literature.
-One of the approaches is $L_2$-regularization, which adds the squared magnitudes of the weights to the objective function \cite{RN1, RN13}.
+One of the approaches is $L_2$-regularization, which adds the squared magnitudes of the weights to the objective function \cite{Wu:2020aa,Lewkowycz:2020aa}.
 Then, the adaptation process attempts to reduce the magnitude of the weights, not only the original objective function.
 By regulating the magnitude of the weights, the stability of the adaptation process can be enhanced, and overfitting can be prevented.
 However, $L_2$-regularization also involves a trade-off between adaptation stability and the optimality of the weights.
 
-For the theoretical analysis of weight optimality with boundedness, the constrained optimization method \cite{RN29} can be utilized.
+For the theoretical analysis of weight optimality with boundedness, the constrained optimization method \cite{Nocedal:2006aa} can be utilized.
 It provides the theoretical definition of optimality and the numerical methodology to solve the constrained optimization problem.
 To the best of the authors’ knowledge, no prior work has utilized the constrained optimization method for the real-time weight adaptation of neuro–adaptive control satisfying weight boundedness.
 Therefore, the constrained optimization method could play a pivotal role in the neuro–adaptive control design addressing the weight boundedness.
@@ -116,7 +111,7 @@ Finally, Section \ref{sec:conclusion} concludes the paper by presenting future w
 In this study, the following notation is used.
 
 \begin{itemize}
-    \item $\otimes$ denotes the Kronecker product \cite{RN22}.
+    \item $\otimes$ denotes the Kronecker product \cite{Bernstein:2009aa}.
     \item $\mv x_{(i)}$ denotes the $i\textsuperscript{th}$ element of vector $\mv x$.    
     % \item $A_{(i,j)}$ is the $i\textsuperscript{th}$ row-$j\textsuperscript{th}$ column element of matrix $A$.
     \item $\text{row}_j(\mm A)$ denotes the $j\textsuperscript{th}$ row of $\mm A\in\mathbb{R}^{n\times m}$. 
@@ -176,8 +171,7 @@ The activation function layer consists of an elementwise nonlinear function $\si
 For further simplicity, let $\mv \theta\triangleq[\mv \theta_1^\top ,\mv \theta_0^\top ]^\top \in\R^{\Xi}$ denote the total weight vector, where $\mv \theta_i\triangleq \text{vec}(\mm V_i)\in\R^{\Xi_i}$ denotes the vectorized weights.
 $\Xi_i=(l_i+1)\cdot l_{i+1}$ and $\Xi=\Xi_0+\Xi_1$ denote the number of each layer and total weights, respectively.
 
-Using this NN, the desired controller $\mv \tau^*$ can be approximated by the ideal weight vector $\mv \theta^*$ for a compact subset $\Omega_{NN}\in\R^{l_0+1}$ to $\epsilon$ accuracy such that $\sup_{{\mv q_{NN}}\in\Omega_{NN}} \allowbreak \Vert\mv \Phi({\mv q_{NN}};\mv \theta^*) - \mv \tau^*\Vert=\epsilon<\infty$ \cite{RN35}.
-% The boundedness of the norm of $\theta^*$  and approximation error $\epsilon$ are also claimed in \cite{RN35}.
+Using this NN, the desired controller $\mv \tau^*$ can be approximated by the ideal weight vector $\mv \theta^*$ for a compact subset $\Omega_{NN}\in\R^{l_0+1}$ to $\epsilon$ accuracy such that $\sup_{{\mv q_{NN}}\in\Omega_{NN}} \allowbreak \Vert\mv \Phi({\mv q_{NN}};\mv \theta^*) - \mv \tau^*\Vert=\epsilon<\infty$ \cite{Cybenko:1989aa}.
 The ideal weight vector $\mv \theta^*$ is typically assumed to be bounded.
 Then, using the estimated weight vector $\hat{\mv \theta}=[\hat{\mv \theta}_1^\top ,\hat{\mv \theta}_0^\top ]^\top $ of $\mv \theta^*=[\mv \theta_1^{*\top},\mv \theta_0^{*\top}]^\top $, the desired controller $\mv \tau^*\approx -\mv \Phi(\mv q_{NN};\mv \theta^*)-\epsilon$ can be approximated as follows:
 \begin{equation}
@@ -279,7 +273,7 @@ Using the chain rule, the gradient of the objective function with respect to the
     .
 \end{equation}
 The calculation of $\partial J/\partial {\hat{\mv\theta}}$ is not straightforward because of the dynamics of $\xi$.
-Using the forward sensitivity method presented in \cite{RN34}, the sensitivity equation can be obtained as follows:
+Using the forward sensitivity method presented in \cite{Sengupta:2014aa}, the sensitivity equation can be obtained as follows:
 \begin{equation}
     \dot {\mm \eta} =
     \mm A_\xi - \mm B_\xi 
@@ -318,7 +312,7 @@ By decomposing for each layer, the dynamics of ${\mm \eta}_i\triangleq \partial 
         .
     \end{aligned}
 \end{equation}
-The calculation of $\partial \hat{\mv\Phi}/\partial{\hat{\mv\theta}}$ is introduced in \cite{RN36}.
+The calculation of $\partial \hat{\mv\Phi}/\partial{\hat{\mv\theta}}$ is introduced in \cite{Patil:2022aa}.
 In conclusion, the gradient of the objective with respect to the weights can be obtained as ${\partial J/\partial {\hat{\mv\theta}}} = {\mm \eta}^\top\mm W\mv\xi$ by simulating the sensitivity equation \eqref{eq. sen eq}.
 
 On the other hand, the gradient of the constraints with respect to the weights can be represented as follows:
@@ -382,10 +376,10 @@ The dynamics of ${\mm \eta}_1$ and ${\hat{\mv\theta}}_1$ are represented as
         ).
     \end{aligned} 
 \end{equation}
-According to \cite[Chap.~4 T.~1.9]{RN32}, the boundedness of ${\mm \eta}_1$ can be obtained since $\mm A_\xi$ is stable and the residual term $-\mm B_\xi (\mm I_{l_{2}}\otimes \hat{\mv\phi}^\top )$ is bounded.
+According to \cite[Chap.~4 T.~1.9]{Desoer:2009aa}, the boundedness of ${\mm \eta}_1$ can be obtained since $\mm A_\xi$ is stable and the residual term $-\mm B_\xi (\mm I_{l_{2}}\otimes \hat{\mv\phi}^\top )$ is bounded.
 
 Define the Lyapunov function $\mathcal V_1=(1/2)\mv\xi^\top \mm P\mv\xi+(1/2\alpha){\hat{\mv\theta}}_1^\top {\hat{\mv\theta}}_1$, with the Lyapunov equation $\mm A_\xi^\top \mm P+\mm P\mm A_\xi=-\mm Q$, where $\mm A_\xi<0,\mm P=\mm P^\top >0$, and $\mm Q>0$.
-Using a proposition $\hat {\mm V}_1^\top \hat{\mv\phi} = \text{vec}(\hat {\mm V}_1^\top \hat{\mv\phi})=\text{vec}(\hat{\mv\phi}^\top \hat {\mm V}_1) = (\mm I_{l_2}\otimes {\hat{\mv\theta}}^\top )\text{vec}(\hat {\mm V}_1)=(\mm I_{l_2}\otimes \hat{\mv\phi}^\top ){\hat{\mv\theta}}_1$ \cite[Proposition~(7.1.9)]{RN22}, the time derivative of $\mathcal V_1$ is
+Using a proposition $\hat {\mm V}_1^\top \hat{\mv\phi} = \text{vec}(\hat {\mm V}_1^\top \hat{\mv\phi})=\text{vec}(\hat{\mv\phi}^\top \hat {\mm V}_1) = (\mm I_{l_2}\otimes {\hat{\mv\theta}}^\top )\text{vec}(\hat {\mm V}_1)=(\mm I_{l_2}\otimes \hat{\mv\phi}^\top ){\hat{\mv\theta}}_1$ \cite[Proposition~(7.1.9)]{Bernstein:2009aa}, the time derivative of $\mathcal V_1$ is
 \begin{equation}
     \begin{aligned}
         \dot {\mathcal V}_1 
@@ -486,7 +480,7 @@ The dynamics of ${\mm \eta}_0$ and ${\hat{\mv\theta}}_0$ are represented as
         .
     \end{aligned}
 \end{equation}
-According to \cite[Chap.~4 T.~1.9]{RN32}, ${\mm \eta}_0$ is bounded since $\mm A_\xi$ is a stable matrix and $-\mm B_\xi\hat {\mm V}_1^\top \hat{\mv\phi}'(\mm I_1\otimes {\mv q_{NN}}^\top )$ is bounded.
+According to \cite[Chap.~4 T.~1.9]{Desoer:2009aa}, ${\mm \eta}_0$ is bounded since $\mm A_\xi$ is a stable matrix and $-\mm B_\xi\hat {\mm V}_1^\top \hat{\mv\phi}'(\mm I_1\otimes {\mv q_{NN}}^\top )$ is bounded.
 To obtain the invariance set of ${\hat{\mv\theta}}_0$, taking the time derivative of the Lyapunov function $\mathcal V_0=(1/2\alpha){\hat{\mv\theta}}_0^\top {\hat{\mv\theta}}_0$ yields:
 \begin{equation}
     \begin{aligned}
@@ -559,7 +553,7 @@ Therefore, the Lagrange multiplier $\lambda_{\theta_0}$ is also bounded.
     \label{table: system parameters}
 \end{table}
 
-The two-link manipulator model in \cite{RN33} is employed for the simulation demonstration as described in Fig.~\ref{fig: manipulator}.
+The two-link manipulator model in \cite{Markus:2013aa} is employed for the simulation demonstration as described in Fig.~\ref{fig: manipulator}.
 In the system, the parameters $q_p,{q_d}_p,\tau_p,m_p,l_p,{l_c}_p,b_p$ and ${f_c}_p$ denote the joint angle, desired joint angle, torque, mass, length, center of mass, viscous coefficient, and friction coefficient, respectively, for link $p\in[1,2]$.
 The values of the system parameters are given in Table~\ref{table: system parameters}.
 The reference signal of $\mv q=[q_1,q_2]^\top $ is defined as follows:
@@ -761,26 +755,9 @@ As further work, the state and output constraints for safety will be handled, en
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+{\footnotesize
 \bibliographystyle{ieeetr}
-\bibliography{refs}
+\bibliography{dding_template/refs}}
 
 \end{document}
 
-
-% \begin{figure}[!t]
-%     \centering
-%         \subfloat[ of Proposed]{\includegraphics[width=0.45\linewidth]{fig9.eps}%
-%         \label{fig: weight_Proposed}}
-%     \qquad
-%         \subfloat[ of NAC-L2]{\includegraphics[width=0.45\linewidth]{fig10.eps}%
-%         \label{fig: weight_NAC-L2}}
-%     \vfill
-%         \subfloat[ of NAC-eMod]{\includegraphics[width=0.45\linewidth]{fig11.eps}%
-%         \label{fig: weight_NAC-eMod}}
-%     \qquad
-%         \subfloat[ of CM3]{\includegraphics[width=0.45\linewidth]{fig12.eps}%
-%         \label{fig: weight_CM3}}
-%     \caption{controls.}
-%     \label{fig: weights}
-% \end{figure}
