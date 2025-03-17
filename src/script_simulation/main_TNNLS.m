@@ -13,12 +13,12 @@ FIGURE_PLOT_FLAG    = 1;
 ANIMATION_FLAG      = 0;
 AINMATION_SAVE_FLAG = 0;
 FIGURE_SAVE_FLAG    = 0;
-RESULT_SAVE_FLAG    = 1;
+RESULT_SAVE_FLAG    = 0;
 
 %% SIMULATION SETTING
-ctrl_dt = 1e-4;
-dt = ctrl_dt * 1/1;
-T = 30;
+ctrl_dt = 1/500;
+dt = ctrl_dt * 1/10;
+T = 50;
 t = 0:dt:T;
 rpt_dt = 1;
 

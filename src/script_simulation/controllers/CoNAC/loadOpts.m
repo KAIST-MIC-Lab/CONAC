@@ -6,7 +6,7 @@ function opt = loadOpts(dt)
     
     opt.Gamma = diag([1 1]);
 
-    opt.alpha = 1e+1;
+    opt.alpha = 1e0;
     opt.rho = opt.alpha*0e-0;
     opt.NN_size = [6,8,8,2];
     opt.W = 1;

@@ -12,29 +12,29 @@ T\kern-.1667em\lower.7ex\hbox{q}\kern-.125emX}}
 \DeclareMathOperator{\sat}{sat}
 \DeclareMathOperator{\myrow}{row}
 
-\newcommand*{\fe}{\mv r}
+\newcommand*{\fe}{\mv{r}}
 
-\newcommand*{\q}{\mv q}
+\newcommand*{\q}{\mv{q}}
 \newcommand*{\dq}{\dot{\mv q}}
 \newcommand*{\ddq}{\ddot{\mv q}}
-\newcommand*{\qd}{\mv q_d}
+\newcommand*{\qd}{\mv{q_d}}
 \newcommand*{\dqd}{\dot{\mv q_d}}
 \newcommand*{\ddqd}{\ddot{\mv q_d}}
 
-\newcommand*{\NN}{\mv\Phi}
-\newcommand*{\act}{\mv\phi}
-\newcommand*{\wth}{\mv\theta}
-\newcommand*{\wV}{\mm W}
+\newcommand*{\NN}{\mv{\Phi}}
+\newcommand*{\act}{\mv{\phi}}
+\newcommand*{\wth}{\mv{\theta}}
+\newcommand*{\wV}{\mm{W}}
 
-\newcommand*{\estwth}{\widehat\wth}
-\newcommand*{\estNN}{\widehat\NN}
-\newcommand*{\estact}{\widehat\act}
-\newcommand*{\estwV}{\widehat\wV}
+\newcommand*{\estwth}{\widehat{\wth}}
+\newcommand*{\estNN}{\widehat{\NN}}
+\newcommand*{\estact}{\widehat{\act}}
+\newcommand*{\estwV}{\widehat{\wV}}
 
-\newcommand*{\idealwth}{\wth^*}
-\newcommand*{\idealNN}{\NN^*}
-\newcommand*{\idealact}{\act^*}
-\newcommand*{\idealwV}{\wV^*}
+\newcommand*{\idealwth}{{\wth}^*}
+\newcommand*{\idealNN}{{\NN}^*}
+\newcommand*{\idealact}{{\act}^*}
+\newcommand*{\idealwV}{{\wV}^*}
 
 \begin{document}
 \title{
@@ -227,8 +227,12 @@ We introduce the following properties:
     \label{prop:dis_bound}
 \end{prop}
 
-In conclusion, the control objective is to develop a neuro-adaptive controller that enables $\q$ to track a continuously differentiable desired trajectory $\qd(t): \R \to \R^n$, compensating for the external disturbance while addressing the imposed constraints.
-Considering the control input saturation function, $\qd(t)$ is supposed to be available to design a feasible control input in the presence of the control input saturation.
+In conclusion, the control objective is to develop a neuro-adaptive controller that enables $\q$ to track a continuously differentiable desired trajectory $\qd:=\qd(t): \R \to \R^n$, compensating for the external disturbance while addressing the imposed constraints.
+Considering the control input saturation function, $\qd(t)$ is supposed to satisfy the following assumption:
+\begin{assum}
+    The desired trajectory $\qd(t)$ is bounded so that $\norm{\qd(t)}\le \bar{q}_d$ and available to design a feasible control input in the presence of the control input saturation.
+    \label{assum:feasible}
+\end{assum}
 
 %  SECTION CONTROLLER DESIGN ==============================
 \section{Control Law Development}\label{sec:ctrl design}
@@ -284,12 +288,14 @@ Consider the Lyapunov function $V_1:= \tfrac{1}{2}\fe^\top \mm M\fe$.
 Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
 \begin{equation}
     \begin{aligned}
-        \dot{V}_1
+        \ddtt{V}_1
         =&
         \fe^\top \mm M (
             -\mm V_m \fe -\mm K \fe + \mv f
             -\mv \tau_d + \sat(\mv\tau)
         )
+        \\
+        &
         +
         \tfrac{1}{2}
         \fe^\top \dot{\mm M}\fe
@@ -325,7 +331,7 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
     \end{aligned}
     \label{eq:lya1:dot1}
 \end{equation}
-where $\mv\tau^*:= -\mv f$ is the ideal control input. 
+where $\mv\tau^*:= -\mv f$ is the ideal control input whose maximum norm is $\bar\tau$ according to Assumption \ref{assum:feasible} and \eqref{eq:sat}. 
 Therefore, one can conclude that $\fe$ is exponentially stable so that $\lim_{t\to\infty}\norm{\fe}=\tfrac{\bar\tau_d}{\lambda_\text{min}(\mm K)}$, if $\mv \tau=-\mv\tau^*$ can be realized.
 However, $\mv \tau^*$ is not available in practice, since $\mv f$ is unknown.
 
@@ -438,6 +444,7 @@ where
         &
         i = 0
     \end{cases},
+    \label{eq:NN:grad}
 \end{equation}
 where $\act_i:= \act_i(\NN_{i-1})$ and $\act_i':= \pptfrac{\act_i}{\NN_{i-1}}$.
 
@@ -619,12 +626,12 @@ First, we introduce the following assumptions for the constraints.
 \end{assum}
 
 \begin{remark}
-    Assumption \ref{assum:convex} is not restrictive, since the saturaion functions are convex in pracice including the origin.
+    Assumption \ref{assum:convex} is not restrictive, since the saturaion functions are convex in practice including the origin.
     Moreover, Assumption \ref{assum:LICQ} is a standard assumption in optimization problems, which ensures that the gradients of the active constraints are linearly independent.
     This assumption will be used in the stability analysis (see, Lemma \ref{lem:convex:angle}).
 \end{remark}
 
-The following Lemma is introduced for the stability analysis. % of the last layer of the DNN.
+The following Lemma is introduced for the stability analysis.
 \begin{lem}
     If Assumptions \ref{assum:convex} and \ref{assum:LICQ} are satisfied, the angle between $\pptfrac{c_j}{\estwth_k}$ and $\estwth_k$ is positive when $c_j$ is active, \ie $\pptfrac{c_j}{\estwth_k}^\top\estwth_k>0$.
     \label{lem:convex:angle}
@@ -632,21 +639,21 @@ The following Lemma is introduced for the stability analysis. % of the last laye
 
 \begin{proof}
 
-Since $\mv\tau = -\estNN$, using \cite[Proposition 7.1.9]{Bernstein:2009aa}, a linear map $\mm T(\cdot):\estwth_k\to\mv\tau$ can be derived: 
+Since $\mv\tau = \estNN$, using \cite[Proposition 7.1.9]{Bernstein:2009aa}, a linear map $\mm T(\cdot):\estwth_k\to\mv\tau$ can be derived: 
 \begin{equation}\label{eq:linear:map}
     \begin{aligned}
     \mv\tau 
     = 
     &
-    -\estNN 
+    \estNN 
     % = 
-    % -\myvec(\estNN)
+    % \myvec(\estNN)
     =
-    -\myvec(
+    \myvec(
         \estwV_k^\top \estact_k
     ) 
     = 
-    -(
+    (
         \mm I_{l_{k+1}}
         \otimes 
         \estact_k^\top
@@ -654,7 +661,7 @@ Since $\mv\tau = -\estNN$, using \cite[Proposition 7.1.9]{Bernstein:2009aa}, a l
     \myvec(\estwV_k)
     \\
     = &
-    -\underbrace{
+    \underbrace{
         (
         \mm I_{l_{k+1}}
         \otimes 
@@ -665,7 +672,7 @@ Since $\mv\tau = -\estNN$, using \cite[Proposition 7.1.9]{Bernstein:2009aa}, a l
     \mm T(\estact_k) \estwth_k.
     \end{aligned}
 \end{equation}
-Therefore, the convexity of the input constraints in $\tau$-space (assumed in Assumption \ref{assum:convex}) holds in $\estwth_k$-space, implying
+Therefore, the convexity of the input constraints in $\mv\tau$-space (assumed in Assumption \ref{assum:convex}) holds in $\estwth_k$-space, implying
 that $\pptfrac{c_j}{\estwth_k}^\top\estwth_k>0$.
 
 \end{proof}
@@ -675,9 +682,13 @@ The weight constraints $\boldsymbol{c}_{\theta}:= [c_{\theta_i}]_{i\in[0,\cdots 
 \begin{equation}
     c_{\theta_i}
     =
-    \Vert \estwth_i\Vert^2 
-    -
-    \bar\theta_i^2 \le 0
+    \tfrac{1}{2}
+    (
+        \Vert \estwth_i\Vert^2 
+        -
+        \bar\theta_i^2 
+    )    
+    \le 0
     \label{eq:cstr:weight_ball}
 \end{equation}
 with $\bar\theta_i<\infty$ denoting the maximum allowable norm for $\estwth_i$. 
@@ -686,7 +697,7 @@ The gradient of $\boldsymbol{c}_\theta$ with respect to $\estwth$ is given by
     \pptfrac{c_{\theta_i}}{\estwth_j} 
     =
     \begin{cases}
-        2\estwth_i,
+        \estwth_i,
         &
         \text{if } i=j
         \\
@@ -702,24 +713,34 @@ Note that $\mv c_{\theta}$ satisfies Assumption \ref{assum:convex} and \ref{assu
 %  SECTION STABILITY ANALYSIS ==============================
 \section{Stability Analysis}\label{sec:stability}
 
-% \begin{lem} 
-%     If $c_j(\estwth),\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in[0,\cdots,k]}$ satisfies Assumption \ref{assum1}, then $\Vert\partial c_j/\partial\estwth_i\Vert$, for all $i\in[k-1,\cdots, 0]$, is bounded, provided the norms of $\estwth_i$, for all $i\in[k,\cdots, i+1]$, remain bounded.
-%     % which can be verified using the boundedness of $\estwth_i,\ \forall i [k,\cdots,i+1]$ (as demonstrated in Section \ref{sec:stability}), and the boundedness of $\Vert\phi_i(\cdot)\Vert$ and $\Vert\nabla\phi_i(\cdot)\Vert$.
-%     \label{lem2}
-% \end{lem}
-
-% \begin{proof}
-
-% The derivative of $c_j,\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in[0,\cdots,k]}$, with respect to $\estwth_i$ is represented as
-% \begin{equation}
-%     {\partial c_j\over\partial \estwth_i} = {\partial c_j\over\partial \tau} {\partial \tau\over\partial \hat\Phi} {\partial \hat\Phi\over\partial \estwth_i}
-% \end{equation}
-% where $\partial \tau/\partial \hat\Phi=-I_n$, which is bounded. From the linear mapping in \eqref{eq linear map}, $\tau$ is bounded as long as $\estwth_k$ is bounded (by the condition of the lemma), and $\Vert\phi_k(\cdot)\Vert$ is bounded due to the properties of the activation functions. By Assumption \ref{assum1}, the function $c_j$ is convex. The convex function has a bounded derivative with respect to $\tau$, since $\tau$ is a bounded variable (\ie $\partial c_j/\partial\tau$ is bounded). Furthermore, $\partial \hat\Phi/\partial \estwth_i$ is bounded, provided that the norms of $\estwth_i,\ \forall i \in[k,\cdots,i+1]$, are bounded. This can be verfied by using the definition of $\partial \hat\Phi/\partial\estwth_i$ given in \eqref{eq. nabla phi}.
-% Consequently, $\Vert\partial c_j/\partial \estwth_i\Vert,\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in[0,\cdots,k]}$, is bounded, when $\estwth_i,\ \forall i\in [k,\cdots,i+1]$ are bounded.
-
-% \end{proof}
-
 Before conducting the stability analysis, let us define the weight estimation error as $\tilde\wth:= [\tilde\wth_i]_{i\in[0,\cdots,k]}$, where $\tilde\wth_i:=\estwth_i-\idealwth_i$.
+The following lemma is introduced for the stability analysis.
+
+\begin{lem} 
+    If $c_j(\estwth),\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in[0,\cdots,k]}$ satisfies Assumption \ref{assum:convex}, then $\norm{\pptfrac{c_j}{\estwth_i}},\ \forall i\in[k-1,\cdots, 0]$, is bounded, provided the norms of $\estwth_i,\ \forall i\in[k,\cdots, i+1]$, remain bounded.
+    \label{lem:cstr:grad:bound}
+\end{lem}
+
+\begin{proof}
+
+The derivative of $c_j,\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in[0,\cdots,k]}$, with respect to $\estwth_i$ is represented as
+\begin{equation}
+    \pptfrac{c_j}{\estwth_i} 
+    = 
+    \pptfrac{c_j}{\mv\tau} 
+    \pptfrac{\mv\tau}{\estNN} 
+    \pptfrac{\estNN}{\estwth_i}
+\end{equation}
+where $\pptfrac{\tau}{\estNN}=\mm I_n$, which is bounded. 
+From the linear mapping in \eqref{eq:linear:map}, $\mv\tau$ is bounded as long as $\estwth_k$ is bounded (by the condition of the lemma), and $\norm{\act_k(\cdot)}$ is bounded due to the properties of the activation functions. 
+By Assumption \ref{assum:convex}, the function $c_j$ is convex. 
+The convex function has a bounded derivative with respect to $\mv\tau$, since $\mv\tau$ is a bounded variable (\ie $\pptfrac{c_j}{\mv\tau}$ is bounded). 
+Furthermore, $\pptfrac{\estNN}{\estwth_i}$ is bounded, provided that the norms of $\estwth_i,\ \forall i \in[k,\cdots,i+1]$, are bounded. 
+This can be verified by using the definition of $\pptfrac{\estNN}{\estwth_i}$ given in \eqref{eq:NN:grad}.
+Consequently, $\norm{\pptfrac{c_j}{\estwth_i}},\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in[0,\cdots,k]}$, is bounded, when $\estwth_i,\ \forall i\in [k,\cdots,i+1]$ are bounded.
+
+\end{proof}
+
 The following theorem shows that $\estwth$ and $\fe$ are bounded.
 
 \begin{theorem}
@@ -731,201 +752,213 @@ The following theorem shows that $\estwth$ and $\fe$ are bounded.
 
 The boundednesses of $\estwth$ and $\fe$ are analyzed recursively from the last $k\textsuperscript{th}$ layer to the first layer of $\estNN$. 
 Without loss of generality, weight constraint $c_{\theta_i},\ \forall i\in[0,\cdots,k]$ is supposed to be active.
-This assumption is reasonable, since even if the constraint is inactive \MSRY{Add the reason why it is reasonable.}
-The step-by-step analysis is described as follows.
-\MSRY{start from here plz}
-\subsection*{Step 1: Boundedness of $\estwth_k$, and $\fe$}
+This assumption is reasonable, since even if the constraint is inactive 
+\MSRY{Add the reason why it is reasonable.}
+We consider two cases: (C$_1$) control input constraints are active, and (C$_2$) control input constraints are inactive.
+Using the fact that amplitude of the control input is only depends on $\estwth_k$ (\ie see \eqref{eq:control:est}, \eqref{eq:DNN:architecture} and $\norm{\act_k}<\infty$), the boundedness of inner layers' weights will be verified after the boundedness of $\estwth_k$ and $\fe$ is confirmed. 
 
-% As the result of the time derivative of $V_1$, the radius of invariant set $\Theta_\fe^{c_1}$ of $\fe$ can be obtained as 
+\subsection*{Case (C$_1$): Control input constraints are active.}
 
-Assume that all constraints are actve in $\mathcal A$ without loss of generality. The dynamics of $\eta_k$ and $\estwth_k$ can be decomposed from \eqref{eq. adaptation law th} and \eqref{eq. eta dynamics} as 
+As the result of the time derivative of $V_1$, the invariant set $\Theta_{\fe}^{c_1}$ of $\fe$ (\ie if $\fe$ leaves $\Theta_{\fe}^{c_1}$, $\ddtt V_1$ is negative) can be obtained as 
 \begin{equation}
-    \begin{aligned}
-        \dot\eta_k =
-        & 
-        A_\xi \eta_k -B_\xi {\partial h\over\partial\tau}{\partial \hat\Phi\over \partial \estwth_k}
-        =
-        A_\xi \eta_k -B_\xi {\partial h\over\partial\tau}(I_{l_{k+1}}\otimes \hat\phi_k^\top)\\
-        \dot{\estwth}_k =
-        & -\alpha 
-        \bigg[
-            \eta_k^\top W\xi+
-            \sum_{j\in\mathcal{A}}
-            \lambda_j{\partial c_j\over\partial \estwth_k}
-        \bigg]
-    \end{aligned} 
-\end{equation}
-According to \cite[Chap.~4 T.~1.9]{Desoer:2009aa}, $\Vert \eta_k\Vert_F$ is bounded, since $A_\xi$ is a stable matrix and the term $-B_\xi(\partial h/\partial \tau)(I_{l_{k+1}}\otimes\hat\phi_k^\top)$ is also bounded.
-
-Let $\mathcal{V}: \R^{2n} \times \R^{\Xi} \to \R_{>0}$ denote the Lyapunov function:
-\begin{equation}
-    \mathcal{V} = \frac{1}{2} \xi^\top P \xi + \frac{1}{2 \alpha} \hat{\wth}_k^\top \hat{\wth}_k,
-    \label{eq. Lyapunov func}
-\end{equation}
-with the Lyapunov equation $A_\xi^\top P + P A_\xi = -Q$, where $A_\xi < 0$, $P = P^\top > 0$, and $Q > 0$.
-Taking the time derivative of $\mathcal{V}$ yields:
-\begin{equation}
-    \begin{aligned}
-        \dot{\mathcal{V}} 
-        &= -\frac{1}{2} \xi^\top Q \xi + \xi^\top P B (V_k^{*T} \phi_k^* - h(\tau) + \epsilon) \\
-        &\quad - \hat{\wth}_k^\top \left( \eta_k W \xi + \sum_{j \in \mathcal{A}} \lambda_j \frac{\partial c_j}{\partial \hat{\wth}_k} \right)
-    \end{aligned}
-    \label{eq. Lyapunov dot}
-\end{equation}
-By applying the boundedness of $\Delta := P B (V_k^{*T} \phi_k^* - h(\tau) + \epsilon)$ and $M := \eta_k W$, where $\Vert \Delta \Vert \leq \bar{\Delta} < \infty$ and $\Vert M \Vert_F \leq \bar{M} < \infty$, this simplifies to:
-\begin{equation}
-    \begin{aligned}
-        \dot{\mathcal{V}} 
-        &\leq \left( -\frac{\lambda_{\text{min}}(Q)}{2} + \frac{\bar{M}}{2} \right) \Vert \xi \Vert^2 + \bar{\Delta} \Vert \xi \Vert \\
-        &\quad + \frac{\bar{M}}{2} \Vert \hat{\wth}_k \Vert^2 - \sum_{j \in \mathcal{A}} \lambda_j \hat{\wth}_k^\top \frac{\partial c_j}{\partial \hat{\wth}_k}.
-    \end{aligned}
-    \label{eq. dot Vk 1}
+    \Theta_{\fe}^{c_1} 
+    = 
+    \left\{ 
+        \fe \in \R^n 
+        \mid 
+        \norm{\fe} 
+        \le 
+        \tfrac{2\bar\tau+\bar\tau_d}{\lambda_{\text{min}}(\mm K)}
+    \right\}
+    .
+    \label{eq:invariant:c1:fe}
 \end{equation}
 
-By representing the term $\partial c_{\wth_k}/\partial \estwth_k$ in the last inequality as $\partial c_{\wth_k}/\partial \estwth_k=2\estwth_k$ using the result provided in \eqref{eq weight norm cnst grad}, $\dot {\mathcal V}$ can be rewritten as
+To investigate the boundedness of $\estwth_k$, consider the Lyapunov function candidate $V_2:=\tfrac{1}{2\alpha}\estwth_k^\top \estwth_k$.
+Taking the time derivative of $V_2$ yields:
 \begin{equation}
     \begin{aligned}
-        \dot {\mathcal V} \le&
-        (\cdot) + 
-        \bigg(
-            -2\lambda _{\wth_k}+{\bar M}/{2}
-        \bigg)
-        \Vert\estwth_k\Vert^2 
+        \ddtt  V_2 
+        =& 
+        -\estwth_k^\top 
+        (
+            (\mm I_{l_{k+1}}\otimes \hat\act_k^\top)^\top
+            \fe
+            +
+            \textstyle\sum_{j\in\mathcal{I}}
+            \lambda_j 
+            \pptfrac{c_j}{\estwth_k}
+        )
         \\
-        &- \underbrace{
-        \sum_{j\in\mathcal{A}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}}\lambda_j\estwth_k^\top{\partial c_j\over\partial \estwth_k}
-        }_{>0, \text{\;by Lemma} \ref{lem1} \text{\;and\;} \text{Assumption} \ref{assum2}}	
+        =&
+        -\estwth_k^\top 
+        (
+            (\mm I_{l_{k+1}}\otimes \hat\act_k^\top)^\top
+            \fe
+            +
+            \lambda_{\theta_k}\estwth_k
+        \\
+        &
+            +
+            \textstyle\sum_{
+                j\in\mathcal{A}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}
+            }
+            \lambda_j 
+            \pptfrac{c_j}{\estwth_k}
+        )
         \\
         \le&
-        \bigg(
-            -{\lambda_\text{min}(Q)}/{2}+{\bar M}/{2}
-        \bigg)
-        \Vert\xi\Vert^2
-        +\bar \Delta \Vert \xi\Vert 
-        \\&
-        + 
-        \bigg(
-            -2\lambda _{\wth_k}+{\bar M}/{2}
-        \bigg)
-        \Vert\estwth_k\Vert^2 
+        -
+        \lambda_{\theta_k}\norm{\estwth_k}^2
+        +
+        \underbrace{
+            \norm{(\mm I_{l_{k+1}}\otimes \hat\act_k^\top)}
+        }_{:=c_1\in\R_{>0}}
+        \norm{\fe}
+        \norm{\estwth_k}
+        \\
+        &
+        -
+        \underbrace{
+        \textstyle\sum_{
+            j\in\mathcal{A}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}
+        }
+        \lambda_j 
+        \estwth_k^\top \pptfrac{c_j}{\estwth_k}
+        }_{:= c_2 >0,\ \text{by Lemma \ref{lem:convex:angle} and Assumption \ref{assum:LICQ}}}
+        \\
+        \le&
+        -
+        \lambda_{\theta_k}\norm{\estwth_k}^2
+        +
+        c_1     
+        \norm{\fe}
+        \norm{\estwth_k}
+        .
     \end{aligned}
-    \label{eq. dot Vk 2}
+    \label{eq:lya2:dot}
 \end{equation}
-%From \eqref{eq. dot Vk 2}, by defining $P=I_2$, if the control gains ${k_q}$ and ${k_z}$ are selected sufficiently large such that
-Define $P=I_2$, leading to $Q = -A_{\xi}^\top - A_{\xi}$. Consequently, the minimum eigenvalues ${\lambda_{\text{min}}(Q)}$ is determined by $2\min({k_q},{k_z})$, as follows from the structure of the matrix $A_{\xi}$. From \eqref{eq. dot Vk 2}, if the control gains ${k_q}$ and ${k_z}$ are chosen sufficiently large to satisfy the condition:
-%is a function of $k_q$ and $k_z$, as per the definition of matrix $A_{\xi}$. From \eqref{eq. dot Vk 2}, if the control gains ${k_q}$ and ${k_z}$ are chosen sufficiently large such that
+According to \eqref{eq:lya2:dot}, the invariant set of $\estwth_k$ is defined as
 \begin{equation}
-    % -\lambda_\text{min}(Q)/2+M/2<0
-    \min({k_q},{k_z})>\bar M/2
-    \label{eq. ctrl stable condition}
-\end{equation}
-and if the Lagrange multiplier $\lambda_{\wth_k}$ for the weight norm constraint of the $k\textsuperscript{th}$ layer is increased sufficiently, such that
-\begin{equation}\label{eq: lambda bk}
-    -2\lambda_{\wth_k} +{\bar M/ 2}<0,  
-\end{equation}
-(as dictated by \eqref{eq. adaptation law L} when the corresponding constraint is violated, \ie $c_{\wth_k}=\Vert \estwth_k\Vert^2 -\bar\wth_k^2 > 0$), then both $\xi$ and $\estwth_k$ will remain bounded within the compact sets $\wth_\xi$ and $\wth_{\estwth_k}$, defined as
-\begin{equation}
-    \wth_\xi = 
-    \bigg\{ \xi \ \bigg\vert\ \Vert\xi\Vert \le  
-    {2\bar \Delta\over \lambda _\text{min}(Q)-\bar M} 
-    \bigg\}
-\end{equation}
-and
-\begin{equation}\label{eq: hat wth k bnd}
-    \wth_{\estwth_k} = 
-    \{
-    \estwth_k 
-    \ 
-    \vert
-    \ 
-    \Vert
-    \estwth_k\Vert \le  
-    \bar\wth_k
-    \}
+    \Theta_{\theta_k}^{c_1} 
+    = 
+    \left\{ 
+        \estwth_k \in \R^{\Xi_{k}} 
+        \mid 
+        \norm{\estwth_k} 
+        \le 
+        \tfrac{
+            c_1(2\bar\tau+\bar\tau_d)
+        }{
+            \lambda_{\theta_k}\lambda_\text{min}(\mm K)
+        }
+    \right\}
     .
+    \label{eq:invariant:c1:wth}
 \end{equation}
-The increase of the Lagrange multiplier $\lambda_{\wth_k}$ will halt once $\hat \wth_k$ reaches the compact set $\wth_{\estwth_k}$. Thus, the Lagrange multiplier $\lambda_{\wth_k}$ is bounded.
-% Note that the compact set $\wth_{\estwth_k}$ implies that the input norm constraint for the last $k\textsuperscript{th}$ layer is satisfied because the condition \eqref{eq: lambda bk} is fulfilled in the case of constraint violation.
 
-%Note that $\wth_{\tilde\wth_k}$ converges to $\{\tilde\wth_k\  \vert \ \Vert\tilde\wth_k\Vert\le\bar\wth_k\}$, if $\lambda_{b,k}$ increases such that $4\lambda_{b,k} \gg  \bar M_k$.
+The satisfaction of the constraints can be verified by the boundedness of $\estwth_k$.
+For $c_{\theta_k}$, if the corresponding Lagrange multiplier $\lambda_{\theta_k}$ increases infinitely by the constraint violation, $\estwth_k$ approaches to the origin as $\Theta_{\estwth_k}^{c_1}$ is squeezed to a point.
+The satisfactions of the remaining control input constraints can be verified implicitly using $c_2$ in \eqref{eq:lya2:dot}.
+Similarly to $c_{\theta_k}$, as the control input constraint $c_j,\ \forall j\in\mathcal{A}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}$ is violated, the corresponding Lagrange multiplier $\lambda_j$ increases infinitely, so does $c_2$.
+It makes $c_2$ dominates the right-hand side of \eqref{eq:lya2:dot}, which leads $\ddtt V_2$ negative definite.
+This drives $\estwth_k$ to the origin until the constraint is satisfied (\ie by Assumption \ref{assum:convex} and Lemma \ref{lem:convex:angle}, the control input constraints can be considered as convex constraint in $\estwth_k$-space).
 
-% To analyze the boundedness of the Lagrange multipliers, let $\mathcal V_2$ be defined as 
+Therefore, the boundedness of $\estwth$ and $\fe$ are guaranteed by the invariant sets $\Theta_{\fe}^{c_1}$ and $\Theta_{\theta_k}^{c_1}$ and satisfactions of $c_j,\ \forall j\in\mathcal{I}$ are confirmed.
 
-% \begin{figure}[!t]
-%     \centering
-%     \includegraphics[width=0.7\linewidth]{lyapunov.drawio.png}
-%     \caption{caption.}
-%     \label{fig: V space}
-% \end{figure}
+\subsection*{Case (C$_2$): Control input constraints are inactive.}
 
-
-The boundedness of the Lagrange multipliers $\lambda_j,\ \forall j\in\mathcal A\setminus\{\wth_i\}_{i\in[0,\cdots,k]}$, can be accessed by considering the convexity of the constraints in $\estwth_k$-space.
-The boundedness of the remaining Lagrange multipliers associated with the weight norm constraints, $\lambda_{\wth_r},\ \forall r\in[0,\cdots,k-1]$, will be examined in Step $i$. Based on Assumption \ref{assum1} and Lemma \ref{lem1},  
-%(\ie the constraint is convex on $\tau$-space and $\estwth_k$-space, including the origin), 
-\MSRY{CHECK BELOW LINE}
-the equality constraints $c_j \le 0, \ \forall j\in\mathcal A\setminus \{\wth_i\}_{i\in[0,\cdots,k]}$, formconvex sets $\wth_{c_j}$ in $\estwth_k$-space.
-Let $\wth_c:= \cap_{j\in\mathcal A\setminus \{\wth_i\}_{i\in[0,\cdots ,k]}} \wth_{c_j}$ represent the intersection of these convex sets, which also contains the origin.
-If $\lambda_j$ increases sufficiently such that $\dot{\mathcal V} \approx -\sum_{j\in\mathcal A\setminus \{\wth_i\}_{i\in[0,\cdots,k]}}\lambda_j\estwth_k^\top(\partial c_j/\partial \estwth_k)<0$, then ${\mathcal V}$, and consequently $\Vert\estwth_k\Vert$, will decrease until $\estwth_k$ reaches $\wth_\xi\cap\wth_{\estwth_k}\cap\wth_c$. Once $\estwth_k$ hits the boundary of $\wth_c$, the Lagrange multipliers will cease to increase, thus ensuring their boundedness.
-
-% To analyze the boundedness of the Lagrange multipliers, assume that $\lambda_j$ dominantly increased such that $\dot{\mathcal V} \approx -\sum_{j\in\mathcal{A}-\{\wth_k\}}\lambda_j\estwth_k^\top(\partial c_j/\partial \estwth_k)<0$. Then $\estwth_k$ approaches into $\wth_\xi\cap\wth_{\estwth_k}\cap\wth_\gamma$. It means that the Lagrange multipliers are bounded satisfying the constraints.
-
-%  subset of $\estwth_k$ which satisfy the constraints in $\mathcal A$, can be represented as 
-% \begin{equation}
-%    \wth_\gamma=
-%    \{
-%        \estwth_k
-%        \ \vert\ 
-%        \Vert\estwth_k\Vert
-%        \le \gamma
-%    \}
-% \end{equation}
-% where $\gamma \le \bar\wth_k$, since if $\gamma$ is greater than $\bar\wth_k$, the constraint can be handled by $c_{\wth_k}$. %, as shown in Fig~\ref{fig: V space}.
-
-
-%To analyze the Lagrange multipliers, assume that the Lagrange multipliers are increased such that
-% \begin{equation}
-%    \dot V \le - \underbrace{
-%     \sum_{j\in\mathcal{A}-b_k}\lambda_j\tilde\wth_k^\top\nabla c_{j,k}
-%     }_{>0}	\le -\gamma_k <0
-% \end{equation}
-%with $\gamma_k\in\mathbb R_{>0}$.
-%It imples that there is a finite time $t_f$ for $\estwth_k$ to converge to the point that satisfies the every constraint, while approaching to the $\idealwth$.
-%When the constraints are satisfied, the reminders of the multipliers in $\mathcal A$ converges.
-
-\subsection*{Step i: Boundedness of $\estwth_i$ and $\eta_i, \ i\in[k-1,\cdots,0]$}
- % \subsubsection*{Step i: Boundedness of $\estwth_i,\eta_i,\ i\in[k-1,\cdots,0]$}
-
-% Following facts
-% \begin{equation}
-%     {\partial \hat\Phi\over \partial \estwth_i} = V_k^\top  \phi'_k \cdots V_{i+1}^\top  \phi'_{i+1} (I_{l_{i+1}}\otimes \phi^\top  _{i})
-% \end{equation}
-
-The boundedness of the Frobenius norm of the gradient $\partial\hat\Phi/\partial \estwth_i$ can be obtained from its definition in \eqref{eq. nabla phi}. This relies on the fact that the boundedness of $\Vert\estwth_i\Vert,\ \forall i\in[k,\cdots,i+1]$, was already shown in the previous step (\ie Step 1 to Step $i+1$) and the activation functions $\hat\phi_i$ and their derivative $\hat\phi_i'$ are bounded.
-
-The dynamics of $\eta_i$ and $\estwth_i$ for all $i\in [k-1,\cdots,0]$ are represented as
-\begin{equation}
-    \dot\eta_i = 
-    A_\xi\eta_i -B_\xi {\partial h\over\partial\tau}
-    {\partial \hat\Phi\over \partial \estwth_i}
-\end{equation}
-and
+Since, here, the control input constraints are inactive, $\sat(\cdot)$ in \eqref{eq:lya1:dot2} and $c_j,\ \forall j\in\mathcal{I}$ in \eqref{eq:lya2:dot} can be removed.
+Consider the Lyapunov function candidate $V_3:=V_1+V_2$ and its time derivative:
 \begin{equation}
     \begin{aligned}
-        \dot{\estwth}_i 
+        \ddtt V_3
         =&
-        -\alpha 
-        \bigg[
-            \eta_i^\top W\xi+2\lambda_{\wth_i} \estwth_i
+        -\lambda_{\text{min}}(\mm K)\norm{\fe}^2
+        +\bar\tau_d\norm{\fe}
+        +\fe^\top (\estNN - \idealNN - \mv\epsilon)
+        \\
+        &
+        -\estwth_k^\top (
+            (\mm I_{l_{k+1}}\otimes \hat\act_k^\top)^\top
+            \fe
             +
-            \sum_{j\in\mathcal{A}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}}\lambda_j{\partial c_j\over\partial \estwth_i}
-        \bigg].
+            \lambda_{\theta_k}\estwth_k
+        )
+        \\
+        \le&
+        -\lambda_{\text{min}}(\mm K)\norm{\fe}^2
+        +\fe^\top \estNN
+        +(
+            \bar\tau_d+\norm{
+                \underbrace{
+                    \idealNN+\mv\epsilon
+                }_{=\mv\tau^*}
+            }
+        )
+        \norm{\fe}
+        \\
+        &
+        -\estNN^\top\fe 
+        -\lambda_{\theta_k}\norm{\estwth_k}^2
+        \\
+        \le&
+        -\lambda_{\text{min}}(\mm K)\norm{\fe}^2
+        +\fe^\top \estNN
+        +(\bar\tau_d+\bar\tau)
+        \norm{\fe}
+        -\lambda_{\theta_k}\norm{\estwth_k}^2
+        .
     \end{aligned}
+    \label{eq:lya3:dot}
 \end{equation}
-According to \cite[Chap.~4 T.~1.9]{Desoer:2009aa}, $\Vert\eta_i\Vert_F$ is bounded because $A_\xi$ is a stable matrix and the terms $\Vert B_\xi\Vert, \Vert(\partial h/\partial \tau)\Vert_F$, and $\Vert\partial \hat\Phi/\partial\estwth_i\Vert_F$ are bounded.
-When $\lambda_{\wth_i}$ is generated due to a violation of the weight norm constraint, $\estwth_i$ remains bounded because the term $-2\alpha\lambda_{\wth_i}$ is stable, and the residual terms $\Vert\eta_iW\xi\Vert$, $\lambda_j$, and $\Vert(\partial c_j/\partial \estwth_i)\Vert_F$ for all $j\in\mathcal{A}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}$ are bounded, as demonstrated in Step 1 and by Lemma \ref{lem2}.
-The boundedness of each $\lambda_{\wth_i}$ also can be obtained, assuming that $\lambda_{\wth_i}$ is sufficiently increased regulating $\Vert\wth_i\Vert$ into the origin until $c_{\wth_i}$ is satisfied.
+Like in Case (C$_1$), the boundedness of $\fe$ can be verified by the invariant sets $\Theta_{\fe}^{c_2}$ defined as
+\begin{equation}
+    \Theta_{\fe}^{c_2}
+    =
+    \left\{ 
+        \fe \in \R^n 
+        \mid 
+        \norm{\fe} 
+        \le 
+        \tfrac{
+            \bar\tau_d+\bar\tau
+        }{
+            \lambda_{\text{min}}(\mm K)
+        }
+    \right\}
+    .
+\end{equation}
+The boundedness of $\estwth_k$ also can be ensured by the invariant set $\Theta_{\theta_k}^{c_2}=\{ \estwth_k \in \R^{\Xi_{k}} \mid \norm{\estwth_k} \le \bar\theta_k \}$, as $\lambda_{\theta_k}$ exists positive until $c_{\theta_k}$ is satisfied.
 
-Therefore, starting from the boundedness of $\xi$, $\estwth_k$, and $\eta_k$ in the $k\textsuperscript{th}$ layer, the boundednesses of $\estwth_i$ and $\eta_i$ for the remaining layers $i\in[0,\cdots,k-1]$ can be established recursively, down to the input layer ($i=0$). Thus, $\estwth$, $\xi$, and $\eta$ are bounded because $\estwth_i,\eta_i,\ \forall i\in[0,\cdots,k]$ and $\xi$ are bounded. Furthermore, since the estimated weight vector $\estwth$ is bounded, the weight estimation error $\tilde\wth$ is also bounded, as $\idealwth$ is bounded according to the universal approximation theorem.
+\hfill 
+
+The boundedness of inner layers' weights and satisfactions of their constraints $c_j,\ \forall j\in\{\theta_i\}_{i\in[k-1,\cdots,0]}$ can be shown recursively, using \cite[Chap.~4 T.~1.9]{Desoer:2009aa}
+The dynamics of $\estwth_i,\ \forall i\in[k-1,\cdots,0]$ are represented as
+\begin{equation}
+    \ddtt \estwth_i 
+    =
+    -\alpha
+    (
+        \pptfrac{\estNN}{\estwth_i}^\top
+        \fe
+        +
+        \lambda_{\theta_i}\estwth_i
+        +
+        \textstyle\sum_{
+            j\in\mathcal{A}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}
+        }
+        \lambda_j
+        \pptfrac{c_j}{\estwth_i}
+    )
+    .
+\end{equation}
+Invoking Lemma \ref{lem:cstr:grad:bound}, $\estwth_i$ is bounded, provided that $\estwth_i,\ \forall i\in[k,\cdots,i+1]$ are bounded, since the system matrix $-\lambda_{\theta_i} \mm I_{\Xi_i}$ is stable and the residual terms are bounded.
+Therefore, starting from $(k-1)\textsuperscript{th}$ layer, the boundedness of $\estwth_i$ can be established recursively down to the input layer ($i=0$).
+
+\hfill
+
+Finally, the filtered error $\fe$ and the estimated weights $\estwth$ are bounded and the imposed constraints $c_j,\ \forall j\in\mathcal I$ are satisfied.
 
 \end{proof}
 
@@ -1086,9 +1119,9 @@ Four controllers were examined for a comparative study. The first was the Backst
 The BSC used the control law defined in \eqref{eq. desired control} with $\hat f=[0,0]^\top$. Since BSC did not consider the unknown system dynamics, the approximation term $\hat f$ was set to zero.
 %CM1 has the following control gains and design parameters: $k_s=5,{k_z}=5, M_0=I_2, C_0=I_2, G_0=[0,0]^\top  $.
 % Since CM1 does not consider the unknown term, $\hat f$ was set to $[0,0]^\top$. 
-The control law for DNN-BSC was the same as BSC, but the unknown system dynamics were approximated by a DNN \ie $\hat f\approx \hat\Phi$. The adaptation law for DNN-BSC, as presented in \cite{Patil:2022aa}, was defined by 
+The control law for DNN-BSC was the same as BSC, but the unknown system dynamics were approximated by a DNN \ie $\hat f\approx \estNN$. The adaptation law for DNN-BSC, as presented in \cite{Patil:2022aa}, was defined by 
 \begin{equation}\label{eq:projection}
-\dot {\estwth}= \text{Proj}_{\Omega}[\alpha  (\partial \hat\Phi/\partial \estwth)M_0^{-1}{\tilde z}],
+\dot {\estwth}= \text{Proj}_{\Omega}[\alpha  (\partial \estNN/\partial \estwth)M_0^{-1}{\tilde z}],
 \end{equation}
 where $\text{Proj}_{\Omega}(\cdot)$ is the projection operator \cite[Appendix E, eq.~(E.4)]{Krstic:1995aa}, which projects an input vector onto a convex set $\Omega$. The convex set was defined as ${\Omega}:= \{\Omega_0\,\cap\,\cdots\,\cap\, \Omega_k\}$, where $\Omega_i:= \{\estwth_i\ \vert \ c_{b_i}\le 0\}, \ \forall i\in[0,\cdots, k]$, representing the weight norm constraint \eqref{eq. cstr weight ball}.
 % The maximum control input ball constraint is not addressed since the stability analysis of \cite{RN16} uses the property that  $\text{Proj}_\Omega(\cdot)$ projects to the convex set, (\ie the constraints are generally non-convex on the $\estwth$-space.).
@@ -1266,11 +1299,11 @@ The gradients of $\boldsymbol{c}_{\overline \tau}$ and $\boldsymbol{c}_{\underli
             \vdots \\
             (\partial c_{\overline \tau_n}/\partial \estwth)^\top
         \end{bmatrix}
-            = -{\partial \hat\Phi\over\partial\estwth}
+            = -{\partial \estNN\over\partial\estwth}
             \\
         =&
         -\begin{bmatrix}
-            (I_{l_{k+1}}\otimes \hat\phi_{k}^\top)&
+            (I_{l_{k+1}}\otimes \estNN_{k}^\top)&
             % V_k^\top \phi_{k}' (I_{l_{k}}\otimes  \phi_{k-1}^\top)&
             \cdots &
             (
@@ -1290,11 +1323,11 @@ The gradients of $\boldsymbol{c}_{\overline \tau}$ and $\boldsymbol{c}_{\underli
             \vdots \\
             (\partial c_{\underline\tau_n}/\partial \estwth)^\top
         \end{bmatrix}
-        = +{\partial \hat\Phi\over\partial\estwth}
+        = +{\partial \estNN\over\partial\estwth}
         \\
         =&
         +\begin{bmatrix}
-            (I_{l_{k+1}}\otimes \hat\phi_{k}^\top)&
+            (I_{l_{k+1}}\otimes \estNN_{k}^\top)&
             % V_k^\top \phi_{k}' (I_{l_{k}}\otimes  \phi_{k-1}^\top)&
             \cdots &
             (
@@ -1325,10 +1358,10 @@ The gradients of $c_{u}$ with respect to $\estwth$ are given by
     \bigg(
         \myrow_i
         \bigg(
-            -{\partial \hat\Phi\over\partial\estwth}
+            -{\partial \estNN\over\partial\estwth}
         \bigg)
     \bigg)^\top  
-    = \tau^\top (I_{l_{k+1}}\otimes \hat\phi_k^\top)
+    = \tau^\top (I_{l_{k+1}}\otimes \estNN_k^\top)
     \in \mathbb R^{\Xi}.
     \label{eq. nabla input ball}
 \end{equation}

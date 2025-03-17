@@ -24,3 +24,4 @@ neuro-adaptive
 Neuro-Adaptive
 ReLU
 boundednesses
+LICQ
