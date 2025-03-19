@@ -1,6 +1,6 @@
 # Constrained Optimization-Based Neuro-Adaptive Control (CoNAC)
 
-> Currently, papers are submitted to __IEEE Transactions on Neural Networks and Learning Systems__ and __European Control Conference (ECC) 2025__ and under review. 
+> This paper is accepted in __European Control Conference (ECC) 2025__. 
 
 ## About this Research
 
@@ -11,14 +11,11 @@ The main features are as follows.
 - Weights of neural network and tracking error are bounded over time.
 - Constraints are satisfied while adaptation (learning)
     - Weight norm constraint.
-    - Control input saturation constraint (which is convex).
-
-
 
 ## Authors
 
-- Ryu Myeongseok
-- Hong Donghwa
+- [Ryu Myeongseok](https://gitlab.com/DDingR)
+- Kim Jiyun
 - Choi Kyunghwan
 
 ## Version History
