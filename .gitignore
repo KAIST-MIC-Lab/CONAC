@@ -45,6 +45,6 @@
 **/.idea/*
 **/slprj
 **/slprj/*
-/*.pdf
+# /*.pdf
 *.sav
 *-checkpoint.ipynb
