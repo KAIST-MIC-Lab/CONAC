@@ -61,7 +61,7 @@ In this study, the following notation is used:
 
 \begin{itemize}
     \item $\otimes$ denotes the Kronecker product \cite[Definition 7.1.2]{Bernstein:2009aa}.
-    \item $\mv x=[x_i]_{i\in[1,\cdots,n]}\in\R^n$ denotes a vector.
+    \item $\mv x=[x_i]_{i\in\{1,\cdots,n\}}\in\R^n$ denotes a vector.
     % \item $\mv x=[x_i]_{i\in[1,\cdots,n]}\in\R^n$ and $
     %     \mm A
     %     := 
@@ -78,7 +78,7 @@ In this study, the following notation is used:
     \item $\mm I_n$ denotes the $n\times n$ identity matrix and $\mm 0_{n\times m}$ denotes the $n\times m$ zero matrix.
 \end{itemize}
 
-\section{Introduction}
+\section{Introduction} \label{sec:intro}
 
 In various practical applications, Euler‒Lagrange systems generally have uncertainties due to their unknown and unmodeled dynamics.
 These uncertainties degrade the control performance index.
@@ -145,15 +145,15 @@ Consider an uncertain Euler‒Lagrange system modeled as
     \mv\tau 
     \label{eq. system dynamics 1}
 \end{equation}
-where $\q\in \mathbb{R}^n$ and $\mv \tau\in\R^n$ denote the generalized coordinate and the control input, respectively; $\mm M :=\mm M(\q)\in\mathbb{R}^{n\times n}$, $mm V_m:= \mm V_m(\q,\dq)\in\mathbb{R}^{n\times n}$, and $\mm G:=\mm G(\q)\in\mathbb{R}^{n}$ denote the unknown system function matrices; and $\mm F:=\mm F(\dq)\in\mathbb{R}^{n}$ denotes the external force.
-Using the user-designed matrices $\mm M_0>0,\mm V_{m0}$ and $\mm G_0$, \eqref{eq. system dynamics 1} can be represented as 
+where $\q\in \mathbb{R}^n$ and $\mv \tau\in\R^n$ denote the generalized coordinate and the control input, respectively; $\mm M :=\mm M(\q)\in\mathbb{R}^{n\times n}$, $\mm V_m:= \mm V_m(\q,\dq)\in\mathbb{R}^{n\times n}$, and $\mm G:=\mm G(\q)\in\mathbb{R}^{n}$ denote the unknown system function matrices; and $\mm F:=\mm F(\dq)\in\mathbb{R}^{n}$ denotes the external force.
+Using the user-designed matrices $\widehat{\mm M}>0,\widehat{\mm V_m}$ and $\widehat{\mm G}$, \eqref{eq. system dynamics 1} can be represented as 
 \begin{equation}
-    \mm M_0\ddq+\mm V_{m0}\dq+\mm G_0 = \mv \tau + \mv f(\q,\dq,\ddq)
+    \widehat{\mm M}\ddq+\widehat{\mm V_m}\dq+\widehat{\mm G} = \mv \tau + \mv f(\q,\dq,\ddq)
     \label{eq. system dynamics 2}
 \end{equation}
-where $\mv f(\q,\dq,\ddq) := -(\mm M-\mm M_0)\ddq-(\mm V_m-\mm V_{m0})\dq -(\mm G-\mm G_0) -\mm F$ denotes the residual unknown term.
+where $\mv f(\q,\dq,\ddq) := -(\mm M-\widehat{\mm M})\ddq-(\mm V_m-\widehat{\mm V_m})\dq -(\mm G-\widehat{\mm G}) -\mm F$ denotes the residual unknown term.
 
-Hence, the objective of the control design is to make $\q$ track the continuously differentiable desired trajectory $\qd(t):\R\to \R^n$ under the unknown terms $\mv f$.
+Hence, the objective of the control design is to make $\q$ track the continuously differentiable desired trajectory $\qd:=\qd(t):\R\to \R^n$ under the unknown terms $\mv f:=\mv f(\q,\dq,\ddq)$.
 
 %  SECTION CONTROLLER DESIGN ==============================
 \section{Control Law Development}\label{sec:ctrl design}
@@ -168,10 +168,18 @@ The backstepping control-based approach is utilized to generate a reference sign
 The desired stabilizing controller can be designed as follows:
 \begin{equation}
     \mv \tau^* = 
-    -\mm M_0\cdot ({k_z}\tilde {\mv z})
+    -\widehat{\mm M}\cdot ({k_z}\tilde {\mv z})
     + 
         ( 
-            -\mm M_0\tilde {\q}+\mm V_{m0}{\mv z}+\mm G_0-\mv f+\mm M_0 \dot {\mv z}^*
+            -\widehat{\mm M}\tilde {\q}
+            +
+            \widehat{\mm V_m}{\mv z}
+            +
+            \widehat{\mm G}
+            -
+            \mv f
+            +
+            \widehat{\mm M} \dot {\mv z}^*
         )
     \label{eq. desired control}
 \end{equation}
@@ -179,32 +187,34 @@ where $\tilde {\mv z}:= \mv z-\mv z^*$ and $k_z\in\R_{>0}$.
 Note that the desired controller cannot be realized because of $\mv f$.
 
 To approximate the desired controller, an NN is utilized.
+\MSRY{
+    Even though the DNNs have a higher approximation capability than the SHLNNs \cite{Rolnick:2017aa}, here, the SHLNN is utilized for simplicity and low computational complexity.
+}
 The NN with a single hidden layer is represented as 
 \begin{equation}
     \NN({\q_{NN}};\wth):= \wV_1^\top \act(\wV_0^\top {\q_{NN}})
 \end{equation}
 where ${\q_{NN}}\in\R^{l_0+1}$ denotes the NN input vector, $\wV_i\in\R^{(l_i+1)\times l_{i+1}},\ i\in\{0,1\}$ denotes the weight matrix of the $i\textsuperscript{th}$ layer and $\act:\R^{l_1}\to\R^{l_1+1}$ denotes the activation function layer.
 The activation function layer consists of an elementwise nonlinear function $\sigma(\cdot)$ and an augmented $1$ to combine the bias terms in the weight matrix (\ie $\act(\mv x) = \left(\sigma(\mv x_{(1)}),\cdots, \sigma(\mv x_{(l_1)}), 1\right)^\top $).
-For further simplicity, let $\wth:=\left(\wth_1^\top ,\wth_0^\top \right)^\top \in\R^{\Xi}$ denote the total weight vector, where $\wth_i:= \myvec(\wV_i)\in\R^{\Xi_i}$ denotes the vectorized weights.
-$\Xi_i=(l_i+1)\cdot l_{i+1}$ and $\Xi=\Xi_0+\Xi_1$ denote the number of each layer and total weights, respectively.
+For further simplicity, let $\wth_i:= \myvec(\wV_i)\in\R^{\Xi_i}$ denotes the vectorized weights and $\wth:=(\wth_1^\top ,\wth_0^\top )^\top \in\R^{\Xi}$ denote the total weight vector, where $\Xi_i=(l_i+1)\cdot l_{i+1}$ and $\Xi=\Xi_0+\Xi_1$ denote the number of each layer and total weights, respectively.
 
 Using this NN, the desired controller $\mv \tau^*$ can be approximated by the ideal weight vector $\wth^*$ for a compact subset $\Omega_{NN}\in\R^{l_0+1}$ to $\epsilon$ accuracy such that $\sup_{{\q_{NN}}\in\Omega_{NN}} \allowbreak \norm{\NN({\q_{NN}};\wth^*) - \mv \tau^*}=\epsilon<\infty$ \cite{Cybenko:1989aa}.
 The ideal weight vector $\wth^*$ is typically assumed to be bounded.
-Then, using the estimated weight vector $\estwth=(\estwth_1^\top ,\estwth_0^\top )^\top $ of $\wth^*=(\wth_1^{*\top},\wth_0^{*\top})^\top $, the desired controller $\mv \tau^*\approx -\NN(\q_{NN};\wth^*)-\epsilon$ can be approximated as follows:
+Then, using the estimated weight vector $\estwth=(\estwth_1^\top ,\estwth_0^\top )^\top $ of $\wth^*=(\wth_1^{*\top},\wth_0^{*\top})^\top $, the desired controller $\mv \tau^*\approx -\NN(\q_{NN};\wth^*)-\mv\epsilon$ with bounded approximation error $\mv \epsilon\in\R^2$, can be approximated as follows:
 \begin{equation}
     \mv \tau := -\NN({\q_{NN}};\estwth)
     .
     \label{eq. control law}
 \end{equation}
-For further sections, let $\idealNN:=\NN({\q_{NN}};\idealwth)$ and $\NN^* :=\NN({\idealwV}_0^{\top}{\q_{NN}})$, and let $\estNN:={\NN}({\q_{NN}};\estwth)$, $\estNN :=\NN(\estwV_0^{\top}{\q_{NN}})$ and $\estNN' := \pptfrac{\estNN}{\estwV_0^\top \q_{NN}}$.
+For further sections, let $\idealNN:=\NN({\q_{NN}};\idealwth)$ and $\idealact :=\act({\idealwV}_0^{\top}{\q_{NN}})$, and let $\estNN:={\NN}({\q_{NN}};\estwth)$, $\estact :=\act(\estwV_0^{\top}{\q_{NN}})$ and $\estact' := \pptfrac{\estact}{\estwV_0^\top \q_{NN}}$.
 
-Using \eqref{eq. system dynamics 2}, \eqref{eq. desired control}, and \eqref{eq. control law}, the error dynamics can be obtained as the first-order system of augmented error $\mv \xi:=\left(\tilde {\q}^\top ,\tilde {\mv z}^\top\right)^\top \in\R^{2n}$ as follows:
+Using \eqref{eq. system dynamics 2}, \eqref{eq. desired control}, and \eqref{eq. control law}, the error dynamics can be obtained as the first-order system of augmented error $\mv \xi:=(\tilde {\q}^\top ,\tilde {\mv z}^\top)^\top \in\R^{2n}$ as follows:
 \begin{equation}
     \dot{\mv \xi} 
     = 
     \mm A_\xi{\mv \xi}+\mm B_\xi(\NN^*-\estNN+\mv\epsilon)
 \end{equation}
-where $\mv \epsilon\in\R^2$ is bounded approximation error and 
+and 
 \begin{equation}
     \mm A_\xi := 
     \begin{bmatrix}
@@ -215,19 +225,22 @@ where $\mv \epsilon\in\R^2$ is bounded approximation error and
     ,\ 
     \mm B_\xi := 
     \begin{bmatrix}
-        \mm 0_{n\times n}\\\mm M_0^{-1}
+        \mm 0_{n\times n}\\\widehat{\mm M}^{-1}
     \end{bmatrix}.
 \end{equation}
 
 \subsection{Adaptation Law Derivation}\label{sec:adap_laws}
 
-For the boundedness of the weights, weight norm constraints are imposed on the adaptation process such that $c_{\theta_i}=\norm{{\estwth}_i}^2-\bar\theta^2_i,\ i\in[0,1]$.
+\MSRY{
+    As discussed in Section \ref{sec:intro}, the boundedness of the weights should be addressed to prevent excessively large control inputs and system instability.
+}
+For the boundedness of the weights, weight norm constraints are imposed on the adaptation process such that $c_{\theta_i}=\norm{{\estwth}_i}^2-\bar\theta^2_i,\ i\in\{0,1\}$.
 The control problem can be reformulated into a constrained optimization problem as follows:
 \begin{equation}
     \begin{matrix}
         \min_{{\estwth}} \ J(\mv \xi;{\estwth})
         :=
-        {1\over 2}
+        \tfrac{1}{2}
         \mv \xi^\top \mm \Lambda \mv \xi
         \\ \\
         \begin{aligned}
@@ -287,13 +300,11 @@ To solve the dual problem $\min_{{\estwth}} \max_{[\lambda_j]_{j\in\mathcal I}} 
             & 
             = 
             \max(\lambda_j,0) ,
-            \quad\quad\quad\quad\ \ \ \ \ 
-            \forall j\in\mathcal I,
         \label{eq. adaptation law L max}
     \end{align}
     \label{eq. adaptation laws}
 \end{subequations}
-where $\alpha\in\R_{>0}$ and $\beta_j\in\R_{>0}$ denote the adaptation gain and the update rate for each Lagrange multiplier, respectively.
+where arguments of $L$ are suppressed for brevity, and $\alpha\in\R_{>0}$ and $\beta_j\in\R_{>0}$ denote the adaptation gain and the update rate for each Lagrange multiplier, respectively.
 \color{red}
 % The Eq.~\eqref{eq. adaptation law L max} is analog to using an active set $\mathcal I=\{j\ \vert \ c_j\ge 0\}$ in constrained optimization theory which excludes terms of satisfied constraints in adaptation law.
 \color{black}
@@ -304,14 +315,15 @@ Using the chain rule, the gradient of the objective function with respect to the
     =
     \pptfrac{\mv\xi}{\estwth}^\top 
     \mm \Lambda
-    \pptfrac{\mv\xi}{\estwth}
+    \mv\xi
     .
 \end{equation}
 The calculation of $\pptfrac{J}{\estwth}$ is not straightforward because of the dynamics of $\mv\xi$.
 Using the forward sensitivity method presented in \cite{Sengupta:2014aa}, the sensitivity equation can be obtained as follows:
 \begin{equation}
     \ddtt{\mm \eta} =
-    \mm A_\xi - \mm B_\xi 
+    \mm A_\xi \mm\eta
+    - \mm B_\xi 
     % (\partial \estNN/\partial {\estwth})
     \pptfrac{\estNN}{\estwth}
     ,
@@ -387,7 +399,8 @@ The boundedness is proven from the last layer to the first layer.
 % For convenience, assume that all the constraints are in the active set without loss of generality.
 % If the constraints are not in the active set, the boundedness cannot be guaranteed, but weights will be adapted to reduce the objective function until the constraints are violated.
 \color{black}
-Without loss of generality, assume that all the constraints. Then, according to \eqref{eq. adaptation law L} and \eqref{eq. adaptation law L max}, all Lagrange multipliers are nonzero.
+Without loss of generality, assume that all the constraints are violated. 
+Then, according to \eqref{eq. adaptation law L} and \eqref{eq. adaptation law L max}, all Lagrange multipliers are nonzero.
 %If the Lagrange multipliers are not sufficiently generated, the boundedness cannot be guaranteed, but weights will be adapted to reduce the objective function until the constraint violations.
 \color{black}
 
@@ -398,7 +411,7 @@ The dynamics of $\mv \xi$ can be represented as
         -\estwV_1^\top \estact+\mv w(t)
     )
 \end{equation}
-where $\mv w(t):= {\idealwV}_1^{\top}\idealact+\mv \epsilon$ is a lumped residual term, which is bounded as $\norm{\mv  w(t)}\le \bar w< 0$ since $\norm{\idealwth_1}$ and $\norm{\idealact}$ are bounded.
+where $\mv w(t):= {\idealwV}_1^{\top}\idealact+\mv \epsilon$ is a lumped residual term, which is bounded as $\norm{\mv  w(t)}\le \bar w< 0$ since $\norm{\idealwth_1},\norm{\idealact}$ and $\norm{\mv\epsilon}$ are bounded.
 The dynamics of ${\mm \eta}_1$ and ${\estwth}_1$ are represented as
 \begin{equation}
     \begin{aligned}
@@ -421,7 +434,7 @@ The dynamics of ${\mm \eta}_1$ and ${\estwth}_1$ are represented as
 \end{equation}
 According to \cite[Chap.~4 T.~1.9]{Desoer:2009aa}, the boundedness of ${\mm \eta}_1$ can be obtained since $\mm A_\xi$ is stable and the residual term $-\mm B_\xi (\mm I_{l_{2}}\otimes \estact^\top )$ is bounded.
 
-Define the Lyapunov function $V_1=\tfrac{1}{2}\mv\xi^\top \mm P\mv\xi+\tfrac{1}{2\alpha}{\estwth}_1^\top {\estwth}_1$, with the Lyapunov equation $\mm A_\xi^\top \mm P+\mm P\mm A_\xi=-\mm Q$, where $\mm A_\xi<0,\mm P=\mm P^\top >0$, and $\mm Q>0$.
+Define the Lyapunov function $V_1:=\tfrac{1}{2}\mv\xi^\top \mm P\mv\xi+\tfrac{1}{2\alpha}{\estwth}_1^\top {\estwth}_1$, with the Lyapunov equation $\mm A_\xi^\top \mm P+\mm P\mm A_\xi=-\mm Q$, where $\mm A_\xi<0,\mm P=\mm P^\top >0$, and $\mm Q>0$.
 Using a proposition $\estwV_1^\top \estact = \myvec(\estwV_1^\top \estact)=\myvec(\estact^\top \estwV_1) = (\mm I_{l_2}\otimes {\estact}^\top )\myvec(\estwV_1)=(\mm I_{l_2}\otimes \estact^\top ){\estwth}_1$ \cite[Proposition~(7.1.9)]{Bernstein:2009aa}, the time derivative of $V_1$ is
 \begin{equation}
     \begin{aligned}
@@ -438,11 +451,11 @@ Using a proposition $\estwV_1^\top \estact = \myvec(\estwV_1^\top \estact)=\myve
             \!-\!\mm B_\xi\estwV_1^\top \estact +\mm B_\xi \mv w(t) 
         )\\
         &
-        +{\estwth}_1^\top 
+        -{\estwth}_1^\top 
         \!
-        (\!
-            -{\mm \eta}_1^\top \mm \Lambda \xi-2\lambda_{\theta_1} {\estwth}_1 
-        \!)
+        (
+            {\mm \eta}_1^\top \mm \Lambda \xi+2\lambda_{\theta_1} {\estwth}_1 
+        )
         \\
         =& 
         -\tfrac{1}{2}
@@ -468,7 +481,8 @@ Using a proposition $\estwV_1^\top \estact = \myvec(\estwV_1^\top \estact)=\myve
         \\
         \le& 
         (
-        -{\lambda_\text{min}(\mm Q)/ 2} +{\tfrac{\bar M}{2}}
+            -\tfrac{1}{2}\lambda_\text{min}(\mm Q)
+            +{\tfrac{\bar M}{2}}
         )
         \norm{\mv \xi}^2 +\bar\Delta \norm{\mv \xi}
         \\
@@ -478,10 +492,11 @@ Using a proposition $\estwV_1^\top \estact = \myvec(\estwV_1^\top \estact)=\myve
         +\tfrac{\bar M}{2}
         )
         \norm{\tilde{\wth}_1}^2 
+        ,
         \end{aligned}
         \label{eq. lya 1}
 \end{equation}
-where $\mv \Delta:= \mm P\mm B_\xi \mv w(t)$ and $\mm M:= -\mm P\mm B_\xi(\mm I_{l_2}\otimes \estNN^\top )+\mm \Lambda{\mm \eta}_1$ are bounded such that $\norm{\mv \Delta}\le\bar\Delta<\infty$ and $\norm{\mm M}_F\le \bar M< \infty$, respectively.
+where $\mv \Delta:= \mm P\mm B_\xi \mv w(t)$ and $\mm M:= -\mm P\mm B_\xi(\mm I_{l_2}\otimes \estact^\top )-\mm \Lambda{\mm \eta}_1$ are bounded such that $\norm{\mv \Delta}\le\bar\Delta<\infty$ and $\norm{\mm M}_F\le \bar M< \infty$, respectively.
 
 By defining $\mm P=\mm I_n$, the eigenvalues of $\mm Q=-\mm A_\xi^\top -\mm A_\xi$ are $2k_q$ and $2k_z$, since $\mm A_\xi$ is a skew-symmetric matrix except for the diagonal entries.
 According to \eqref{eq. lya 1}, if $k_q$ and $k_z$ are provided that
@@ -492,29 +507,29 @@ According to \eqref{eq. lya 1}, if $k_q$ and $k_z$ are provided that
 \end{equation}
 and if $\lambda_{\theta_1}$ is increased sufficiently large such that $2\lambda_{\theta_1}>\tfrac{\bar M}{2}$, due to the violation of $c_{\theta_1}$, the tracking error is bounded in
 \begin{equation}
-    \Theta_\xi = 
+    \Theta_\xi := 
     \left\{
         \mv\xi\mid
         \norm{\mv\xi}
         \le  
         \tfrac{
-            \bar \Delta
+            2\bar \Delta
         }{
-            \lambda _\text{min}(\mm Q)-{\bar M}/{2}
+            \lambda _\text{min}(\mm Q)-{\bar M}
         } 
     \right\}
     ,
 \end{equation}
 and the weight estimation $\estwth_1$ is bounded in
 \begin{equation}
-    \Theta_{{\theta}_1} = 
-    \{ 
+    \Theta_{{\theta}_1} := 
+    \left\{ 
         {\estwth_1} 
         \mid
         \norm{\estwth_1}
         \le  
         \bar\theta_1
-    \}
+    \right\}
     .
 \end{equation}
 The Lagrange multiplier $\lambda_{\theta_1}$ is also bounded since the $\lambda_{\theta_1}$ update stops once ${\estwth}_1$ approaches the compact set $\Theta_{{\theta}_1}$, satisfying the constraint $c_{\theta_1}$.
@@ -526,7 +541,7 @@ The dynamics of ${\mm \eta}_0$ and ${\estwth}_0$ are represented as
     \begin{aligned}     
         \ddtt{\mm \eta}_0 =& 
         \mm A_\xi{\mm \eta}_0 -\mm B_\xi 
-        \estwV_1^\top \estact'(\mm I_1\otimes {\q_{NN}}^\top )
+        \estwV_1^\top \estact'(\mm I_{l_1}\otimes {\q_{NN}}^\top )
         \\
         \ddtt{{\estwth}}_0
         =&
@@ -537,12 +552,15 @@ The dynamics of ${\mm \eta}_0$ and ${\estwth}_0$ are represented as
         .
     \end{aligned}
 \end{equation}
-According to \cite[Chap.~4 T.~1.9]{Desoer:2009aa}, ${\mm \eta}_0$ is bounded since $\mm A_\xi$ is a stable matrix and $-\mm B_\xi\estwV_1^\top \estact'(\mm I_1\otimes {\q_{NN}}^\top )$ is bounded.
-To obtain the invariance set of ${\estwth}_0$, taking the time derivative of the Lyapunov function $V_0=(1/2\alpha){\estwth}_0^\top {\estwth}_0$ yields:
+According to \cite[Chap.~4 T.~1.9]{Desoer:2009aa}, ${\mm \eta}_0$ is bounded since $\mm A_\xi$ is a stable matrix and $-\mm B_\xi\estwV_1^\top \estact'(\mm I_{l_1}\otimes {\q_{NN}}^\top )$ is bounded.
+To obtain the invariance set of ${\estwth}_0$, taking the time derivative of the Lyapunov function $V_0=\tfrac{1}{2\alpha}{\estwth}_0^\top {\estwth}_0$ yields:
 \begin{equation}
     \begin{aligned}
         \ddtt {V}_0 =& 
-        {\estwth}_0^\top (-{\mm \eta}_0\mm \Lambda\mv \xi -2\lambda_{\theta_0}{\estwth}_0)
+        -{\estwth}_0^\top (
+            {\mm \eta}_0\mm \Lambda\mv \xi 
+            +2\lambda_{\theta_0}{\estwth}_0
+        )
         \\
         \le &
         \norm{{\estwth}_0} \norm{{\mm \eta}_0\mm \Lambda\mv \xi} 
@@ -561,16 +579,16 @@ To obtain the invariance set of ${\estwth}_0$, taking the time derivative of the
 \end{equation}
 Then, the invariance set can be represented as 
 \begin{equation}
-    \Theta_{{\theta}_0} =
-    \{
+    \Theta_{{\theta}_0} :=
+    \left\{
         {\estwth}_0\mid\norm{\estwth_0}
         \le
         \tfrac{
             \norm{{\mm \eta}_0\mm \Lambda\mv \xi}
         }{
-            \lambda_{\theta_0}
+            2\lambda_{\theta_0}
         }
-    \}
+    \right\}
     .    
 \end{equation}
 If $\lambda_{\theta_0}$ is increased sufficiently large due to the violation of $c_{\theta_0}$, the invariance set $\Theta_{{\theta}_0}$ converges to $\{{\estwth}_0 \mid \norm{{\estwth}_0} \le \bar\theta_0\}$ until the constraint $c_{\theta_0}$ is satisfied.
@@ -684,8 +702,11 @@ Therefore, the adaptation attempts to reduce the tracking error mainly without t
 The adaptation law of NAC-CO is presented in \eqref{eq. adaptation laws}.
 Owing to the stabilizing functions, the weights of NAC-L2 and NAC-eMod are biased since the stabilizing functions drive the weights toward the origin.
 
-All controllers had the same control parameters except their crucial parameters (\ie $\lambda$, $\rho$ and $\beta_j$) as $k_q=1.1$, $k_z=10$, $\mm M_0=I_2$ and $\mm \Lambda=\text{diag}([5,1,15,15])$.
+All controllers had the same control parameters except their crucial parameters (\ie $\lambda$, $\rho$ and $\beta_j$) as $k_q=1.1$, $k_z=10$, $\widehat{\mm M}=I_2$ and $\mm \Lambda=\text{diag}([5,1,15,15])$.
 The parameters of the NNs were set to $l_0=2$, $l_1=16$, $l_2=2$, and $\alpha=10^3$, and the same random seed was applied for weight initialization.
+\MSRY{
+    The validity of the selected number of nodes were demonstrated through experiments 
+}
 The NN input vector was set to the desired trajectory $\qd$, with the augmented 1 to incorporate the bias term in the weight matrix such that $\q_{NN}=[\qd^\top ,1]^\top $.
 For NAC-CO, the parameters of the weight norm constraints were set as $\bar\theta_0=10$ and $\bar\theta_1=20$.
 The sampling time of the simulation and the simulation termination time were set to $T_s=100\ \mu\mathrm{s}$ and $T=10\ \mathrm{s}$, respectively.
