@@ -8,10 +8,6 @@ T\kern-.1667em\lower.7ex\hbox{q}\kern-.125emX}}
 \input{dding_template/tex_packages/tex_packages_general.tex}
 \input{dding_template/tex_macros/tex_macros_general.tex}
 
-\DeclareMathOperator{\myvec}{vec}
-\DeclareMathOperator{\sat}{sat}
-\DeclareMathOperator{\myrow}{row}
-
 \newcommand*{\fe}{\mv{r}}
 
 \newcommand*{\q}{\mv{q}}
@@ -20,21 +16,6 @@ T\kern-.1667em\lower.7ex\hbox{q}\kern-.125emX}}
 \newcommand*{\qd}{\mv{q_d}}
 \newcommand*{\dqd}{\dot{\mv q_d}}
 \newcommand*{\ddqd}{\ddot{\mv q_d}}
-
-\newcommand*{\NN}{\mv{\Phi}}
-\newcommand*{\act}{\mv{\phi}}
-\newcommand*{\wth}{\mv{\theta}}
-\newcommand*{\wV}{\mm{W}}
-
-\newcommand*{\estwth}{\widehat{\wth}}
-\newcommand*{\estNN}{\widehat{\NN}}
-\newcommand*{\estact}{\widehat{\act}}
-\newcommand*{\estwV}{\widehat{\wV}}
-
-\newcommand*{\idealwth}{{\wth}^*}
-\newcommand*{\idealNN}{{\NN}^*}
-\newcommand*{\idealact}{{\act}^*}
-\newcommand*{\idealwV}{{\wV}^*}
 
 \begin{document}
 \title{
@@ -70,7 +51,7 @@ In this study, the following notation is used:
         _{
             i\in[1,\cdots,n],j\in[1,\cdots ,]
         }\allowbreak\in\R^{n\times m}
-        $ denotes a vector and a matrix.
+        $ denote a vector and a matrix.
     \item $\myrow_i(\mm A)$ denotes the $i\textsuperscript{th}$ row of the matrix $\mm A\in\R^{n\times m}$. 
     \item $\myvec(\mm A):= [\myrow_1(\mm A^\top)  ,\cdots,\myrow_m(\mm A^\top)  ]^\top   $ for $\mm A\in\R^{n\times m}$.
     % \item $\text{col}_i(A)$ and $\myrow_j(A)$ denote the $i\textsuperscript{th}$ column and $j\textsuperscript{th}$ row of $A\in\R^{n\times m}$, respectively.
