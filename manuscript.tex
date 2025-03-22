@@ -165,14 +165,14 @@ Consider an uncertain Euler-Lagrange system modeled as
 \begin{equation}
     \mm M\ddq + \mm V_m + \mm F + \mm G + \mv\tau_d
     =
-    \sat(\mv\tau)
+    \mysat(\mv\tau)
     \label{eq:sys1}
 \end{equation}
 where $\q\in \R^n$ denotes the generalized coordinate, $\mv \tau_d$ represents disturbance and $\mv\tau\in\R^n$ denotes the control input. 
 The terms $\mm M:=\mm M(\q)\in\R^{n\times n}$, $\mm V_m:=\mm V_m(\q,\dq)\in\R^{n\times n}$, $\mm F:=\mm F(\dq)\in\R^{n}$ and $\mm G:=\mm G(\q)$ represent the unknown inertia matrix, Coriolis/centripetal matrix, friction terms and gravity vector
-The function $\sat(\cdot):\R^n\to\R^n$ represents the inherent physical limitations of the actuators and is defined as 
+The function $\mysat(\cdot):\R^n\to\R^n$ represents the inherent physical limitations of the actuators and is defined as 
 \begin{equation}
-    \sat(\mv\tau)
+    \mysat(\mv\tau)
     :=
     \begin{cases}
         \mv\tau, 
@@ -247,7 +247,7 @@ Using $\fe$, the system dynamics \eqref{eq:sys1} can be rewritten as
     -\mm V_m \fe
     -\mm K \fe
     + \mv f
-    -\mv \tau_d + \sat(\mv\tau)
+    -\mv \tau_d + \mysat(\mv\tau)
     ,
     \label{eq:sys:filtered}
 \end{equation}
@@ -273,7 +273,7 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
         =&
         \fe^\top \mm M (
             -\mm V_m \fe -\mm K \fe + \mv f
-            -\mv \tau_d + \sat(\mv\tau)
+            -\mv \tau_d + \mysat(\mv\tau)
         )
         \\
         &
@@ -286,7 +286,7 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
         \fe^\top \mm K \fe 
         +
         \fe^\top (
-            \mv f+\sat(\mv\tau)
+            \mv f+\mysat(\mv\tau)
             -\mv \tau_d
         )
         \\
@@ -300,14 +300,14 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
         +
         \bar\tau_d\norm{\fe}
         +
-        \fe^\top (\mv f+\sat(\mv \tau))
+        \fe^\top (\mv f+\mysat(\mv \tau))
         \\
         \le&
         -\lambda_\text{min}(\mm K)\norm{\fe}^2
         +
         \bar\tau_d\norm{\fe}
         +
-        \fe^\top (\sat(\mv\tau)-\mv\tau^*)
+        \fe^\top (\mysat(\mv\tau)-\mv\tau^*)
         ,
     \end{aligned}
     \label{eq:lya1:dot1}
@@ -343,7 +343,7 @@ Substituting \eqref{eq:control:ideal} and \eqref{eq:control:est} into \eqref{eq:
     +
     \bar\tau_d\norm{\fe}
     +
-    \fe^\top (\sat(\hat\NN)-\idealNN-\mv\epsilon)
+    \fe^\top (\mysat(\hat\NN)-\idealNN-\mv\epsilon)
     .
     \label{eq:lya1:dot2}
 \end{equation}
@@ -534,7 +534,7 @@ The recommended method to calculate the exact value of $\pptfrac{J}{\estwth}$ is
             -\mm V_m \fe
             -\mm K \fe
             + \mv f
-            -\mv \tau_d + \sat(\mv\tau)
+            -\mv \tau_d + \mysat(\mv\tau)
         )
     \right]
     .
@@ -849,7 +849,7 @@ Therefore, the boundedness of $\estwth$ and $\fe$ are guaranteed by the invarian
 
 \subsection*{Case (C$_2$): Control input constraints are inactive.}
 
-Since, here, the control input constraints are inactive, $\sat(\cdot)$ in \eqref{eq:lya1:dot2} and $c_j,\ \forall j\in\mathcal{I}$ in \eqref{eq:lya2:dot} can be removed.
+Since, here, the control input constraints are inactive, $\mysat(\cdot)$ in \eqref{eq:lya1:dot2} and $c_j,\ \forall j\in\mathcal{I}$ in \eqref{eq:lya2:dot} can be removed.
 Consider the Lyapunov function candidate $V_3:=V_1+V_2$ and its time derivative:
 \begin{equation}
     \begin{aligned}
@@ -1102,10 +1102,10 @@ The BSC used the control law defined in \eqref{eq. desired control} with $\hat f
 % Since CM1 does not consider the unknown term, $\hat f$ was set to $[0,0]^\top$. 
 The control law for DNN-BSC was the same as BSC, but the unknown system dynamics were approximated by a DNN \ie $\hat f\approx \estNN$. The adaptation law for DNN-BSC, as presented in \cite{Patil:2022aa}, was defined by 
 \begin{equation}\label{eq:projection}
-\dot {\estwth}= \text{Proj}_{\Omega}[\alpha  (\partial \estNN/\partial \estwth)M_0^{-1}{\tilde z}],
+\dot {\estwth}= \myproj_{\Omega}[\alpha  (\partial \estNN/\partial \estwth)M_0^{-1}{\tilde z}],
 \end{equation}
-where $\text{Proj}_{\Omega}(\cdot)$ is the projection operator \cite[Appendix E, eq.~(E.4)]{Krstic:1995aa}, which projects an input vector onto a convex set $\Omega$. The convex set was defined as ${\Omega}:= \{\Omega_0\,\cap\,\cdots\,\cap\, \Omega_k\}$, where $\Omega_i:= \{\estwth_i\ \vert \ c_{b_i}\le 0\}, \ \forall i\in[0,\cdots, k]$, representing the weight norm constraint \eqref{eq. cstr weight ball}.
-% The maximum control input ball constraint is not addressed since the stability analysis of \cite{RN16} uses the property that  $\text{Proj}_\Omega(\cdot)$ projects to the convex set, (\ie the constraints are generally non-convex on the $\estwth$-space.).
+where $\myproj_{\Omega}(\cdot)$ is the projection operator \cite[Appendix E, eq.~(E.4)]{Krstic:1995aa}, which projects an input vector onto a convex set $\Omega$. The convex set was defined as ${\Omega}:= \{\Omega_0\,\cap\,\cdots\,\cap\, \Omega_k\}$, where $\Omega_i:= \{\estwth_i\ \vert \ c_{b_i}\le 0\}, \ \forall i\in[0,\cdots, k]$, representing the weight norm constraint \eqref{eq. cstr weight ball}.
+% The maximum control input ball constraint is not addressed since the stability analysis of \cite{RN16} uses the property that  $\myproj_\Omega(\cdot)$ projects to the convex set, (\ie the constraints are generally non-convex on the $\estwth$-space.).
 % **** CM3 control law *****
 
 The control law for DNN-BSC-A was the same as DNN-BSC, but with an auxiliary system to compensate for control input violations. Since the auxiliary system handled only the input bound constraint, not the more complex input norm constraint \eqref{eq. cstr input ball}, an approximated version of the input norm constraint was used as an input bound constraint \eqref{eq. cstr input saturation} with ${\overline\tau_i} = -{\underline\tau_i} = (\bar\tau/\sqrt{2}+\bar\tau)/2$. The comparison between the original input norm constraint and its approximation is shown in Fig.~\ref{fig: ball control}.
