@@ -4,7 +4,7 @@
 
 You can find papers here:
 
-- First submission: [./subs/1st_sub.pdf](./subs/1st_%20_sub.pdf)
+- First submission: [./subs/1st_sub.pdf](./subs/1st_sub.pdf)
 - Final submission: [still working](./manuscript.pdf)
 
 ## About this Research
