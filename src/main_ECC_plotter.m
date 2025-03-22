@@ -129,8 +129,8 @@ plot(t, e2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", ..
     "DisplayName", "$\beta=0.45$"); hold on
 plot(t, e3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
     "DisplayName", "$\beta=1$"); hold on
-xlabel("$t\ (\rm s)$", "Interpreter", "latex")
-ylabel("$\Vert\xi\Vert\ (\rm rad)$", "Interpreter","latex")
+xlabel("Time / S", "Interpreter", "latex")
+ylabel("$\Vert\mathbf{\xi}\Vert$ / rad", "Interpreter","latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on
 ylim([-.005, .03])
@@ -167,8 +167,8 @@ plot(t, e2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", ..
     "DisplayName", "$\lambda=0.45$"); hold on
 plot(t, e3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
     "DisplayName", "$\lambda=1$"); hold on
-xlabel("$t\ (\rm s)$", "Interpreter", "latex")
-ylabel("$\Vert\xi\Vert\ (\rm rad)$", "Interpreter","latex")
+xlabel("Time / S", "Interpreter", "latex")
+ylabel("$\Vert\mathbf{\xi}\Vert$ / rad", "Interpreter","latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on
 ylim([-.005, .03])
@@ -206,8 +206,8 @@ plot(t, e2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", ..
     "DisplayName", "$\rho=0.45$"); hold on
 plot(t, e3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
     "DisplayName", "$\rho=1$"); hold on
-xlabel("$t\ (\rm s)$", "Interpreter", "latex")
-ylabel("$\Vert\xi\Vert\ (\rm rad)$", "Interpreter","latex")
+xlabel("Time / S", "Interpreter", "latex")
+ylabel("$\Vert\mathbf{\xi}\Vert$ / rad", "Interpreter","latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on
 ylim([-.005, .03])
@@ -245,8 +245,8 @@ plot(t, th2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", .
     "DisplayName", "$\beta=0.45$"); hold on
 plot(t, th3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
     "DisplayName", "$\beta=1$"); hold on
-xlabel("$t\ (\rm s)$", "Interpreter", "latex")
-ylabel("$\Vert\theta\Vert$", "Interpreter","latex")
+xlabel("Time / S", "Interpreter", "latex")
+ylabel("$\Vert\mathbf{\theta}\Vert$", "Interpreter","latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on
 ylim([0, 60])
@@ -284,8 +284,8 @@ plot(t, th2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", .
     "DisplayName", "$\lambda=0.45$"); hold on
 plot(t, th3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
     "DisplayName", "$\lambda=1$"); hold on
-xlabel("$t\ (\rm s)$", "Interpreter", "latex")
-ylabel("$\Vert\theta\Vert$", "Interpreter","latex")
+xlabel("Time / S", "Interpreter", "latex")
+ylabel("$\Vert\mathbf{\theta}\Vert$", "Interpreter","latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on
 ylim([0, 60])
@@ -324,8 +324,8 @@ plot(t, th2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", .
     "DisplayName", "$\rho=0.45$"); hold on
 plot(t, th3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
     "DisplayName", "$\rho=1$"); hold on
-xlabel("$t\ (\rm s)$", "Interpreter", "latex")
-ylabel("$\Vert\theta\Vert$", "Interpreter","latex")
+xlabel("Time / S", "Interpreter", "latex")
+ylabel("$\Vert\mathbf{\theta}\Vert$", "Interpreter","latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on
 ylim([0, 60])
@@ -413,7 +413,8 @@ if SAVE_FLAG
         f_name = "figures/main_plot/ECC/" + fig_name;
 
         saveas(figure(idx), f_name + ".png")
-        exportgraphics(figure(idx), f_name+'.eps')
+        % exportgraphics(figure(idx), f_name+'.eps')
+        exportgraphics(figure(idx), f_name+'.eps', 'ContentType', 'vector')
     end
 end
 

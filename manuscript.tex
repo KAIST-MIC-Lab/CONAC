@@ -140,15 +140,17 @@ Finally, Section \ref{sec:conclusion} concludes the paper by presenting future w
 
 Consider an uncertain Euler‒Lagrange system modeled as
 \begin{equation}
-    \mm M\ddq + \mm V_m\dq + \mm F + \mm G + \mv\tau_d
+    \mm M\ddq + \mm V_m\dq+ \mm G + \mm F 
     =
     \mv\tau 
+    ,
     \label{eq. system dynamics 1}
 \end{equation}
 where $\q\in \mathbb{R}^n$ and $\mv \tau\in\R^n$ denote the generalized coordinate and the control input, respectively; $\mm M :=\mm M(\q)\in\mathbb{R}^{n\times n}$, $\mm V_m:= \mm V_m(\q,\dq)\in\mathbb{R}^{n\times n}$, and $\mm G:=\mm G(\q)\in\mathbb{R}^{n}$ denote the unknown system function matrices; and $\mm F:=\mm F(\dq)\in\mathbb{R}^{n}$ denotes the external force.
 Using the user-designed matrices $\widehat{\mm M}>0,\widehat{\mm V_m}$ and $\widehat{\mm G}$, \eqref{eq. system dynamics 1} can be represented as 
 \begin{equation}
     \widehat{\mm M}\ddq+\widehat{\mm V_m}\dq+\widehat{\mm G} = \mv \tau + \mv f(\q,\dq,\ddq)
+    ,
     \label{eq. system dynamics 2}
 \end{equation}
 where $\mv f(\q,\dq,\ddq) := -(\mm M-\widehat{\mm M})\ddq-(\mm V_m-\widehat{\mm V_m})\dq -(\mm G-\widehat{\mm G}) -\mm F$ denotes the residual unknown term.
@@ -170,29 +172,31 @@ The desired stabilizing controller can be designed as follows:
     \mv \tau^* = 
     -\widehat{\mm M}\cdot ({k_z}\tilde {\mv z})
     + 
-        ( 
-            -\widehat{\mm M}\tilde {\q}
-            +
-            \widehat{\mm V_m}{\mv z}
-            +
-            \widehat{\mm G}
-            -
-            \mv f
-            +
-            \widehat{\mm M} \dot {\mv z}^*
-        )
+    ( 
+        -\widehat{\mm M}\tilde {\q}
+        +
+        \widehat{\mm V_m}{\mv z}
+        +
+        \widehat{\mm G}
+        -
+        \mv f
+        +
+        \widehat{\mm M} \dot {\mv z}^*
+    ) 
+    ,
     \label{eq. desired control}
 \end{equation}
 where $\tilde {\mv z}:= \mv z-\mv z^*$ and $k_z\in\R_{>0}$.
 Note that the desired controller cannot be realized because of $\mv f$.
 
 To approximate the desired controller, an NN is utilized.
-\MSRY{
-    Even though the DNNs have a higher approximation capability than the SHLNNs \cite{Rolnick:2017aa}, here, the SHLNN is utilized for simplicity and low computational complexity.
-}
+\color{red}
+    Even though the DNNs have a higher approximation capability than the SHLNNs \cite{Rolnick:2018aa}, here, the SHLNN is utilized for simplicity and low computational complexity.
+\color{black}
 The NN with a single hidden layer is represented as 
 \begin{equation}
     \NN({\q_{NN}};\wth):= \wV_1^\top \act(\wV_0^\top {\q_{NN}})
+    ,
 \end{equation}
 where ${\q_{NN}}\in\R^{l_0+1}$ denotes the NN input vector, $\wV_i\in\R^{(l_i+1)\times l_{i+1}},\ i\in\{0,1\}$ denotes the weight matrix of the $i\textsuperscript{th}$ layer and $\act:\R^{l_1}\to\R^{l_1+1}$ denotes the activation function layer.
 The activation function layer consists of an elementwise nonlinear function $\sigma(\cdot)$ and an augmented $1$ to combine the bias terms in the weight matrix (\ie $\act(\mv x) = \left(\sigma(\mv x_{(1)}),\cdots, \sigma(\mv x_{(l_1)}), 1\right)^\top $).
@@ -206,13 +210,14 @@ Then, using the estimated weight vector $\estwth=(\estwth_1^\top ,\estwth_0^\top
     .
     \label{eq. control law}
 \end{equation}
-For further sections, let $\idealNN:=\NN({\q_{NN}};\idealwth)$ and $\idealact :=\act({\idealwV}_0^{\top}{\q_{NN}})$, and let $\estNN:={\NN}({\q_{NN}};\estwth)$, $\estact :=\act(\estwV_0^{\top}{\q_{NN}})$ and $\estact' := \pptfrac{\estact}{\estwV_0^\top \q_{NN}}$.
+For further sections, let $\idealNN:=\NN({\q_{NN}};\idealwth)$ and $\idealact :=\act({\idealwV}_0^{\top}{\q_{NN}})$, and let $\estNN:={\NN}({\q_{NN}};\estwth)$, $\estact :=\act(\estwV_0^{\top}{\q_{NN}})$ and $\estact' := \pptfrac{\estact}{(\estwV_0^\top \q_{NN})}$.
 
 Using \eqref{eq. system dynamics 2}, \eqref{eq. desired control}, and \eqref{eq. control law}, the error dynamics can be obtained as the first-order system of augmented error $\mv \xi:=(\tilde {\q}^\top ,\tilde {\mv z}^\top)^\top \in\R^{2n}$ as follows:
 \begin{equation}
     \dot{\mv \xi} 
     = 
     \mm A_\xi{\mv \xi}+\mm B_\xi(\NN^*-\estNN+\mv\epsilon)
+    ,
 \end{equation}
 and 
 \begin{equation}
@@ -231,9 +236,9 @@ and
 
 \subsection{Adaptation Law Derivation}\label{sec:adap_laws}
 
-\MSRY{
-    As discussed in Section \ref{sec:intro}, the boundedness of the weights should be addressed to prevent excessively large control inputs and system instability.
-}
+\color{red}
+    As discussed in Section \ref{sec:intro}, the boundedness of the weights should be considered to prevent excessively large control inputs and system instability.
+\color{black}
 For the boundedness of the weights, weight norm constraints are imposed on the adaptation process such that $c_{\theta_i}=\norm{{\estwth}_i}^2-\bar\theta^2_i,\ i\in\{0,1\}$.
 The control problem can be reformulated into a constrained optimization problem as follows:
 \begin{equation}
@@ -410,6 +415,7 @@ The dynamics of $\mv \xi$ can be represented as
     (
         -\estwV_1^\top \estact+\mv w(t)
     )
+    ,
 \end{equation}
 where $\mv w(t):= {\idealwV}_1^{\top}\idealact+\mv \epsilon$ is a lumped residual term, which is bounded as $\norm{\mv  w(t)}\le \bar w< 0$ since $\norm{\idealwth_1},\norm{\idealact}$ and $\norm{\mv\epsilon}$ are bounded.
 The dynamics of ${\mm \eta}_1$ and ${\estwth}_1$ are represented as
@@ -621,9 +627,10 @@ Therefore, the Lagrange multiplier $\lambda_{\theta_0}$ is also bounded.
     \renewcommand{\arraystretch}{1.3}
     \caption{System model parameters.}
     \centering
-    \begin{tabular}{|c||c|c|c|c|}
+    \begin{tabular}{c c c c c }
     \hline
-    Symbol & \textbf{Description} & \textbf{Link 1} & \textbf{Link 2} \\
+    \textbf{Symbol} & \textbf{Description} & \textbf{Link 1} & \textbf{Link 2} \\
+    \hline
     \hline 
     $m_1, m_2$ & Mass of link    & 23.902 (kg) & 3.88 (kg) \\
     \hline
@@ -693,6 +700,7 @@ For NAC-eMod, similar to the $\sigma$-modification, the stabilizing function $-\
         \pptfrac{J}{\estwth}
         +
         \rho\norm{\tilde {\mv z}}{\estwth}
+        ,
     \right)
     \label{eq. adap eMod}
 \end{equation}
@@ -702,11 +710,11 @@ Therefore, the adaptation attempts to reduce the tracking error mainly without t
 The adaptation law of NAC-CO is presented in \eqref{eq. adaptation laws}.
 Owing to the stabilizing functions, the weights of NAC-L2 and NAC-eMod are biased since the stabilizing functions drive the weights toward the origin.
 
-All controllers had the same control parameters except their crucial parameters (\ie $\lambda$, $\rho$ and $\beta_j$) as $k_q=1.1$, $k_z=10$, $\widehat{\mm M}=I_2$ and $\mm \Lambda=\text{diag}([5,1,15,15])$.
+All controllers had the same control parameters except their crucial parameters (\ie $\lambda$, $\rho$ and $\beta_j$) as $k_q=1.1$, $k_z=10$, $\widehat{\mm M}=\mm I_2$ and $\mm \Lambda=\text{diag}([5,1,15,15])$.
 The parameters of the NNs were set to $l_0=2$, $l_1=16$, $l_2=2$, and $\alpha=10^3$, and the same random seed was applied for weight initialization.
-\MSRY{
+\color{red}    
     The validity of the selected number of nodes were demonstrated through experiments 
-}
+\color{black}
 The NN input vector was set to the desired trajectory $\qd$, with the augmented 1 to incorporate the bias term in the weight matrix such that $\q_{NN}=[\qd^\top ,1]^\top $.
 For NAC-CO, the parameters of the weight norm constraints were set as $\bar\theta_0=10$ and $\bar\theta_1=20$.
 The sampling time of the simulation and the simulation termination time were set to $T_s=100\ \mu\mathrm{s}$ and $T=10\ \mathrm{s}$, respectively.
@@ -724,20 +732,21 @@ The sampling time of the simulation and the simulation termination time were set
     \renewcommand{\arraystretch}{1.3}
     \caption{Quantitative comparison of square root of tracking ISE.}
     \centering
-    \begin{tabular}{|c||c|c|c|}
+    \begin{tabular}{c c c c }
     \hline
-     & \textbf{NAC-L2} & \textbf{NAC-eMod} & \textbf{NAC-CO} (proposed) 
+     & \textbf{NAC-L2}\!&\!\textbf{NAC-eMod}\!&\!\textbf{NAC-CO} (proposed) 
      \\
+     \hline
     \hline 
-    Maximum         & $11.1753$e-3 & $0.5603$e-3 & $0.3439$e-3 \\
+    Maximum\!&\!$11.1753\!\times\!10^{-3}$\!&\!$0.5603\!\times\!10^{-3}$\!&\!$0.3439\!\times\!10^{-3}$\!\\
     \hline
     % Upper quartile  & $1.7284$e-3 & $0.5566$e-3 & $0.3261$e-3 \\
     % \hline
-    Median          & $0.5898$e-3 & $0.5519$e-3 & $0.3240$e-3 \\
+    Median\!&\!$0.5898\!\times\!10^{-3}$\!&\!$0.5519\!\times\!10^{-3}$\!&\!$0.3240\!\times\!10^{-3}$\!\\
     \hline
     % Lower quartile  & $0.5533$e-3 & $0.5470$e-3 & $0.3238$e-3 \\
     % \hline
-    Minimum         & $0.5434$e-3 & $0.5434$e-3 & $0.3235$e-3 \\
+    Minimum\!&\!$0.5434\!\times\!10^{-3}$\!&\!$0.5434\!\times\!10^{-3}$\!&\!$0.3235\!\times\!10^{-3}$\!\\
     \hline
     \end{tabular}
     \label{table: error norm}

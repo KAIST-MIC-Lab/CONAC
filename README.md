@@ -2,6 +2,11 @@
 
 > This paper is accepted in __European Control Conference (ECC) 2025__. 
 
+You can find papers here:
+
+- First submission: [./subs/1st_sub.pdf](./subs/1st_%20_sub.pdf)
+- Final submission: [still working](./manuscript.pdf)
+
 ## About this Research
 
 The objective of this research is to design neuro-adaptive controller using constrained optimiztion theory. 
@@ -19,7 +24,5 @@ The main features are as follows.
 - Choi Kyunghwan
 
 ## Version History
-
-## License
 
 
