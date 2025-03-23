@@ -124,13 +124,13 @@ e3 = sqrt(sum(e3.^2, 1));
 plot(t, zeros(size(t)), "color",  'black', "LineWidth", line_width, "LineStyle", "-", ...
     'HandleVisibility','off'); hold on
 plot(t, e1, "color",  c_list(1,:), "LineWidth", line_width, "LineStyle", "-", ...
-    "DisplayName", "$\beta=0.001$"); hold on
+    "DisplayName", "$\beta_j=0.001$"); hold on
 plot(t, e2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", ...
-    "DisplayName", "$\beta=0.45$"); hold on
+    "DisplayName", "$\beta_j=0.45$"); hold on
 plot(t, e3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
-    "DisplayName", "$\beta=1$"); hold on
-xlabel("Time / S", "Interpreter", "latex")
-ylabel("$\Vert\mathbf{\xi}\Vert$ / rad", "Interpreter","latex")
+    "DisplayName", "$\beta_j=1$"); hold on
+xlabel("Time / s", "Interpreter", "latex")
+ylabel("$\Vert {\xi}\Vert$ / rad", "Interpreter","latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on
 ylim([-.005, .03])
@@ -167,8 +167,8 @@ plot(t, e2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", ..
     "DisplayName", "$\lambda=0.45$"); hold on
 plot(t, e3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
     "DisplayName", "$\lambda=1$"); hold on
-xlabel("Time / S", "Interpreter", "latex")
-ylabel("$\Vert\mathbf{\xi}\Vert$ / rad", "Interpreter","latex")
+xlabel("Time / s", "Interpreter", "latex")
+ylabel("$\Vert {\xi}\Vert$ / rad", "Interpreter","latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on
 ylim([-.005, .03])
@@ -206,8 +206,8 @@ plot(t, e2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", ..
     "DisplayName", "$\rho=0.45$"); hold on
 plot(t, e3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
     "DisplayName", "$\rho=1$"); hold on
-xlabel("Time / S", "Interpreter", "latex")
-ylabel("$\Vert\mathbf{\xi}\Vert$ / rad", "Interpreter","latex")
+xlabel("Time / s", "Interpreter", "latex")
+ylabel("$\Vert {\xi}\Vert$ / rad", "Interpreter","latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on
 ylim([-.005, .03])
@@ -240,13 +240,13 @@ th2 = th2(end,:);
 th3 = th3(end,:);
 
 plot(t, th1, "color", c_list(1,:), "LineWidth", line_width, "LineStyle", "-", ...
-    "DisplayName", "$\beta=0.001$"); hold on
+    "DisplayName", "$\beta_j=0.001$"); hold on
 plot(t, th2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", ...
-    "DisplayName", "$\beta=0.45$"); hold on
+    "DisplayName", "$\beta_j=0.45$"); hold on
 plot(t, th3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
-    "DisplayName", "$\beta=1$"); hold on
-xlabel("Time / S", "Interpreter", "latex")
-ylabel("$\Vert\mathbf{\theta}\Vert$", "Interpreter","latex")
+    "DisplayName", "$\beta_j=1$"); hold on
+xlabel("Time / s", "Interpreter", "latex")
+ylabel("$\Vert \hat{\theta}\Vert$", "Interpreter","latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on
 ylim([0, 60])
@@ -284,8 +284,8 @@ plot(t, th2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", .
     "DisplayName", "$\lambda=0.45$"); hold on
 plot(t, th3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
     "DisplayName", "$\lambda=1$"); hold on
-xlabel("Time / S", "Interpreter", "latex")
-ylabel("$\Vert\mathbf{\theta}\Vert$", "Interpreter","latex")
+xlabel("Time / s", "Interpreter", "latex")
+ylabel("$\Vert { \hat{\theta}}\Vert$", "Interpreter","latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on
 ylim([0, 60])
@@ -324,8 +324,8 @@ plot(t, th2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", .
     "DisplayName", "$\rho=0.45$"); hold on
 plot(t, th3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
     "DisplayName", "$\rho=1$"); hold on
-xlabel("Time / S", "Interpreter", "latex")
-ylabel("$\Vert\mathbf{\theta}\Vert$", "Interpreter","latex")
+xlabel("Time / s", "Interpreter", "latex")
+ylabel("$\Vert { \hat{\theta}}\Vert$", "Interpreter","latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on
 ylim([0, 60])
@@ -346,9 +346,9 @@ t = ctrl_results.ctrl5_1.t;
 L = ctrl_results.ctrl5_1.L_hist;
 
 semilogy(t, L(1,:), "color", "red", "LineWidth", line_width, "LineStyle", "-", ...
-    "DisplayName", "$\lambda_{\theta_0}$"); hold on
+    "DisplayName", "$\lambda_{ {\theta}_0}$"); hold on
 semilogy(t, L(2,:), "color", "blue", "LineWidth", line_width, "LineStyle", "-.", ...
-    "DisplayName", "$\lambda_{\theta_1}$"); hold on
+    "DisplayName", "$\lambda_{ {\theta}_1}$"); hold on
 grid on
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on
@@ -375,13 +375,13 @@ cstr = ctrl_results.ctrl5_1.nnOpt.cstr;
 l_len = size(th, 1);
 % c_list = rand(l_len, 3);
 
-plot(t, th(1, :), 'color', 'red', 'DisplayName',"$\Vert\hat\theta_0\Vert$" ...
+plot(t, th(1, :), 'color', 'red', 'DisplayName',"$\Vert \hat{\theta}_0\Vert$" ...
         , "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(t, ones(size(t)) * cstr.V_max(1), "color", 'red', 'DisplayName',"$\bar \theta_0$", ...
+plot(t, ones(size(t)) * cstr.V_max(1), "color", 'red', 'DisplayName',"$\bar{\theta}_0$", ...
         "LineWidth", line_width, "LineStyle", "-."); hold on
-plot(t, th(2, :), 'color', 'blue', 'DisplayName',"$\Vert\hat\theta_1\Vert$" ...
+plot(t, th(2, :), 'color', 'blue', 'DisplayName',"$\Vert \hat{\theta}_1\Vert$" ...
     , "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(t, ones(size(t)) * cstr.V_max(2), "color", 'blue', 'DisplayName',"$\bar \theta_1$", ...
+plot(t, ones(size(t)) * cstr.V_max(2), "color", 'blue', 'DisplayName',"$\bar{\theta}_1$", ...
         "LineWidth", line_width, "LineStyle", "-."); hold on
 
 lgd = legend;

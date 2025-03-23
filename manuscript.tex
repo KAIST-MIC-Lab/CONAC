@@ -7,20 +7,15 @@
 
 \overrideIEEEmargins                                      % Needed to meet printer requirements.
 
-% \makeatletter
-% \let\NAT@parse\undefined
-% \makeatother
+\makeatletter
+\let\NAT@parse\undefined
+\makeatother
 
-\input{dding_template/tex_packages/tex_packages_general.tex}
-\input{dding_template/tex_macros/tex_macros_general.tex}
-% MY PAKEAGES ========================================
 
-\newcommand*{\q}{\mv{q}}
-\newcommand*{\dq}{\dot{\q}}
-\newcommand*{\ddq}{\ddot{\q}}
-\newcommand*{\qd}{\mv{q_d}}
-\newcommand*{\dqd}{\dot{\qd}}
-\newcommand*{\ddqd}{\ddot{\qd}}
+\def\pub{false} % true for publication, false for draft
+\newcommand*{\template}{dding_template}
+\input{\template/preamble/preamble_conf.tex}
+
 
 \title{\LARGE \bf
 Imposing a Weight Norm Constraint for Neuro–Adaptive Control
@@ -87,7 +82,7 @@ By compensating for these uncertainties, adaptive control methods have been wide
 Most conventional adaptive control methods focus on estimating unknown parameters in systems or controllers.
 
 More recently, neuro–adaptive control approaches have been developed using neural networks (NNs) to approximate unknown system dynamics \cite{Farrell:2006aa}.
-It uses the approximation capability of NNs with any arbitrary sigmoidal activation function \cite{Cybenko:1989aa}, which can approximate sufficiently smooth functions with minimum approximation error through ideal weights in a compact set.
+It generally uses the approximation capability of NNs with any arbitrary sigmoidal activation function \cite{Cybenko:1989aa}, which can approximate sufficiently smooth functions with minimum approximation error through ideal weights in a compact set.
 This property allows the NNs to be synthesized in the controllers to approximate the unknown dynamics.
 Various architectures of NNs have been proposed for neuro–adaptive control, such as single-hidden-layer NN (SHLNN) \cite{Esfandiari:2015aa,Gao:2006aa}, radial basis function NN (RBFNN) \cite{Ge:2002aa,Zhou:2023aa} and deep NN (DNN) \cite{Patil:2022aa}.
 The literature has shown that NNs can improve the system's performance index and stability by approximating the unknown dynamics.
@@ -96,9 +91,19 @@ The literature has shown that NNs can improve the system's performance index and
 % It refers to the weight divergence during the adaptation process, while the tracking error is bounded.
 
 % One of the common issues in neuro–adaptive control is that the boundedness of the control inputs is not guaranteed.
-One of the common issues in using NNs is that the outputs of NNs are not predictable.
+One of the common issues in using NNs 
+\color{red}
+for control compontnets
+\color{black}
+is that the outputs of NNs are not predictable.
 This is because the input‒output relationships of the NNs are not interpretable (\ie the NNs are usually called black boxes \cite{Sheu:2020aa,Rudin:2019aa}).
-This issue should be addressed for safety because the unpredictable control input may reach the actuator's physical limitations and result in system collapse.
+\color{red}
+This issue should be addressed for safety because the control input may reach the actuator's physical limitations and result in system collapse, due to the unpredictable control conponents from NNs.
+\color{black}
+\st{
+    This issue should be addressed for safety because the unpredictable control input may reach the actuator's physical limitations and result in system collapse.
+}
+
 
 Most studies modify their adaptation laws to ensure the boundedness of the weights, noting that the boundedness of the NNs' output can be ensured by the boundedness of the weights.
 In \cite{Zhou:2023aa,Patil:2022aa}, the projection operator is utilized to prevent weight divergence by projecting the adaptation direction on the convex set of weights.
@@ -147,13 +152,13 @@ Consider an uncertain Euler‒Lagrange system modeled as
     \label{eq. system dynamics 1}
 \end{equation}
 where $\q\in \mathbb{R}^n$ and $\mv \tau\in\R^n$ denote the generalized coordinate and the control input, respectively; $\mm M :=\mm M(\q)\in\mathbb{R}^{n\times n}$, $\mm V_m:= \mm V_m(\q,\dq)\in\mathbb{R}^{n\times n}$, and $\mm G:=\mm G(\q)\in\mathbb{R}^{n}$ denote the unknown system function matrices; and $\mm F:=\mm F(\dq)\in\mathbb{R}^{n}$ denotes the external force.
-Using the user-designed matrices $\widehat{\mm M}>0,\widehat{\mm V_m}$ and $\widehat{\mm G}$, \eqref{eq. system dynamics 1} can be represented as 
+Using the user-designed matrices $\widehat{\mm M}>0,\widehat{\mm V}_m$ and $\widehat{\mm G}$, \eqref{eq. system dynamics 1} can be represented as 
 \begin{equation}
-    \widehat{\mm M}\ddq+\widehat{\mm V_m}\dq+\widehat{\mm G} = \mv \tau + \mv f(\q,\dq,\ddq)
+    \widehat{\mm M}\ddq+\widehat{\mm V}_m\dq+\widehat{\mm G} = \mv \tau + \mv f(\q,\dq,\ddq)
     ,
     \label{eq. system dynamics 2}
 \end{equation}
-where $\mv f(\q,\dq,\ddq) := -(\mm M-\widehat{\mm M})\ddq-(\mm V_m-\widehat{\mm V_m})\dq -(\mm G-\widehat{\mm G}) -\mm F$ denotes the residual unknown term.
+where $\mv f(\q,\dq,\ddq) := -(\mm M-\widehat{\mm M})\ddq-(\mm V_m-\widehat{\mm V}_m)\dq -(\mm G-\widehat{\mm G}) -\mm F$ denotes the residual unknown term.
 
 Hence, the objective of the control design is to make $\q$ track the continuously differentiable desired trajectory $\qd:=\qd(t):\R\to \R^n$ under the unknown terms $\mv f:=\mv f(\q,\dq,\ddq)$.
 
@@ -175,7 +180,7 @@ The desired stabilizing controller can be designed as follows:
     ( 
         -\widehat{\mm M}\tilde {\q}
         +
-        \widehat{\mm V_m}{\mv z}
+        \widehat{\mm V}_m{\mv z}
         +
         \widehat{\mm G}
         -
@@ -191,30 +196,30 @@ Note that the desired controller cannot be realized because of $\mv f$.
 
 To approximate the desired controller, an NN is utilized.
 \color{red}
-    Even though the DNNs have a higher approximation capability than the SHLNNs \cite{Rolnick:2018aa}, here, the SHLNN is utilized for simplicity and low computational complexity.
+    Even though the DNNs have a higher approximation capability than the SHLNNs \cite{Rolnick:2017aa}, here, the SHLNN is utilized for simplicity and low computational complexity.
 \color{black}
 The NN with a single hidden layer is represented as 
 \begin{equation}
-    \NN({\q_{NN}};\wth):= \wV_1^\top \act(\wV_0^\top {\q_{NN}})
+    \NN({\q_{n}};\wth):= \wV_1^\top \act(\wV_0^\top {\q_{n}})
     ,
 \end{equation}
-where ${\q_{NN}}\in\R^{l_0+1}$ denotes the NN input vector, $\wV_i\in\R^{(l_i+1)\times l_{i+1}},\ i\in\{0,1\}$ denotes the weight matrix of the $i\textsuperscript{th}$ layer and $\act:\R^{l_1}\to\R^{l_1+1}$ denotes the activation function layer.
+where ${\q_{n}}\in\R^{l_0+1}$ denotes the NN input vector, $\wV_i\in\R^{(l_i+1)\times l_{i+1}},\ \forall i\in\{0,1\}$ denotes the weight matrix of the $i\textsuperscript{th}$ layer and $\act:\R^{l_1}\to\R^{l_1+1}$ denotes the activation function layer.
 The activation function layer consists of an elementwise nonlinear function $\sigma(\cdot)$ and an augmented $1$ to combine the bias terms in the weight matrix (\ie $\act(\mv x) = \left(\sigma(\mv x_{(1)}),\cdots, \sigma(\mv x_{(l_1)}), 1\right)^\top $).
-For further simplicity, let $\wth_i:= \myvec(\wV_i)\in\R^{\Xi_i}$ denotes the vectorized weights and $\wth:=(\wth_1^\top ,\wth_0^\top )^\top \in\R^{\Xi}$ denote the total weight vector, where $\Xi_i=(l_i+1)\cdot l_{i+1}$ and $\Xi=\Xi_0+\Xi_1$ denote the number of each layer and total weights, respectively.
+For further simplicity, let $\wth_i:= \myvec(\wV_i)\in\R^{\Xi_i},\ \forall i\in\{0,1\}$ denotes the vectorized weights and $\wth:=(\wth_1^\top ,\wth_0^\top )^\top \in\R^{\Xi}$ denote the total weight vector, where $\Xi_i:=(l_i+1)\cdot l_{i+1},\ \forall i\in\{0,1\}$ and $\Xi:=\Xi_0+\Xi_1$ denote the number of each layer and total weights, respectively.
 
-Using this NN, the desired controller $\mv \tau^*$ can be approximated by the ideal weight vector $\wth^*$ for a compact subset $\Omega_{NN}\in\R^{l_0+1}$ to $\epsilon$ accuracy such that $\sup_{{\q_{NN}}\in\Omega_{NN}} \allowbreak \norm{\NN({\q_{NN}};\wth^*) - \mv \tau^*}=\epsilon<\infty$ \cite{Cybenko:1989aa}.
+Using this NN, the desired controller $\mv \tau^*$ can be approximated by the ideal weight vector $\wth^*$ for a compact subset $\Omega_{NN}\in\R^{l_0+1}$ to $\epsilon$ accuracy such that $\sup_{{\q_{n}}\in\Omega_{NN}} \allowbreak \norm{\NN({\q_{n}};\wth^*) - \mv \tau^*}=\epsilon<\infty$ \cite{Cybenko:1989aa}.
 The ideal weight vector $\wth^*$ is typically assumed to be bounded.
-Then, using the estimated weight vector $\estwth=(\estwth_1^\top ,\estwth_0^\top )^\top $ of $\wth^*=(\wth_1^{*\top},\wth_0^{*\top})^\top $, the desired controller $\mv \tau^*\approx -\NN(\q_{NN};\wth^*)-\mv\epsilon$ with bounded approximation error $\mv \epsilon\in\R^2$, can be approximated as follows:
+Then, using the estimated weight vector $\estwth:=(\estwth_1^\top ,\estwth_0^\top )^\top $ of $\idealwth:=({\idealwth_{1}}^{\top},{\idealwth_{0}}^{\top})^\top $ and bounded approximation error $\mv \epsilon\in\R^2$, the approximated desired controller $\mv \tau^*\approx -\NN(\q_{n};\idealwth)-\mv\epsilon$ can be estimated as follows:
 \begin{equation}
-    \mv \tau := -\NN({\q_{NN}};\estwth)
+    \mv \tau := -\NN({\q_{n}};\estwth)
     .
     \label{eq. control law}
 \end{equation}
-For further sections, let $\idealNN:=\NN({\q_{NN}};\idealwth)$ and $\idealact :=\act({\idealwV}_0^{\top}{\q_{NN}})$, and let $\estNN:={\NN}({\q_{NN}};\estwth)$, $\estact :=\act(\estwV_0^{\top}{\q_{NN}})$ and $\estact' := \pptfrac{\estact}{(\estwV_0^\top \q_{NN})}$.
+For further sections, let $\idealNN:=\NN({\q_{n}};\idealwth)$ and $\idealact :=\act({\idealwV_0}^{\top}{\q_{n}})$, and let $\estNN:={\NN}({\q_{n}};\estwth)$, $\estact :=\act(\estwV_0^{\top}{\q_{n}})$ and $\estact' := \pptfrac{\estact}{(\estwV_0^\top \q_{n})}$.
 
-Using \eqref{eq. system dynamics 2}, \eqref{eq. desired control}, and \eqref{eq. control law}, the error dynamics can be obtained as the first-order system of augmented error $\mv \xi:=(\tilde {\q}^\top ,\tilde {\mv z}^\top)^\top \in\R^{2n}$ as follows:
+Using \eqref{eq. system dynamics 2}, \eqref{eq. desired control}, and \eqref{eq. control law}, the error dynamics can be obtained as the first-order system of augmented error $\mv \xi:=({\tilde {\q}}^\top ,{\tilde {\mv z}}^\top)^\top \in\R^{2n}$ as follows:
 \begin{equation}
-    \dot{\mv \xi} 
+    \ddtt{\mv \xi} 
     = 
     \mm A_\xi{\mv \xi}+\mm B_\xi(\NN^*-\estNN+\mv\epsilon)
     ,
@@ -239,7 +244,7 @@ and
 \color{red}
     As discussed in Section \ref{sec:intro}, the boundedness of the weights should be considered to prevent excessively large control inputs and system instability.
 \color{black}
-For the boundedness of the weights, weight norm constraints are imposed on the adaptation process such that $c_{\theta_i}=\norm{{\estwth}_i}^2-\bar\theta^2_i,\ i\in\{0,1\}$.
+For the boundedness of the weights, weight norm constraints are imposed on the adaptation process such that $c_{\theta_i}:=c_{\theta_i}(\estwth_i)=\norm{{\estwth}_i}^2-\bar\theta^2_i,\ \forall i\in\{0,1\}$.
 The control problem can be reformulated into a constrained optimization problem as follows:
 \begin{equation}
     \begin{matrix}
@@ -250,7 +255,7 @@ The control problem can be reformulated into a constrained optimization problem 
         \\ \\
         \begin{aligned}
         \text{subject to\;}&c_{j}\le0, \quad j\in\mathcal I 
-        = 
+        := 
         \{\theta_0,\theta_1\}
         ,
         \end{aligned}
@@ -272,7 +277,7 @@ The corresponding Lagrangian function is defined as
     .
 \end{equation}
 % where $\mathcal I=\{j\ \vert \ c_j\ge 0\}$ denotes the active set.
-To solve the dual problem $\min_{{\estwth}} \max_{[\lambda_j]_{j\in\mathcal I}}  L$, the adaptation law is derived as follows:
+To solve the dual problem $\min_{{\estwth}} \max_{[\lambda_j]_{j\in\mathcal I}}  L(\mv \xi,{\estwth},[\lambda_j]_{j\in\mathcal I}$, the adaptation law is derived as follows:
 \begin{subequations}
     \begin{align}
             \ddtt {{\estwth}}
@@ -315,14 +320,16 @@ where arguments of $L$ are suppressed for brevity, and $\alpha\in\R_{>0}$ and $\
 \color{black}
 
 Using the chain rule, the gradient of the objective function with respect to the weights (\ie $\pptfrac{J}{\estwth}$) in \eqref{eq. adaptation law th} can be represented as
-\begin{equation}
+% \begin{equation}
+$
     \pptfrac{J}{\estwth}
     =
     \pptfrac{\mv\xi}{\estwth}^\top 
     \mm \Lambda
     \mv\xi
     .
-\end{equation}
+% \end{equation}
+$
 The calculation of $\pptfrac{J}{\estwth}$ is not straightforward because of the dynamics of $\mv\xi$.
 Using the forward sensitivity method presented in \cite{Sengupta:2014aa}, the sensitivity equation can be obtained as follows:
 \begin{equation}
@@ -360,7 +367,7 @@ By decomposing for each layer, the dynamics of ${\mm \eta}_i:= \pptfrac{\mv\xi}{
         [
             (\mm I_{l_2}\!\otimes\!\estact^\top )
             \ \ 
-            \estwV_1^\top \estact'(\mm I_{l_1}\otimes {\q_{NN}}^\top )
+            \estwV_1^\top \estact'(\mm I_{l_1}\otimes {\q_{n}}^\top )
         ]
         % \end{bmatrix}
         .
@@ -417,7 +424,7 @@ The dynamics of $\mv \xi$ can be represented as
     )
     ,
 \end{equation}
-where $\mv w(t):= {\idealwV}_1^{\top}\idealact+\mv \epsilon$ is a lumped residual term, which is bounded as $\norm{\mv  w(t)}\le \bar w< 0$ since $\norm{\idealwth_1},\norm{\idealact}$ and $\norm{\mv\epsilon}$ are bounded.
+where $\mv w(t):= {\idealwV_1}^{\top}\idealact+\mv \epsilon$ is a lumped residual term, which is bounded as $\norm{\mv  w(t)}\le \bar w< 0$ since $\norm{\idealwth_1},\norm{\idealact}$ and $\norm{\mv\epsilon}$ are bounded.
 The dynamics of ${\mm \eta}_1$ and ${\estwth}_1$ are represented as
 \begin{equation}
     \begin{aligned}
@@ -438,7 +445,7 @@ The dynamics of ${\mm \eta}_1$ and ${\estwth}_1$ are represented as
         .
     \end{aligned} 
 \end{equation}
-According to \cite[Chap.~4 T.~1.9]{Desoer:2009aa}, the boundedness of ${\mm \eta}_1$ can be obtained since $\mm A_\xi$ is stable and the residual term $-\mm B_\xi (\mm I_{l_{2}}\otimes \estact^\top )$ is bounded.
+According to \cite[Chap.~4 T.~1.9]{Desoer:2009aa}, the boundedness of ${\mm \eta}_1$ can be obtained since $\mm A_\xi$ is stable and the residual term $\norm{-\mm B_\xi (\mm I_{l_{2}}\otimes \estact^\top )}$ is bounded.
 
 Define the Lyapunov function $V_1:=\tfrac{1}{2}\mv\xi^\top \mm P\mv\xi+\tfrac{1}{2\alpha}{\estwth}_1^\top {\estwth}_1$, with the Lyapunov equation $\mm A_\xi^\top \mm P+\mm P\mm A_\xi=-\mm Q$, where $\mm A_\xi<0,\mm P=\mm P^\top >0$, and $\mm Q>0$.
 Using a proposition $\estwV_1^\top \estact = \myvec(\estwV_1^\top \estact)=\myvec(\estact^\top \estwV_1) = (\mm I_{l_2}\otimes {\estact}^\top )\myvec(\estwV_1)=(\mm I_{l_2}\otimes \estact^\top ){\estwth}_1$ \cite[Proposition~(7.1.9)]{Bernstein:2009aa}, the time derivative of $V_1$ is
@@ -547,7 +554,7 @@ The dynamics of ${\mm \eta}_0$ and ${\estwth}_0$ are represented as
     \begin{aligned}     
         \ddtt{\mm \eta}_0 =& 
         \mm A_\xi{\mm \eta}_0 -\mm B_\xi 
-        \estwV_1^\top \estact'(\mm I_{l_1}\otimes {\q_{NN}}^\top )
+        \estwV_1^\top \estact'(\mm I_{l_1}\otimes {\q_{n}}^\top )
         \\
         \ddtt{{\estwth}}_0
         =&
@@ -558,7 +565,7 @@ The dynamics of ${\mm \eta}_0$ and ${\estwth}_0$ are represented as
         .
     \end{aligned}
 \end{equation}
-According to \cite[Chap.~4 T.~1.9]{Desoer:2009aa}, ${\mm \eta}_0$ is bounded since $\mm A_\xi$ is a stable matrix and $-\mm B_\xi\estwV_1^\top \estact'(\mm I_{l_1}\otimes {\q_{NN}}^\top )$ is bounded.
+According to \cite[Chap.~4 T.~1.9]{Desoer:2009aa}, ${\mm \eta}_0$ is bounded since $\mm A_\xi$ is a stable matrix and $\norm{-\mm B_\xi\estwV_1^\top \estact'(\mm I_{l_1}\otimes {\q_{n}}^\top )}$ is bounded.
 To obtain the invariance set of ${\estwth}_0$, taking the time derivative of the Lyapunov function $V_0=\tfrac{1}{2\alpha}{\estwth}_0^\top {\estwth}_0$ yields:
 \begin{equation}
     \begin{aligned}
@@ -632,22 +639,22 @@ Therefore, the Lagrange multiplier $\lambda_{\theta_0}$ is also bounded.
     \textbf{Symbol} & \textbf{Description} & \textbf{Link 1} & \textbf{Link 2} \\
     \hline
     \hline 
-    $m_1, m_2$ & Mass of link    & 23.902 (kg) & 3.88 (kg) \\
+    $m_p$ & Mass of $p\textsubscript{th}$ link    & 23.902 (kg) & 3.88 (kg) \\
     \hline
-    $l_1, l_2$  & Length of link   & 0.45 (m) & 0.45 (m) \\
+    $l_p$  & Length of $p\textsubscript{th}$ link   & 0.45 (m) & 0.45 (m) \\
     \hline
-    $l_{c1}, l_{c2}$ & COM of link  & 0.091 (m) & 0.048 (m) \\
+    ${l_c}_p$ & COM of $p\textsubscript{th}$ link  & 0.091 (m) & 0.048 (m) \\
     \hline
-    $\theta_1, b_2$   & Viscous coefficient  &  2.288 (Nms) & 0.172 (Nms) \\
+    $b_p$   & Viscous coef. of $p\textsubscript{th}$ link  &  2.288 (Nms) & 0.172 (Nms) \\
     \hline
-    $f_{c1}, f_{c2}$  & Friction coefficient &  7.17 (Nm) & 1.734 (Nm) \\
+    ${f_c}_p$  & Friction coef. of $p\textsubscript{th}$ link &  7.17 (Nm) & 1.734 (Nm) \\
     \hline
     \end{tabular}
     \label{table: system parameters}
 \end{table}
 
 The two-link manipulator model in \cite{Markus:2013aa} is employed for the simulation demonstration as described in Fig.~\ref{fig: manipulator}.
-In the system, the parameters $q_p,{q_d}_p,\tau_p,m_p,l_p,{l_c}_p,b_p$ and ${f_c}_p$ denote the joint angle, desired joint angle, torque, mass, length, center of mass, viscous coefficient, and friction coefficient, respectively, for link $p\in[1,2]$.
+In the system, the parameters $q_p,{q_d}_p,\tau_p,m_p,l_p,{l_c}_p,b_p$ and ${f_c}_p$ denote the joint angle, desired joint angle, torque, mass, length, center of mass, viscous coefficient, and friction coefficient, respectively, for link $p\in\{1,2\}$.
 The values of the system parameters are given in Table~\ref{table: system parameters}.
 The reference signal of $\q=[q_1,q_2]^\top $ is defined as follows:
 \begin{equation}
@@ -671,14 +678,14 @@ The reference signal of $\q=[q_1,q_2]^\top $ is defined as follows:
 
 For the comparative study, three controllers were selected: the neuro–adaptive controller with $L_2$-regularization (NAC-L2) and with $\epsilon$-modification (NAC-eMod) and the proposed controller with constrained optimization (NAC-CO).
 %%%%%%%%%%%%%%%%%%%%%
-The performances of the selected controllers are compared based on the tracking performances and the dependencies of the parameters $\lambda$, $\rho$, and $\beta_j$ of NAC-L2, NAC-eMod, and NAC-CO, respectively.
+The performances of the selected controllers are compared based on the tracking performances and the dependencies of the parameters (\ie $L_2$ coefficient $\lambda$, $\epsilon$-modification coefficient $\rho$, and $\beta_j$ of NAC-L2, NAC-eMod, and NAC-CO, respectively).
 The square root of the integrated squared error (ISE) (\ie $\sqrt{\int_0^T \norm{\mv \xi}^2\,\der t}$, where $T$ denotes a simulation termination time) is utilized to evaluate the tracking performance.
 The parameter dependencies of the controllers were examined via various values of the parameters. 
 The values ranged from $0.001$ to $1$ across $10$ samples.
 %%%%%%%%%%%%%%%%%%%%%
 
 The control laws of all three controllers were the same as those defined in \eqref{eq. control law}.
-The adaptation law of NAC-L2 is derived by adding the squared weight term $\tfrac{1}{2}\lambda{\estwth}^\top {\estwth}$ to the objective function such that $J_{L_2} = J+\tfrac{1}{2}\lambda{\estwth}^\top {\estwth}$, where $\lambda\in\R_{>0}$ denotes the $L_2$ coefficient.
+The adaptation law of NAC-L2 is derived by adding the squared weight term $\tfrac{1}{2}\lambda{\estwth}^\top {\estwth}$ to the objective function such that $J_{L_2}:= J+\tfrac{1}{2}\lambda{\estwth}^\top {\estwth}$, where $\lambda\in\R_{>0}$.
 The adaptation law obtained via the gradient descent method is subsequently adjusted by adding a stabilizing term $-\alpha\lambda{\estwth}$ as follows:
 \begin{equation} 
     \ddtt{{\estwth}} = 
@@ -700,24 +707,24 @@ For NAC-eMod, similar to the $\sigma$-modification, the stabilizing function $-\
         \pptfrac{J}{\estwth}
         +
         \rho\norm{\tilde {\mv z}}{\estwth}
-        ,
     \right)
+    ,
     \label{eq. adap eMod}
 \end{equation}
-where $\rho\in\R_{>0}$ denotes the $\epsilon$-modification coefficient.
+where $\rho\in\R_{>0}$.
 By $\norm{\tilde {\mv z}}$, the stabilizing function proportionally increases as the tracking error $\tilde {\mv z}$ increases.
 Therefore, the adaptation attempts to reduce the tracking error mainly without the effect of the stabilizing function if the tracking error is sufficiently regulated.
 The adaptation law of NAC-CO is presented in \eqref{eq. adaptation laws}.
 Owing to the stabilizing functions, the weights of NAC-L2 and NAC-eMod are biased since the stabilizing functions drive the weights toward the origin.
 
-All controllers had the same control parameters except their crucial parameters (\ie $\lambda$, $\rho$ and $\beta_j$) as $k_q=1.1$, $k_z=10$, $\widehat{\mm M}=\mm I_2$ and $\mm \Lambda=\text{diag}([5,1,15,15])$.
+All controllers had the same control parameters except their crucial parameters (\ie $\lambda$, $\rho$ and $\beta_j$) as $k_q=1.1$, $k_z=10$, $\widehat{\mm M}=\mm I_2$ and $\mm \Lambda=\mydiag([5,1,15,15])$.
 The parameters of the NNs were set to $l_0=2$, $l_1=16$, $l_2=2$, and $\alpha=10^3$, and the same random seed was applied for weight initialization.
 \color{red}    
     The validity of the selected number of nodes were demonstrated through experiments 
 \color{black}
-The NN input vector was set to the desired trajectory $\qd$, with the augmented 1 to incorporate the bias term in the weight matrix such that $\q_{NN}=[\qd^\top ,1]^\top $.
+The NN input vector was set to the desired trajectory $\qd$, with the augmented 1 to incorporate the bias term in the weight matrix such that $\q_{n}=(\qd^\top ,1)^\top $.
 For NAC-CO, the parameters of the weight norm constraints were set as $\bar\theta_0=10$ and $\bar\theta_1=20$.
-The sampling time of the simulation and the simulation termination time were set to $T_s=100\ \mu\mathrm{s}$ and $T=10\ \mathrm{s}$, respectively.
+The sampling time of the simulation and the simulation termination time were set to $T_s=100\,\mu\mathrm{s}$ and $T=10\,\mathrm{s}$, respectively.
 
 \subsection{Results}
 
@@ -760,13 +767,12 @@ A quantitative comparison of the square root of the tracking ISE is provided in 
     \centering
         \subfloat[NAC-L2]{\includegraphics[width=.85\linewidth]{fig/fig9.eps}%
         \label{fig: weight NAC-L2}}
-    \vfill
+    \vspace{.1mm}
         \subfloat[NAC-eMod]{\includegraphics[width=.85\linewidth]{fig/fig10.eps}%
         \label{fig: weight NAC-eMod}}
-    \vfill
+    \vspace{.1mm}
         \subfloat[NAC-CO]{\includegraphics[width=.85\linewidth]{fig/fig8.eps}%
         \label{fig: weight NAC-CO}}
-    \vfill
     \caption{Weight norms of NAC-L2, NAC-eMod, and NAC-CO.}
     \label{fig: weight}
 \end{figure}
@@ -775,18 +781,17 @@ A quantitative comparison of the square root of the tracking ISE is provided in 
     \centering
         \subfloat[NAC-L2]{\includegraphics[width=.85\linewidth]{fig/fig6.eps}%
         \label{fig: error NAC-L2}}
-    \vfill
+    \vspace{.1mm}
         \subfloat[NAC-eMod]{\includegraphics[width=.85\linewidth]{fig/fig7.eps}%
         \label{fig: error NAC-eMod}}
-    \vfill
+    \vspace{.1mm}
         \subfloat[NAC-CO]{\includegraphics[width=.85\linewidth]{fig/fig5.eps}%
         \label{fig: error NAC-CO}}
-    \vfill
     \caption{Tracking errors of NAC-L2, NAC-eMod, and NAC-CO.}
     \label{fig: error}
 \end{figure}
 
-For the detailed analysis, three values of the parameters (\ie $\lambda,\rho,\beta_j\in[0.001,0.45,1]$) were selected as described in Fig.~\ref{fig: weight} and Fig.~\ref{fig: error}.
+For the detailed analysis, three values of the parameters (\ie $\lambda,\rho,\beta_j\in\{0.001,0.45,1\}$) were selected as described in Fig.~\ref{fig: weight} and Fig.~\ref{fig: error}.
 As shown in Fig.~\ref{fig: weight NAC-L2}, increasing $\lambda$ reduces the weight norm of NAC-L2 via the stabilizing function $-\alpha\lambda{\estwth}$.
 Moreover, the high dependency of NAC-L2 on the $L_2$-regularization coefficient $\lambda$ can also be observed.
 Since the weight norm is decreased, NAC-L2 cannot generate sufficient control inputs, resulting in a larger square root of tracking ISE, as shown in Fig.~\ref{fig: error NAC-L2}.
@@ -809,13 +814,13 @@ The Lagrange multipliers disappear when the constraints are satisfied, and the w
 
 \begin{figure}[!t]      
     \centering
-    \subfloat[Weight norm]{\includegraphics[width=.8 \linewidth]{fig/fig12.eps}%
-    \label{fig: weight per layer NAC-CO}}
-    \vfill
-    \subfloat[Lagrange multipliers]{\includegraphics[width=.8 \linewidth]{fig/fig11.eps}%
-    \label{fig: multipliers NAC-CO}}
-    \caption{Weight norms and Lagrange multipliers of NAC-CO ($\beta=0.001$).}
-    \label{fig: weight and multiplier}
+        \subfloat[Weight norm]{\includegraphics[width=.8 \linewidth]{fig/fig12.eps}%
+        \label{fig: weight per layer NAC-CO}}
+    \vspace{.1mm}
+        \subfloat[Lagrange multipliers]{\includegraphics[width=.8 \linewidth]{fig/fig11.eps}%
+        \label{fig: multipliers NAC-CO}}
+        \caption{Weight norms and Lagrange multipliers of NAC-CO ($\beta=0.001$).}
+        \label{fig: weight and multiplier}
 \end{figure}
 
 Furthermore, it is important to note that NAC-CO shows enhanced tracking performance with smaller weights than NAC-L2 and NAC-eMod.
@@ -826,13 +831,13 @@ Therefore, if the physical analysis of the system is available to predict the fe
 %  SECTION CONCLUSION ======================================
 \section{Conclusion}\label{sec:conclusion}
 
-\color{black}
+%
 In this paper, a neuro–adaptive control method is proposed for uncertain Euler‒Lagrange systems, ensuring weight boundedness.
 Adaptation laws are derived by formulating a constrained optimization problem with weight norm constraints.
 The boundedness of the tracking error and the weight estimation are analyzed via Lyapunov analysis.
 The simulation results demonstrate that the proposed controller outperforms the existing methods in terms of tracking performance and parameter dependency.
-As further work, the state and output constraints for safety will be handled, ensuring stability.
-\color{black}
+As further work, the state constraints for safety will be handled, ensuring stability.
+%
 
 \addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
                                   % on the last page of the document manually. It shortens
@@ -862,8 +867,9 @@ As further work, the state and output constraints for safety will be handled, en
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 {\footnotesize
-\bibliographystyle{ieeetr}
-\bibliography{dding_template/refs}}
+    \bibliographystyle{ieeetr}
+    \bibliography{dding_template/refs}
+}
 
 \end{document}
 
