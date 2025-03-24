@@ -104,7 +104,6 @@ This issue should be addressed for safety because the control input may reach th
     This issue should be addressed for safety because the unpredictable control input may reach the actuator's physical limitations and result in system collapse.
 }
 
-
 Most studies modify their adaptation laws to ensure the boundedness of the weights, noting that the boundedness of the NNs' output can be ensured by the boundedness of the weights.
 In \cite{Zhou:2023aa,Patil:2022aa}, the projection operator is utilized to prevent weight divergence by projecting the adaptation direction on the convex set of weights.
 However, in the literature, the convex set is usually selected to be as large as possible since there is no information on the ideal weights' norm.
@@ -634,7 +633,7 @@ Therefore, the Lagrange multiplier $\lambda_{\theta_0}$ is also bounded.
     \renewcommand{\arraystretch}{1.3}
     \caption{System model parameters.}
     \centering
-    \begin{tabular}{c c c c c }
+    \begin{tabular}{c m{11em} c c c }
     \hline
     \textbf{Symbol} & \textbf{Description} & \textbf{Link 1} & \textbf{Link 2} \\
     \hline
