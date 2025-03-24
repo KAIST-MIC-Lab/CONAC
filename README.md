@@ -20,7 +20,7 @@ The main features are as follows.
 ## Authors
 
 - [Ryu Myeongseok](https://gitlab.com/DDingR)
-- Kim Jiyun
+- [Kim Jiyun](https://github.com/jixyuxn)
 - Choi Kyunghwan
 
 ## Version History
