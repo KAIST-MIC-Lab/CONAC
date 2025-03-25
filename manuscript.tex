@@ -21,11 +21,20 @@
 Imposing a Weight Norm Constraint for Neuro–Adaptive Control
 }
 
-\author{Myeongseok Ryu$^{1}$, Jiyun Kim$^{2}$, and Kyunghwan Choi$^{1}$% <-this % stops a space
-\thanks{*This work was supported by a Korea Institute for Advancement of Technology (KIAT) grant funded by the Korea Government (MOTIE) (P0020535, The Competency Development Program for Industry Specialist) \it{(Corresponding author: Kyunghwan Choi)}}% <-this % stops a space
-\thanks{$^{1}$Myeongseok Ryu and Kyunghwan Choi are with the Department of Mechanical and Robotics Engineering, Gwangju Institute of Science and Technology, 61005 Gwangju, Republic of Korea {\tt\small dding\_98@gm.gist.ac.kr, khchoi@gist.ac.kr}}%
-\thanks{$^{2}$Jiyun Kim is with the AI Graduate School, Gwangju Institute of Science and Technology, 61005 Gwangju, Republic of Korea 
-        {\tt\small jiyun6606@gm.gist.ac.kr}}%
+\author{Myeongseok Ryu$^{1}$, Jiyun Kim$^{2}$, and Kyunghwan Choi$^{3}$% <-this % stops a space
+\thanks{
+    *This work was supported in part by a Korea Research Institute for Defense Technology planning and advancement (KRIT) grant funded by Korea government DAPA (Defense Acquisition Program Administration) (No. KRIT-CT-22-087, Synthetic Battlefield Environment based Integrated Combat Training Platform) and in part by a Korea Institute for Advancement of Technology (KIAT) grant funded by the Korea Government (MOTIE) (P0020535, The Competency Development Program for Industry Specialist) \it{(Corresponding author: Kyunghwan Choi)}
+}% <-this % stops a space
+\thanks{
+    $^{1}$Myeongseok Ryu is with the Department of Mechanical and Robotics Engineering, Gwangju Institute of Science and Technology, 61005 Gwangju, Republic of Korea {\tt\small dding\_98@gm.gist.ac.kr}
+}%
+\thanks{
+    $^{2}$Jiyun Kim is with the AI Graduate School, Gwangju Institute of Science and Technology, 61005 Gwangju, Republic of Korea 
+        {\tt\small jiyun6606@gm.gist.ac.kr}
+}%
+\thanks{
+    $^{3}$Kyunghwan Choi was with the Department of Mechanical and Robotics Engineering, Gwangju Institute of Science and Technology, Republic of Korea. He is currently with the Graduate School of Mobility, Korea Advanced Institute of Science and Technology (KAIST), Daejeon 34051, Republic of Korea {\tt\small kyunghwan.choi90@gmail.com}
+}%
 }
 
 \begin{document}
@@ -91,18 +100,9 @@ The literature has shown that NNs can improve the system's performance index and
 % It refers to the weight divergence during the adaptation process, while the tracking error is bounded.
 
 % One of the common issues in neuro–adaptive control is that the boundedness of the control inputs is not guaranteed.
-One of the common issues in using NNs 
-\color{red}
-for control compontnets
-\color{black}
-is that the outputs of NNs are not predictable.
+One of the common issues in using NNs as control compontnets is that the outputs of NNs are not predictable.
 This is because the input‒output relationships of the NNs are not interpretable (\ie the NNs are usually called black boxes \cite{Sheu:2020aa,Rudin:2019aa}).
-\color{red}
 This issue should be addressed for safety because the control input may reach the actuator's physical limitations and result in system collapse, due to the unpredictable control conponents from NNs.
-\color{black}
-\st{
-    This issue should be addressed for safety because the unpredictable control input may reach the actuator's physical limitations and result in system collapse.
-}
 
 Most studies modify their adaptation laws to ensure the boundedness of the weights, noting that the boundedness of the NNs' output can be ensured by the boundedness of the weights.
 In \cite{Zhou:2023aa,Patil:2022aa}, the projection operator is utilized to prevent weight divergence by projecting the adaptation direction on the convex set of weights.
@@ -194,9 +194,7 @@ where $\tilde {\mv z}:= \mv z-\mv z^*$ and $k_z\in\R_{>0}$.
 Note that the desired controller cannot be realized because of $\mv f$.
 
 To approximate the desired controller, an NN is utilized.
-\color{red}
-    Even though the DNNs have a higher approximation capability than the SHLNNs \cite{Rolnick:2017aa}, here, the SHLNN is utilized for simplicity and low computational complexity.
-\color{black}
+Even though DNNs have a higher approximation capability than SHLNNs \cite{Rolnick:2018aa}, here, an SHLNN is utilized for simplicity and low computational complexity.
 The NN with a single hidden layer is represented as 
 \begin{equation}
     \NN({\q_{n}};\wth):= \wV_1^\top \act(\wV_0^\top {\q_{n}})
@@ -240,9 +238,7 @@ and
 
 \subsection{Adaptation Law Derivation}\label{sec:adap_laws}
 
-\color{red}
-    As discussed in Section \ref{sec:intro}, the boundedness of the weights should be considered to prevent excessively large control inputs and system instability.
-\color{black}
+As discussed in Section \ref{sec:intro}, the boundedness of the weights should be considered to prevent excessively large control inputs and system instability.
 For the boundedness of the weights, weight norm constraints are imposed on the adaptation process such that $c_{\theta_i}:=c_{\theta_i}(\estwth_i)=\norm{{\estwth}_i}^2-\bar\theta^2_i,\ \forall i\in\{0,1\}$.
 The control problem can be reformulated into a constrained optimization problem as follows:
 \begin{equation}
@@ -554,6 +550,7 @@ The dynamics of ${\mm \eta}_0$ and ${\estwth}_0$ are represented as
         \ddtt{\mm \eta}_0 =& 
         \mm A_\xi{\mm \eta}_0 -\mm B_\xi 
         \estwV_1^\top \estact'(\mm I_{l_1}\otimes {\q_{n}}^\top )
+        ,
         \\
         \ddtt{{\estwth}}_0
         =&
@@ -590,9 +587,11 @@ To obtain the invariance set of ${\estwth}_0$, taking the time derivative of the
     \end{aligned}
 \end{equation}
 Then, the invariance set can be represented as 
-\begin{equation}
+% \begin{equation}
+$
     \Theta_{{\theta}_0} :=
-    \left\{
+    % \left\{
+    \{
         {\estwth}_0\mid\norm{\estwth_0}
         \le
         \tfrac{
@@ -600,9 +599,11 @@ Then, the invariance set can be represented as
         }{
             2\lambda_{\theta_0}
         }
-    \right\}
+    % \right\}
+    \}
     .    
-\end{equation}
+$
+% \end{equation}
 If $\lambda_{\theta_0}$ is increased sufficiently large due to the violation of $c_{\theta_0}$, the invariance set $\Theta_{{\theta}_0}$ converges to $\{{\estwth}_0 \mid \norm{{\estwth}_0} \le \bar\theta_0\}$ until the constraint $c_{\theta_0}$ is satisfied.
 Therefore, the Lagrange multiplier $\lambda_{\theta_0}$ is also bounded.
 
@@ -718,9 +719,7 @@ Owing to the stabilizing functions, the weights of NAC-L2 and NAC-eMod are biase
 
 All controllers had the same control parameters except their crucial parameters (\ie $\lambda$, $\rho$ and $\beta_j$) as $k_q=1.1$, $k_z=10$, $\widehat{\mm M}=\mm I_2$ and $\mm \Lambda=\mydiag([5,1,15,15])$.
 The parameters of the NNs were set to $l_0=2$, $l_1=16$, $l_2=2$, and $\alpha=10^3$, and the same random seed was applied for weight initialization.
-\color{red}    
-    The validity of the selected number of nodes were demonstrated through experiments 
-\color{black}
+The validity of the selected number of nodes were demonstrated through experiments 
 The NN input vector was set to the desired trajectory $\qd$, with the augmented 1 to incorporate the bias term in the weight matrix such that $\q_{n}=(\qd^\top ,1)^\top $.
 For NAC-CO, the parameters of the weight norm constraints were set as $\bar\theta_0=10$ and $\bar\theta_1=20$.
 The sampling time of the simulation and the simulation termination time were set to $T_s=100\,\mu\mathrm{s}$ and $T=10\,\mathrm{s}$, respectively.
@@ -766,10 +765,10 @@ A quantitative comparison of the square root of the tracking ISE is provided in 
     \centering
         \subfloat[NAC-L2]{\includegraphics[width=.85\linewidth]{fig/fig9.eps}%
         \label{fig: weight NAC-L2}}
-    \vspace{.1mm}
+    \vspace{-2mm}
         \subfloat[NAC-eMod]{\includegraphics[width=.85\linewidth]{fig/fig10.eps}%
         \label{fig: weight NAC-eMod}}
-    \vspace{.1mm}
+    \vspace{-2mm}
         \subfloat[NAC-CO]{\includegraphics[width=.85\linewidth]{fig/fig8.eps}%
         \label{fig: weight NAC-CO}}
     \caption{Weight norms of NAC-L2, NAC-eMod, and NAC-CO.}
@@ -780,10 +779,10 @@ A quantitative comparison of the square root of the tracking ISE is provided in 
     \centering
         \subfloat[NAC-L2]{\includegraphics[width=.85\linewidth]{fig/fig6.eps}%
         \label{fig: error NAC-L2}}
-    \vspace{.1mm}
+    \vspace{-2mm}
         \subfloat[NAC-eMod]{\includegraphics[width=.85\linewidth]{fig/fig7.eps}%
         \label{fig: error NAC-eMod}}
-    \vspace{.1mm}
+    \vspace{-2mm}
         \subfloat[NAC-CO]{\includegraphics[width=.85\linewidth]{fig/fig5.eps}%
         \label{fig: error NAC-CO}}
     \caption{Tracking errors of NAC-L2, NAC-eMod, and NAC-CO.}
@@ -815,10 +814,11 @@ The Lagrange multipliers disappear when the constraints are satisfied, and the w
     \centering
         \subfloat[Weight norm]{\includegraphics[width=.8 \linewidth]{fig/fig12.eps}%
         \label{fig: weight per layer NAC-CO}}
-    \vspace{.1mm}
+    \vspace{-1mm}
         \subfloat[Lagrange multipliers]{\includegraphics[width=.8 \linewidth]{fig/fig11.eps}%
         \label{fig: multipliers NAC-CO}}
         \caption{Weight norms and Lagrange multipliers of NAC-CO ($\beta=0.001$).}
+    \vspace{-2mm}
         \label{fig: weight and multiplier}
 \end{figure}
 
@@ -865,10 +865,10 @@ As further work, the state constraints for safety will be handled, ensuring stab
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-{\footnotesize
+% {\footnotesize
     \bibliographystyle{ieeetr}
     \bibliography{dding_template/refs}
-}
+% }
 
 \end{document}
 
