@@ -4,18 +4,13 @@
 \hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
 T\kern-.1667em\lower.7ex\hbox{q}\kern-.125emX}}
+
 % \usepackage{balance}
-\input{dding_template/tex_packages/tex_packages_general.tex}
-\input{dding_template/tex_macros/tex_macros_general.tex}
+\def\pub{false} % true for publication, false for draft
+\newcommand*{\template}{template}
+\input{\template/preamble/preamble_conf.tex}
 
 \newcommand*{\fe}{\mv{r}}
-
-\newcommand*{\q}{\mv{q}}
-\newcommand*{\dq}{\dot{\mv q}}
-\newcommand*{\ddq}{\ddot{\mv q}}
-\newcommand*{\qd}{\mv{q_d}}
-\newcommand*{\dqd}{\dot{\mv q_d}}
-\newcommand*{\ddqd}{\ddot{\mv q_d}}
 
 \begin{document}
 \title{
@@ -1354,6 +1349,6 @@ It should be noted that constraints \eqref{eq. cstr input saturation} and \eqref
 {\footnotesize
 \bibliographystyle{ieeetr}
 % \bibliography{}
-\bibliography{dding_template/refs}}
+\bibliography{\template/refs}}
 
 \end{document}
