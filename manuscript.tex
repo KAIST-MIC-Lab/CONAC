@@ -100,9 +100,9 @@ The literature has shown that NNs can improve the system's performance index and
 % It refers to the weight divergence during the adaptation process, while the tracking error is bounded.
 
 % One of the common issues in neuro–adaptive control is that the boundedness of the control inputs is not guaranteed.
-One of the common issues in using NNs as control compontnets is that the outputs of NNs are not predictable.
+One of the common issues in using NNs as control components is that the outputs of NNs are not predictable.
 This is because the input‒output relationships of the NNs are not interpretable (\ie the NNs are usually called black boxes \cite{Sheu:2020aa,Rudin:2019aa}).
-This issue should be addressed for safety because the control input may reach the actuator's physical limitations and result in system collapse, due to the unpredictable control conponents from NNs.
+This issue should be addressed for safety because the control input may reach the actuator's physical limitations and result in system collapse, due to the unpredictable control components from NNs.
 
 Most studies modify their adaptation laws to ensure the boundedness of the weights, noting that the boundedness of the NNs' output can be ensured by the boundedness of the weights.
 In \cite{Zhou:2023aa,Patil:2022aa}, the projection operator is utilized to prevent weight divergence by projecting the adaptation direction on the convex set of weights.
@@ -202,7 +202,7 @@ The NN with a single hidden layer is represented as
 \end{equation}
 where ${\q_{n}}\in\R^{l_0+1}$ denotes the NN input vector, $\wV_i\in\R^{(l_i+1)\times l_{i+1}},\ \forall i\in\{0,1\}$ denotes the weight matrix of the $i\textsuperscript{th}$ layer and $\act:\R^{l_1}\to\R^{l_1+1}$ denotes the activation function layer.
 The activation function layer consists of an elementwise nonlinear function $\sigma(\cdot)$ and an augmented $1$ to combine the bias terms in the weight matrix (\ie $\act(\mv x) = \left(\sigma(\mv x_{(1)}),\cdots, \sigma(\mv x_{(l_1)}), 1\right)^\top $).
-For further simplicity, let $\wth_i:= \myvec(\wV_i)\in\R^{\Xi_i},\ \forall i\in\{0,1\}$ denotes the vectorized weights and $\wth:=(\wth_1^\top ,\wth_0^\top )^\top \in\R^{\Xi}$ denote the total weight vector, where $\Xi_i:=(l_i+1)\cdot l_{i+1},\ \forall i\in\{0,1\}$ and $\Xi:=\Xi_0+\Xi_1$ denote the number of each layer and total weights, respectively.
+For further simplicity, let $\wth_i:= \myvec(\wV_i)\in\R^{\Xi_i},\ \forall i\in\{0,1\}$ denotes the vectorized weights and $\wth:=(\wth_1^\top ,\wth_0^\top )^\top \in\R^{\Xi}$ denotes the total weight vector, where $\Xi_i:=(l_i+1)\cdot l_{i+1},\ \forall i\in\{0,1\}$ and $\Xi:=\Xi_0+\Xi_1$ denote the number of each layer and total weights, respectively.
 
 Using this NN, the desired controller $\mv \tau^*$ can be approximated by the ideal weight vector $\wth^*$ for a compact subset $\Omega_{NN}\in\R^{l_0+1}$ to $\epsilon$ accuracy such that $\sup_{{\q_{n}}\in\Omega_{NN}} \allowbreak \norm{\NN({\q_{n}};\wth^*) - \mv \tau^*}=\epsilon<\infty$ \cite{Cybenko:1989aa}.
 The ideal weight vector $\wth^*$ is typically assumed to be bounded.
@@ -719,7 +719,7 @@ Owing to the stabilizing functions, the weights of NAC-L2 and NAC-eMod are biase
 
 All controllers had the same control parameters except their crucial parameters (\ie $\lambda$, $\rho$ and $\beta_j$) as $k_q=1.1$, $k_z=10$, $\widehat{\mm M}=\mm I_2$ and $\mm \Lambda=\mydiag([5,1,15,15])$.
 The parameters of the NNs were set to $l_0=2$, $l_1=16$, $l_2=2$, and $\alpha=10^3$, and the same random seed was applied for weight initialization.
-The validity of the selected number of nodes were demonstrated through experiments 
+The validity of the selected number of nodes were demonstrated through experiments.
 The NN input vector was set to the desired trajectory $\qd$, with the augmented 1 to incorporate the bias term in the weight matrix such that $\q_{n}=(\qd^\top ,1)^\top $.
 For NAC-CO, the parameters of the weight norm constraints were set as $\bar\theta_0=10$ and $\bar\theta_1=20$.
 The sampling time of the simulation and the simulation termination time were set to $T_s=100\,\mu\mathrm{s}$ and $T=10\,\mathrm{s}$, respectively.
