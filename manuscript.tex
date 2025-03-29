@@ -188,12 +188,12 @@ Appendix \ref{sec:appen:cstr} introduces candidate constraints that can be appli
 
 The Euler-Lagrange system \eqref{eq:sys1} satisfy some important physical properties \cite[see, Chap. 3 Tab. 3.2.1]{Lewis:1998aa}.
 We introduce the following properties:
-\begin{prop} \cite{Lewis:1998aa}
+\begin{prop} 
     The inertia matrix $\mm M$ is symmetric, positive definite and bounded.
     \label{prop:M}
 \end{prop}
 
-\begin{prop} \cite{Lewis:1998aa}
+\begin{prop} 
     The Coriolis/centripetal matrix $\mm V_m$ can always be selected so that the matrix $(\dot{\mm M}-2\mm V_m)$ is skew-symmetric.
     \label{prop:skew}
 \end{prop}
@@ -346,7 +346,7 @@ Finally, one can conclude that the result of \eqref{eq:lya1:dot1} can be obtaine
 
 \subsection{Deep Neural Network (DNN) Model}\label{sec:sub:NN definition}
 
-The DNN architecture $\NN_k = \NN(\q_{NN};\wth)$ can be recursively represented as follows:
+The DNN architecture $\NN(\q_{NN};\wth) := \NN_k$ can be recursively represented as follows:
 \begin{equation}
     \NN_i :=
     \begin{cases}
@@ -602,7 +602,7 @@ First, we introduce the following assumptions for the constraints.
 \end{assum}
 
 \begin{remark}
-    Assumption \ref{assum:convex} is not restrictive, since the saturaion functions are convex in practice including the origin.
+    Assumption \ref{assum:convex} is not restrictive, since the saturation functions are convex in practice including the origin.
     Moreover, Assumption \ref{assum:LICQ} is a standard assumption in optimization problems, which ensures that the gradients of the active constraints are linearly independent.
     This assumption will be used in the stability analysis (see, Lemma \ref{lem:convex:angle}).
 \end{remark}
@@ -677,7 +677,7 @@ The gradient of $\boldsymbol{c}_\theta$ with respect to $\estwth$ is given by
         &
         \text{if } i=j
         \\
-        0,
+        \mv{0},
         &
         \text{if } i\ne j
         .
@@ -880,7 +880,6 @@ Consider the Lyapunov function candidate $V_3:=V_1+V_2$ and its time derivative:
         \\
         \le&
         -\lambda_{\text{min}}(\mm K)\norm{\fe}^2
-        +\fe^\top \estNN
         +(\bar\tau_d+\bar\tau)
         \norm{\fe}
         -\lambda_{\theta_k}\norm{\estwth_k}^2
@@ -944,11 +943,11 @@ Finally, the filtered error $\fe$ and the estimated weights $\estwth$ are bounde
 \subsection{Setup}
 
 The proposed CoNAC was validated using a two-link manipulator model, as depicted in Fig.~\ref{fig: manipulator}, adapted from \cite{Markus:2013aa}. 
-The parameters $q_p,{q_d}_p,\tau_p,m_p,l_p,{l_c}_p,b_p$, and ${f_c}_p$ denote the joint angle, desired joint angle, torque, mass, length, center of mass, viscous coefficient, and friction coefficient, respectively, for link $p\in[1,2]$.
+The parameters $q_p,{q_d}_p,\tau_p,m_p,l_p,{l_c}_p,b_p$ and ${f_c}_p$ denote the joint angle, desired joint angle, torque, mass, length, center of mass, viscous coefficient, and friction coefficient, respectively, for link $p\in[1,2]$.
 %This model contains terms of gravity and friction in its mechanical system.
 %These terms make system functions in \eqref{eq. system dynamics 1} nonlinear.
 %and can be considered as the disturbance of the system.
-The values of the system model parameters are provided in Table~\ref{table: system parameters}. The desired trajectory for ${q}=[q_1,q_2]^\top$ was defined as
+The values of the system model parameters are provided in Table~\ref{table: system parameters}. The desired trajectory for $\q=[q_1,q_2]^\top $ was defined as
 \begin{equation}
     {q_d}(t) = 
     \begin{bmatrix}
@@ -984,22 +983,21 @@ In addition to this physically imposed control input saturation, the input norm 
 \begin{table}[!t]
     \renewcommand{\arraystretch}{1.3}
     \caption{System model parameters.}
-    \label{table: error norm}
     \centering
     \begin{tabular}{c m{11em} c c c }
     \hline
-    Symbol & \textbf{Description} & \textbf{Link 1} & \textbf{Link 2} \\
+    \textbf{Symbol} & \textbf{Description} & \textbf{Link 1} & \textbf{Link 2} \\
     \hline
     \hline 
-    $m_1, m_2$ & Mass of link    & 23.902 (kg) & 3.88 (kg) \\
+    $m_p$ & Mass of $p\textsuperscript{th}$ link    & 23.902 (kg) & 3.88 (kg) \\
     \hline
-    $l_1, l_2$  & Length of link   & 0.45 (m) & 0.45 (m) \\
+    $l_p$  & Length of $p\textsuperscript{th}$ link   & 0.45 (m) & 0.45 (m) \\
     \hline
-    $l_{c1}, l_{c2}$ & COM of link  & 0.091 (m) & 0.048 (m) \\
+    ${l_c}_p$ & COM of $p\textsuperscript{th}$ link  & 0.091 (m) & 0.048 (m) \\
     \hline
-    $b_1, b_2$   & Viscous coefficient  &  2.288 (Nms) & 0.172 (Nms) \\
+    $b_p$   & Viscous coef. of $p\textsuperscript{th}$ link  &  2.288 (Nms) & 0.172 (Nms) \\
     \hline
-    $f_{c1}, f_{c2}$  & Friction coefficient &  7.17 (Nm) & 1.734 (Nm) \\
+    ${f_c}_p$  & Friction coef. of $p\textsuperscript{th}$ link &  7.17 (Nm) & 1.734 (Nm) \\
     \hline
     \end{tabular}
     \label{table: system parameters}
@@ -1120,121 +1118,62 @@ The sampling time of the simulations was selected as $T_s=10^{-4}$.
 % The same values were assigned across all the controllers for the common parameters for a fair comparison.
 % The other parameters for CM1 to CoNAC were selected as listed in Table.~\ref{table: control parameters}. The same values were assigned across all the controllers for the common parameters for a fair comparison.
 
-% **********************************************************
-% SIMULATION FIGURES
-\begin{figure*}[!t]
-    \centering
-        \subfloat[BSC]{\includegraphics[width=0.49\linewidth]{fig/fig1.eps}%
-        \label{fig: tracking_CM1}}
-    \hfill
-        \subfloat[DNN-BSC]{\includegraphics[width=0.49\linewidth]{fig/fig2.eps}%
-        \label{fig: tracking_CM2}}
-    \vfill
-        \subfloat[DNN-BSC-A]{\includegraphics[width=0.49\linewidth]{fig/fig3.eps}%
-        \label{fig: tracking_CM3}}
-    \hfill
-        \subfloat[CoNAC]{\includegraphics[width=0.49\linewidth]{fig/fig4.eps}%
-        \label{fig: tracking_CoNAC}}
-    \caption{Comparison of the tracking performance across the selected controllers.}
-    \label{fig: tracking}
-\end{figure*}
-
-\begin{figure*}[!t]
-    \centering
-        \subfloat[BSC]{\includegraphics[width=0.49\linewidth]{fig/fig5.eps}%
-        \label{fig: control_CM1}}
-    \hfill
-        \subfloat[DNN-BSC]{\includegraphics[width=0.49\linewidth]{fig/fig6.eps}%
-        \label{fig: control_CM2}}
-    \vfill
-        \subfloat[DNN-BSC-A]{\includegraphics[width=0.49\linewidth]{fig/fig7.eps}%
-        \label{fig: control_CM3}}
-    \hfill
-        \subfloat[CoNAC]{\includegraphics[width=0.49\linewidth]{fig/fig8.eps}%
-        \label{fig: control_CoNAC}}
-    \caption{Comparison of the control input $\tau$ and the physically saturated control input $h(\tau)$ across the selected controllers.}
-    \label{fig: control}
-\end{figure*}
-
-\begin{figure}[!t]
-    \centering
-    {\includegraphics[width=0.9\linewidth]{fig/fig16.eps}
-    \caption{Control input paths of DNN-BSC and CoNAC during the time interval from 5 s to 8 s.}
-    \label{fig: ball control}}
-\end{figure}
-
-\begin{figure*}[!t]
-    \centering
-        \subfloat[Multipliers of CoNAC]{\includegraphics[width=0.49\linewidth]{fig/fig12.eps}%
-        \label{fig: multiplier_CoNAC}}
-    \hfill
-        \subfloat[Weight norms of DNN-BSC]{\includegraphics[width=0.49\linewidth]{fig/fig9.eps}%
-        \label{fig: weight_CM2}}
-    \vfill
-        \subfloat[Weight norms of DNN-BSC-A]{\includegraphics[width=0.49\linewidth]{fig/fig10.eps}%
-        \label{fig: weight_CM3}}
-    \hfill
-        \subfloat[Weight norms of CoNAC]{\includegraphics[width=0.49\linewidth]{fig/fig11.eps}%
-        \label{fig: weight_CoNAC}}       
-    \caption{Lagrange multipliers of CoNAC and weight norms of DNN-BSC, DNN-BSC-A, and CoNAC.}
-    \label{fig: weight and multiplier}
-\end{figure*}
-% SIMULATION FIGURES
-% **********************************************************
 
 \subsection{System Uncertainty Handling}
 
-The tracking results of the selected controllers are shown in Fig.~\ref{fig: tracking}.
-To demonstrate the effectiveness of using DNNs for compensating the lumped system uncertainty function $f$, the gains ${k_q}$ and ${k_z}$ for BSC were intentionally selected as small values, resulting in a weak ability to handle these uncertainties. As a result,
-%poor performance and sufficiently large values to satisfy \eqref{eq. ctrl stable condition}.
-%the parameters of CM1 are poorly tuned, 
-BSC failed to track the reference trajectory, as shown in Fig.~\ref{fig: tracking_CM1}.
+\begin{comment}
+    The tracking results of the selected controllers are shown in Fig.~\ref{fig: tracking}.
+    To demonstrate the effectiveness of using DNNs for compensating the lumped system uncertainty function $f$, the gains ${k_q}$ and ${k_z}$ for BSC were intentionally selected as small values, resulting in a weak ability to handle these uncertainties. As a result,
+    %poor performance and sufficiently large values to satisfy \eqref{eq. ctrl stable condition}.
+    %the parameters of CM1 are poorly tuned, 
+    BSC failed to track the reference trajectory, as shown in Fig.~\ref{fig: tracking_CM1}.
 
-By leveraging the DNN to compensate for the lumped system uncertainty within the BSC, DNN-BSC achieved improved tracking performance compared to BSC, as seen in Fig.~\ref{fig: tracking_CM2}. Fig.~\ref{fig: tracking_CM3} shows that DNN-BSC-A enhanced tracking performance for $q_2$, but tracking for $q_1$ remained unsatisfactory due to incomplete constraint handling, which will be discussed in detail in Section \ref{sec:sim_cnst}.
-%By compensating the uncertain terms the control input of CM2 in Fig.~\ref{fig: control_CM2} is saturated.
+    By leveraging the DNN to compensate for the lumped system uncertainty within the BSC, DNN-BSC achieved improved tracking performance compared to BSC, as seen in Fig.~\ref{fig: tracking_CM2}. Fig.~\ref{fig: tracking_CM3} shows that DNN-BSC-A enhanced tracking performance for $q_2$, but tracking for $q_1$ remained unsatisfactory due to incomplete constraint handling, which will be discussed in detail in Section \ref{sec:sim_cnst}.
+    %By compensating the uncertain terms the control input of CM2 in Fig.~\ref{fig: control_CM2} is saturated.
 
-Finally, CoNAC, which directly approximates the stabilizing control law along with the compensation term, demonstrated satisfactory tracking performance across both states, as illustrated in Fig.~\ref{fig: tracking_CoNAC}.
+    Finally, CoNAC, which directly approximates the stabilizing control law along with the compensation term, demonstrated satisfactory tracking performance across both states, as illustrated in Fig.~\ref{fig: tracking_CoNAC}.
 
-\subsection{Input Norm Constraint Handling}\label{sec:sim_cnst}
+    \subsection{Input Norm Constraint Handling}\label{sec:sim_cnst}
 
-The resulting control input $\tau$ and physically saturation control input $h(\tau)$ for the selected controllers are shown in Fig.~\ref{fig: control}. As illustrated in Fig.~\ref{fig: control_CM1}, BSC did not violate the input norm constraint (\ie $\tau = h(\tau)$). However, in DNN-BSC, the added compensation term from the DNN caused violations of the input norm constraint (\ie $\tau > h(\tau)$) at several points; see Fig.~\ref{fig: control_CM2}. This failure to account for the input norm constraint led to oscillations in the control input $\tau$. The DNN adaptation process attempted to increase the weights to reduce the residual errors that were not constrained by saturation, but after saturation ceased, the control input had to rapidly adjust back to realistic levels, leading to oscillatory behavior. Such high-frequency oscillations may induce instability in the control system or cause fatigue in the actuators.
+    The resulting control input $\tau$ and physically saturation control input $h(\tau)$ for the selected controllers are shown in Fig.~\ref{fig: control}. As illustrated in Fig.~\ref{fig: control_CM1}, BSC did not violate the input norm constraint (\ie $\tau = h(\tau)$). However, in DNN-BSC, the added compensation term from the DNN caused violations of the input norm constraint (\ie $\tau > h(\tau)$) at several points; see Fig.~\ref{fig: control_CM2}. This failure to account for the input norm constraint led to oscillations in the control input $\tau$. The DNN adaptation process attempted to increase the weights to reduce the residual errors that were not constrained by saturation, but after saturation ceased, the control input had to rapidly adjust back to realistic levels, leading to oscillatory behavior. Such high-frequency oscillations may induce instability in the control system or cause fatigue in the actuators.
 
-On the other hand, both DNN-BSC-A and CoNAC successfully handled their imposed input constraints, as shown in Fig.~\ref{fig: control_CM3} and Fig.~\ref{fig: control_CoNAC}, respectively, without causing notable oscillations in the control input $\tau$ even after the input constraint was activated. However, the tracking performance of DNN-BSC-A was lower than that of DNN-BSC and CoNAC, as the auxiliary system used in DNN-BSC-A approximated the input norm constraint with an input bound constraint, creating a rectangular constraint in the $\tau$-space (see Fig.~\ref{fig: ball control}). In contrast, CoNAC satisfied the nonlinear input norm constraint and produced the physically maximum control input, resulting in improved tracking performance. 
+    On the other hand, both DNN-BSC-A and CoNAC successfully handled their imposed input constraints, as shown in Fig.~\ref{fig: control_CM3} and Fig.~\ref{fig: control_CoNAC}, respectively, without causing notable oscillations in the control input $\tau$ even after the input constraint was activated. However, the tracking performance of DNN-BSC-A was lower than that of DNN-BSC and CoNAC, as the auxiliary system used in DNN-BSC-A approximated the input norm constraint with an input bound constraint, creating a rectangular constraint in the $\tau$-space (see Fig.~\ref{fig: ball control}). In contrast, CoNAC satisfied the nonlinear input norm constraint and produced the physically maximum control input, resulting in improved tracking performance. 
 
-It is also important to note that the control input trajectory in DNN-BSC-A depends on the dynamics of the auxiliary system. The auxiliary system regulates the violated control input after sufficient auxiliary state $\zeta$ is generated to compensate for the violation. This can be observed in Fig.~\ref{fig: ball control}, where DNN-BSC-A exhibited minor violations of the input bound constraint. In contrast, CoNAC satisfied the constraint without being affected by such dynamics, as its Lagrange multiplier adjusted as soon as the constraint was violated.
+    It is also important to note that the control input trajectory in DNN-BSC-A depends on the dynamics of the auxiliary system. The auxiliary system regulates the violated control input after sufficient auxiliary state $\zeta$ is generated to compensate for the violation. This can be observed in Fig.~\ref{fig: ball control}, where DNN-BSC-A exhibited minor violations of the input bound constraint. In contrast, CoNAC satisfied the constraint without being affected by such dynamics, as its Lagrange multiplier adjusted as soon as the constraint was violated.
 
-%Meanwhile, CM2 and CM3 is based on BSC, and the desired controller $\tau^*$ of CoNAC is based on the BSC which may produce larger control input by canceling the stabilizing system dynamics.
-%Therefore, CM2, CM3, and CoNAC produced the saturated control input.
-%These control results show why the control saturation should be handled.
+    %Meanwhile, CM2 and CM3 is based on BSC, and the desired controller $\tau^*$ of CoNAC is based on the BSC which may produce larger control input by canceling the stabilizing system dynamics.
+    %Therefore, CM2, CM3, and CoNAC produced the saturated control input.
+    %These control results show why the control saturation should be handled.
 
-\subsection{Weight Norm Constraint Handling}
+    \subsection{Weight Norm Constraint Handling}
 
-The resulting weight norms of DNN-BSC, DNN-BSC-A, and CoNAC, along with the Lagrange multipliers of CoNAC, are shown in Fig.~\ref{fig: weight and multiplier}. All three controllers—DNN-BSC, DNN-BSC-A, and CoNAC—maintained weight norms within the imposed weight norm constraints.
+    The resulting weight norms of DNN-BSC, DNN-BSC-A, and CoNAC, along with the Lagrange multipliers of CoNAC, are shown in Fig.~\ref{fig: weight and multiplier}. All three controllers—DNN-BSC, DNN-BSC-A, and CoNAC—maintained weight norms within the imposed weight norm constraints.
 
-IN DNN-BSC, as shown in Fig.~\ref{fig: weight_CM2}, the weight norm of the last layer (\ie $\Vert {{{\hat \wth }_2}} \Vert$) fluctuated significantly over time, proportional to the control input norm. This is because the last layer’s weights directly determine the control input. When the control input violated the input norm constraint, the last layer’s weight norm hit the boundary and stayed there due to the projection operator. However, the projection operator only responded to violations without considering optimality or behavior.
-%In the case of CM2 which does not consider the control input constraint, the weight norm of the last layer reaches the maximum weight norm value, when the control is saturated.
-%It is because the weights get increased to produce larger control input to reduce the tracking error of $q_2$. (\ie the maximum magnitude of the control input depends on the weight norm of the last layer, since the activation function is bounded.)
+    IN DNN-BSC, as shown in Fig.~\ref{fig: weight_CM2}, the weight norm of the last layer (\ie $\Vert {{{\hat \wth }_2}} \Vert$) fluctuated significantly over time, proportional to the control input norm. This is because the last layer’s weights directly determine the control input. When the control input violated the input norm constraint, the last layer’s weight norm hit the boundary and stayed there due to the projection operator. However, the projection operator only responded to violations without considering optimality or behavior.
+    %In the case of CM2 which does not consider the control input constraint, the weight norm of the last layer reaches the maximum weight norm value, when the control is saturated.
+    %It is because the weights get increased to produce larger control input to reduce the tracking error of $q_2$. (\ie the maximum magnitude of the control input depends on the weight norm of the last layer, since the activation function is bounded.)
 
-In DNN-BSC-A, none of the weight norms reached their boundaries, as shown in Fig.~\ref{fig: weight_CM3}. This was due to the auxiliary system, where the auxiliary state $\zeta$ reduced the control input, ensuring it stayed within the input constraint.
+    In DNN-BSC-A, none of the weight norms reached their boundaries, as shown in Fig.~\ref{fig: weight_CM3}. This was due to the auxiliary system, where the auxiliary state $\zeta$ reduced the control input, ensuring it stayed within the input constraint.
 
-In CoNAC, all weight norms complied with the imposed constraints through the constrained optimization approach, as illustrated in Fig.\ref{fig: weight_CoNAC}. When any weight norm approached its upper limit, the Lagrange multiplier was promptly activated to steer the weight adaptation direction towards a constraint-satisfactory point (see Fig.\ref{fig: multiplier_CoNAC}). Notably, the weight norms of the first and second layers ($\Vert {{{\hat \wth }_0}} \Vert$ and $\Vert {{{\hat \wth }_1}} \Vert$) remained nearly constant throughout the control period. The weight norm of the last layer $\Vert {{{\hat \wth }_2}} \Vert$ stabilized within the upper bound by around 6.5 seconds (see Fig.~\ref{fig: weight_CoNAC} (B)), coinciding with the activation of the input norm constraint. This quasi-static behavior of the weight norm (\ie $d{\estwth}/dt=-\alpha\partial L/\partial \estwth \approx 0$) along with the quasi-static behavior of the Lagrange multipliers (\ie $\dot\lambda_j = \beta_j c_j \approx 0$) implies that the weights were updated near the KKT conditions, signifying local optimality in CoNAC. However, at around 2.5 seconds (see Fig.~\ref{fig: weight_CoNAC} (A)), the weight norm of the last layer reached the upper limit earlier, despite similar control conditions as the case at 6.5 seconds. This earlier saturation likely occurred because the optimization process had not yet fully converged to the optimal weight values.
-%(\ie $\partial J/\partial\estwth = \sum_{j\in\mathcal {A}}\lambda_j\nabla_{\estwth} c_j)$.
-%, by the multipliers increased due to the violation of the constraints as shown in Fig.~\ref{fig: multiplier_CoNAC}.
+    In CoNAC, all weight norms complied with the imposed constraints through the constrained optimization approach, as illustrated in Fig.\ref{fig: weight_CoNAC}. When any weight norm approached its upper limit, the Lagrange multiplier was promptly activated to steer the weight adaptation direction towards a constraint-satisfactory point (see Fig.\ref{fig: multiplier_CoNAC}). Notably, the weight norms of the first and second layers ($\Vert {{{\hat \wth }_0}} \Vert$ and $\Vert {{{\hat \wth }_1}} \Vert$) remained nearly constant throughout the control period. The weight norm of the last layer $\Vert {{{\hat \wth }_2}} \Vert$ stabilized within the upper bound by around 6.5 seconds (see Fig.~\ref{fig: weight_CoNAC} (B)), coinciding with the activation of the input norm constraint. This quasi-static behavior of the weight norm (\ie $d{\estwth}/dt=-\alpha\partial L/\partial \estwth \approx 0$) along with the quasi-static behavior of the Lagrange multipliers (\ie $\dot\lambda_j = \beta_j c_j \approx 0$) implies that the weights were updated near the KKT conditions, signifying local optimality in CoNAC. However, at around 2.5 seconds (see Fig.~\ref{fig: weight_CoNAC} (A)), the weight norm of the last layer reached the upper limit earlier, despite similar control conditions as the case at 6.5 seconds. This earlier saturation likely occurred because the optimization process had not yet fully converged to the optimal weight values.
+    %(\ie $\partial J/\partial\estwth = \sum_{j\in\mathcal {A}}\lambda_j\nabla_{\estwth} c_j)$.
+    %, by the multipliers increased due to the violation of the constraints as shown in Fig.~\ref{fig: multiplier_CoNAC}.
 
-The overall weight norms of CoNAC were larger than those of DNN-BSC and DNN-BSC-A, since CoNAC approximated the entire stabilizing control law, whereas DNN-BSC and DNN-BSC-A only approximated the system uncertainty term within the BSC framework.
+    The overall weight norms of CoNAC were larger than those of DNN-BSC and DNN-BSC-A, since CoNAC approximated the entire stabilizing control law, whereas DNN-BSC and DNN-BSC-A only approximated the system uncertainty term within the BSC framework.
 
-%Because the simulation is implemented in a digital computer, the multipliers repeat to disappear and be generated, since the constraints are satisfied and violated in the digital process.
+    %Because the simulation is implemented in a digital computer, the multipliers repeat to disappear and be generated, since the constraints are satisfied and violated in the digital process.
 
-%\subsection{Analysis of the Neural Network}
+    %\subsection{Analysis of the Neural Network}
 
-%Generally, the existing literature states that the maximum norms of the weights should be sufficiently large (\ie $\bar\wth_i \gg 0$) since the designer does not know where the global optimal point of the weights is.
-%However, using the physical prior knowledge of the system, one can guess the proper value of the maximum norm, since the magnitude of the control input depends on the last layer's weights due to the bounded activation function.
-%Furthermore, the simulation study shows that the selected controllers have sufficiently good performances with the small maximum weight norms.
-%It means that the local optimal point of the weights are more effective for the stability analysis and the limitating the control input's amplitude.
+    %Generally, the existing literature states that the maximum norms of the weights should be sufficiently large (\ie $\bar\wth_i \gg 0$) since the designer does not know where the global optimal point of the weights is.
+    %However, using the physical prior knowledge of the system, one can guess the proper value of the maximum norm, since the magnitude of the control input depends on the last layer's weights due to the bounded activation function.
+    %Furthermore, the simulation study shows that the selected controllers have sufficiently good performances with the small maximum weight norms.
+    %It means that the local optimal point of the weights are more effective for the stability analysis and the limitating the control input's amplitude.
 
-%Since it is generally known that the deeper NNs have better approximation performance with less computation cost, the NNs should have more layers.
-%However, because the NNs in this paper utilize $\tanh(\cdot)$ as the activation function, the NNs have the gradient vanishing problem as shown in Fig.~\ref{fig: weight_CM2}-\ref{fig: weight_CoNAC}. (\ie the weight updates are smaller as its layer is closer to the input layer.)
-%To address this issue, the activation function should be selected as the ReLU or the Leaky ReLU, while ensuring the stability of the controller.
+    %Since it is generally known that the deeper NNs have better approximation performance with less computation cost, the NNs should have more layers.
+    %However, because the NNs in this paper utilize $\tanh(\cdot)$ as the activation function, the NNs have the gradient vanishing problem as shown in Fig.~\ref{fig: weight_CM2}-\ref{fig: weight_CoNAC}. (\ie the weight updates are smaller as its layer is closer to the input layer.)
+    %To address this issue, the activation function should be selected as the ReLU or the Leaky ReLU, while ensuring the stability of the controller.
+\end{comment}
 
 %  SECTION CONCLUSION ======================================
 \section{Conclusion}\label{sec:conclusion}
@@ -1269,49 +1208,50 @@ with $\tau_{\overline \tau_i}$ and $\tau_{\underline\tau_i}$ representing the ma
 The gradients of $\boldsymbol{c}_{\overline \tau}$ and $\boldsymbol{c}_{\underline\tau}$ with respect to $\estwth$ are given by
 \begin{equation}
     \begin{aligned}
-        {\partial \boldsymbol c_{\overline \tau} \over \partial \estwth}
+        \pptfrac{\boldsymbol c_{\overline \tau}}{\estwth}
         =& 
-        \begin{bmatrix}
-            (\partial c_{\overline \tau_1}/\partial \estwth)^\top \\
-            \vdots \\
-            (\partial c_{\overline \tau_n}/\partial \estwth)^\top
-        \end{bmatrix}
-            = -{\partial \estNN\over\partial\estwth}
-            \\
-        =&
+        % \begin{bmatrix}
+        %     \pptfrac{c_{\overline \tau_1}}{\estwth}^\top \\
+        %     \vdots \\
+        %     \pptfrac{c_{\overline \tau_n}}{\estwth}^\top
+        % \end{bmatrix}
+        = 
+            -\pptfrac{\estNN}{\estwth}
+        %     \\
+        % =&
+        =
         -\begin{bmatrix}
             (I_{l_{k+1}}\otimes \estNN_{k}^\top)&
-            % V_k^\top \phi_{k}' (I_{l_{k}}\otimes  \phi_{k-1}^\top)&
-            \cdots &
+            \!\cdots\! &
             (
-            \cdot
+                \cdot
             )
         \end{bmatrix} 
-        &
         \in
         \mathbb R^{n\times \Xi}
         , 
         \\
-        {\partial \boldsymbol c_{\underline\tau} \over \partial \estwth}         
+        \pptfrac{\boldsymbol c_{\underline\tau}}{\estwth}         
         :=
         & 
-        \begin{bmatrix}
-            (\partial c_{\underline\tau_1}/\partial \estwth)^\top \\
-            \vdots \\
-            (\partial c_{\underline\tau_n}/\partial \estwth)^\top
-        \end{bmatrix}
-        = +{\partial \estNN\over\partial\estwth}
-        \\
-        =&
+        % \begin{bmatrix}
+        %     \pptfrac{c_{\underline\tau_1}}{\estwth}^\top \\
+        %     \vdots \\
+        %     \pptfrac{c_{\underline\tau_n}}{\estwth}^\top
+        % \end{bmatrix}
+        = 
+        +\pptfrac{\estNN}{\estwth}
+        % \\
+        % =&
+        =
         +\begin{bmatrix}
             (I_{l_{k+1}}\otimes \estNN_{k}^\top)&
             % V_k^\top \phi_{k}' (I_{l_{k}}\otimes  \phi_{k-1}^\top)&
-            \cdots &
+            \!\cdots\! &
             (
-            \cdot
+                \cdot
             )
         \end{bmatrix} 
-        &
         \in
         \mathbb R^{n\times \Xi}
         .
@@ -1323,22 +1263,24 @@ The gradients of $\boldsymbol{c}_{\overline \tau}$ and $\boldsymbol{c}_{\underli
 
 Consider the control input $\tau$ as the torque of each actuator corresponding to its generalized coordinate. Since torque is typically linearly proportional to current, actuators that share a common power source are often subject to total current limitations. This can be captured by the following inequality constraint: 
 \begin{equation}
-    c_{u}=\Vert\tau\Vert^2 -\bar\tau^2  \le 0
+    c_{u}=\norm{\mv{\tau}}^2 -\bar\tau^2  \le 0
     \label{eq. cstr input ball}
 \end{equation}
 with $\bar\tau\in\R_{>0}$ denoting the maximum allowable control input magnitude. This input norm constraint is also commonly applied in current and torque control problems for electric motors \cite{Choi:2024aa}.
 % The corresponding Lagrangian multipier is $\lambda_{u_b}$. 
 The gradients of $c_{u}$ with respect to $\estwth$ are given by
 \begin{equation}
-    {\partial \boldsymbol c_{u} \over \partial \estwth}
-    = -\sum_{i=1}^n 2\tau_{(i)} 
-    \bigg(
+    \pptfrac{\boldsymbol c_{u}}{\estwth}
+    \!=\! 
+    -\textstyle\sum_{i=1}^n 2\tau_{(i)} 
+    \left(
         \myrow_i
-        \bigg(
-            -{\partial \estNN\over\partial\estwth}
-        \bigg)
-    \bigg)^\top  
-    = \tau^\top (I_{l_{k+1}}\otimes \estNN_k^\top)
+        (
+            -\pptfrac{\estNN}{\estwth}
+        )
+    \right)^\top  
+    \!=\! 
+    \tau^\top (I_{l_{k+1}}\otimes \estNN_k^\top)
     \in \mathbb R^{\Xi}.
     \label{eq. nabla input ball}
 \end{equation}
