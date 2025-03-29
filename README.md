@@ -1,6 +1,14 @@
 # Constrained Optimization-Based Neuro-Adaptive Control (CoNAC)
 
-> Currently, papers are submitted to __IEEE Transactions on Neural Networks and Learning Systems__ and __European Control Conference (ECC) 2025__ and under review. 
+Paper Name: TBD
+State: TBD
+
+> This paper will be submitted to *TBD*.
+
+You can find papers here:
+
+- First submission: 
+<!-- - Final submission: [still working](./manuscript.pdf) -->
 
 ## About this Research
 
@@ -21,8 +29,7 @@ The main features are as follows.
 - Hong Donghwa
 - Choi Kyunghwan
 
-## Version History
 
-## License
+
 
 
