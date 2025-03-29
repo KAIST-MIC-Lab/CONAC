@@ -1,5 +1,9 @@
 # Constrained Optimization-Based Neuro-Adaptive Control (CoNAC)
 
+- Paper Name: **Imposing a Weight Norm Constraint for Neuro–Adaptive Control**
+- Accepted: ECC 2025
+
+> [!Note]
 > This paper is accepted in __European Control Conference (ECC) 2025__. 
 
 You can find papers here:
