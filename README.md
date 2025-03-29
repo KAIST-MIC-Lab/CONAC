@@ -17,7 +17,7 @@ The main features are as follows.
 
 ## Authors
 
-- Ryu Myeongseok
+- [Ryu Myeongseok](https://github.com/DDingR)
 - Hong Donghwa
 - Choi Kyunghwan
 
