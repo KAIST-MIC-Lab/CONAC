@@ -1,11 +1,11 @@
 function total_grad = nnGradient(nn, nnOpt)
 
     %% PRE-ALLOCATION
-    total_grad = zeros(nnOpt.NN_size(end), nnOpt.v_size);
+    total_grad = zeros(nnOpt.NN_size(end), nnOpt.th_size);
     
     %% 
-    pt_V = nnOpt.v_size;
-    pt_tape = nnOpt.t_size;
+    pt_V = nnOpt.th_size;
+    pt_tape = nnOpt.tp_size;
 
     grad_to_back = 1;
 
@@ -25,7 +25,7 @@ function total_grad = nnGradient(nn, nnOpt)
             % get phi_dot
             phi_dot = tanh_dot(pre_Phi);
             % get V weight
-            V = reshape(nn.V(pt_V-(n*m)+1: pt_V), n,m);
+            V = reshape(nn.th(pt_V-(n*m)+1: pt_V), n,m);
             grad_to_back = grad_to_back * V'*phi_dot;
 
             % pointer to next

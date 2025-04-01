@@ -55,7 +55,7 @@ xlabel("Time $[\rm s]$", "Interpreter", "latex")
 ylabel("State Dot 1 $[\rm rad/s]$", "Interpreter","latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on
-ylim([min(rd1) * 1.25, max(rd1) * 1.25])
+% ylim([min(rd1) * 1.25, max(rd1) * 1.25])
 legend([p1, p2], ["$\dot r_1$","$\dot x_1$"], "Interpreter","latex", "FontSize", lgd_size, "FontWeight", "bold", "Location", "northwest")
 
 figure(4); clf
@@ -68,7 +68,7 @@ xlabel("Time $[\rm s]$", "Interpreter", "latex")
 ylabel("State Dot 2 $[\rm rad/s]$", "Interpreter","latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on
-ylim([min(rd2) * 1.25, max(rd2) * 1.25])
+% ylim([min(rd2) * 1.25, max(rd2) * 1.25])
 legend([p1, p2], ["$\dot r_2$","$\dot x_2$"], "Interpreter","latex", "FontSize", lgd_size, "FontWeight", "bold", "Location", "northwest")
 
 %% FIG.3: CONTROL INPUT 
@@ -132,7 +132,7 @@ for l_idx = flip(1:1:l_len)
 
     plot(t, th(l_idx, :), 'color', c, 'DisplayName',"$\Vert\hat\theta_"+string(l_idx-1)+"\Vert$" ...
         , "LineWidth", line_width, "LineStyle", "-"); hold on
-    plot(t, ones(size(t)) * cstr.V_max(l_idx), "color", c, 'DisplayName',"$\bar \theta_"+string(l_idx-1)+"$", ...
+    plot(t, ones(size(t)) * cstr.th_max(l_idx), "color", c, 'DisplayName',"$\bar \theta_"+string(l_idx-1)+"$", ...
          "LineWidth", line_width, "LineStyle", "-."); hold on
 end
 lgd = legend;
@@ -146,7 +146,7 @@ xlabel("Time $[\rm s]$", "Interpreter", "latex")
 ylabel("Weights Norm $ $", "Interpreter","latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on 
-ylim([0, max(cstr.V_max) * 1.25])
+ylim([0, max(cstr.th_max) * 1.25])
 % ylim([0, max(th, [], 'all') * 1.25])
 % ylim([0, max(th, [], 'all')+20])
 

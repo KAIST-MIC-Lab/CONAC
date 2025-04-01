@@ -23,8 +23,8 @@ u2 = u_hist(2,:);
 u1_sat = uSat_hist(1,:);
 u2_sat = uSat_hist(2,:);
 
-th = V_hist;
-L = L_hist;
+th = th_hist;
+L = lbd_hist;
 
 % dot_L = dot_L_hist;
 

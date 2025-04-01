@@ -5,7 +5,7 @@ xd2_hist(:, t_idx) = xd2;
 
 u_hist(:, t_idx) = u;
 uSat_hist(:, t_idx) = u_sat;
-L_hist(:, t_idx) = opt.Lambda;
-V_hist(:, t_idx) = nnWeightNorm(nn.V, opt);
+lbd_hist(:, t_idx) = opt.lbd;
+th_hist(:, t_idx) = nnWeightNorm(nn.th, opt);
 
 % aux_hist(:, t_idx) = zeta;

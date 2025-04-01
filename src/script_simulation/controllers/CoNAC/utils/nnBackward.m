@@ -13,19 +13,20 @@ function [nn, opt] = nnBackward(nn, opt, e, u_NN)
     [c, cd] = nnCstr(nn, opt, u_NN, nnGrad);
 
     % ActSet  = double(c>0);
-    Lambda  = opt.Lambda;
+    lbd  = opt.lbd;
 
     % find gradient; theta, lambda
-    V_grad = - opt.alpha * (nnGrad'*opt.W*e + cd'*Lambda);
-    L_grad = diag(opt.beta) * c;
+    th_grad = - opt.alpha * (nnGrad'*opt.W*e + cd'*lbd);
+    th_grad = th_grad + - opt.rho * nn.th;
+    lbd_grad = diag(opt.beta) * c;
 
-    V_grad = V_grad * opt.dt;
-    L_grad = L_grad * opt.dt;
+    th_grad = th_grad * opt.dt;
+    lbd_grad = lbd_grad * opt.dt;
 
     % update
-    nn.V = nn.V + V_grad;
-    opt.Lambda = Lambda + L_grad;
-    opt.Lambda = max(opt.Lambda, 0);
+    nn.th = nn.th + th_grad;
+    opt.lbd = lbd + lbd_grad;
+    opt.lbd = max(opt.lbd, 0);
 
     %% TERMINATION
     

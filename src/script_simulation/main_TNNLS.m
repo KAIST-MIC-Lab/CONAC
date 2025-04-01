@@ -16,18 +16,20 @@ FIGURE_SAVE_FLAG    = 0;
 RESULT_SAVE_FLAG    = 0;
 
 %% SIMULATION SETTING
-ctrl_dt = 1/500;
-dt = ctrl_dt * 1/10;
-T = 50;
+ctrl_dt = 1/250;
+dt = 1/1000;
+% dt = ctrl_dt * 1/10;
+T = 30;
 t = 0:dt:T;
 rpt_dt = 1;
 
 %% SYSTEM DECLARE
 grad_x = model1_load();
 % [xd1_f, xd2_f] = ref1_load(); % sin func
-[xd1_f, xd2_f] = ref3_load(); 
+r_func = ref4_load(); 
 
-x1 = [-deg2rad(90);0];  
+% x1 = [0;0];  
+x1 = [deg2rad(-90);0];  
 x2 = [0;0];
 u = [0;0];
 
@@ -46,13 +48,12 @@ recInit;
 fprintf("[INFO] Simulation Start\n");
 
 for t_idx = 2:1:num_t
-    xd1 = xd1_f(x1, t(t_idx));
-    xd2 = xd2_f(x2, t(t_idx));
+    [xd1,xd2] = r_func(t(t_idx));
     
     e1 = x1 - xd1;
     e2 = x2 - xd2;
 
-    r = e2 + opt.Gamma * e1;
+    r = e2 + opt.Lambda * e1;
 
     if t_idx==2 || rem(t(t_idx)/dt, ctrl_dt/dt) == 0
         x_in = [x1;x2;r];
@@ -60,6 +61,7 @@ for t_idx = 2:1:num_t
         [nn, u_NN] = nnForward(nn, opt, x_in);
         [nn, opt] = nnBackward(nn, opt, r, u_NN);
         u = u_NN;
+        % u = zeros(size(u));
     end
 
     % control input saturation
@@ -125,8 +127,8 @@ if RESULT_SAVE_FLAG
         xd2_hist;
         u_hist;
         uSat_hist;
-        L_hist;
-        V_hist;
+        lbd_hist;
+        th_hist;
     ];
     output = [data_name, data];
 

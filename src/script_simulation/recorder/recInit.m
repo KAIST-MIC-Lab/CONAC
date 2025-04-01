@@ -15,14 +15,18 @@ num_t = length(t);
 
 x1_hist = zeros(num_x, num_t); x1_hist(:, 1) = x1;
 x2_hist = zeros(num_x, num_t); x2_hist(:, 1) = x2;
-xd1_hist = zeros(num_x, num_t); xd1_hist(:, 1) = xd1_f(x1, t(1));
-xd2_hist = zeros(num_x, num_t); xd2_hist(:, 1) = xd2_f(x2, t(1));
+xd1_hist = zeros(num_x, num_t); 
+xd2_hist = zeros(num_x, num_t); 
+
+[xd1,xd2] = r_func(0);
+xd1_hist(:, 1) = xd1;
+xd2_hist(:, 1) = xd2;
 
 u_hist = zeros(num_u, num_t); u_hist(:, 1) = u;
 uSat_hist = zeros(num_u, num_t); uSat_hist(:, 1) = u;
 
 %% 
-L_hist = zeros(length(opt.beta), num_t); L_hist(:,1) = zeros(length(opt.beta),1);
-V_hist = zeros(opt.l_size-1, num_t); V_hist(:, 1) = nnWeightNorm(nn.V, opt);
+lbd_hist = zeros(length(opt.beta), num_t); lbd_hist(:,1) = zeros(length(opt.beta),1);
+th_hist = zeros(opt.l_size-1, num_t); th_hist(:, 1) = nnWeightNorm(nn.th, opt);
 
 % aux_hist = zeros(num_x/2, num_t);

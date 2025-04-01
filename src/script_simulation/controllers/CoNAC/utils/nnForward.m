@@ -14,7 +14,7 @@ function [nn, out] = nnForward(nn, opt, in)
         m = opt.NN_size(l_idx+1);
 
         % get V weight
-        V = reshape(nn.V(pt_V: pt_V+(n*m)-1), n,m);
+        V = reshape(nn.th(pt_V: pt_V+(n*m)-1), n,m);
     
         % phi_k = tanh(nn_out); 1]
         if l_idx == 1
@@ -37,7 +37,7 @@ function [nn, out] = nnForward(nn, opt, in)
     end
 
     %% ERROR CHECK
-    assert(pt_V-1 == opt.v_size);
+    assert(pt_V-1 == opt.th_size);
 %     assert(pt_tape-1 == opt.t_size);
 
     %% TERMINATION
