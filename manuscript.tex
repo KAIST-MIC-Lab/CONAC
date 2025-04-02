@@ -12,7 +12,7 @@
 \makeatother
 
 
-\def\pub{false} % true for publication, false for draft
+\def\pub{true} % true for publication, false for draft
 \newcommand*{\template}{template}
 \input{\template/preamble/preamble_conf.tex}
 
@@ -78,7 +78,7 @@ In this study, the following notation is used:
     \item $\myvec(\mm A):= [\myrow_1(\mm A^\top)  ,\cdots,\myrow_m(\mm A^\top)  ]^\top   $ for $\mm A\in\R^{n\times m}$.
     % \item $\text{col}_i(A)$ and $\myrow_j(A)$ denote the $i\textsuperscript{th}$ column and $j\textsuperscript{th}$ row of $A\in\R^{n\times m}$, respectively.
     % \item $\myvec(A):= [\text{col}_1(A)^\top  ,\cdots,\text{col}_m(A)^\top  ]^\top   $ for $A\in\R^{n\times m}$.
-    \item $\lambda_\text{min}(\mm A)$ denotes the minimum eigenvalue of the matrix $\mm A\in\R^{n\times n}$.
+    \item $\lambda_{\min}(\mm A)$ denotes the minimum eigenvalue of $\mm A\in\R^{n\times n}$.
     \item $\mm I_n$ denotes the $n\times n$ identity matrix and $\mm 0_{n\times m}$ denotes the $n\times m$ zero matrix.
 \end{itemize}
 
@@ -93,7 +93,7 @@ Most conventional adaptive control methods focus on estimating unknown parameter
 More recently, neuro–adaptive control approaches have been developed using neural networks (NNs) to approximate unknown system dynamics \cite{Farrell:2006aa}.
 It generally uses the approximation capability of NNs with any arbitrary sigmoidal activation function \cite{Cybenko:1989aa}, which can approximate sufficiently smooth functions with minimum approximation error through ideal weights in a compact set.
 This property allows the NNs to be synthesized in the controllers to approximate the unknown dynamics.
-Various architectures of NNs have been proposed for neuro–adaptive control, such as single-hidden-layer NN (SHLNN) \cite{Esfandiari:2015aa,Gao:2006aa}, radial basis function NN (RBFNN) \cite{Ge:2002aa,Zhou:2023aa} and deep NN (DNN) \cite{Patil:2022aa}.
+Various architectures of NNs have been proposed for neuro–adaptive control, such as single-hidden-layer NN (SHLNN) \cite{Esfandiari:2015aa,Gao:2006aa}, radial basis function NN (RBFNN) \cite{Ge:2002aa,Zhou:2023aa}, and deep NN (DNN) \cite{Patil:2022aa}.
 The literature has shown that NNs can improve the system's performance index and stability by approximating the unknown dynamics.
 
 % The corresponding issue in the adaptive control is the parameter drift.
@@ -108,7 +108,7 @@ Most studies modify their adaptation laws to ensure the boundedness of the weigh
 In \cite{Zhou:2023aa,Patil:2022aa}, the projection operator is utilized to prevent weight divergence by projecting the adaptation direction on the convex set of weights.
 However, in the literature, the convex set is usually selected to be as large as possible since there is no information on the ideal weights' norm.
 Hence, the projection operator guarantees only the boundedness of the weights without theoretical optimality.
-In addition, the $\sigma$-modification\cite{Ge:2002aa} and the $\epsilon$-modification \cite{Esfandiari:2015aa,Gao:2006aa} are widely used to regulate the magnitude of the weights by adding a stabilizing function in the adaptation law, therby making the invariance set of the estimation error of the weights. 
+In addition, the $\sigma$-modification\cite{Ge:2002aa} and the $\epsilon$-modification \cite{Esfandiari:2015aa,Gao:2006aa} are widely used to regulate the magnitude of the weights by adding a stabilizing function in the adaptation law, thereby making the invariance set of the estimation error of the weights. 
 The existing methods have shown their effectiveness in ensuring the boundedness of the weights via numerical simulations.
 However, they lack theoretical analysis regarding the optimality of the adapted weights.
 
@@ -246,7 +246,7 @@ The control problem can be reformulated into a constrained optimization problem 
         \min_{{\estwth}} \ J(\mv \xi;{\estwth})
         :=
         \tfrac{1}{2}
-        \mv \xi^\top \mm \Lambda \mv \xi
+        \mv \xi^\top \mm \Lambda \mv \xi,
         \\ \\
         \begin{aligned}
         \text{subject to\;}&c_{j}\le0, \quad j\in\mathcal I 
@@ -479,7 +479,7 @@ Using a proposition $\estwV_1^\top \estact = \myvec(\estwV_1^\top \estact)=\myve
         \le&
         -
         \tfrac{1}{2}
-        \lambda_\text{min}(\mm Q)\norm{\mv \xi} ^2
+        \lambda_{\min}(\mm Q)\norm{\mv \xi} ^2
         +\bar\Delta \norm{\mv \xi}
         +\bar M\norm{\mv \xi} \norm{{\estwth}_1}
         \\
@@ -489,7 +489,7 @@ Using a proposition $\estwV_1^\top \estact = \myvec(\estwV_1^\top \estact)=\myve
         \\
         \le& 
         (
-            -\tfrac{1}{2}\lambda_\text{min}(\mm Q)
+            -\tfrac{1}{2}\lambda_{\min}(\mm Q)
             +{\tfrac{\bar M}{2}}
         )
         \norm{\mv \xi}^2 +\bar\Delta \norm{\mv \xi}
@@ -509,7 +509,7 @@ where $\mv \Delta:= \mm P\mm B_\xi \mv w(t)$ and $\mm M:= -\mm P\mm B_\xi(\mm I_
 By defining $\mm P=\mm I_n$, the eigenvalues of $\mm Q=-\mm A_\xi^\top -\mm A_\xi$ are $2k_q$ and $2k_z$, since $\mm A_\xi$ is a skew-symmetric matrix except for the diagonal entries.
 According to \eqref{eq. lya 1}, if $k_q$ and $k_z$ are provided that
 \begin{equation}
-    \text{min}(k_q,k_z)>\tfrac{\bar M}{2}
+    \min(k_q,k_z)>\tfrac{\bar M}{2}
     ,
     \label{eq. ctrl stable condition}
 \end{equation}
@@ -523,7 +523,7 @@ and if $\lambda_{\theta_1}$ is increased sufficiently large such that $2\lambda_
         \tfrac{
             2\bar \Delta
         }{
-            \lambda _\text{min}(\mm Q)-{\bar M}
+            \lambda _{\min}(\mm Q)-{\bar M}
         } 
     \right\}
     ,
@@ -625,9 +625,10 @@ Therefore, the Lagrange multiplier $\lambda_{\theta_0}$ is also bounded.
 
 \begin{figure}[!t]
     \centering
-    \includegraphics[width=0.8\linewidth]{fig/RobotModel.drawio.png}
+    \includegraphics[width=0.9\linewidth]{fig/RobotModel.drawio.png}
     \caption{Two-link manipulator model.}
     \label{fig: manipulator}
+    \vspace{-4mm}
 \end{figure}
 
 \begin{table}[!t]
@@ -676,7 +677,7 @@ The reference signal of $\q=[q_1,q_2]^\top $ is defined as follows:
     .
 \end{equation}
 
-For the comparative study, three controllers were selected: the neuro–adaptive controller with $L_2$-regularization (NAC-L2) and with $\epsilon$-modification (NAC-eMod) and the proposed controller with constrained optimization (NAC-CO).
+For the comparative study, three controllers were selected: the neuro–adaptive controller with $L_2$-regularization (NAC-L2) and with $\epsilon$-modification (NAC-eMod), and the proposed controller with constrained optimization (NAC-CO).
 %%%%%%%%%%%%%%%%%%%%%
 The performances of the selected controllers are compared based on the tracking performances and the dependencies of the parameters (\ie $L_2$ coefficient $\lambda$, $\epsilon$-modification coefficient $\rho$, and $\beta_j$ of NAC-L2, NAC-eMod, and NAC-CO, respectively).
 The square root of the integrated squared error (ISE) (\ie $\sqrt{\int_0^T \norm{\mv \xi}^2\,\der t}$, where $T$ denotes a simulation termination time) is utilized to evaluate the tracking performance.
@@ -719,7 +720,7 @@ Owing to the stabilizing functions, the weights of NAC-L2 and NAC-eMod are biase
 
 All controllers had the same control parameters except their crucial parameters (\ie $\lambda$, $\rho$ and $\beta_j$) as $k_q=1.1$, $k_z=10$, $\widehat{\mm M}=\mm I_2$ and $\mm \Lambda=\mydiag([5,1,15,15])$.
 The parameters of the NNs were set to $l_0=2$, $l_1=16$, $l_2=2$, and $\alpha=10^3$, and the same random seed was applied for weight initialization.
-The validity of the selected number of nodes were demonstrated through experiments.
+The validity of the selected number of nodes was demonstrated through experiments.
 The NN input vector was set to the desired trajectory $\qd$, with the augmented 1 to incorporate the bias term in the weight matrix such that $\q_{n}=(\qd^\top ,1)^\top $.
 For NAC-CO, the parameters of the weight norm constraints were set as $\bar\theta_0=10$ and $\bar\theta_1=20$.
 The sampling time of the simulation and the simulation termination time were set to $T_s=100\,\mu\mathrm{s}$ and $T=10\,\mathrm{s}$, respectively.
@@ -729,7 +730,7 @@ The sampling time of the simulation and the simulation termination time were set
 \begin{figure}[!t]      
     \centering
     {\includegraphics[width=.85\linewidth]{fig/BoxWhisker.drawio.png}}
-\caption{Box-and-Whisker plot of the square root of the tracking ISEs of NAC-L2, NAC-eMod and NAC-CO across various parameter values.}
+\caption{Box-and-Whisker plot of the square root of the tracking ISEs of NAC-L2, NAC-eMod, and NAC-CO across various parameter values.}
     \label{fig: Box-beard plot}
 \end{figure}
 
