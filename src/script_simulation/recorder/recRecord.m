@@ -5,7 +5,12 @@ xd2_hist(:, t_idx) = xd2;
 
 u_hist(:, t_idx) = u;
 uSat_hist(:, t_idx) = u_sat;
-lbd_hist(:, t_idx) = opt.lbd;
 th_hist(:, t_idx) = nnWeightNorm(nn.th, opt);
 
-% aux_hist(:, t_idx) = zeta;
+if CONTROL_NUM == 1
+    % CoNAC
+    lbd_hist(:, t_idx) = opt.lbd;
+elseif CONTROL_NUM == 2
+    % Aux.
+    zeta_hist(:, t_idx) = z;
+end

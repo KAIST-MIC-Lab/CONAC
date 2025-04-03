@@ -9,6 +9,8 @@ grad_x = @(q, u, t) model_wrapper(q, u, t);
 end
 
 %% Local function
+
+
 % ********************************************************
 function f = model_wrapper(q, u, t)
     [M, C, G, F ] = model1(q, t);

@@ -155,21 +155,16 @@ hF = gcf;
 hF.Position(3:4) = [fig_width, fig_height];
 tl = tiledlayout(2, 1);
 
-
-for l_idx = 1:1:size(L, 1)
-    c = rand(1,3);
-
-    % plot(t, L(l_idx, :), 'color', c, 'DisplayName',"$\lambda_"+string(l_idx)+"$" ...
-    % , "LineWidth", line_width, "LineStyle", "-"); hold on
-    semilogy(t, L(l_idx, :), 'color', c, 'DisplayName',"$\lambda_"+string(l_idx)+"$" ...
-    , "LineWidth", line_width, "LineStyle", "-"); hold on
-end
-grid on
+nexttile(1);
+p2 = plot(t, z1, "Color", "blue", "LineWidth", line_width, "LineStyle", "-."); hold on
 xlabel("Time $[\rm s]$", "Interpreter", "latex")
-ylabel("$\lambda_i$ (log scale)", "Interpreter", "latex")
+ylabel("Zeta 1 $[\rm rad]$", "Interpreter","latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
-lgd = legend;
-lgd.Orientation = 'horizontal';
-lgd.Location = 'northoutside';
-lgd.Interpreter = 'latex';
-lgd.FontSize = lgd_size;
+grid on
+
+nexttile(2);
+p2 = plot(t, z2, "Color", "blue", "LineWidth", line_width, "LineStyle", "-."); hold on
+xlabel("Time $[\rm s]$", "Interpreter", "latex")
+ylabel("Zeta 2 $[\rm rad]$", "Interpreter","latex")
+set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
+grid on

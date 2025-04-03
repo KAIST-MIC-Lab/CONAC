@@ -44,14 +44,14 @@ In this study, the following notation is used:
         := 
         [a_{ij}]
         _{
-            i\in[1,\cdots,n],j\in[1,\cdots ,]
+            i\in[1,\cdots,n],j\in[1,\cdots ,m]
         }\allowbreak\in\R^{n\times m}
         $ denote a vector and a matrix.
     \item $\myrow_i(\mm A)$ denotes the $i\textsuperscript{th}$ row of the matrix $\mm A\in\R^{n\times m}$. 
     \item $\myvec(\mm A):= [\myrow_1(\mm A^\top)  ,\cdots,\myrow_m(\mm A^\top)  ]^\top   $ for $\mm A\in\R^{n\times m}$.
     % \item $\text{col}_i(A)$ and $\myrow_j(A)$ denote the $i\textsuperscript{th}$ column and $j\textsuperscript{th}$ row of $A\in\R^{n\times m}$, respectively.
     % \item $\myvec(A):= [\text{col}_1(A)^\top  ,\cdots,\text{col}_m(A)^\top  ]^\top   $ for $A\in\R^{n\times m}$.
-    \item $\lambda_\text{min}(\mm A)$ denotes the minimum eigenvalue of the matrix $\mm A\in\R^{n\times n}$.
+    \item $\lambda_{\min}(\mm A)$ denotes the minimum eigenvalue of the matrix $\mm A\in\R^{n\times n}$.
     \item $\mm I_n$ denotes the $n\times n$ identity matrix.
 \end{itemize}
 
@@ -291,14 +291,14 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
         \fe^\top(\dot{\mm M}- 2\mm V_m)\fe
         \\
         \le&
-        -\lambda_\text{min}(\mm K)\norm{\fe}^2
+        -\lambda_{\min}(\mm K)\norm{\fe}^2
         +
         \bar\tau_d\norm{\fe}
         +
         \fe^\top (\mv f+\mysat(\mv \tau))
         \\
         \le&
-        -\lambda_\text{min}(\mm K)\norm{\fe}^2
+        -\lambda_{\min}(\mm K)\norm{\fe}^2
         +
         \bar\tau_d\norm{\fe}
         +
@@ -308,7 +308,7 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
     \label{eq:lya1:dot1}
 \end{equation}
 where $\mv\tau^*:= -\mv f$ is the ideal control input whose maximum norm is $\bar\tau$ according to Assumption \ref{assum:feasible} and \eqref{eq:sat}. 
-Therefore, one can conclude that $\fe$ is exponentially stable so that $\lim_{t\to\infty}\norm{\fe}=\tfrac{\bar\tau_d}{\lambda_\text{min}(\mm K)}$, if $\mv \tau=-\mv\tau^*$ can be realized.
+Therefore, one can conclude that $\fe$ is exponentially stable so that $\lim_{t\to\infty}\norm{\fe}=\tfrac{\bar\tau_d}{\lambda_{\min}(\mm K)}$, if $\mv \tau=-\mv\tau^*$ can be realized.
 However, $\mv \tau^*$ is not available in practice, since $\mv f$ is unknown.
 
 To overcome this issue, a DNN is employed to approximate $\mv\tau^*$.
@@ -334,7 +334,7 @@ Substituting \eqref{eq:control:ideal} and \eqref{eq:control:est} into \eqref{eq:
 \begin{equation}
     \dot{\mathcal V}_1
     \le 
-    -\lambda_\text{min}(\mm K)\norm{\fe}^2
+    -\lambda_{\min}(\mm K)\norm{\fe}^2
     +
     \bar\tau_d\norm{\fe}
     +
@@ -826,7 +826,7 @@ According to \eqref{eq:lya2:dot}, the invariant set of $\estwth_k$ is defined as
         \tfrac{
             c_1(2\bar\tau+\bar\tau_d)
         }{
-            \lambda_{\theta_k}\lambda_\text{min}(\mm K)
+            \lambda_{\theta_k}\lambda_{\min}(\mm K)
         }
     \right\}
     .

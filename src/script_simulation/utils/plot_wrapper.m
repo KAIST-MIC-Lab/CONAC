@@ -24,9 +24,19 @@ u1_sat = uSat_hist(1,:);
 u2_sat = uSat_hist(2,:);
 
 th = th_hist;
-L = lbd_hist;
 
-% dot_L = dot_L_hist;
+if CONTROL_NUM == 1
+    % CoNAC
+    L = lbd_hist;
+elseif CONTROL_NUM == 2
+    % Aux.
+    z1 = zeta_hist(1,:);
+    z2 = zeta_hist(2,:);
+end
 
 %% 
-plotter1
+if CONTROL_NUM == 1
+    plotter1
+elseif CONTROL_NUM == 2
+    plotter2
+end

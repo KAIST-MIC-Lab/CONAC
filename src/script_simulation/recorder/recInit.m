@@ -1,5 +1,4 @@
 
-fprintf("                                 \n");
 fprintf("\n");
 fprintf(" FLAGs\n");
 fprintf("     animation      : "+string(ANIMATION_FLAG)+"\n");
@@ -26,7 +25,14 @@ u_hist = zeros(num_u, num_t); u_hist(:, 1) = u;
 uSat_hist = zeros(num_u, num_t); uSat_hist(:, 1) = u;
 
 %% 
-lbd_hist = zeros(length(opt.beta), num_t); lbd_hist(:,1) = zeros(length(opt.beta),1);
-th_hist = zeros(opt.l_size-1, num_t); th_hist(:, 1) = nnWeightNorm(nn.th, opt);
+if CONTROL_NUM == 1
+    % CoNAC
+    lbd_hist = zeros(length(opt.beta), num_t); lbd_hist(:,1) = zeros(length(opt.beta),1);
+    th_hist = zeros(opt.l_size-1, num_t); th_hist(:, 1) = nnWeightNorm(nn.th, opt);
+elseif CONTROL_NUM == 2
+    % Aux.
+    th_hist = zeros(opt.l_size-1, num_t); th_hist(:, 1) = nnWeightNorm(nn.th, opt);
+    zeta_hist = zeros(num_u, num_t); zeta_hist(:, 1) = z;
+end
 
 % aux_hist = zeros(num_x/2, num_t);

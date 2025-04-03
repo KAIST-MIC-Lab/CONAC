@@ -8,7 +8,7 @@ function opt = loadOpts(dt)
 
     opt.alpha = 8e-1;
     opt.rho = opt.alpha*0e-2;
-    opt.NN_size = [6,4,4,2];
+    opt.NN_size = [6,8,8,2];
     opt.W = 1;
     opt.e_size = 2;
 

@@ -5,16 +5,19 @@ r_func = @(t) ref_gen(t);
 end
 
 function [r1,r2] = ref_gen(t)
-    x0 = [deg2rad(-90);0];  
-    xd = [0;deg2rad(10)];
-    T = 3;    
+    x0 = deg2rad([-90;0]);  
+    xd1 = deg2rad([-45;135]);
+    xd2 = deg2rad([45;-45]);
+    T = 2;    
 
-    t = mod(t, 2*T);
+    t = mod(t, 3*T);
 
     if t < T
-        [r1,r2] = poly_filter(x0, xd, T, t);
+        [r1,r2] = poly_filter(x0, xd1, T, t);
+    elseif t < 2*T
+        [r1,r2] = poly_filter(xd1, xd2, T, (t-T));
     else
-        [r1,r2] = poly_filter(xd, x0, T, (t-T));
+        [r1,r2] = poly_filter(xd2, x0, T, (t-2*T));
     end
 end
 
