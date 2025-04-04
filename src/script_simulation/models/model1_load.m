@@ -13,7 +13,7 @@ end
 
 % ********************************************************
 function f = model_wrapper(q, u, t)
-    [M, C, G, F ] = model1(q, t);
+    [M, C, G, F ] = model1(q, u, t);
     
     del_M = zeros(2,2); 
     % del_C = [

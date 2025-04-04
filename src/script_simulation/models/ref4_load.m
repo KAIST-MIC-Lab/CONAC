@@ -6,8 +6,8 @@ end
 
 function [r1,r2] = ref_gen(t)
     x0 = deg2rad([-90;0]);  
-    xd1 = deg2rad([-45;135]);
-    xd2 = deg2rad([45;-45]);
+    xd1 = deg2rad([0;90]);
+    xd2 = deg2rad([135;-135]);
     T = 2;    
 
     t = mod(t, 3*T);

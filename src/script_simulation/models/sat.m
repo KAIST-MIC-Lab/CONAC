@@ -1,4 +1,5 @@
 function u = sat(u, opt, CONTROL_NUM)
+    u = u; return;
     u_ball = opt.cstr.u_ball;
     uMax1 = opt.cstr.uMax1;
     uMax2 = opt.cstr.uMax2;

@@ -1,4 +1,4 @@
-function [M, C, G, F, J] = model1(q, t)
+function [M, C, G, F, J] = model1(q, u, t)
 % 2 link manipulator dynamics
 
 %% Parameters
@@ -26,6 +26,8 @@ b1 = .2;
 b2 = .1;
 fc1 = .35;
 fc2 = .2;
+fs1 = .7;
+fs2 = .4;
 
 I1 = .06911;
 I2 = .01532;
@@ -70,12 +72,23 @@ Cmat21=L1.*Lc2*m2*sin(q2)*qd1;
 Cmat22=0;
 Gmat1=g*((Lc1*m1+L1*m2)*cos(q1)+Lc2*m2*cos(q1+q2));
 Gmat2=g*Lc2*m2*cos(q1+q2);
-Fmat1=b1*sign(qd1)+fc1*qd1;
-Fmat2=b2*sign(qd2)+fc2*qd2;
+
 Jmat11 = (-1).*L1.*sin(q1)+(-1).*L2.*sin(q1+q2); 
 Jmat12 = (-1).*L2.*sin(q1+q2);
 Jmat21 = L1.*cos(q1)+L2.*cos(q1+q2); 
 Jmat22 = L2.*cos(q1+q2);
+
+if abs(u(1)) > fs1
+    Fmat1=b1*sign(qd1)+fc1*qd1;
+else
+    Fmat1 = u(1)-Gmat1;
+end
+
+if abs(u(2)) > fs2
+    Fmat2=b2*sign(qd2)+fc2*qd2;
+else
+    Fmat2 = u(2)-Gmat2;
+end
 
 %%
 M = [

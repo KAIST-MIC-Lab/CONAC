@@ -16,7 +16,7 @@ FIGURE_SAVE_FLAG    = 0;
 RESULT_SAVE_FLAG    = 0;
 CONTROL_NUM = 1;    % 1: CoNAC, 2: Aux.
 
-seed = 18; rng(seed);
+% seed = 18; rng(seed);
 
 %% SIMULATION SETTING
 ctrl_dt = 1/250;
