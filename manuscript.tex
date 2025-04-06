@@ -25,11 +25,11 @@
 %% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
 %% for a journal layout:
 %% \documentclass[final,1p,times,authoryear]{elsarticle}
-%% \documentclass[final,1p,times,twocolumn,authoryear]{elsarticle}
-\documentclass[final,3p,times,authoryear]{elsarticle}
+% \documentclass[final,1p,times,twocolumn,authoryear]{elsarticle}
+% \documentclass[final,3p,times,authoryear]{elsarticle}
 % \documentclass[final,3p,times,twocolumn,authoryear]{elsarticle}
-%% \documentclass[final,5p,times,authoryear]{elsarticle}
-% \documentclass[final,5p,times,twocolumn,authoryear]{elsarticle}
+% \documentclass[final,5p,times,authoryear]{elsarticle}
+\documentclass[final,5p,times,twocolumn,authoryear]{elsarticle}
 
 %% For including figures, graphicx.sty has been loaded in
 %% elsarticle.cls. If you prefer to use the old commands
@@ -40,10 +40,8 @@
 \newcommand*{\template}{template}
 \input{\template/preamble/preamble_Elsevier.tex}
 
-\newcommand*{\fe}{\mv{r}}
-\DeclareMathOperator{\mypoly}{Poly} % filtered error
-
-\newcommand*{\figSize}{.99}
+\newcommand*{\figSizeTwoCol}{.49}
+\newcommand*{\figSizeOneCol}{0.98}
 
 % %% The amssymb package provides various useful mathematical symbols
 % \usepackage{amssymb}
@@ -119,7 +117,7 @@
             addressline={123 Cheomdangwagi-ro, Buk-gu}, 
             city={Gwangju},
             postcode={61005}, 
-            state={},
+            % state={},
             country={Korea}}
 
 %% Abstract
@@ -175,8 +173,8 @@ In this study, the following notation is used:
         $ denote a vector and a matrix.
     \item $\myrow_i(\mm A)$ denotes the $i\textsuperscript{th}$ row of the matrix $\mm A\in\R^{n\times m}$. 
     \item $\myvec(\mm A):= [\myrow_1(\mm A^\top)  ,\cdots,\myrow_m(\mm A^\top)  ]^\top   $ for $\mm A\in\R^{n\times m}$.
-    % \item $\text{col}_i(A)$ and $\myrow_j(A)$ denote the $i\textsuperscript{th}$ column and $j\textsuperscript{th}$ row of $A\in\R^{n\times m}$, respectively.
-    % \item $\myvec(A):= [\text{col}_1(A)^\top  ,\cdots,\text{col}_m(A)^\top  ]^\top   $ for $A\in\R^{n\times m}$.
+    % \item $\mycol_i(A)$ and $\myrow_j(A)$ denote the $i\textsuperscript{th}$ column and $j\textsuperscript{th}$ row of $A\in\R^{n\times m}$, respectively.
+    % \item $\myvec(A):= [\mycol_1(A)^\top  ,\cdots,\mycol_m(A)^\top  ]^\top   $ for $A\in\R^{n\times m}$.
     \item $\lambda_{\min}(\mm A)$ denotes the minimum eigenvalue of the matrix $\mm A\in\R^{n\times n}$.
     \item $\mm I_n$ denotes the $n\times n$ identity matrix.
 \end{itemize}
@@ -284,31 +282,31 @@ Finally, Section \ref{sec:conclusion} concludes the paper and discusses potentia
 
 Consider an uncertain Euler-Lagrange system modeled as
 \begin{equation}
-    \mm M\ddq + \mm V_m + \mm F + \mm G + \mv\tau_d
+    \rbM\ddq + \rbVm + \rbF + \rbG + \rbd
     =
-    \mysat(\mv\tau)
+    \mysat(\rbu)
     \label{eq:sys1}
 \end{equation}
-where $\q\in \R^n$ denotes the generalized coordinate, $\mv \tau_d$ represents disturbance and $\mv\tau\in\R^n$ denotes the control input. 
-The terms $\mm M:=\mm M(\q)\in\R^{n\times n}$, $\mm V_m:=\mm V_m(\q,\dq)\in\R^{n\times n}$, $\mm F:=\mm F(\dq)\in\R^{n}$ and $\mm G:=\mm G(\q)$ represent the unknown inertia matrix, Coriolis/centripetal matrix, friction terms and gravity vector
-The function $\mysat(\cdot):\R^n\to\R^n$ represents the inherent physical limitations of the actuators such that $\norm{\mysat(\mv\tau)}\le \bar\tau$, where $\bar\tau$ denotes the maximum norm of control input.
+where $\q\in \R^n$ denotes the generalized coordinate, $\rbd$ represents disturbance and $\rbu\in\R^n$ denotes the control input. 
+The terms $\rbM:=\rbM(\q)\in\R^{n\times n}$, $\rbVm:=\rbVm(\q,\dq)\in\R^{n\times n}$, $\rbF:=\rbF(\dq)\in\R^{n}$ and $\rbG:=\rbG(\q)$ represent the unknown inertia matrix, Coriolis/centripetal matrix, friction terms and gravity vector
+The function $\mysat(\cdot):\R^n\to\R^n$ represents the inherent physical limitations of the actuators such that $\norm{\mysat(\rbu)}\le \bar\tau$, where $\bar\tau$ denotes the maximum norm of control input.
 To account for these limitations, it is essential to incorporate physically motivated constraints into the controller design.
 Appendix \ref{sec:appen:cstr} introduces candidate constraints that can be applied to ensure compliance with these physical limitations.
 
 The Euler-Lagrange system \eqref{eq:sys1} satisfy some important physical properties \cite[see, Chap. 3 Tab. 3.2.1]{Lewis:1998aa}.
 We introduce the following properties:
 \begin{prop} 
-    The inertia matrix $\mm M$ is symmetric, positive definite and bounded.
+    The inertia matrix $\rbM$ is symmetric, positive definite and bounded.
     \label{prop:M}
 \end{prop}
 
 \begin{prop} 
-    The Coriolis/centripetal matrix $\mm V_m$ can always be selected so that the matrix $(\dot{\mm M}-2\mm V_m)$ is skew-symmetric.
+    The Coriolis/centripetal matrix $\rbVm$ can always be selected so that the matrix $(\dot{\rbM}-2\rbVm)$ is skew-symmetric.
     \label{prop:skew}
 \end{prop}
 
 \begin{prop}
-    The disturbance $\mv\tau_d$ is bounded so that $\norm{\mv\tau_d}\le \bar\tau_d$.
+    The disturbance $\rbd$ is bounded so that $\norm{\rbd}\le \bar\tau_d$.
     \label{prop:dis_bound}
 \end{prop}
 
@@ -346,12 +344,12 @@ Since \eqref{eq:err:filtered} is stable system, it implies that $\mv e$ is bound
 
 Using $\fe$, the system dynamics \eqref{eq:sys1} can be rewritten as
 \begin{equation}
-    \mm M \dot\fe
+    \rbM \dot\fe
     =
-    -\mm V_m \fe
+    -\rbVm \fe
     -\mm K \fe
     + \mv f
-    -\mv \tau_d + \mysat(\mv\tau)
+    -\rbd + \mysat(\rbu)
     ,
     \label{eq:sys:filtered}
 \end{equation}
@@ -359,89 +357,89 @@ where $\mm K\in\R^{n\times n}$ denotes arbitrary symmetric positive definite mat
     \mv f:= \mv f(\q,\dq,\dqd,\ddqd)
     =
     \mm K \fe
-    +\mm M(-\ddqd+\mm\Lambda\dot{\mv e})
+    +\rbM(-\ddqd+\mm\Lambda\dot{\mv e})
     +
-    \mm V_m(-\dqd+\mm\Lambda\mv e)
+    \rbVm(-\dqd+\mm\Lambda\mv e)
     -
-    \mm F
+    \rbF
     -
-    \mm G
+    \rbG
     \in\R^n
 $ denotes the lumped system uncertainty.
 
-Consider the Lyapunov function $V_1:= \tfrac{1}{2}\fe^\top \mm M\fe$. 
+Consider the Lyapunov function $V_1:= \tfrac{1}{2}\fe^\top \rbM\fe$. 
 Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
 \begin{equation}
     \begin{aligned}
         \ddtt{V}_1
         =&
-        \fe^\top \mm M (
-            -\mm V_m \fe -\mm K \fe + \mv f
-            -\mv \tau_d + \mysat(\mv\tau)
+        \fe^\top \rbM (
+            -\rbVm \fe -\mm K \fe + \mv f
+            -\rbd + \mysat(\rbu)
         )
         \\
         &
         +
         \tfrac{1}{2}
-        \fe^\top \dot{\mm M}\fe
+        \fe^\top \dot{\rbM}\fe
         \\
         =&
         -
         \fe^\top \mm K \fe 
         +
         \fe^\top (
-            \mv f+\mysat(\mv\tau)
-            -\mv \tau_d
+            \mv f+\mysat(\rbu)
+            -\rbd
         )
         \\
         &
         +
         \tfrac{1}{2}
-        \fe^\top(\dot{\mm M}- 2\mm V_m)\fe
+        \fe^\top(\dot{\rbM}- 2\rbVm)\fe
         \\
         \le&
         -\lambda_{\min}(\mm K)\norm{\fe}^2
         +
         \bar\tau_d\norm{\fe}
         +
-        \fe^\top (\mv f+\mysat(\mv \tau))
+        \fe^\top (\mv f+\mysat(\rbu))
         \\
         \le&
         -\lambda_{\min}(\mm K)\norm{\fe}^2
         +
         \bar\tau_d\norm{\fe}
         +
-        \fe^\top (\mysat(\mv\tau)-\mv\tau^*)
+        \fe^\top (\mysat(\rbu)-\rbu^*)
         ,
     \end{aligned}
     \label{eq:lya1:dot1}
 \end{equation}
-where $\mv\tau^*:= -\mv f$ is the ideal control input whose maximum norm is $\bar\tau$ according to Assumption \ref{assum:feasible} and $\mysat(\cdot)$. 
-Therefore, one can conclude that $\fe$ is exponentially stable so that $\lim_{t\to\infty}\norm{\fe}=\tfrac{\bar\tau_d}{\lambda_{\min}(\mm K)}$, if $\mv \tau=-\mv\tau^*$ can be realized.
-However, $\mv \tau^*$ is not available in practice, since $\mv f$ is unknown.
+where $\rbu^*:= -\mv f$ is the ideal control input whose maximum norm is $\bar\tau$ according to Assumption \ref{assum:feasible} and $\mysat(\cdot)$. 
+Therefore, one can conclude that $\fe$ is exponentially stable so that $\lim_{t\to\infty}\norm{\fe}=\tfrac{\bar\tau_d}{\lambda_{\min}(\mm K)}$, if $\rbu=-\rbu^*$ can be realized.
+However, $\rbu^*$ is not available in practice, since $\mv f$ is unknown.
 
-To overcome this issue, a DNN is employed to approximate $\mv\tau^*$.
+To overcome this issue, a DNN is employed to approximate $\rbu^*$.
 Let $\NN:=\NN(\q_{NN};\wth): \R^{l}\times\R^{\Xi}\to\R^{n}$ represent the DNN, where $\q_{NN}\in\R^{l}$ is the DNN input vector, and $\wth\in\R^{\Xi}$ is the vector of trainable weights.
 The architecture of $\NN(\q_{NN};\wth)$ will be defined in Section \ref{eq:DNN:architecture}.
 According to the universal approximation theorem for DNNs \cite{Kidger:2020aa}, $\NN(\q_{NN};\wth)$ can approximate a nonlinear function $\mv g(\cdot)$ with an ideal weight vector $\idealwth$ on a compact subset $\Omega_{NN}\in\R^{l}$ to $\mv\epsilon$-accuracy, such that $\sup_{\q_{NN}\in\Omega_{NN}}\norm{ \NN(\q_{NN};\idealwth) - \mv g(\cdot)} = \mv\epsilon < \infty$.
 Furthermore, the theorem states that the norm of $\idealwth$ is bounded, \ie $\norm{\idealwth}\le \bar\wth<\infty$.
 In this study, $\idealwth$ is defined as a local optimal point, rather than a global optimal point.
 
-In conclusion, the ideal control law $\mv\tau^*$ is expressed by the DNN approximation with the ideal weight vector $\idealNN:=\NN(\q_{NN};\idealwth)$ as follows:
+In conclusion, the ideal control law $\rbu^*$ is expressed by the DNN approximation with the ideal weight vector $\idealNN:=\NN(\q_{NN};\idealwth)$ as follows:
 \begin{align}
-    \mv\tau^*=& \idealNN+\mv\epsilon,
+    \rbu^*=& \idealNN+\mv\epsilon,
     \label{eq:control:ideal}
 \end{align}
 which is estimated online by
 \begin{align}
-    \mv\tau =& \estNN,
+    \rbu =& \estNN,
     \label{eq:control:est}
 \end{align}
 where $\hat\NN:=\NN(\q_{NN};\estwth)$, and  $\estwth$ is the estimated weight vector for $\idealwth$.
 
-Substituting \eqref{eq:control:ideal} and \eqref{eq:control:est} into \eqref{eq:lya1:dot1}, the time derivative of $\mathcal V_1$ can be rewritten as
+Substituting \eqref{eq:control:ideal} and \eqref{eq:control:est} into \eqref{eq:lya1:dot1}, the time derivative of $V_1$ can be rewritten as
 \begin{equation}
-    \dot{\mathcal V}_1
+    \ddtt{V}_1
     \le 
     -\lambda_{\min}(\mm K)\norm{\fe}^2
     +
@@ -472,7 +470,7 @@ The DNN architecture $\NN(\q_{NN};\wth) := \NN_k$ can be recursively represented
 \end{equation}
 where $\wV_i\in\R^{(l_i+1)\times l_{i+1}}$ is the weight matrix of the $i\textsuperscript{th}$ layer, and $\act_i: \R^{l_i}\to\R^{l_i+1}$ represents the activation function of the $i\textsuperscript{th}$ layer. 
 The activation function is defined as $\act_i(\mv x)=[\sigma(x_1),\sigma(x_2),\cdots, \sigma(x_{l_{i}}), 1]^\top,\ \forall\mv x\in\R^{l_i}$, where $\sigma: \R\to\R$ is a nonlinear function, and the augmentation of $1$ is used to account for bias terms in the weight matrices. 
-Notice that the output size of $\NN(\cdot)$ is the same as that of the control input $\mv\tau$ (\ie $l_{k+1}=n$). 
+Notice that the output size of $\NN(\cdot)$ is the same as that of the control input $\rbu$ (\ie $l_{k+1}=n$). 
 
 
 One of the widely used activation functions for large DNNs is from the ReLU family \cite{Maas:2013aa}, which effectively avoids the gradient vanishing problem during error backpropagation. 
@@ -516,19 +514,19 @@ where
     \begin{cases}
         (\mm I_{l_{k+1}}\otimes \act_{k}^\top  ), 
         &
-        i=k 
+        i=k,
         \\
         \wV_k^\top   \act_{k}' (\mm I_{l_{k}}\otimes  \act_{k-1}^\top  ), 
         & 
-        i=k-1
+        i=k-1,
         \\
         &
         \vdots 
         \\
         \wV_k^\top   \act'_{k} \cdots \wV_1^\top  \act_1' (\mm I_{l_1}\otimes \q_{NN}^\top  ), 
         &
-        i = 0
-    \end{cases},
+        i = 0,
+    \end{cases}
     \label{eq:NN:grad}
 \end{equation}
 where $\act_i:= \act_i(\NN_{i-1})$ and $\act_i':= \pptfrac{\act_i}{\NN_{i-1}}$.
@@ -547,7 +545,7 @@ The control objective can be represented as follows:
 \begin{equation}
     \begin{matrix}
         \min_{\estwth} \ J(\fe;\estwth):= 
-        \tfrac{1}{2} \fe^\top  \mm W\fe
+        \tfrac{1}{2} \fe^\top \fe
         \\ \\
         \begin{aligned}
         \text{s.t. }&c_{j}(\estwth) 
@@ -556,7 +554,7 @@ The control objective can be represented as follows:
     \end{matrix}
     \label{eq:opt:problem1}
 \end{equation}
-where $J(\fe;\estwth):= \tfrac{1}{2} \fe^\top  \mm W\fe$ is the objective function, and $\mm W\in\R^{n\times n}$ is a symmetric positive weighting matrix.
+where $J(\fe;\estwth):= \tfrac{1}{2} \fe^\top \fe$ is the objective function.
 Inequality constraints $c_j,\ j\in\mathcal{I}$, are imposed during the weight adaptation process to minimize the objective function, where $\mathcal I$ denotes the set of the imposed inequality constraints. 
 Here, $\fe$ is considered a pre-defined data or parameter for this optimization problem. The Lagrangian function is defined as
 \begin{equation}
@@ -569,6 +567,7 @@ Here, $\fe$ is considered a pre-defined data or parameter for this optimization 
     \sum_{j\in\mathcal I}
     \lambda_{j}
     c_{j}(\estwth)
+    ,
     \label{eq:lagrangian}
 \end{equation}
 where $\lambda_j$ denotes the Lagrange multiplier for each constraint.
@@ -606,61 +605,62 @@ The adaptation laws for $\estwth$ and $[\lambda]_{j\in\mathcal I}$ are derived t
     \label{eq:adaptation law}
 \end{subequations}
 where $\alpha\in\R_{>0}$ denotes the adaptation gain (learning rate) and $\beta_j\in\R_{>0}$ denotes the update rate of the Lagrange multipliers in $\mathcal I$, and the arguments of $L$ and $J$ are suppressed for brevity. 
-The Lagrange multipliers associated with inequality constraints are non-negative, \ie $\lambda_j\ge 0$, and they become zero when their corresponding constraints are inactive. When a constraint $c_j$ becomes active (\ie violated), the corresponding Lagrange multiplier $\lambda_j$ increases to address the violation. Once the violation is resolved and the constraint is no longer active (\ie $c_j < 0$), the multiplier decreases gradually until it returns to zero. Note that this adaption law is similar to the ALM in \cite{Nocedal:2006aa}, where the adaptation law for Lagrange multipliers is given by $\lambda_j\leftarrow \text{max}(\lambda_j-\tfrac{c_j}{\mu},0)$, with $\mu\in\R_{>0}$ being the penalty parameter. 
+The Lagrange multipliers associated with inequality constraints are non-negative, \ie $\lambda_j\ge 0$, and they become zero when their corresponding constraints are inactive. When a constraint $c_j$ becomes active (\ie violated), the corresponding Lagrange multiplier $\lambda_j$ increases to address the violation. Once the violation is resolved and the constraint is no longer active (\ie $c_j < 0$), the multiplier decreases gradually until it returns to zero. Note that this adaption law is similar to the ALM in \cite{Nocedal:2006aa}, where the adaptation law for Lagrange multipliers is given by $\lambda_j\leftarrow \max(\lambda_j-\tfrac{c_j}{\mu},0)$, with $\mu\in\R_{>0}$ being the penalty parameter. 
 
-At steady state, where $\ddtt{\estwth}=0$ and $\ddtt\lambda_j=0$, the KKT conditions are satisfied, \ie $\partial L/\partial \estwth=0$, $c_j \le 0$, $\lambda_j \ge 0$, and $\lambda_j c_j=0$ \cite[Chap.~12 T.~12.1]{Nocedal:2006aa}.
+At steady state, where $\ddtt{\estwth}=0$ and $\ddtt\lambda_j=0$, the KKT conditions are satisfied, \ie $\pptfrac{L}{\estwth}=0$, $c_j \le 0$, $\lambda_j \ge 0$, and $\lambda_j c_j=0$ \cite[Chap.~12 T.~12.1]{Nocedal:2006aa}.
 In other words, the proposed optimizer updates $\estwth$ and $\lambda_j$ in a way that satisfies the KKT conditions. 
 These conditions represent the first-order necessary conditions for optimality, guiding the updates toward candidates for a locally optimal point.
 % The KKT condition is satisfied, when $\estwth$ converges to $\idealwth$, since $\partial L/\partial \estwth=0$ (i.e. the first-order necessary condition of the optimality is satisfied.).
 
 \subsection{Approximation of the Gradient of Objective Function}
 
-The adaptation law for $\estwth$ defined in \eqref{eq:adap:th} involves the partial derivative of the state vector with respect to control input $\pptfrac{\fe}{\mv\tau}$ (\ie 
+The adaptation law for $\estwth$ defined in \eqref{eq:adap:th} involves the partial derivative of the state vector with respect to control input $\pptfrac{\fe}{\rbu}$ (\ie 
 $
-    \pptfrac{J}{\mv \tau}
+    \pptfrac{J}{\rbu}
     =
-    ((\pptfrac{\fe}{\mv\tau})(\pptfrac{\mv \tau}{\estwth}))^\top \fe
+    ((\pptfrac{\fe}{\rbu})(\pptfrac{\rbu}{\estwth}))^\top \fe
     =
-    ((\pptfrac{\fe}{\mv\tau})(\pptfrac{\estNN}{\estwth}))^\top \fe
+    ((\pptfrac{\fe}{\rbu})(\pptfrac{\estNN}{\estwth}))^\top \fe
 $). 
 Since the objective function depends on $\fe$ of a dynamic system, obtaining the gradient is not straightforward. 
 The recommended method to calculate the exact value of $\pptfrac{J}{\estwth}$ is to use the forward sensitivity method \cite{Sengupta:2014aa} by simulating the sensitivity equation as follows: 
 \begin{equation}
     \ddtt (
-        \pptfrac{\fe}{\mv\tau}
+        \pptfrac{\fe}{\rbu}
     )
     =
     \pptfrac{}{
-        \mv\tau
+        \rbu
     }
     \left[
-        \mm M^{-1}(
-            -\mm V_m \fe
+        \rbM^{-1}(
+            -\rbVm \fe
             -\mm K \fe
             + \mv f
-            -\mv \tau_d + \mysat(\mv\tau)
+            -\rbd + \mysat(\rbu)
         )
     \right]
     .
 \end{equation}
-However, this method cannot be realized, since we do not have the exact system dynamics (\ie $\mm M,\mm V_m, \mm F$ and $ \mm G$).
+However, this method cannot be realized, since we do not have the exact system dynamics (\ie $\rbM,\rbVm, \rbF$ and $ \rbG$).
 Additionally, the computational cost of the forward sensitivity method is high, as the number of NN's weights are generally large.
 
-In \cite{Douratsos:2007aa,Saerens:1991aa}, the authors approximate $\pptfrac{\fe}{\mv\tau}$ as $
-    \pptfrac{\fe}{\mv\tau}
+In \cite{Douratsos:2007aa,Saerens:1991aa}, the authors approximate $\pptfrac{\fe}{\rbu}$ as $
+    \pptfrac{\fe}{\rbu}
     \approx
     [
-        \mathrm{sign}(\pptfrac{r_i}{\tau_j})
+        \mysign(\pptfrac{r_i}{\tau_j})
     ]_{i,j\in[1,\cdots,m]}
 $ using the sign of each entry (\ie control direction).
-However, this method is not suitable for \eqref{eq:sys1}, since the control directions are unknown, but the sign of the control input is known (\ie $\mm M^{-1}$ is positive definite matrix in the view of Property \ref{prop:M}).
-Therefore, we propose to approximate $\pptfrac{\fe}{\mv\tau}$ as $\pptfrac{\fe}{\mv\tau}\approx \mm I_n$ and one can conclude \eqref{eq:adap:th} as follows:
+However, this method is not suitable for \eqref{eq:sys1}, since the control directions are unknown, but the sign of the control input is known (\ie $\rbM^{-1}$ is positive definite matrix in the view of Property \ref{prop:M}).
+Therefore, we propose to approximate $\pptfrac{\fe}{\rbu}$ as $\pptfrac{\fe}{\rbu}\approx \mm I_n$ and one can conclude \eqref{eq:adap:th} as follows:
 \begin{equation}
     \ddtt{\estwth}
     \approx
     -\alpha 
     \left(
-        \pptfrac{\estNN}{\estwth}^\top
+        \pptfrac{\estNN}
+        {\estwth}^\top
         \fe
         +
         \textstyle\sum_{j\in\mathcal{I}}
@@ -724,10 +724,10 @@ The following Lemma is introduced for the stability analysis.
 
 \begin{proof}
 
-Since $\mv\tau = \estNN$, using \cite[Proposition 7.1.9]{Bernstein:2009aa}, a linear map $\mm T(\cdot):\estwth_k\to\mv\tau$ can be derived: 
+Since $\rbu = \estNN$, using \cite[Proposition 7.1.9]{Bernstein:2009aa}, a linear map $\mm T(\cdot):\estwth_k\to\rbu$ can be derived: 
 \begin{equation}\label{eq:linear:map}
     \begin{aligned}
-    \mv\tau 
+    \rbu 
     = 
     &
     \estNN 
@@ -757,7 +757,7 @@ Since $\mv\tau = \estNN$, using \cite[Proposition 7.1.9]{Bernstein:2009aa}, a li
     \mm T(\estact_k) \estwth_k.
     \end{aligned}
 \end{equation}
-Therefore, the convexity of the input constraints in $\mv\tau$-space (assumed in Assumption \ref{assum:convex}) holds in $\estwth_k$-space, implying
+Therefore, the convexity of the input constraints in $\rbu$-space (assumed in Assumption \ref{assum:convex}) holds in $\estwth_k$-space, implying
 that $\pptfrac{c_j}{\estwth_k}^\top\estwth_k>0$.
 
 \end{proof}
@@ -784,7 +784,7 @@ The gradient of $\boldsymbol{c}_\theta$ with respect to $\estwth$ is given by
     \begin{cases}
         \estwth_i,
         &
-        \text{if } i=j
+        \text{if } i=j,
         \\
         \mv{0},
         &
@@ -812,14 +812,14 @@ The derivative of $c_j,\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in[0,\cd
 \begin{equation}
     \pptfrac{c_j}{\estwth_i} 
     = 
-    \pptfrac{c_j}{\mv\tau} 
-    \pptfrac{\mv\tau}{\estNN} 
+    \pptfrac{c_j}{\rbu} 
+    \pptfrac{\rbu}{\estNN} 
     \pptfrac{\estNN}{\estwth_i}
 \end{equation}
 where $\pptfrac{\tau}{\estNN}=\mm I_n$, which is bounded. 
-From the linear mapping in \eqref{eq:linear:map}, $\mv\tau$ is bounded as long as $\estwth_k$ is bounded (by the condition of the lemma), and $\norm{\act_k(\cdot)}$ is bounded due to the properties of the activation functions. 
+From the linear mapping in \eqref{eq:linear:map}, $\rbu$ is bounded as long as $\estwth_k$ is bounded (by the condition of the lemma), and $\norm{\act_k(\cdot)}$ is bounded due to the properties of the activation functions. 
 By Assumption \ref{assum:convex}, the function $c_j$ is convex. 
-The convex function has a bounded derivative with respect to $\mv\tau$, since $\mv\tau$ is a bounded variable (\ie $\pptfrac{c_j}{\mv\tau}$ is bounded). 
+The convex function has a bounded derivative with respect to $\rbu$, since $\rbu$ is a bounded variable (\ie $\pptfrac{c_j}{\rbu}$ is bounded). 
 Furthermore, $\pptfrac{\estNN}{\estwth_i}$ is bounded, provided that the norms of $\estwth_i,\ \forall i \in[k,\cdots,i+1]$, are bounded. 
 This can be verified by using the definition of $\pptfrac{\estNN}{\estwth_i}$ given in \eqref{eq:NN:grad}.
 Consequently, $\norm{\pptfrac{c_j}{\estwth_i}},\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in[0,\cdots,k]}$, is bounded, when $\estwth_i,\ \forall i\in [k,\cdots,i+1]$ are bounded.
@@ -853,7 +853,7 @@ As the result of the time derivative of $V_1$, the invariant set $\Theta_{\fe}^{
         \mid 
         \norm{\fe} 
         \le 
-        \tfrac{2\bar\tau+\bar\tau_d}{\lambda_{\text{min}}(\mm K)}
+        \tfrac{2\bar\tau+\bar\tau_d}{\lambda_{\min}(\mm K)}
     \right\}
     .
     \label{eq:invariant:c1:fe}
@@ -886,7 +886,7 @@ Taking the time derivative of $V_2$ yields:
         &
             +
             \textstyle\sum_{
-                j\in\mathcal{A}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}
+                j\in\mathcal{I}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}
             }
             \lambda_j 
             \pptfrac{c_j}{\estwth_k}
@@ -906,7 +906,7 @@ Taking the time derivative of $V_2$ yields:
         -
         \underbrace{
         \textstyle\sum_{
-            j\in\mathcal{A}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}
+            j\in\mathcal{I}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}
         }
         \lambda_j 
         \estwth_k^\top \pptfrac{c_j}{\estwth_k}
@@ -945,7 +945,7 @@ According to \eqref{eq:lya2:dot}, the invariant set of $\estwth_k$ is defined as
 The satisfaction of the constraints can be verified by the boundedness of $\estwth_k$.
 For $c_{\theta_k}$, if the corresponding Lagrange multiplier $\lambda_{\theta_k}$ increases infinitely by the constraint violation, $\estwth_k$ approaches to the origin as $\Theta_{\estwth_k}^{c_1}$ is squeezed to a point.
 The satisfactions of the remaining control input constraints can be verified implicitly using $c_2$ in \eqref{eq:lya2:dot}.
-Similarly to $c_{\theta_k}$, as the control input constraint $c_j,\ \forall j\in\mathcal{A}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}$ is violated, the corresponding Lagrange multiplier $\lambda_j$ increases infinitely, so does $c_2$.
+Similarly to $c_{\theta_k}$, as the control input constraint $c_j,\ \forall j\in\mathcal{I}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}$ is violated, the corresponding Lagrange multiplier $\lambda_j$ increases infinitely, so does $c_2$.
 It makes $c_2$ dominates the right-hand side of \eqref{eq:lya2:dot}, which leads $\ddtt V_2$ negative definite.
 This drives $\estwth_k$ to the origin until the constraint is satisfied (\ie by Assumption \ref{assum:convex} and Lemma \ref{lem:convex:angle}, the control input constraints can be considered as convex constraint in $\estwth_k$-space).
 
@@ -959,7 +959,7 @@ Consider the Lyapunov function candidate $V_3:=V_1+V_2$ and its time derivative:
     \begin{aligned}
         \ddtt V_3
         =&
-        -\lambda_{\text{min}}(\mm K)\norm{\fe}^2
+        -\lambda_{\min}(\mm K)\norm{\fe}^2
         +\bar\tau_d\norm{\fe}
         +\fe^\top (\estNN - \idealNN - \mv\epsilon)
         \\
@@ -972,13 +972,13 @@ Consider the Lyapunov function candidate $V_3:=V_1+V_2$ and its time derivative:
         )
         \\
         \le&
-        -\lambda_{\text{min}}(\mm K)\norm{\fe}^2
+        -\lambda_{\min}(\mm K)\norm{\fe}^2
         +\fe^\top \estNN
         +(
             \bar\tau_d+\norm{
                 \underbrace{
                     \idealNN+\mv\epsilon
-                }_{=\mv\tau^*}
+                }_{=\rbu^*}
             }
         )
         \norm{\fe}
@@ -988,7 +988,7 @@ Consider the Lyapunov function candidate $V_3:=V_1+V_2$ and its time derivative:
         -\lambda_{\theta_k}\norm{\estwth_k}^2
         \\
         \le&
-        -\lambda_{\text{min}}(\mm K)\norm{\fe}^2
+        -\lambda_{\min}(\mm K)\norm{\fe}^2
         +(\bar\tau_d+\bar\tau)
         \norm{\fe}
         -\lambda_{\theta_k}\norm{\estwth_k}^2
@@ -1008,7 +1008,7 @@ Like in Case (C$_1$), the boundedness of $\fe$ can be verified by the invariant 
         \tfrac{
             \bar\tau_d+\bar\tau
         }{
-            \lambda_{\text{min}}(\mm K)
+            \lambda_{\min}(\mm K)
         }
     \right\}
     .
@@ -1023,18 +1023,18 @@ The dynamics of $\estwth_i,\ \forall i\in[k-1,\cdots,0]$ are represented as
     \ddtt \estwth_i 
     =
     -\alpha
-    (
+    \left(
         \pptfrac{\estNN}{\estwth_i}^\top
         \fe
         +
         \lambda_{\theta_i}\estwth_i
         +
         \textstyle\sum_{
-            j\in\mathcal{A}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}
+            j\in\mathcal{I}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}
         }
         \lambda_j
         \pptfrac{c_j}{\estwth_i}
-    )
+    \right)
     .
 \end{equation}
 Invoking Lemma \ref{lem:cstr:grad:bound}, $\estwth_i$ is bounded, provided that $\estwth_i,\ \forall i\in[k,\cdots,i+1]$ are bounded, since the system matrix $-\lambda_{\theta_i} \mm I_{\Xi_i}$ is stable and the residual terms are bounded.
@@ -1061,9 +1061,9 @@ The system dynamics of the two-link manipulator is described by the following eq
 \MSRY{ADD MORE DETAIL; Following Eqn is just example}
 \begin{equation}
     \begin{aligned}
-        \mm M(\q) \ddtt{\q} + \mm V_m(\q,\dot\q) + \mm F(\q,\dot\q) + \mm G(\q) = \mv\tau,
+        \rbM(\q) \ddtt{\q} + \rbVm(\q,\dot\q) + \rbF(\q,\dot\q) + \rbG(\q) = \rbu,
         \\
-        \mv\tau = \estNN(\q,\dot\q),
+        \rbu = \estNN(\q,\dot\q),
     \end{aligned}
     \label{eq:robot_dynamics}
 \end{equation}
@@ -1071,22 +1071,30 @@ The parameters $q_p,{q_d}_p,\tau_p,m_p,l_p,{l_c}_p,b_p$ and ${f_c}_p$ \MSRY{more
 The values of the system model parameters are provided in Table~\ref{table:system:params}. 
 The desired trajectory for $\q=[q_1,q_2]^\top $ was defined with \MSRY{5th Poly functions} as
 \begin{equation}
-    \qd(t) = 
+    \qd(t) 
+    \!=\! 
     \begin{bmatrix}
         {q_d}_1\\{q_d}_2
     \end{bmatrix}
-    =
+    \!=\!
     \begin{cases}
-    \mypoly({\qd}_0,{\qd}_1,t_f,t)
-        & \text{if } 0\le t < t_f \\
-    \mypoly({\qd}_1,{\qd}_2,t_f,t-t_f)
-        & \text{if } t_f\le t < 2t_f \\
-    \mypoly({\qd}_2,{\qd}_1,t_f,t-2t_f)
-        & \text{if } 2t_f\le t < 3t_f \\
-    \mypoly({\qd}_1,{\qd}_0,t_f,t-3t_f)
-        & \text{if } 3t_f\le t < 4t_f \\
+    \mypoly({\qd}_0,{\qd}_1,t_f,t),
+        & \text{if } 0\le t < t_f 
+        ,
+        \\
+    \mypoly({\qd}_1,{\qd}_2,t_f,t-t_f),
+        & \text{if } t_f\le t < 2t_f 
+        ,
+        \\
+    \mypoly({\qd}_2,{\qd}_1,t_f,t-2t_f),
+        & \text{if } 2t_f\le t < 3t_f 
+        .
+        \\
+    \mypoly({\qd}_1,{\qd}_0,t_f,t-3t_f),
+        & \text{if } 3t_f\le t < 4t_f 
+        ,
+        \\
     \end{cases}
-    ,
     \label{eq:desired trajectory}
 \end{equation}
 where \MSRY{CAN BE CHANGED}$\q_0=[0,0]^\top$, $\q_1=[\pi/2,\pi/2]^\top$, $\q_2=[\pi/2,0]^\top$, and $t_f=5$ s.
@@ -1097,16 +1105,16 @@ where \MSRY{CAN BE CHANGED}$\q_0=[0,0]^\top$, $\q_1=[\pi/2,\pi/2]^\top$, $\q_2=[
 % ------------------------------------
 To demonstrate the effectiveness of the proposed CoNAC to handle the combination of the nonlinear input constraints, the following control input saturations were imposed:
 \begin{equation}
-    \mysat(\mv\tau)
+    \mysat(\rbu)
     :=
     \begin{cases}
-        \mv\tau, 
+        \rbu, 
         & 
-        \text{if } \Vert\mv\tau\Vert\le \bar\tau,
+        \text{if } \norm{\rbu}\le \bar\tau,
         \\
-        \bar\tau
+        \rbu
         \cdot
-        \tfrac{\mv\tau}{\Vert\mv\tau\Vert}, 
+        \tfrac{\bar\tau}{\norm{\rbu}}, 
         & 
         \text{otherwise},
     \end{cases}
@@ -1119,7 +1127,7 @@ where $\bar\tau=50, \bar\tau_1$ and $\bar\tau_2$ are the saturation limit values
 % ------------------------------------
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.5\linewidth]{fig/RobotModel.drawio.png}
+    \includegraphics[width=0.75\linewidth]{fig/RobotModel.drawio.png}
     \caption{Two-link manipulator model.}
     \label{fig: manipulator}
 \end{figure}
@@ -1128,7 +1136,8 @@ where $\bar\tau=50, \bar\tau_1$ and $\bar\tau_2$ are the saturation limit values
     \renewcommand{\arraystretch}{1.3}
     \caption{System model parameters.}
     \centering
-    \begin{tabular}{c m{11em} c c c }
+    \begin{tabular}{c m{7em} c c c }
+        % \begin{tabular}{c c c c c}
     \hline
     \textbf{Symbol} & \textbf{Description} & \textbf{Link 1} & \textbf{Link 2} \\
     \hline
@@ -1171,7 +1180,7 @@ The auxiliary state variables were used in the adaptation law \eqref{eq:adap:th:
 % CoNAC
 % ------------------------------------
 The proposed CoNAC directly approximated the control law using the DNN as defined in \eqref{eq:control:est}. 
-The update rates for the multipliers were set as \MSRY{SEE HERE}$\beta_{j}=0.1$. The weight matrix $W$ was selected as $W=\text{diag}([5,1,15,15])]$.
+The update rates for the multipliers were set as \MSRY{SEE HERE}$\beta_{j}=0.1$. The weight matrix $W$ was selected as $W=\mydiag([5,1,15,15])]$.
 
 % ------------------------------------
 % Controller Parameters
@@ -1179,8 +1188,7 @@ The update rates for the multipliers were set as \MSRY{SEE HERE}$\beta_{j}=0.1$.
 For all DNN-based controllers (DNN-BSC, DNN-BSC-A, and CoNAC), the DNN input vector $q_{NN}$ was set as the desired trajectory for ${q}$, \ie $q_{NN}=[{q_d}^\top,1]^\top$ with the augmented scalar 1 included to account for the bias term in the weight matrix. 
 Each DNN architecture had two hidden layers with eight nodes (\ie $k=2, l_0=2, l_1=8, l_2=8, l_3=2$), and the adaptation gain was set to $\alpha =10^3$. The constraint parameters were $\bar\wth_0=20, \bar\wth_1=30, \bar\wth_2=40$, and $\bar\tau = 50$ \MSRY{SEE HERE}. The control parameters for all the controllers were set as ${k_q}=1.1,{k_z}=10,M_0=I_2,C_0=I_2,G_0=[0,0]^\top$.
 The sampling time of the simulations was selected as $T_s=10^{-4}$.
-% The same values were assigned across all the controllers for the common parameters for a fair comparison.
-The parameters for CoNAC to NAC-AUX were listed in Table.~\ref{table:controller:params}. 
+% The parameters for CoNAC to NAC-AUX were listed in Table.~\ref{table:controller:params}. 
 % The same values were assigned across all the controllers for the common parameters for a fair comparison.
 
 % ------------------------------------
@@ -1191,10 +1199,10 @@ The parameters for CoNAC to NAC-AUX were listed in Table.~\ref{table:controller:
     \caption{Properties of the controllers used in simulation}
     \label{table:controller}
     \centering
-    \begin{tabular}{c c c}
+    \begin{tabular}{l c c}
     \hline
         & \multicolumn{2}{c}{\bf{Handling Capability}}\\
-        & Weight Norm Constraint & Input Norm Constraint\\
+        & Weight Constraint & Input Constraint\\
     \hline
     \hline
     \multirow{2}{*}{\bf{CoNAC}} & O & O \\
@@ -1210,49 +1218,49 @@ The parameters for CoNAC to NAC-AUX were listed in Table.~\ref{table:controller:
 % ------------------------------------
 % Controller Parameters
 % ------------------------------------
-\begin{table}[t]
-    \renewcommand{\arraystretch}{1.3}
-    \caption{Parameters of the controllers used in simulation}
-    \label{table:controller:params}
-    \centering
-    \begin{tabular}{c | c c c c c c c c c c c c c c}
-    \hline
-        & $l_0$ & $l_1$ & $l_2$ & $l_3$ & $\alpha$ & $\beta$ & $\bar\theta_0$ & $\bar\theta_1$ & $\bar\theta_2$ & $\bar\tau$ & $\tau_1$ & $\tau_2$ & $\mm{A}_\zeta$ & $\mm{B}_\zeta$ \\
-    \hline
-    \hline
-        \bf{BSC} & \multirow{2}{*}{6} & \multirow{2}{*}{4} & \multirow{2}{*}{4} & \multirow{2}{*}{2} & \multirow{2}{*}{$10^3$} & \multirow{2}{*}{$10^{-4}$} & \multirow{2}{*}{11} & \multirow{2}{*}{12} & \multirow{2}{*}{13} & \multirow{2}{*}{10} & \multirow{2}{*}{11} & 0.5 & & \\
-    % \hline
-        \bf{NAC-AUX} &  & & & & & & & & & & & 0.5 & $[20,0;0,20]$ & $[10,0;0,10]$ \\
-    \hline
-    \end{tabular}
-\end{table}
+% \begin{table}[t]
+%     \renewcommand{\arraystretch}{1.3}
+%     \caption{Parameters of the controllers used in simulation}
+%     \label{table:controller:params}
+%     \centering
+%     \begin{tabular}{c | c c c c c c c c c c c c c c}
+%     \hline
+%         & $l_0$ & $l_1$ & $l_2$ & $l_3$ & $\alpha$ & $\beta$ & $\bar\theta_0$ & $\bar\theta_1$ & $\bar\theta_2$ & $\bar\tau$ & $\tau_1$ & $\tau_2$ & $\mm{A}_\zeta$ & $\mm{B}_\zeta$ \\
+%     \hline
+%     \hline
+%         \bf{BSC} & \multirow{2}{*}{6} & \multirow{2}{*}{4} & \multirow{2}{*}{4} & \multirow{2}{*}{2} & \multirow{2}{*}{$10^3$} & \multirow{2}{*}{$10^{-4}$} & \multirow{2}{*}{11} & \multirow{2}{*}{12} & \multirow{2}{*}{13} & \multirow{2}{*}{10} & \multirow{2}{*}{11} & 0.5 & & \\
+%     % \hline
+%         \bf{NAC-AUX} &  & & & & & & & & & & & 0.5 & $[20,0;0,20]$ & $[10,0;0,10]$ \\
+%     \hline
+%     \end{tabular}
+% \end{table}
 
 
-\begin{figure}[t]
+\begin{figure*}[t]
   \centering
     \subfloat[Tracking result of $q_1$.]{
-      \includegraphics[width=\figSize\linewidth]
+      \includegraphics[width=\figSizeTwoCol\linewidth]
       {
         src/measurement/figures/Fig1.eps
       }%
       \label{fig:ctrl:result:q1}}
-    \vspace{2mm}
+    % \vfill
     \subfloat[Tracking result of $q_2$.]{
-      \includegraphics[width=\figSize\linewidth]
+      \includegraphics[width=\figSizeTwoCol\linewidth]
       {
         src/measurement/figures/Fig2.eps
       }%
       \label{fig:ctrl:result:q2}}
-    \vspace{2mm}
+    \vfill
       \subfloat[Control input $\tau_1$.]{
-        \includegraphics[width=\figSize\linewidth]
+        \includegraphics[width=\figSizeTwoCol\linewidth]
         {
           src/measurement/figures/Fig3.eps
         }%
         \label{fig:ctrl:result:tau:1}}
-    \vspace{2mm}
+    % \vfill
       \subfloat[Control input $\tau_2$.]{
-        \includegraphics[width=\figSize\linewidth]
+        \includegraphics[width=\figSizeTwoCol\linewidth]
         {
           src/measurement/figures/Fig4.eps
         }%
@@ -1261,26 +1269,26 @@ The parameters for CoNAC to NAC-AUX were listed in Table.~\ref{table:controller:
   Simulation results of the CoNAC (blue) and NAC-AUX (cyan), and reference signal of $\qd$ (red dashed line).
   }
 \label{fig:ctrl:result}
-\end{figure}
+\end{figure*}
 
 \begin{figure}[t]
   \centering
     \subfloat[Norm of weights $\hat\theta_i$.]{
-      \includegraphics[width=\figSize\linewidth]
+      \includegraphics[width=\figSizeOneCol\linewidth]
       {
         src/measurement/figures/Fig5.eps
       }%
       \label{fig:ctrl:result:opt:norm}}
     \vspace{2mm}
     \subfloat[Lagrange multipliers $\lambda_j$ in logarithmic scale.]{
-      \includegraphics[width=\figSize\linewidth]
+      \includegraphics[width=\figSizeOneCol\linewidth]
       {
         src/measurement/figures/Fig6.eps
       }%
       \label{fig:ctrl:result:opt:multiplier}}
     \vspace{2mm}
       \subfloat[Auxiliary states $\mv{\zeta}$ of NAC-AUX.]{
-        \includegraphics[width=\figSize\linewidth]
+        \includegraphics[width=\figSizeOneCol\linewidth]
         {
           src/measurement/figures/Fig8.eps
         }%
@@ -1293,7 +1301,7 @@ The parameters for CoNAC to NAC-AUX were listed in Table.~\ref{table:controller:
 
 \begin{figure}[t]
   \centering
-      \includegraphics[width=\figSize\linewidth]
+      \includegraphics[width=\figSizeOneCol\linewidth]
       {
         src/measurement/figures/Fig9.eps
       }%
@@ -1302,6 +1310,20 @@ Control input $\tau$ in time interval $[??, ??]$ s (bird's eye view).
   }
   \label{fig:ctrl:result:conrol}
 \end{figure}
+
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=0.6\linewidth]{
+		src/figures/lambda_effect.drawio.pdf
+		}
+	\caption{
+		The effect of Lagrange multiplier $\lambda_{\theta_i}$ on the adaptation direction of $\widehat{ \mv{\theta}}_i$.
+		The notation ($\cdot'$) and ($\cdot''$) represent two different cases of bigger and smaller Lagrange multiplier, respectively (i.e., $\lambda_{\theta_1}' > \lambda_{\theta_1}''$).
+	}
+	% \vspace{1mm}
+	\label{fig:lambda_effect}
+\end{figure}
+
 
 % ------------------------------------
 % Tracking Performance
@@ -1387,8 +1409,10 @@ Most physical systems have control input limits due to electrical and mechanical
 \begin{equation}
     \begin{aligned}
         c_{\overline \tau_i}=\tau_{(i)} - {\tau_{\overline \tau_i}} \le 0
-        \\
+        ,
+        \quad
         c_{\underline\tau_i}={\tau_{\underline\tau_i}}-\tau_{(i)} \le 0
+        ,
     \end{aligned}
     \label{eq:cstr:input:bound}
 \end{equation}
@@ -1454,6 +1478,7 @@ The gradients of $\boldsymbol{c}_{\overline \tau}$ and $\boldsymbol{c}_{\underli
 Consider the control input $\tau$ as the torque of each actuator corresponding to its generalized coordinate. Since torque is typically linearly proportional to current, actuators that share a common power source are often subject to total current limitations. This can be captured by the following inequality constraint: 
 \begin{equation}
     c_{u}=\norm{\mv{\tau}}^2 -\bar\tau^2  \le 0
+    ,
     \label{eq:cstr:input:norm}
 \end{equation}
 with $\bar\tau\in\R_{>0}$ denoting the maximum allowable control input magnitude. This input norm constraint is also commonly applied in current and torque control problems for electric motors \cite{Choi:2024aa}.

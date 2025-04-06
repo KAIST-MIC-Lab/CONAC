@@ -23,7 +23,7 @@ line_width = 2;
 lgd_size = 16;
     
 fig_height = 230 * 1; 
-fig_width = 800 * 2;
+fig_width = 800 * 1;
 %% 
 ctrl1_name = "c1"; % CoNAC
 ctrl2_name = "c2"; % Aux.
