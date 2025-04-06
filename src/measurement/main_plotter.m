@@ -44,6 +44,13 @@ t2 = t2-t2(1);
 T = t1(end);
 obs_t1 = 1:length(t1);
 obs_t2 = 1:length(t2);
+
+start_time = 8.5;
+end_time = 9.9;
+
+obs_t1_1 = find(t1 >= start_time & t1 <= end_time);
+obs_t2_1 = find(t2 >= start_time & t2 <= end_time);
+
 % opt1 = ctrl1_log.opt;
 % opt2 = ctrl2_log.opt;
 
@@ -216,7 +223,7 @@ ylabel('$\Vert \hat\theta_i\Vert$', 'FontSize', font_size, 'Interpreter', 'latex
     % lgd.Orientation = 'Vertical';
     % lgd.Orientation = 'Horizontal';
     lgd.NumColumns = 3;
-    lgd.Location = 'southwest';
+    lgd.Location = 'southeast';
     lgd.Interpreter = 'latex';
     lgd.FontSize = lgd_size; 
 
@@ -254,8 +261,8 @@ xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
 ylabel('$\lambda_j$ (Log scale)', 'FontSize', font_size, 'Interpreter', 'latex');
     lgd = legend;
     % lgd.Orientation = 'Vertical';
-    lgd.NumColumns = 2;
-    lgd.Location = 'southwest';
+    lgd.NumColumns = 3;
+    lgd.Location = 'southeast';
     lgd.Interpreter = 'latex';
     lgd.FontSize = lgd_size; 
 grid on; grid minor;
@@ -282,12 +289,18 @@ hF.Position(3:4) = [fig_width, fig_height];
 % text(ctrl_start+.02, -4.7, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
 % text(ctrl_start+.52, -4.7, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
 
-plot(t2(obs_t2), c2_zeta(1,obs_t2), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(t2(obs_t2), c2_zeta(2,obs_t2), "Color", "red", "LineWidth", line_width, "LineStyle", "-."); hold on
+plot(t2(obs_t2), c2_zeta(1,obs_t2), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\zeta_1$"); hold on
+plot(t2(obs_t2), c2_zeta(2,obs_t2), "Color", "red", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\zeta_2$"); hold on
 
 grid on; grid minor;
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
-ylabel('$\zeta$ / rad', 'FontSize', font_size, 'Interpreter', 'latex');
+ylabel('$\zeta$', 'FontSize', font_size, 'Interpreter', 'latex');
+    lgd = legend;
+    % lgd.Orientation = 'Vertical';
+    lgd.NumColumns = 3;
+    lgd.Location = 'southeast';
+    lgd.Interpreter = 'latex';
+    lgd.FontSize = lgd_size; 
 % maxVal = max(id_ref.Data); minVal = min(id_ref.Data); 
 % maxVal = 0; minVal = -1; 
 % len = maxVal-minVal; ratio = .3;
@@ -302,8 +315,8 @@ xlim([0 T])
 %     Fig. 9: Control Bird-eye View
 % ============================================
 figure(9); clf;
-% hF = gcf; 
-% hF.Position(3:4) = [fig_width, fig_height];
+hF = gcf; 
+hF.Position(3:4) = [fig_width, fig_height];
 
 ang = 0:0.01:2*pi;
 
@@ -313,16 +326,17 @@ plot([-100, 100], [-1, -1] * u_max2, "color", 'black', "LineWidth", line_width, 
 plot([1, 1] * u_max1, [-100, 100], "color", 'black', "LineWidth", line_width, "LineStyle", "-."); hold on
 plot([-1, -1] * u_max1, [-100, 100], "color", 'black', "LineWidth", line_width, "LineStyle", "-."); hold on
 % p1 = plot(c2_u(1,:), c2_u(2,:), "color", 'red', "LineWidth", 2, "LineStyle", "-"); hold on
-plot(c2_uSat(1,:), c2_uSat(2,:), "color", 'cyan', "LineWidth", 2, "LineStyle", "-"); hold on
+plot(c2_uSat(1,obs_t2_1), c2_uSat(2,obs_t2_1), "color", 'cyan', "LineWidth", 2, "LineStyle", "-"); hold on
 % p1 = plot(c1_u(1,:), c1_u(2,:), "color", 'red', "LineWidth", 2, "LineStyle", "-"); hold on
-plot(c1_uSat(1,:), c1_uSat(2,:), "color", 'blue', "LineWidth", 2, "LineStyle", "-"); hold on
-xlabel("$\tau_1\ [\rm Nm]$", "Interpreter", "latex")
-ylabel("$\tau_2\ [\rm Nm]$", "Interpreter", "latex")
+plot(c1_uSat(1,obs_t1_1), c1_uSat(2,obs_t1_1), "color", 'blue', "LineWidth", 2, "LineStyle", "-"); hold on
+xlabel("$\tau_1 / \rm Nm$", "Interpreter", "latex")
+ylabel("$\tau_2 / \rm Nm$", "Interpreter", "latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on 
 xlim([-u_ball*1.25, u_ball*1.25])
-ylim([-u_ball*1.25, u_ball*1.25])
-pbaspect([1 1 1])
+% ylim([-u_ball*1.25, u_ball*1.25])
+ylim([-u_max2*1.25, u_max2*1.25])
+% pbaspect([1 1 1])
 % legend([p1, p2], ["$\tau$", "Saturated $\tau$"], "Interpreter","latex", "FontSize", lgd_size, "FontWeight", "bold", "Location", "northwest")
 
 
@@ -333,7 +347,7 @@ if SAVE_FLAG
 
     for idx = 1:1:9
 
-        f_name = "figures//Fig" + string(idx);
+        f_name = "figures/Fig" + string(idx);
 
         saveas(figure(idx), f_name + ".png")
 
