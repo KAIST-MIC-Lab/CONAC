@@ -2,7 +2,7 @@ clear
 
 ANITMATE = 0;
 AINMATION_SAVE_FLAG = 0;
-SAVE_FLAG = 1;
+SAVE_FLAG = 0;
 POSITION_FLAG = 1; % it will plot fiugures in the same position
 
 %%
@@ -29,11 +29,8 @@ ctrl1_name = "c1"; % CoNAC
 ctrl2_name = "c2"; % Aux.
 
 %%
-% ctrl1_log = readmatrix("sim_result/"+ctrl1_name+".csv");
-% ctrl2_log = readmatrix("sim_result/"+ctrl2_name+".csv");
-
-ctrl1_log = post_procc("sim_result/"+ctrl1_name+".csv");
-ctrl2_log = post_procc("sim_result/"+ctrl2_name+".csv");
+ctrl1_log = post_procc(ctrl1_name);
+ctrl2_log = post_procc(ctrl2_name);
 
 %% RESULT PLOTTER
 % T = ctrl1_log.T;
@@ -339,13 +336,30 @@ ylim([-u_max2*1.25, u_max2*1.25])
 % pbaspect([1 1 1])
 % legend([p1, p2], ["$\tau$", "Saturated $\tau$"], "Interpreter","latex", "FontSize", lgd_size, "FontWeight", "bold", "Location", "northwest")
 
+% =============================================
+%    Fig. 10: Computational Time
+% =============================================
+figure(10); clf;
+hF = gcf; 
+hF.Position(3:4) = [fig_width, fig_height];
+
+plot(t2(obs_t2), c2_cmp(1,obs_t2)*1e3, "color", 'cyan', "LineWidth", 2, "LineStyle", "-"); hold on
+plot(t1(obs_t1), c1_cmp(1,obs_t1)*1e3, "color", 'blue', "LineWidth", 2, "LineStyle", "-"); hold on
+xlabel("Time / s", "Interpreter", "latex")
+ylabel("Cmp. Time / ms", "Interpreter", "latex")
+set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
+grid on 
+xlim([0 T])
+% ylim([-u_max2*1.25, u_max2*1.25])
+% legend([p1, p2], ["$\tau$", "Saturated $\tau$"], "Interpreter","latex", "FontSize", lgd_size, "FontWeight", "bold", "Location", "northwest")
+
 
 %% ============================================
 %% SAVE FIGURES
 if SAVE_FLAG
     [~,~] = mkdir("figures/");
 
-    for idx = 1:1:9
+    for idx = 1:1:10
 
         f_name = "figures/Fig" + string(idx);
 

@@ -1,9 +1,11 @@
 # Constrained Optimization-Based Neuro-Adaptive Control (CoNAC)
 
-Paper Name: TBD
-State: TBD
+- Paper Name: TBD
+- State: TBD
+- Template Version: Robot Branch
 
-> This paper will be submitted to *TBD*.
+> [!Note]
+> This paper will be submitted to [expert systems and applications](https://www.sciencedirect.com/journal/expert-systems-with-applications).
 
 You can find papers here:
 

@@ -1,11 +1,16 @@
-function data = post_procc(path)
+function [data, loss_ratio] = post_procc(ctrl_name)
 
-    data = readtable(path);
+    data = readtable("sim_result/"+ctrl_name+".csv");
     data = data{1:end-1, 1:28};
 
     del_ts = [0.001, 0.004];
-    pt = [];
 
+    pt = find(data(:,2).^2 > 1e-6);
+    data = data(pt, :);
+    ori_num = length(data);
+
+    pt = [];
+    % sampling time check
     for idx = 1:length(del_ts)
         del_t = del_ts(idx);
         tmp_pt = find((data(2:end,1) - data(1:end-1,1) - del_t).^2 < 1e-6);
@@ -13,13 +18,18 @@ function data = post_procc(path)
         pt = union(pt, tmp_pt);
     end
 
-    tmp_pt = find((data(2:end,7) - data(1:end-1,7)).^2 > 1e-2);
-    pt = setdiff(pt, tmp_pt);
-
-    pt = setdiff(pt, find(data(:,2).^2 < 1e-6));
+    % remove the data with large change
+    thr = 1e0;
+    for idx = 3:28
+        tmp_pt = find((data(2:end,idx) - data(1:end-1,idx)).^2 > thr);
+        pt = setdiff(pt, tmp_pt);
+    end
 
     data = data(pt, :);
+    mod_num = length(data);
 
+    loss_ratio = (ori_num - mod_num) / ori_num;
+    fprintf('loss ratio: %.3f%%\n', loss_ratio*1e2);
 end
 
 
