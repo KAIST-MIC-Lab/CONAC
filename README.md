@@ -24,10 +24,7 @@ The main features are as follows.
 
 ## Authors
 
-- [Ryu Myeongseok](https://gitlab.com/DDingR)
+- [Ryu Myeongseok](https://github.com/DDingR)
 - [Kim Jiyun](https://github.com/jixyuxn)
-- Choi Kyunghwan
-
-## Version History
-
+- [Choi Kyunghwan](https://github.com/Kyunghwan-Choi)
 
