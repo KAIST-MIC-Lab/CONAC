@@ -2,7 +2,7 @@ clear
 
 ANITMATE = 0;
 AINMATION_SAVE_FLAG = 0;
-SAVE_FLAG = 0;
+SAVE_FLAG = 1;
 POSITION_FLAG = 1; % it will plot fiugures in the same position
 
 %%
@@ -25,8 +25,8 @@ lgd_size = 16;
 fig_height = 230 * 1; 
 fig_width = 800 * 1;
 %% 
-ctrl1_name = "c1"; % CoNAC
-ctrl2_name = "c2"; % Aux.
+ctrl1_name = "c1.csv"; % CoNAC
+ctrl2_name = "c2.csv"; % Aux.
 
 %%
 ctrl1_log = post_procc(ctrl1_name);
@@ -353,13 +353,17 @@ xlim([0 T])
 % ylim([-u_max2*1.25, u_max2*1.25])
 % legend([p1, p2], ["$\tau$", "Saturated $\tau$"], "Interpreter","latex", "FontSize", lgd_size, "FontWeight", "bold", "Location", "northwest")
 
+% ============================================
+%    Fig. 11: Box-Whisker Plot
+% ============================================
+var_plot
 
 %% ============================================
 %% SAVE FIGURES
 if SAVE_FLAG
     [~,~] = mkdir("figures/");
 
-    for idx = 1:1:10
+    for idx = 1:1:11
 
         f_name = "figures/Fig" + string(idx);
 

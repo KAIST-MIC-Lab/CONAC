@@ -1,6 +1,6 @@
 function [data, loss_ratio] = post_procc(ctrl_name)
 
-    data = readtable("sim_result/"+ctrl_name+".csv");
+    data = readtable("sim_result/"+ctrl_name);
     data = data{1:end-1, 1:28};
 
     del_ts = [0.001, 0.004];
