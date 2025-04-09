@@ -11,14 +11,14 @@ fig_height = 230 * 1.5;
 fig_width = 800 * 1;
 
 % 
-ctrl_name = "beta10_to_90";
+ctrl_name = "COM4_2025_04_09";
 
 sim_dt = 1/250;
 ISE = @(e) sqrt(sum(e.^2)*sim_dt);
 
-u_max1 = 10;
-u_max2 = 2;
-u_ball = 10;
+u_max1 = 11.5;
+u_max2 = 16;
+u_ball = 12;
 th_max = [11,12,13];
 
 [~,~] = mkdir("figures/"+ctrl_name);
@@ -28,7 +28,7 @@ th_max = [11,12,13];
 [~,~] = mkdir("figures/"+ctrl_name+"/c1/fig2");
 [~,~] = mkdir("figures/"+ctrl_name+"/c1/fig3");
 [~,~] = mkdir("figures/"+ctrl_name+"/c1/fig4");
-[~,~] = mkdir("figures/"+ctrl_name+"/c1/fig5");
+[~,~] = mkdir("figures/"+ctrl_name+"/c1/fig5"); 
 [~,~] = mkdir("figures/"+ctrl_name+"/c1/fig6");
 [~,~] = mkdir("figures/"+ctrl_name+"/c1/fig7");
 [~,~] = mkdir("figures/"+ctrl_name+"/c1/fig8");
@@ -52,6 +52,12 @@ data = readtable("sim_result/"+ctrl_name);
 data = data{1:end-1, 1:28};
 ori_num = length(data);
 
+
+figure(12); clf;
+plot(data(:,2)); hold on
+% % plot(data(:,1), data(:,9)); hold on
+
+
 del_ts = [0.001, 0.004];
 pt = [];
 % sampling time check
@@ -64,7 +70,7 @@ end
 data = data(pt, :);
 
 pt = 1:size(data,1);
-thr = 1e0;
+thr = 1e-1;
 for idx = 3:28
     tmp_pt = find((data(2:end,idx) - data(1:end-1,idx)).^2 > thr);
     pt = setdiff(pt, tmp_pt);
@@ -76,17 +82,18 @@ loss_ratio = (ori_num - mod_num) / ori_num;
 fprintf('loss ratio: %.3f%%\n', loss_ratio*1e2);
 
 % seperate
-pt1 = find(data(:,2) == 2);
-pt2 = find(data(:,2) == 3);
+pt1 = find(data(:,2) == 4);
+pt2 = find(data(:,2) == 5);
 pt = setdiff(1:size(data,1), pt1);
 pt = setdiff(pt, pt2);
 data(pt, 2) = zeros(length(pt), 1);
 
 figure(12); clf;
 plot(data(:,1), data(:,2)); hold on
+% plot(data(:,2)); hold on
 plot(data(:,1), data(:,9)); hold on
 
-data(96514,:) = [];
+% data(96514,:) = [];
 
 rise_flag = find(data(2:end,2) - data(1:end-1,2) > 0);
 rise_t = data(rise_flag, 1);
@@ -141,7 +148,6 @@ for ctrl_idx = 1:VAR_NUM*2
             % set(gcf, 'Position', [0, 0, fig_width, fig_height]); % [left, bottom, width, height] 
             % exportgraphics(gcf, f_name+'.eps', 'ContentType', 'vector')
             % exportgraphics(figure(idx), f_name+'.eps',"Padding","figure")
-    
         end
     end
 end
@@ -152,9 +158,9 @@ figure(11); clf;
 hF = gcf;
 hF.Position(3:4) = [fig_width, fig_height];
 
-Pi_list = transpose([PI1(:,1), PI2(:,1), PI1(:,2), PI2(:,2)]);
-lgds = {"CoNAC $q_1$", "NAC-AUX $q_1$", "CoNAC $q_2$", "NAC-AUX $q_2$"};
-boxplot(Pi_list', 'Labels', {'CoNAC $q_1$', 'NAC-AUX $q_1$', 'CoNAC $q_2$', 'NAC-AUX $q_2$'}, 'Whisker', 1.5); hold on
+Pi_list = transpose([PI1(:,1), PI2(:,1), PI1(:,2), PI2(:,2),PI1(:,3), PI2(:,3), PI1(:,4), PI2(:,4)]);
+lgds = {'C1 $q_1$', 'C2 $q_1$', 'C1 $q_2$', 'C2 $q_2$', 'C1 $c_u$', 'C2 $c_u$', 'C1 $c_1$', 'C2 $c_1$'};
+boxplot(Pi_list', 'Labels', lgds, 'Whisker', 1.5); hold on
 ylabel("Square Root of ISE", "Interpreter", "latex")
 % xlabel("$q_{2}\ (\rm rad)$", "Interpreter","latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
@@ -164,3 +170,24 @@ a = gca;
 % a.YTick = linspace(-10e-4, 20e-4, 6);
 % a.YRuler.Exponent = -4;
 set(gca,'TickLabelInterpreter','latex');
+
+figure(13);clf;
+tiledlayout(4,1);
+
+var_range = 10:10:90;
+
+nexttile
+plot(var_range, PI1(:,1), 'o-', 'color', 'blue', 'LineWidth', line_width, 'MarkerSize', 10); hold on
+plot(var_range, PI2(:,1), 'o-', 'color', 'cyan',  'LineWidth', line_width, 'MarkerSize', 10); hold on
+
+nexttile
+plot(var_range, PI1(:,2), 'o-', 'color', 'blue',  'LineWidth', line_width, 'MarkerSize', 10); hold on
+plot(var_range, PI2(:,2), 'o-', 'color', 'cyan',  'LineWidth', line_width, 'MarkerSize', 10); hold on
+
+nexttile
+plot(var_range, PI1(:,3), 'o-', 'color', 'blue',  'LineWidth', line_width, 'MarkerSize', 10); hold on
+plot(var_range, PI2(:,3), 'o-', 'color', 'cyan',  'LineWidth', line_width, 'MarkerSize', 10); hold on
+
+nexttile
+plot(var_range, PI1(:,4), 'o-', 'color', 'blue',  'LineWidth', line_width, 'MarkerSize', 10); hold on
+plot(var_range, PI2(:,4), 'o-', 'color', 'cyan',  'LineWidth', line_width, 'MarkerSize', 10); hold on

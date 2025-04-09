@@ -325,7 +325,7 @@ Section \ref{sec:sub:NAC} presents the neuro-adaptive controller along with the 
 
 \begin{figure*}[!t]
     \centering
-    \includegraphics[width=0.9\linewidth]{src/figures/Controller.drawio.png}
+    \includegraphics[width=0.8\linewidth]{src/figures/Controller.drawio.png}
     % \includesvg[width=0.75\linewidth]{Controller.drawio.svg}
     \caption{Architecture of the constrained optimization-based neuro-adaptive controller (CoNAC).}
     \label{fig:ctrl:diagram}
@@ -512,24 +512,46 @@ where
 \begin{equation}
     \pptfrac{\NN}{\wth_i} = 
     \begin{cases}
-        (\mm I_{l_{k+1}}\otimes \act_{k}^\top  ), 
+        (
+            \mm I_{l_{k+1}}
+            \otimes 
+            \act_{k}^\top  
+        )
+        , 
         &
-        i=k,
+        i=k
+        ,
         \\
-        \wV_k^\top   \act_{k}' (\mm I_{l_{k}}\otimes  \act_{k-1}^\top  ), 
+        \wV_k^\top\act_{k}' 
+        (
+            \mm I_{l_{k}}
+            \otimes  
+            \act_{k-1}^\top  
+        )
+        , 
         & 
-        i=k-1,
+        i=k-1
+        ,
         \\
         &
         \vdots 
         \\
-        \wV_k^\top   \act'_{k} \cdots \wV_1^\top  \act_1' (\mm I_{l_1}\otimes {\q}_n^\top  ), 
+        \wV_k^\top\act'_{k} 
+        \cdots 
+        \wV_1^\top\act_1' 
+        (
+            \mm I_{l_1}
+            \otimes 
+            {\q}_n^\top  
+        )
+        , 
         &
-        i = 0,
+        i = 0
+        ,
     \end{cases}
     \label{eq:NN:grad}
 \end{equation}
-where $\act_i:= \act_i(\NN_{i-1})$ and $\act_i':= \pptfrac{\act_i}{\NN_{i-1}}$.
+and $\act_i:= \act_i(\NN_{i-1})$ and $\act_i':= \pptfrac{\act_i}{\NN_{i-1}}$.
 
 In the following sections, let $\idealNN_i$ represent the output of the $i\textsuperscript{th}$ layer with the ideal weight vector $\idealwth$. 
 Additionally, define $\idealact_i:=\act_i(\idealNN_{i-1})$ and $\act^{*'}_i:= \pptfrac{\idealact_i}{\idealNN_{i-1}}$. 
@@ -548,7 +570,7 @@ The control objective can be represented as follows:
         \tfrac{1}{2} \fe^\top \fe
         \\ \\
         \begin{aligned}
-        \text{s.t. }&c_{j}(\estwth) 
+        \text{subject to }&c_{j}(\estwth) 
         \le0, \quad j\in\mathcal{I},
         \end{aligned}
     \end{matrix}
