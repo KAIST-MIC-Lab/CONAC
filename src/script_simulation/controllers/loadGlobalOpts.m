@@ -20,9 +20,9 @@ function opt = loadGlobalOpts(dt, CONTROL_NUM)
     if CONTROL_NUM == 1
         % opt.beta = [1 1 1] * 1e-1;
         opt.beta(1:3) = [1 1 1] * 1e-3;
-        opt.beta(4) = 1e0; % control input ball
+        opt.beta(4) = 1e1; % control input ball
         opt.beta(5) = 0e2; % control input 1 Max
-        opt.beta(6) = 10e1; % control input 2 Max
+        opt.beta(6) = 1e3; % control input 2 Max
         opt.beta(7) = opt.beta(5); % control input 1 Min
         opt.beta(8) = opt.beta(6); % control input 2 Min
         % opt.beta = opt.beta/opt.alpha;
