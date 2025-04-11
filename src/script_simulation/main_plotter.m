@@ -1,7 +1,7 @@
 clear
 
 %%
-SAVE_FLAG = 0;
+SAVE_FLAG = 1;
 POSITION_FLAG = 1; % it will plot fiugures in the same position
 gray = "#808080";
 
@@ -9,12 +9,14 @@ more_blue = "#0072BD";
 more_red = "#A2142F";
 
 %% 
-ctrl1_name = "3-Apr-2025_17-38-31"; % CoNAC
-ctrl2_name = "3-Apr-2025_17-38-57"; % Aux.
+ctrl1_name = "11-Apr-2025_15-56-43"; % CoNAC
+ctrl2_name = "11-Apr-2025_15-57-02"; % Aux.
+ctrl3_name = "11-Apr-2025_15-57-25"; % CoNAC 2.
 
 %%
 ctrl1_log = load("sim_result/"+ctrl1_name+".mat");
 ctrl2_log = load("sim_result/"+ctrl2_name+".mat");
+ctrl3_log = load("sim_result/"+ctrl3_name+".mat");
 
 %% RESULT PLOTTER
 T = ctrl1_log.T;
@@ -22,6 +24,7 @@ t = ctrl1_log.t;
 obs_t = 1:length(t);
 opt1 = ctrl1_log.opt;
 opt2 = ctrl2_log.opt;
+opt3 = ctrl3_log.opt;
 
 c1_x1 = ctrl1_log.x1_hist;
 c1_x2 = ctrl1_log.x2_hist;
@@ -38,9 +41,18 @@ c2_xd1 = ctrl2_log.xd1_hist;
 c2_xd2 = ctrl2_log.xd2_hist;
 c2_u = ctrl2_log.u_hist;
 c2_uSat = ctrl2_log.uSat_hist;
-c2_lbd = ctrl2_log.lbd_hist;
+% c2_lbd = ctrl2_log.lbd_hist;
 c2_zeta = ctrl2_log.zeta_hist;
 c2_th = ctrl2_log.th_hist;
+
+c3_x1 = ctrl3_log.x1_hist;
+c3_x2 = ctrl3_log.x2_hist;
+c3_xd1 = ctrl3_log.xd1_hist;
+c3_xd2 = ctrl3_log.xd2_hist;
+c3_u = ctrl3_log.u_hist;
+c3_uSat = ctrl3_log.uSat_hist;
+c3_lbd = ctrl3_log.lbd_hist;
+c3_th = ctrl3_log.th_hist;
 
 u_max1 = opt1.cstr.uMax1;
 u_max2 = opt1.cstr.uMax2;
@@ -48,83 +60,82 @@ u_ball = opt1.cstr.u_ball;
 th_max = opt1.cstr.th_max;
 
 %%
-font_size = 16;
-line_width = 2;
-lgd_size = 12;
-    
-fig_height = 210 * 1; 
-fig_width = 450 * 1;
+ep_time = 12;
 
-% font_size = 20;
+% font_size = 16;
 % line_width = 2;
-% lgd_size = 16;
+% lgd_size = 12;
     
-% fig_height = 230 * 1; 
-% fig_width = 800 * 1;
+% fig_height = 210 * 1; 
+% fig_width = 450 * 1;
 
-% ctrl_start = .75;
-% ctrl_start_idx = ctrl_start/ctrl1.id.Time(2);
-% plot_range = [ctrl_start_idx:length(ctrl1.id.Time)];
-
-% zoom_x_start = .895+ctrl_start;
-% zoom_x_range = 0.05;
-
-% ============================================
-%     Fig. 1: Current d-axis (Ref vs Obs)
-% ============================================
+font_size = 20;
+line_width = 1.5;
+lgd_size = 16;
+    
+fig_height = 230 * 1; 
+fig_width = 800 * 1;
+%% FIG. 1; STATE 1
 figure(1); clf;
 hF = gcf; 
 hF.Position(3:4) = [fig_width, fig_height];
 
-% plot(ctrl_start+[0.5 0.5], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
-% text(ctrl_start+.02, -4.7, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
-% text(ctrl_start+.52, -4.7, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
+plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
+text(.2, -2, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
+text(ep_time+.2, -2, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
 
 plot(t(obs_t), c1_xd1(1,obs_t), "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
+plot(t(obs_t), c3_x1(1,obs_t), "Color", gray, "LineWidth", line_width, "LineStyle", "-"); hold on
 plot(t(obs_t), c2_x1(1,obs_t), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
 plot(t(obs_t), c1_x1(1,obs_t), "Color", "blue", "LineWidth", line_width, "LineStyle", "-"); hold on
 
 grid on; grid minor;
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
 ylabel('$q_1$ / rad', 'FontSize', font_size, 'Interpreter', 'latex');
-% maxVal = max(id_ref.Data); minVal = min(id_ref.Data); 
-% % maxVal = 0; minVal = -1; 
-% len = maxVal-minVal; ratio = .3;
-% ylim([minVal-len*ratio maxVal+len*ratio]);
-% xlim([ctrl_start T+ctrl_start])
+maxVal = max(c1_xd1(1,:)); minVal = min(c1_xd1(1,:)); 
+% maxVal = 0; minVal = -1; 
+len = maxVal-minVal; ratio = .3;
+ylim([minVal-len*ratio maxVal+len*ratio]);
+xlim([0 T])
     ax = gca;
     ax.FontSize = font_size; 
     ax.FontName = 'Times New Roman';
 
-% ============================================
-%     Fig. 2: Current q-axis (Ref vs Obs)
-% ============================================
+%% FIG. 2; STATE 2
 figure(2); clf;
 hF = gcf; 
 hF.Position(3:4) = [fig_width, fig_height];
 
+plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
+text(.2, -3, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
+text(ep_time+.2, -3, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
+
 plot(t(obs_t), c1_xd1(2,obs_t), "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
+plot(t(obs_t), c3_x1(2,obs_t), "Color", gray, "LineWidth", line_width, "LineStyle", "-"); hold on
 plot(t(obs_t), c2_x1(2,obs_t), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
 plot(t(obs_t), c1_x1(2,obs_t), "Color", "blue", "LineWidth", line_width, "LineStyle", "-"); hold on
 
 grid on; grid minor;
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
 ylabel('$q_2$ / rad', 'FontSize', font_size, 'Interpreter', 'latex');
-% maxVal = max(iq_ref.Data); minVal = min(iq_ref.Data); 
-% len = maxVal-minVal; ratio = .3;
-% ylim([minVal-len*ratio maxVal+len*ratio]);
-% xlim([ctrl_start T+ctrl_start])
+maxVal = max(c1_xd1(2,:)); minVal = min(c1_xd1(2,:)); 
+len = maxVal-minVal; ratio = .3;
+ylim([minVal-len*ratio maxVal+len*ratio]);
+xlim([0 T])
     ax = gca;
     ax.FontSize = font_size; 
     ax.FontName = 'Times New Roman';
 
-% ============================================
-%        Fig. 3: Voltage Norm
-% ============================================
+%% FIG. 3; CONTROL INPUT 1
 figure(3);clf
 hF = gcf;
 hF.Position(3:4) = [fig_width, fig_height];
 
+plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
+text(.2, -1, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
+text(ep_time+.2, -1, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
+
+plot(t(obs_t), c3_u(1,obs_t), "Color", gray, "LineWidth", line_width, "LineStyle", "-"); hold on
 plot(t(obs_t), c2_u(1,obs_t), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
 plot(t(obs_t), c1_u(1,obs_t), "Color", "blue", "LineWidth", line_width, "LineStyle", "-"); hold on
 
@@ -136,22 +147,24 @@ plot(t(obs_t), ones(size(obs_t))*-1*u_max1, "Color", "black", "LineWidth", line_
 grid on; grid minor;
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
 ylabel('$\tau_1$ / Nm', 'FontSize', font_size, 'Interpreter', 'latex');
-% maxVal = 420; minVal = 100; 
+maxVal = 11; minVal = -1;
 % maxVal = max(norm_v2); minVal = min(norm_v2); 
-% len = maxVal-minVal; ratio = .1;
-% ylim([minVal-len*ratio maxVal+len*ratio]);
-% xlim([ctrl_start T+ctrl_start])
+ylim([minVal-len*ratio maxVal+len*ratio]);
+xlim([0 T])
     ax = gca;
     ax.FontSize = font_size; 
     ax.FontName = 'Times New Roman';
 
-% ============================================
-%        Fig. 4: Voltage Norm
-% ============================================
+%% FIG. 4; CONTROL INPUT 2
 figure(4);clf
 hF = gcf;
 hF.Position(3:4) = [fig_width, fig_height];
 
+plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
+text(.2, -2, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
+text(ep_time+.2, -2, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
+
+plot(t(obs_t), c3_u(2,obs_t), "Color", gray, "LineWidth", line_width, "LineStyle", "-"); hold on
 plot(t(obs_t), c2_u(2,obs_t), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
 plot(t(obs_t), c1_u(2,obs_t), "Color", "blue", "LineWidth", line_width, "LineStyle", "-"); hold on
 
@@ -163,19 +176,87 @@ plot(t(obs_t), ones(size(obs_t))*-1*u_max2, "Color", "black", "LineWidth", line_
 grid on; grid minor;
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
 ylabel('$\tau_2$ / Nm', 'FontSize', font_size, 'Interpreter', 'latex');
-% maxVal = 420; minVal = 100; 
+maxVal = 3; minVal = -2; 
 % maxVal = max(norm_v2); minVal = min(norm_v2); 
-% len = maxVal-minVal; ratio = .1;
-% ylim([minVal-len*ratio maxVal+len*ratio]);
-% xlim([ctrl_start T+ctrl_start])
+len = maxVal-minVal; ratio = .1;
+ylim([minVal-len*ratio maxVal+len*ratio]);
+xlim([0 T])
     ax = gca;
     ax.FontSize = font_size; 
     ax.FontName = 'Times New Roman';
 
-% ============================================
-%        Fig. 5: Weight
-% ============================================
+%% FIG. 5; CONTROL INPUT NORM
+figure(5);clf
+hF = gcf;
+hF.Position(3:4) = [fig_width, fig_height];
+
+plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
+text(.2, -0, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
+text(ep_time+.2, -0, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
+
+norm_u1 = sqrt(c1_u(1,:).^2 + c1_u(2,:).^2);
+norm_u2 = sqrt(c2_u(1,:).^2 + c2_u(2,:).^2);
+norm_u3 = sqrt(c3_u(1,:).^2 + c3_u(2,:).^2);
+
+plot(t(obs_t), norm_u3(obs_t), "Color", gray, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(t(obs_t), norm_u2(obs_t), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(t(obs_t), norm_u1(obs_t), "Color", "blue", "LineWidth", line_width, "LineStyle", "-"); hold on
+% text(0, 415, {"C$_1$'s $\bar u$"}, "FontSize", font_size, "FontName", 'Times New Roman', "Interpreter", "Latex", "Color", "black")
+plot(t(obs_t), ones(size(obs_t))*u_ball, "Color", "black", "LineWidth", line_width, "LineStyle", "--"); hold on
+% text(ctrl_start+.02, 320, {"C$_2$'s $\bar u$"}, "FontSize", font_size, "FontName", 'Times New Roman', "Interpreter", "Latex", "Color", "black")
+grid on; grid minor;
+xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
+ylabel('$\Vert \bar u \Vert$ / Nm', 'FontSize', font_size, 'Interpreter', 'latex');
+maxVal = 10; minVal = 0; 
+len = maxVal-minVal; ratio = .1;
+ylim([minVal-len*ratio maxVal+len*ratio]);
+xlim([0 T])
+    ax = gca;
+    ax.FontSize = font_size; 
+    ax.FontName = 'Times New Roman';
+
+%% FIG. 6; CONTROL NORM (BIRDEYE)
 figure(6);clf
+hf = gcf;
+hf.Position(3:4) = [fig_width, fig_height];
+
+ang = 0:0.01:2*pi;
+
+start_t = 19;
+end_t = 20;
+ctrl_obs_idx = find(t >= start_t & t <= end_t);
+
+plot(u_ball*cos(ang), u_ball*sin(ang), "color", 'black', "LineWidth", line_width, "LineStyle", "-."); hold on
+plot([-100, 100], [1, 1] * u_max2, "color", 'black', "LineWidth", line_width, "LineStyle", "-."); hold on
+plot([-100, 100], [-1, -1] * u_max2, "color", 'black', "LineWidth", line_width, "LineStyle", "-."); hold on
+plot([1, 1] * u_max1, [-100, 100], "color", 'black', "LineWidth", line_width, "LineStyle", "-."); hold on
+plot([-1, -1] * u_max1, [-100, 100], "color", 'black', "LineWidth", line_width, "LineStyle", "-."); hold on
+
+plot(c3_u(1,ctrl_obs_idx), c3_u(2,ctrl_obs_idx), "Color", gray, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(c2_u(1,ctrl_obs_idx), c2_u(2,ctrl_obs_idx), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(c1_u(1,ctrl_obs_idx), c1_u(2,ctrl_obs_idx), "Color", "blue", "LineWidth", line_width, "LineStyle", "-"); hold on
+
+xlabel("$\tau_1$ / Nm", "Interpreter", "latex")
+ylabel("$\tau_2$ / Nm", "Interpreter", "latex")
+set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
+grid on 
+
+% xlim([-u_ball*1.25, u_ball*1.25])
+% ylim([-u_max2*1.25, u_max2*1.25])
+
+xlim([8 11.5])
+ylim([-1 3])
+
+% del_x = 800; del_y = 230;
+% sqz_ratio = 1e-2;
+
+% xlim(9*[1 1] + [-1 1] * del_x/2 * sqz_ratio)
+% ylim(1*[1 1] + [-1 1] * del_y/2 * sqz_ratio)
+
+% pbaspect([1 1 1])
+% legend([p1, p2], ["$\tau$", "Saturated $\tau$"], "Interpreter","latex", "FontSize", lgd_size, "FontWeight", "bold", "Location", "northwest")
+%% FIG. 7; WEIGHT NORM
+figure(7);clf
 hF = gcf;
 hF.Position(3:4) = [fig_width, fig_height];
 
@@ -183,13 +264,17 @@ plot(t(obs_t), ones(size(obs_t))*th_max(1), "Color", "black", "LineWidth", line_
 plot(t(obs_t), ones(size(obs_t))*th_max(2), "Color", "black", "LineWidth", line_width, "LineStyle", "--", 'HandleVisibility','off'); hold on  
 plot(t(obs_t), ones(size(obs_t))*th_max(3), "Color", "black", "LineWidth", line_width, "LineStyle", "--", 'HandleVisibility','off'); hold on
 
-plot(t(obs_t), c1_th(1,:), "Color", "blue", "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(t(obs_t), c1_th(2,:), "Color", "blue", "LineWidth", line_width, "LineStyle", "-."); hold on
-plot(t(obs_t), c1_th(3,:), "Color", "blue", "LineWidth", line_width, "LineStyle", "--"); hold on
+plot(t(obs_t), c3_th(1,:), "Color", gray, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\hat\theta_0$"); hold on
+plot(t(obs_t), c3_th(2,:), "Color", gray, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\hat\theta_1$"); hold on
+plot(t(obs_t), c3_th(3,:), "Color", gray, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\hat\theta_2$"); hold on
 
-plot(t(obs_t), c2_th(1,:), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(t(obs_t), c2_th(2,:), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-."); hold on
-plot(t(obs_t), c2_th(3,:), "Color", "cyan", "LineWidth", line_width, "LineStyle", "--"); hold on
+plot(t(obs_t), c2_th(1,:), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\hat\theta_0$"); hold on
+plot(t(obs_t), c2_th(2,:), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\hat\theta_1$"); hold on
+plot(t(obs_t), c2_th(3,:), "Color", "cyan", "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\hat\theta_2$"); hold on
+
+plot(t(obs_t), c1_th(1,:), "Color", "blue", "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\hat\theta_0$"); hold on
+plot(t(obs_t), c1_th(2,:), "Color", "blue", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\hat\theta_1$"); hold on
+plot(t(obs_t), c1_th(3,:), "Color", "blue", "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\hat\theta_2$"); hold on
 
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
 ylabel('$\Vert \hat\theta_i\Vert$', 'FontSize', font_size, 'Interpreter', 'latex');
@@ -198,7 +283,7 @@ ylabel('$\Vert \hat\theta_i\Vert$', 'FontSize', font_size, 'Interpreter', 'latex
     % lgd.Orientation = 'Vertical';
     % lgd.Orientation = 'Horizontal';
     lgd.NumColumns = 3;
-    lgd.Location = 'southwest';
+    lgd.Location = 'northwest';
     lgd.Interpreter = 'latex';
     lgd.FontSize = lgd_size; 
 
@@ -212,26 +297,30 @@ grid on; grid minor;
     ax.FontSize = font_size; 
     ax.FontName = 'Times New Roman';
 
-% ============================================
-%        Fig. 5: Multipliers
-% ============================================
-figure(5);clf
+%% FIG. 8; LAGRANGE MULTIPLIERS
+figure(8);clf
 hF = gcf;
 hF.Position(3:4) = [fig_width, fig_height];
 
-semilogy(t(obs_t), exp(c1_lbd(1,:)), "Color", "blue", "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$(C_1)$: $\lambda_{\theta_0}$"); hold on
-semilogy(t(obs_t), exp(c1_lbd(2,:)), "Color", "blue", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$(C_1)$: $\lambda_{\theta_1}$"); hold on
-semilogy(t(obs_t), exp(c1_lbd(3,:)), "Color", "blue", "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$(C_1)$: $\lambda_{\theta_2}$"); hold on
-semilogy(t(obs_t), exp(c1_lbd(4,:)), "Color", "blue", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$(C_1)$: $\lambda_{u}$"); hold on
-semilogy(t(obs_t), exp(c1_lbd(4,:)), "Color", "red", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$(C_1)$: $\lambda_{u}$"); hold on
-semilogy(t(obs_t), exp(c1_lbd(5,:)), "Color", "green", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$(C_1)$: $\lambda_{\bar{u_1}}$"); hold on
-% semilogt(y)(obs_t, exp(c1_lbd(6,:)), "Color", "blue", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$(C_1)$: $\lambda_{\bar{u_2}}$"); hold on
-semilogy(t(obs_t), exp(c1_lbd(7,:)), "Color", "green", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$(C_1)$: $\lambda_{\bar{min u_1}}$"); hold on
-% semilogy(obs_t, exp(c1_lbd(8,:)), "Color", "blue", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$(C_1)$: $\lambda_{\bar{min u_2}}$"); hold on
+% semilogy(t(obs_t), exp(c1_lbd(1,:)), "Color", "blue", "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$(C_1)$: $\lambda_{\theta_0}$"); hold on
+% semilogy(t(obs_t), exp(c1_lbd(2,:)), "Color", "blue", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$(C_1)$: $\lambda_{\theta_1}$"); hold on
+% semilogy(t(obs_t), exp(c1_lbd(3,:)), "Color", "blue", "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$(C_1)$: $\lambda_{\theta_2}$"); hold on
 
-semilogy(t(obs_t), exp(c2_lbd(1,:)), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$(C_2)$: $\lambda_{\theta_0}$"); hold on
-semilogy(t(obs_t), exp(c2_lbd(2,:)), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$(C_2)$: $\lambda_{\theta_1}$"); hold on
-semilogy(t(obs_t), exp(c2_lbd(3,:)), "Color", "cyan", "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$(C_2)$: $\lambda_{\theta_2}$"); hold on
+semilogy(t(ctrl_obs_idx), (c1_lbd(4,ctrl_obs_idx)), "Color", "blue", "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$(C_1)$: $\lambda_{u}$"); hold on
+semilogy(t(ctrl_obs_idx), (c1_lbd(5,ctrl_obs_idx)), "Color", "blue", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$(C_1)$: $\lambda_{\bar{u}_1}$"); hold on
+semilogy(t(ctrl_obs_idx), (c1_lbd(6,ctrl_obs_idx)), "Color", "blue", "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$(C_1)$: $\lambda_{\bar{u}_1}$"); hold on
+% semilogy(t(ctrl_obs_idx), (c1_lbd(7,ctrl_obs_idx)), "Color", "green", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$(C_1)$: $\lambda_{\underline{u}_1}$"); hold on
+% semilogy(t(ctrl_obs_idx), (c1_lbd(8,ctrl_obs_idx)), "Color", "blue", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$(C_1)$: $\lambda_{\underline{u}_2}$"); hold on
+
+% semilogy(t(obs_t), exp(c2_lbd(1,:)), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$(C_2)$: $\lambda_{\theta_0}$"); hold on
+% semilogy(t(obs_t), exp(c2_lbd(2,:)), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$(C_2)$: $\lambda_{\theta_1}$"); hold on
+% semilogy(t(obs_t), exp(c2_lbd(3,:)), "Color", "cyan", "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$(C_2)$: $\lambda_{\theta_2}$"); hold on
+
+semilogy(t(ctrl_obs_idx), (c3_lbd(4,ctrl_obs_idx)), "Color", gray, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$(C_2)$: $\lambda_{u}$"); hold on
+semilogy(t(ctrl_obs_idx), (c3_lbd(5,ctrl_obs_idx)), "Color", gray, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$(C_2)$: $\lambda_{\bar{u}_1}$"); hold on
+semilogy(t(ctrl_obs_idx), (c3_lbd(6,ctrl_obs_idx)), "Color", gray, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$(C_2)$: $\lambda_{\bar{u}_1}$"); hold on
+% semilogy(t(ctrl_obs_idx), (c3_lbd(7,ctrl_obs_idx)), "Color", "green", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$(C_2)$: $\lambda_{\underline{u}_1}$"); hold on
+% semilogy(t(ctrl_obs_idx), (c3_lbd(8,ctrl_obs_idx)), "Color", "blue", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$(C_2)$: $\lambda_{\underline{u}_2}$"); hold on
 
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
 ylabel('$\lambda_j$ (Log scale)', 'FontSize', font_size, 'Interpreter', 'latex');
@@ -247,30 +336,65 @@ grid on; grid minor;
     ax.FontSize = font_size; 
     ax.FontName = 'Times New Roman';
 
-nexttile
-    ax = gca;
-    ax.XColor = 'none';
-    ax.YColor = 'none';
-    ax.Color = 'none';
-
-
-% ============================================
-%     Fig. 6: Aux. State
-% ============================================
-figure(6); clf;
+%% FIG. 9; AUXILIARY STATE
+figure(9); clf;
 hF = gcf; 
 hF.Position(3:4) = [fig_width, fig_height];
+% tl = tiledlayout(2,1);
 
 % plot(ctrl_start+[0.5 0.5], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
 % text(ctrl_start+.02, -4.7, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
 % text(ctrl_start+.52, -4.7, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
 
-plot(t(obs_t), c2_zeta(1,obs_t), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(t(obs_t), c2_zeta(2,obs_t), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-."); hold on
+% nexttile
+plot(t(ctrl_obs_idx), c2_zeta(1,ctrl_obs_idx), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
+
+grid on; grid minor;
+% xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
+ylabel('$\zeta_1$ / rad', 'FontSize', font_size, 'Interpreter', 'latex');
+% maxVal = max(id_ref.Data); minVal = min(id_ref.Data); 
+maxVal = 1.6; minVal = 0; 
+len = maxVal-minVal; ratio = .3;
+ylim([minVal-len*ratio maxVal+len*ratio]);
+% xlim([ctrl_start T+ctrl_start])
+    ax = gca;
+    ax.FontSize = font_size; 
+    ax.FontName = 'Times New Roman';
+
+% nexttile
+% plot(t(ctrl_obs_idx), c2_zeta(2,ctrl_obs_idx), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
+
+% grid on; grid minor;
+% xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
+% ylabel('$\zeta_2$ / rad', 'FontSize', font_size, 'Interpreter', 'latex');
+% maxVal = 0; minVal = 2; 
+% len = maxVal-minVal; ratio = .3;
+% ylim([minVal-len*ratio maxVal+len*ratio]);
+% % xlim([ctrl_start T+ctrl_start])
+%     ax = gca;
+%     ax.FontSize = font_size; 
+%     ax.FontName = 'Times New Roman';
+
+%% FIG. 10, 11; AUXILIARY CONTROL INPUT
+figure(10); clf;
+hF = gcf;
+hF.Position(3:4) = [fig_width, fig_height];
+
+e1 = c1_x1-c1_xd1; ed1 = c1_x2-c1_xd2;
+e2 = c2_x1-c2_xd1; ed2 = c2_x2-c2_xd2;
+e3 = c3_x1-c3_xd1; ed3 = c3_x2-c3_xd2;
+
+r1 = ed1+[5 0; 0 15]*e1;
+r2 = ed2+[5 0; 0 15]*e2;
+r3 = ed3+[5 0; 0 15]*e3;
+
+plot(t(obs_t), r3(1,obs_t), "Color", gray, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(t(obs_t), r2(1,obs_t), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(t(obs_t), r1(1,obs_t), "Color", "blue", "LineWidth", line_width, "LineStyle", "-"); hold on
 
 grid on; grid minor;
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
-ylabel('$\zeta$ / rad', 'FontSize', font_size, 'Interpreter', 'latex');
+ylabel('$r_1$ / rad', 'FontSize', font_size, 'Interpreter', 'latex');
 % maxVal = max(id_ref.Data); minVal = min(id_ref.Data); 
 % % maxVal = 0; minVal = -1; 
 % len = maxVal-minVal; ratio = .3;
@@ -279,75 +403,88 @@ ylabel('$\zeta$ / rad', 'FontSize', font_size, 'Interpreter', 'latex');
     ax = gca;
     ax.FontSize = font_size; 
     ax.FontName = 'Times New Roman';
-% %% SAVE FIGURES
-% if SAVE_FLAG
-%     [~,~] = mkdir("figures/compare");
 
-%     for idx = 1:1:6
+figure(11); clf;
+hF = gcf;
+hF.Position(3:4) = [fig_width, fig_height];
 
-%         f_name = "figures/compare/Fig" + string(idx);
+plot(t(obs_t), r3(2,obs_t), "Color", gray, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(t(obs_t), r2(2,obs_t), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(t(obs_t), r1(2,obs_t), "Color", "blue", "LineWidth", line_width, "LineStyle", "-"); hold on
 
-%         saveas(figure(idx), f_name + ".png")
+grid on; grid minor;
+xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
+ylabel('$r_2$ / rad', 'FontSize', font_size, 'Interpreter', 'latex');
+% maxVal = max(id_ref.Data); minVal = min(id_ref.Data); 
+% % maxVal = 0; minVal = -1; 
+% len = maxVal-minVal; ratio = .3;
+% ylim([minVal-len*ratio maxVal+len*ratio]);
+% xlim([ctrl_start T+ctrl_start])
+    ax = gca;
+    ax.FontSize = font_size; 
+    ax.FontName = 'Times New Roman';
 
-%         figure(idx);
-%         % set(gcf, 'Position', [0, 0, fig_width, fig_height]); % [left, bottom, width, height] 
-%         exportgraphics(gcf, f_name+'.eps', 'ContentType', 'vector')
-%         % exportgraphics(figure(idx), f_name+'.eps',"Padding","figure")
+%% SAVE FIGURES
+if SAVE_FLAG
+    [~,~] = mkdir("figures/compare");
 
-%     end
-% end
+    for idx = 1:1:11
 
-% %% NUMERICAL ANALYSIS
-% ctrl_dt = 1/8e3;
-% sim_dt = ctrl_dt / 100;
+        f_name = "figures/compare/Fig" + string(idx);
 
-% ed1 = id1.Data-id_ref.Data;
-% ed2 = id2.Data-id_ref.Data;
-% eq1 = iq1.Data-iq_ref.Data;
-% eq2 = iq2.Data-iq_ref.Data;
+        saveas(figure(idx), f_name + ".png")
 
-% ed1 = ed1(ctrl_start_idx:end);
-% ed2 = ed2(ctrl_start_idx:end);
-% eq1 = eq1(ctrl_start_idx:end);
-% eq2 = eq2(ctrl_start_idx:end);
+        figure(idx);
+        % set(gcf, 'Position', [0, 0, fig_width, fig_height]); % [left, bottom, width, height] 
+        exportgraphics(gcf, f_name+'.eps', 'ContentType', 'vector')
+        % exportgraphics(figure(idx), f_name+'.eps',"Padding","figure")
 
-% ep_idx = floor(length(ed1)/2);
+    end
+end
 
-% ed1_ep1 = ed1(1:ep_idx);
-% ed1_ep2 = ed1(ep_idx+1:end); 
-% ed2_ep1 = ed2(1:ep_idx);
-% ed2_ep2 = ed2(ep_idx+1:end);
-% eq1_ep1 = eq1(1:ep_idx);
-% eq1_ep2 = eq1(ep_idx+1:end);
-% eq2_ep1 = eq2(1:ep_idx);
-% eq2_ep2 = eq2(ep_idx+1:end);
+%% NUMERICAL ANALYSIS
+ctrl_dt = 1/250;
+sim_dt = ctrl_dt / 1000;
 
-% ISE = @(e) sqrt(sum(e.^2)*sim_dt);
+ep_idx = floor(length(r1)/2);
 
-% fprintf("Norm of error in Episode 1: \n")
-% fprintf("Controller 1 ed: %.3f\n", ISE(ed1_ep1))
-% fprintf("Controller 1 eq: %.3f\n", ISE(eq1_ep1))
-% fprintf("Controller 2 ed: %.3f\n", ISE(ed2_ep1))
-% fprintf("Controller 2 eq: %.3f\n", ISE(eq2_ep1))
+r11_ep1 = r1(1,1:ep_idx);
+r12_ep1 = r1(2,1:ep_idx);
+r11_ep2 = r1(1,ep_idx+1:end);
+r12_ep2 = r1(2,ep_idx+1:end);
+r21_ep1 = r2(1,1:ep_idx);
+r22_ep1 = r2(2,1:ep_idx);
+r21_ep2 = r2(1,ep_idx+1:end);
+r22_ep2 = r2(2,ep_idx+1:end);
+r31_ep1 = r3(1,1:ep_idx);
+r32_ep1 = r3(2,1:ep_idx);
+r31_ep2 = r3(1,ep_idx+1:end);
+r32_ep2 = r3(2,ep_idx+1:end);
 
-% fprintf("Norm of error in Episode 2: \n")
-% fprintf("Controller 1 ed: %.3f\n", ISE(ed1_ep2))
-% fprintf("Controller 1 eq: %.3f\n", ISE(eq1_ep2))
-% fprintf("Controller 2 ed: %.3f\n", ISE(ed2_ep2))
-% fprintf("Controller 2 eq: %.3f\n", ISE(eq2_ep2))
+ISE = @(e) sqrt(sum(e.^2)*sim_dt);
 
-% fprintf("id: C1/C2\n")
-% fprintf("Episode 1: %.3f\n", ISE(ed1_ep1)/ISE(ed2_ep1))
-% fprintf("Episode 2: %.3f\n", ISE(ed1_ep2)/ISE(ed2_ep2))
-% fprintf("iq: C1/C2\n")
-% fprintf("Episode 1: %.3f\n", ISE(eq1_ep1)/ISE(eq2_ep1))
-% fprintf("Episode 2: %.3f\n", ISE(eq1_ep2)/ISE(eq2_ep2))
+fprintf("Norm of error in Episode 1: \n")
+fprintf("C1 r1 ep1: %.3f\n", ISE(r11_ep1))
+fprintf("C1 r2 ep1: %.3f\n", ISE(r12_ep1))
+fprintf("C2 r1 ep1: %.3f\n", ISE(r21_ep1))
+fprintf("C2 r2 ep1: %.3f\n", ISE(r22_ep1))
+fprintf("C3 r1 ep1: %.3f\n", ISE(r31_ep1))
+fprintf("C3 r2 ep1: %.3f\n", ISE(r32_ep1))
 
-% fprintf("C1: E1/E2\n")
-% fprintf("id: %.3f\n", ISE(ed1_ep2)/ISE(ed1_ep1))
-% fprintf("iq: %.3f\n", ISE(eq1_ep2)/ISE(eq1_ep1))
-% fprintf("C2: E1/E2\n")
-% fprintf("id: %.3f\n", ISE(ed2_ep2)/ISE(ed2_ep1))
-% fprintf("iq: %.3f\n", ISE(eq2_ep2)/ISE(eq2_ep1))
+fprintf("Norm of error in Episode 2: \n")
+fprintf("C1 r1 ep2: %.3f\n", ISE(r11_ep2))
+fprintf("C1 r2 ep2: %.3f\n", ISE(r12_ep2))
+fprintf("C2 r1 ep2: %.3f\n", ISE(r21_ep2))
+fprintf("C2 r2 ep2: %.3f\n", ISE(r22_ep2))
+fprintf("C3 r1 ep2: %.3f\n", ISE(r31_ep2))
+fprintf("C3 r2 ep2: %.3f\n", ISE(r32_ep2))
+
+fprintf("Improvement in Episode 2: \n")
+fprintf("C1 r1: %.3f\n", 1-ISE(r11_ep2)/ISE(r11_ep1))
+fprintf("C1 r2: %.3f\n", 1-ISE(r12_ep2)/ISE(r12_ep1))
+fprintf("C2 r1: %.3f\n", 1-ISE(r21_ep2)/ISE(r21_ep1))
+fprintf("C2 r2: %.3f\n", 1-ISE(r22_ep2)/ISE(r22_ep1))
+fprintf("C3 r1: %.3f\n", 1-ISE(r31_ep2)/ISE(r31_ep1))
+fprintf("C3 r2: %.3f\n", 1-ISE(r32_ep2)/ISE(r32_ep1))
 
 beep()

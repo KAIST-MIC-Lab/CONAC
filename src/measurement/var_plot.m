@@ -11,7 +11,7 @@ fig_height = 230 * 1.5;
 fig_width = 800 * 1;
 
 % 
-ctrl_name = "COM4_2025_04_09";
+data_num = "10-Apr-2025_11-56-08";
 
 sim_dt = 1/250;
 ISE = @(e) sqrt(sum(e.^2)*sim_dt);
@@ -191,3 +191,4 @@ plot(var_range, PI2(:,3), 'o-', 'color', 'cyan',  'LineWidth', line_width, 'Mark
 nexttile
 plot(var_range, PI1(:,4), 'o-', 'color', 'blue',  'LineWidth', line_width, 'MarkerSize', 10); hold on
 plot(var_range, PI2(:,4), 'o-', 'color', 'cyan',  'LineWidth', line_width, 'MarkerSize', 10); hold on
+

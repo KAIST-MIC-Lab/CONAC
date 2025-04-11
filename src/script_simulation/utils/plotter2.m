@@ -64,6 +64,7 @@ figure(5); clf
 hF = gcf; 
 hF.Position(3:4) = [fig_width, fig_height];
 
+plot(t, ones(size(t)) * cstr.uMax1, "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
 plot(t, u1, "Color", "red", "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\tau$"); hold on
 plot(t, u1_sat, "Color", "blue", "LineWidth", line_width, "LineStyle", "-", "DisplayName", "Saturated $\tau$"); hold on
 % plot(t(actset1), u1(actset1), "Color", "red", "LineWidth", line_width, "LineStyle", "."); hold on
@@ -83,6 +84,7 @@ figure(6); clf
 hF = gcf; 
 hF.Position(3:4) = [fig_width, fig_height];
 
+plot(t, ones(size(t)) * cstr.uMax2, "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
 plot(t, u2, "Color", "red", "LineWidth", line_width, "LineStyle", "-"); hold on
 plot(t, u2_sat, "Color", "blue", "LineWidth", line_width, "LineStyle", "-"); hold on
 xlabel("Time $[\rm s]$", "Interpreter", "latex")
@@ -166,5 +168,19 @@ nexttile(2);
 p2 = plot(t, z2, "Color", "blue", "LineWidth", line_width, "LineStyle", "-."); hold on
 xlabel("Time $[\rm s]$", "Interpreter", "latex")
 ylabel("Zeta 2 $[\rm rad]$", "Interpreter","latex")
+set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
+grid on
+
+%% FIG.10: CONTROL INPUT NORM
+figure(10); clf
+hF = gcf; 
+hF.Position(3:4) = [fig_width, fig_height];
+
+u_norm = sqrt(u1.^2 + u2.^2);
+
+plot(t, ones(size(t)) * cstr.u_ball, "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
+plot(t, u_norm, "Color", "blue", "LineWidth", line_width, "LineStyle", "-"); hold on
+xlabel("Time $[\rm s]$", "Interpreter", "latex")
+ylabel("$\Vert \tau \Vert[\rm Nm]$", "Interpreter","latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on

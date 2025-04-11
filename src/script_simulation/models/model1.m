@@ -5,7 +5,8 @@ function [M, C, G, F, J] = model1(q, u, t)
 % ********************************************************
 
 m1 = 2.465;             % [kg]
-m2 = 1.093;
+m2 = 2.465;             % [kg]
+% m2 = 1.093;
 L1 = .2;             % [m]
 L2 = .15+.01+.02;
 Lc1 = .13888;             % [m]
@@ -22,12 +23,12 @@ g = 9.81;             % [m/s^2]
 % fc1 = 7.17;             % [Nm]
 % fc2 = 1.734;
 
-b1 = .2;
+b1 = .1;
 b2 = .1;
-fc1 = .35;
-fc2 = .2;
-fs1 = .7;
-fs2 = .4;
+fc1 = .24;
+fc2 = .24;
+fs1 = .3;
+fs2 = .3;
 
 I1 = .06911;
 I2 = .01532;
@@ -78,17 +79,49 @@ Jmat12 = (-1).*L2.*sin(q1+q2);
 Jmat21 = L1.*cos(q1)+L2.*cos(q1+q2); 
 Jmat22 = L2.*cos(q1+q2);
 
-if abs(u(1)) > fs1
-    Fmat1=b1*sign(qd1)+fc1*qd1;
+f_thr = 1e-3;
+
+Fc1 = fc1*qd1;
+Fc2 = fc2*qd2;
+
+
+
+if abs(qd1) < f_thr 
+    if abs(u(1)) < fs1
+        Fmat1 = u(1)-Gmat1;
+    else
+        if u(1)-Gmat1 >= 0
+            Fmat1 = b1*qd1+fc1;
+        else
+            Fmat1 = b1*qd1-fc1;
+        end
+    end
 else
-    Fmat1 = u(1)-Gmat1;
+    if qd1 >=0 
+        Fmat1 = fc1 + b1*qd1;
+    elseif q(3) < 0
+        Fmat1 = -fc1 + b1*qd1;
+    end
 end
 
-if abs(u(2)) > fs2
-    Fmat2=b2*sign(qd2)+fc2*qd2;
+if abs(qd2) < f_thr 
+    if abs(u(2)) < fs2
+        Fmat2 = u(2)-Gmat2;
+    else
+        if u(2)-Gmat2 >= 0
+            Fmat2 = b2*qd2+fc2;
+        else
+            Fmat2 = b2*qd2-fc2;
+        end
+    end
 else
-    Fmat2 = u(2)-Gmat2;
+    if qd2 >=0 
+        Fmat2 = fc2 + b2*qd2;
+    elseif qd2 < 0
+        Fmat2 = -fc2 + b2*qd2;
+    end
 end
+
 
 %%
 M = [

@@ -2,30 +2,30 @@ function opt = loadGlobalOpts(dt, CONTROL_NUM)
     opt.dt = dt;
 
     opt.e_tol = 0e-3;
-    opt.init_range = 1e-5;
+    opt.init_range = 1e-1;
     
-    opt.Lambda = diag([1 1]) * 5e0;
+    opt.Lambda = diag([5 15]) * 1;
 
-    opt.alpha = 1.5;
+    opt.alpha = .5;
     opt.rho = opt.alpha*0e-2;
     opt.NN_size = [6,4,4,2];
-    opt.W = 1;
+    opt.W = diag([1 1]);
     opt.e_size = 2;
 
     opt.cstr.th_max = [11;12;13] * 1e0;
-    opt.cstr.u_ball = 7;
-    opt.cstr.uMax1 = 7;
+    opt.cstr.u_ball = 10;
+    opt.cstr.uMax1 = 9.682;
     opt.cstr.uMax2 = 2.5;
 
     if CONTROL_NUM == 1
         % opt.beta = [1 1 1] * 1e-1;
         opt.beta(1:3) = [1 1 1] * 1e-3;
-        opt.beta(4) = 1e2; % control ipnut ball
-        opt.beta(5) = 0e2; % control ipnut 1 Max
-        opt.beta(6) = 0e4; % control ipnut 2 Max
-        opt.beta(7) = opt.beta(5); % control ipnut 1 Min
-        opt.beta(8) = opt.beta(6); % control ipnut 2 Min
-        opt.beta = opt.beta/opt.alpha;
+        opt.beta(4) = 1e0; % control input ball
+        opt.beta(5) = 0e2; % control input 1 Max
+        opt.beta(6) = 10e1; % control input 2 Max
+        opt.beta(7) = opt.beta(5); % control input 1 Min
+        opt.beta(8) = opt.beta(6); % control input 2 Min
+        % opt.beta = opt.beta/opt.alpha;
 
         c_num = length(opt.beta);
         opt.lbd = zeros(c_num,1);
