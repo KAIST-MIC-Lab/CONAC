@@ -15,7 +15,7 @@ function [r1, r2] = epi_gen(t)
     cycle = floor(t/CYCLE_TIME)+1;
 
     t = mod(t, CYCLE_TIME);
-2.1
+
     x0 = deg2rad([-90;0]);  
     xd1 = deg2rad([45;-90]);
     xd2 = deg2rad([-45;45]);

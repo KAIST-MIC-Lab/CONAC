@@ -13,7 +13,7 @@ FIGURE_PLOT_FLAG    = 1;
 ANIMATION_FLAG      = 0;
 AINMATION_SAVE_FLAG = 0; 
 FIGURE_SAVE_FLAG    = 0;
-RESULT_SAVE_FLAG    = 0;
+RESULT_SAVE_FLAG    = 1;
 CONTROL_NUM         = 1;    % 1: CoNAC, 2: Aux.
 
 seed = 18; rng(seed);

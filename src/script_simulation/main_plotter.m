@@ -9,9 +9,9 @@ more_blue = "#0072BD";
 more_red = "#A2142F";
 
 %% 
-ctrl1_name = "12-Apr-2025_00-22-05"; % CoNAC
-ctrl2_name = "12-Apr-2025_00-22-27"; % Aux.
-ctrl3_name = "12-Apr-2025_00-22-18"; % CoNAC 2.
+ctrl1_name = "12-Apr-2025_16-42-57"; % CoNAC
+ctrl2_name = "12-Apr-2025_16-35-02"; % Aux.
+ctrl3_name = "12-Apr-2025_16-43-22"; % CoNAC 2.
 
 % ctrl1_name = "11-Apr-2025_15-56-43"; % CoNAC
 % ctrl2_name = "11-Apr-2025_15-57-02"; % Aux.
@@ -88,14 +88,14 @@ figure(1); clf;
 hF = gcf; 
 hF.Position(3:4) = [fig_width, fig_height];
 
-plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
-text(.2, -1.8, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
-text(ep_time+.2, -1.8, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
-
 plot(t(obs_t), c1_xd1(1,obs_t), "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
 plot(t(obs_t), c3_x1(1,obs_t), "Color", gray, "LineWidth", line_width, "LineStyle", "-"); hold on
 plot(t(obs_t), c2_x1(1,obs_t), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
 plot(t(obs_t), c1_x1(1,obs_t), "Color", "blue", "LineWidth", line_width, "LineStyle", "-"); hold on
+
+plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
+text(.2, -1.8, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
+text(ep_time+.2, -1.8, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
 
 grid on; grid minor;
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
@@ -114,14 +114,14 @@ figure(2); clf;
 hF = gcf; 
 hF.Position(3:4) = [fig_width, fig_height];
 
-plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
-text(.2, -2.75, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
-text(ep_time+.2, -2.75, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
-
 plot(t(obs_t), c1_xd1(2,obs_t), "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
 plot(t(obs_t), c3_x1(2,obs_t), "Color", gray, "LineWidth", line_width, "LineStyle", "-"); hold on
 plot(t(obs_t), c2_x1(2,obs_t), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
 plot(t(obs_t), c1_x1(2,obs_t), "Color", "blue", "LineWidth", line_width, "LineStyle", "-"); hold on
+
+plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
+text(.2, -1.8, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
+text(ep_time+.2, -1.8, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
 
 grid on; grid minor;
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
@@ -139,10 +139,6 @@ figure(3);clf
 hF = gcf;
 hF.Position(3:4) = [fig_width, fig_height];
 
-plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
-text(.2, -.2, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
-text(ep_time+.2, -.2, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
-
 plot(t(obs_t), c3_u(1,obs_t), "Color", gray, "LineWidth", line_width, "LineStyle", "-"); hold on
 plot(t(obs_t), c2_u(1,obs_t), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
 plot(t(obs_t), c1_u(1,obs_t), "Color", "blue", "LineWidth", line_width, "LineStyle", "-"); hold on
@@ -151,6 +147,10 @@ plot(t(obs_t), c1_u(1,obs_t), "Color", "blue", "LineWidth", line_width, "LineSty
 plot(t(obs_t), ones(size(obs_t))*u_max1, "Color", "black", "LineWidth", line_width, "LineStyle", "--"); hold on
 % text(ctrl_start+.02, 320, {"C$_2$'s $\bar u$"}, "FontSize", font_size, "FontName", 'Times New Roman', "Interpreter", "Latex", "Color", "black")
 plot(t(obs_t), ones(size(obs_t))*-1*u_max1, "Color", "black", "LineWidth", line_width, "LineStyle", "--"); hold on
+
+plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
+text(.2, -.2, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
+text(ep_time+.2, -.2, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
 
 grid on; grid minor;
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
@@ -168,10 +168,6 @@ figure(4);clf
 hF = gcf;
 hF.Position(3:4) = [fig_width, fig_height];
 
-plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
-text(.2, -1.8, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
-text(ep_time+.2, -1.8, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
-
 plot(t(obs_t), c3_u(2,obs_t), "Color", gray, "LineWidth", line_width, "LineStyle", "-"); hold on
 plot(t(obs_t), c2_u(2,obs_t), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
 plot(t(obs_t), c1_u(2,obs_t), "Color", "blue", "LineWidth", line_width, "LineStyle", "-"); hold on
@@ -180,6 +176,10 @@ plot(t(obs_t), c1_u(2,obs_t), "Color", "blue", "LineWidth", line_width, "LineSty
 plot(t(obs_t), ones(size(obs_t))*u_max2, "Color", "black", "LineWidth", line_width, "LineStyle", "--"); hold on
 % text(ctrl_start+.02, 320, {"C$_2$'s $\bar u$"}, "FontSize", font_size, "FontName", 'Times New Roman', "Interpreter", "Latex", "Color", "black")
 plot(t(obs_t), ones(size(obs_t))*-1*u_max2, "Color", "black", "LineWidth", line_width, "LineStyle", "--"); hold on
+
+plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
+text(.2, -1.8, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
+text(ep_time+.2, -1.8, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
 
 grid on; grid minor;
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
@@ -198,10 +198,6 @@ figure(5);clf
 hF = gcf;
 hF.Position(3:4) = [fig_width, fig_height];
 
-plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
-text(.2, .2, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
-text(ep_time+.2, .2, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
-
 norm_u1 = sqrt(c1_u(1,:).^2 + c1_u(2,:).^2);
 norm_u2 = sqrt(c2_u(1,:).^2 + c2_u(2,:).^2);
 norm_u3 = sqrt(c3_u(1,:).^2 + c3_u(2,:).^2);
@@ -212,6 +208,11 @@ plot(t(obs_t), norm_u1(obs_t), "Color", "blue", "LineWidth", line_width, "LineSt
 % text(0, 415, {"C$_1$'s $\bar u$"}, "FontSize", font_size, "FontName", 'Times New Roman', "Interpreter", "Latex", "Color", "black")
 plot(t(obs_t), ones(size(obs_t))*u_ball, "Color", "black", "LineWidth", line_width, "LineStyle", "--"); hold on
 % text(ctrl_start+.02, 320, {"C$_2$'s $\bar u$"}, "FontSize", font_size, "FontName", 'Times New Roman', "Interpreter", "Latex", "Color", "black")
+
+plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
+text(.2, .2, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
+text(ep_time+.2, .2, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
+
 grid on; grid minor;
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
 ylabel('$\Vert {\tau} \Vert$ / Nm', 'FontSize', font_size, 'Interpreter', 'latex');
@@ -264,11 +265,6 @@ figure(7);clf
 hF = gcf;
 hF.Position(3:4) = [fig_width, fig_height];
 
-plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-.", "HandleVisibility", "off"); hold on
-text(.2, 1.5, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman', "HandleVisibility", "off") 
-text(ep_time+.2, 1.5, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman', "HandleVisibility", "off")
-
-
 plot(t(obs_t), ones(size(obs_t))*th_max(1), "Color", "black", "LineWidth", line_width, "LineStyle", "-", 'HandleVisibility','off'); hold on
 plot(t(obs_t), ones(size(obs_t))*th_max(2), "Color", "black", "LineWidth", line_width, "LineStyle", "-.", 'HandleVisibility','off'); hold on  
 plot(t(obs_t), ones(size(obs_t))*th_max(3), "Color", "black", "LineWidth", line_width, "LineStyle", "--", 'HandleVisibility','off'); hold on
@@ -284,6 +280,10 @@ plot(t(obs_t), c2_th(3,:), "Color", "cyan", "LineWidth", line_width, "LineStyle"
 plot(t(obs_t), c1_th(1,:), "Color", "blue", "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\hat\theta_0$"); hold on
 plot(t(obs_t), c1_th(2,:), "Color", "blue", "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\hat\theta_1$"); hold on
 plot(t(obs_t), c1_th(3,:), "Color", "blue", "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\hat\theta_2$"); hold on
+
+plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-.", "HandleVisibility", "off"); hold on
+text(.2, 1.5, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman', "HandleVisibility", "off") 
+text(ep_time+.2, 1.5, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman', "HandleVisibility", "off")
 
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
 ylabel('$\Vert \hat\theta_i\Vert$', 'FontSize', font_size, 'Interpreter', 'latex');
@@ -362,7 +362,7 @@ grid on; grid minor;
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
 ylabel('$\zeta_1$ / rad', 'FontSize', font_size, 'Interpreter', 'latex');
 % maxVal = max(id_ref.Data); minVal = min(id_ref.Data); 
-maxVal = 1.6; minVal = 0; 
+maxVal = 3.5; minVal = 0; 
 len = maxVal-minVal; ratio = .3;
 ylim([minVal-len*ratio maxVal+len*ratio]);
 % xlim([ctrl_start T+ctrl_start])
