@@ -1374,11 +1374,11 @@ The quantitative comparison of the tracking performance was evaluated using the 
 \begin{figure*}[t]
   \centering
     \subfloat[Tracking result of $q_1$.]{
-    %   \includegraphics
-      \includegraphics[width=\figSizeTwoCol\linewidth]
+      \includegraphics
+    %   \includegraphics[width=\figSizeTwoCol\linewidth]
       {
-        % fig/Fig1.pdf
-        src/script_simulation/figures/compare/Fig1.eps
+        fig/Fig1.pdf
+        % src/script_simulation/figures/compare/Fig1.eps
       }%
       \label{fig:ctrl:result:q1}}
     \hfill
@@ -1564,6 +1564,15 @@ In Fig.~\ref{fig:ctrl:result:scope:control} and Fig.~\ref{fig:ctrl:result:scope:
 Besides, with small $\lambda_j$, the adaptation direction of $\widehat{ \mv{\theta}}_1$ is adjusted more conservatively, which leads to a slower satisfaction of the constraint $c_j,\ \forall j\in\mathcal I$, as shown in Fig.~\ref{fig:ctrl:result:scope:control} and the positively existence of $\lambda_j$ in Fig.~\ref{fig:ctrl:result:scope:beta}.
 This allows the controller to show a smoother control input.
 However, since the weights were adapted to reduce the filtered error $\fe$ while the control input was saturated, the weights were not able to effectively adapt the weights with respect to the filtered error $\fe$.
+
+% ------------------------------------
+% Karsh-Kuhn-Tucker (KKT) conditions}
+% ------------------------------------
+\subsubsection{Satisfaction of Karsh-Kuhn-Tucker (KKT) conditions}
+
+\color{red}
+The KKT conditions defined in \cite[Def. @@]{Nocedal:2006aa} were satisfied in the simulation, as shown in Fig.~\ref{fig:ctrl:result:scope:beta}, where the Lagrange multipliers $\lambda_j,\ \forall j\in\mathcal I$ were positive and the constraint violations $c_j,\ \forall j\in\mathcal I$ were negative.
+\color{black}
 
 % ------------------------------------
 % Real-time Implementation Set-up
