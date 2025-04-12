@@ -1,12 +1,34 @@
 clear
-
+addpath('~/Desktop/matlab2tikz/src')
 %%
 SAVE_FLAG = 1;
 POSITION_FLAG = 1; % it will plot fiugures in the same position
+TEX_CONVERT_FLAG = 0;
 gray = "#808080";
 
 more_blue = "#0072BD";
 more_red = "#A2142F";
+
+if TEX_CONVERT_FLAG
+    font_size = 4;
+    line_width = .5;
+    lgd_size = 2;
+
+    fig_height = 8.89/4;
+    fig_width = 8.89;
+
+    fig_unit = 'centimeters';
+else
+    font_size = 18;
+    line_width = 1.5;
+    lgd_size = 16;
+        
+    fig_height = 200;
+    fig_width = 800;
+
+    fig_unit = 'pixels';
+end
+
 
 %% 
 ctrl1_name = "12-Apr-2025_16-42-57"; % CoNAC
@@ -70,22 +92,10 @@ start_t = 19;
 end_t = 21;
 ctrl_obs_idx = find(t >= start_t & t <= end_t);
 
-% font_size = 16;
-% line_width = 2;
-% lgd_size = 12;
-    
-% fig_height = 210 * 1; 
-% fig_width = 450 * 1;
-
-font_size = 18;
-line_width = 1.5;
-lgd_size = 16;
-    
-fig_height = 200 * 1; 
-fig_width = 800 * 1;
 %% FIG. 1; STATE 1
 figure(1); clf;
 hF = gcf; 
+hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
 plot(t(obs_t), c1_xd1(1,obs_t), "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
@@ -112,6 +122,7 @@ xlim([0 T])
 %% FIG. 2; STATE 2
 figure(2); clf;
 hF = gcf; 
+hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
 plot(t(obs_t), c1_xd1(2,obs_t), "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
@@ -137,6 +148,7 @@ xlim([0 T])
 %% FIG. 3; CONTROL INPUT 1
 figure(3);clf
 hF = gcf;
+hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
 plot(t(obs_t), c3_u(1,obs_t), "Color", gray, "LineWidth", line_width, "LineStyle", "-"); hold on
@@ -166,6 +178,7 @@ xlim([0 T])
 %% FIG. 4; CONTROL INPUT 2
 figure(4);clf
 hF = gcf;
+hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
 plot(t(obs_t), c3_u(2,obs_t), "Color", gray, "LineWidth", line_width, "LineStyle", "-"); hold on
@@ -196,6 +209,7 @@ xlim([0 T])
 %% FIG. 5; CONTROL INPUT NORM
 figure(5);clf
 hF = gcf;
+hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
 norm_u1 = sqrt(c1_u(1,:).^2 + c1_u(2,:).^2);
@@ -227,6 +241,7 @@ xlim([0 T])
 %% FIG. 6; CONTROL NORM (BIRDEYE)
 figure(6);clf
 hf = gcf;
+hF.Units = fig_unit;
 hf.Position(3:4) = [fig_width, fig_height];
 
 ang = 0:0.01:2*pi;
@@ -263,6 +278,7 @@ ylim([0.1 1.5])
 %% FIG. 7; WEIGHT NORM
 figure(7);clf
 hF = gcf;
+hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
 plot(t(obs_t), ones(size(obs_t))*th_max(1), "Color", "black", "LineWidth", line_width, "LineStyle", "-", 'HandleVisibility','off'); hold on
@@ -295,6 +311,10 @@ ylabel('$\Vert \hat\theta_i\Vert$', 'FontSize', font_size, 'Interpreter', 'latex
     lgd.Location = 'northwest';
     lgd.Interpreter = 'latex';
     lgd.FontSize = lgd_size; 
+    % lgd.IconColumnWidth = 5;
+    % lgd.Position(3:4) = lgd.Position(3:4) * .01;
+    % lgd.Position = lgd.Position * .01;
+    
 
 grid on; grid minor;
 % maxVal = V_max(2); minVal = 0; 
@@ -309,6 +329,7 @@ xlim([0 T])
 %% FIG. 8; LAGRANGE MULTIPLIERS
 figure(8);clf
 hF = gcf;
+hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
 % semilogy(t(obs_t), exp(c1_lbd(1,:)), "Color", "blue", "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$(C_1)$: $\lambda_{\theta_0}$"); hold on
@@ -348,6 +369,7 @@ grid on; grid minor;
 %% FIG. 9; AUXILIARY STATE
 figure(9); clf;
 hF = gcf; 
+hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 % tl = tiledlayout(2,1);
 
@@ -387,6 +409,7 @@ ylim([minVal-len*ratio maxVal+len*ratio]);
 %% FIG. 10, 11; FILTERED ERROR
 figure(10); clf;
 hF = gcf;
+hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
 e1 = c1_x1-c1_xd1; ed1 = c1_x2-c1_xd2;
@@ -415,6 +438,7 @@ ylabel('$r_1$ / rad', 'FontSize', font_size, 'Interpreter', 'latex');
 
 figure(11); clf;
 hF = gcf;
+hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
 plot(t(obs_t), r3(2,obs_t), "Color", gray, "LineWidth", line_width, "LineStyle", "-"); hold on
@@ -447,9 +471,11 @@ if SAVE_FLAG
         % set(gcf, 'Position', [0, 0, fig_width, fig_height]); % [left, bottom, width, height] 
         exportgraphics(gcf, f_name+'.eps', 'ContentType', 'vector')
         % exportgraphics(figure(idx), f_name+'.eps',"Padding","figure")
-
+    
+        matlab2tikz(char(f_name+".tex"))
     end
 end
+
 
 %% NUMERICAL ANALYSIS
 ctrl_dt = 1/250;
