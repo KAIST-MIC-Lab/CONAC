@@ -470,7 +470,7 @@ The DNN architecture $\NN({\q}_n;\wth) := \NN_k$ can be recursively represented 
     \label{eq:DNN:architecture}
 \end{equation}
 where $\wV_i\in\R^{(l_i+1)\times l_{i+1}}$ is the weight matrix of the $i\textsuperscript{th}$ layer, and $\act_i: \R^{l_i}\to\R^{l_i+1}$ represents the activation function of the $i\textsuperscript{th}$ layer. 
-The activation function is defined as $\act_i(\mv x)=[\sigma(x_1),\sigma(x_2),\cdots, \sigma(x_{l_{i}}), 1]^\top,\ \forall\mv x\in\R^{l_i}$, where $\sigma: \R\to\R$ is a nonlinear function, and the augmentation of $1$ is used to account for bias terms in the weight matrices. 
+The activation function is defined as $\act_i(\mv x)=\left(\sigma(x_1),\sigma(x_2),\cdots, \sigma(x_{l_{i}}), 1\right)^\top,\ \forall\mv x\in\R^{l_i}$, where $\sigma: \R\to\R$ is a nonlinear function, and the augmentation of $1$ is used to account for bias terms in the weight matrices. 
 Notice that the output size of $\NN(\cdot)$ is the same as that of the control input $\rbu$ (\ie $l_{k+1}=n$). 
 
 
@@ -480,22 +480,22 @@ These functions simplify stability analysis due to their continuous differentiab
 In this study, the hyperbolic tangent function $\tanh(\cdot)$ was selected as the activation function (\ie $\sigma(x) = \tanh(x),\ \forall x\in\R$), which provides desirable boundedness with $\norm{\sigma(x)}<1$ and $\norm{\ddtfrac{\sigma(x)}{x}}< 1$.
 
 For simplicity, each layer's weights are vectorized as $\wth_i:=\myvec(\wV_i)\in\R^{\Xi_i}$, where $\Xi_i:= (l_i+1)l_{i+1}$ is the number of weights in the $i\textsuperscript{th}$ layer. 
-The total weight vector $\wth\in\R^{\Xi}$ is defined by augmenting $\wth_i$ for all $i\in [0,\cdots,k]$ as 
+The total weight vector $\wth\in\R^{\Xi}$ is defined by augmenting $\wth_i$ for all $i\in \{0,\cdots,k\}$ as 
 \begin{equation}
     \wth := 
-    \begin{bmatrix}
+    \begin{pmatrix}
         \wth_k\\
         \wth_{k-1}\\
         \vdots\\
         \wth_0
-    \end{bmatrix}
+    \end{pmatrix}
     =
-    \begin{bmatrix}
+    \begin{pmatrix}
         \myvec(\wV_k)\\
         \myvec(\wV_{k-1})\\
         \vdots\\
         \myvec(\wV_0)
-    \end{bmatrix},
+    \end{pmatrix},
 \end{equation}
 where $\Xi={\sum_{i=0}^{k} \Xi_i}$ represents the total number of weights. The gradient of $ \NN({\q}_n;\wth)$ with respect to $\wth$ is defined as
 \begin{equation}
@@ -572,13 +572,13 @@ The control objective can be represented as follows:
         \\ \\
         \begin{aligned}
         \text{subject to }&c_{j}(\estwth) 
-        \le0, \quad j\in\mathcal{I},
+        \le0, \quad \forall j\in\mathcal{I},
         \end{aligned}
     \end{matrix}
     \label{eq:opt:problem1}
 \end{equation}
 where $J(\fe;\estwth):= \tfrac{1}{2} \fe^\top \fe$ is the objective function.
-Inequality constraints $c_j,\ j\in\mathcal{I}$, are imposed during the weight adaptation process to minimize the objective function, where $\mathcal I$ denotes the set of the imposed inequality constraints. 
+Inequality constraints $c_j,\ \forall j\in\mathcal{I}$, are imposed during the weight adaptation process to minimize the objective function, where $\mathcal I$ denotes the set of the imposed inequality constraints. 
 Here, $\fe$ is considered a pre-defined data or parameter for this optimization problem. The Lagrangian function is defined as
 \begin{equation}
     L(
@@ -627,9 +627,9 @@ The adaptation laws for $\estwth$ and $[\lambda]_{j\in\mathcal I}$ are derived t
     \end{align}
     \label{eq:adaptation law}
 \end{subequations}
-where $\alpha=\in\R_{>0}$ denotes the adaptation gain (learning rate) and $\beta_j\in\R_{>0}$ denotes the update rate of the Lagrange multipliers in $\mathcal I$, and the arguments of $L$ and $J$ are suppressed for brevity. 
+where $\alpha\in\R_{>0}$ denotes the adaptation gain (learning rate) and $\beta_j\in\R_{>0}$ denotes the update rate of the Lagrange multipliers in $\mathcal I$, and the arguments of $L$ and $J$ are suppressed for brevity. 
 % By selecting $\alpha_i\in\R_{>0},\ \forall i\in[1,\cdots,n]$, one can weight the importance of each component of the gradient of the objective function, allowing for a more tailored adaptation process.
-The Lagrange multipliers associated with inequality constraints are non-negative, \ie $\lambda_j\ge 0$, and they become zero when their corresponding constraints are inactive. When a constraint $c_j$ becomes active (\ie violated), the corresponding Lagrange multiplier $\lambda_j$ increases to address the violation. Once the violation is resolved and the constraint is no longer active (\ie $c_j < 0$), the multiplier decreases gradually until it returns to zero. Note that this adaption law is similar to the ALM in \cite{Nocedal:2006aa}, where the adaptation law for Lagrange multipliers is given by $\lambda_j\leftarrow \max(\lambda_j-\tfrac{c_j}{\mu},0)$, with $\mu\in\R_{>0}$ being the penalty parameter. 
+The Lagrange multipliers associated with inequality constraints are non-negative, \ie $\lambda_j\ge 0$, and they become zero when their corresponding constraints are inactive. When a constraint $c_j$ becomes active (\ie violated), the corresponding Lagrange multiplier $\lambda_j$ increases to address the violation. Once the violation is resolved and the constraint is no longer active (\ie $c_j < 0$), the multiplier decreases gradually until it returns to zero. Note that this adaption law is similar to the ALM in \cite{Nocedal:2006aa}, where the adaptation law for Lagrange multipliers is given by $\lambda_j\leftarrow \max\left(\lambda_j-\tfrac{c_j}{\mu},0\right)$, with $\mu\in\R_{>0}$ being the penalty parameter. 
 
 At steady state, where $\ddtt{\estwth}=0$ and $\ddtt\lambda_j=0$, the KKT conditions are satisfied, \ie $\pptfrac{L}{\estwth}=0$, $c_j \le 0$, $\lambda_j \ge 0$, and $\lambda_j c_j=0$ \cite[Chap.~12 T.~12.1]{Nocedal:2006aa}.
 In other words, the proposed optimizer updates $\estwth$ and $\lambda_j$ in a way that satisfies the KKT conditions. 
@@ -674,7 +674,7 @@ In \cite{Douratsos:2007aa,Saerens:1991aa}, the authors approximate $\pptfrac{\fe
     \approx
     [
         \mysign(\pptfrac{r_i}{\tau_j})
-    ]_{i,j\in[1,\cdots,m]}
+    ]_{i,j\in\{1,\cdots,m\}}
 $ using the sign of each entry (\ie control direction).
 However, this method is not suitable for \eqref{eq:sys1}, since the control directions are unknown, but the sign of the control input is known (\ie $\rbM^{-1}$ is positive definite matrix in the view of Property \ref{prop:M}).
 Therefore, we propose to approximate $\pptfrac{\fe}{\rbu}$ as $\pptfrac{\fe}{\rbu}\approx \mm I_n$ and one can conclude \eqref{eq:adap:th} as follows:
@@ -787,7 +787,7 @@ that $\pptfrac{c_j}{\estwth_k}^\top\estwth_k>0$.
 \end{proof}
 
 The weight constraints are essential to prevent the weights from diverging during the adaptation process.
-The weight constraints $\boldsymbol{c}_{\theta}:= [c_{\theta_i}]_{i\in[0,\cdots ,k]}\in\mathbb R^{k+1}$ are defined for each layer's weight as follows:
+The weight constraints $\boldsymbol{c}_{\theta}:= [c_{\theta_i}]_{i\in\{0,\cdots ,k\}}\in\mathbb R^{k+1}$ are defined for each layer's weight as follows:
 \begin{equation}
     c_{\theta_i}
     =
@@ -822,17 +822,17 @@ Note that $\mv c_{\theta}$ satisfies Assumption \ref{assum:convex} and \ref{assu
 %  SECTION STABILITY ANALYSIS ==============================
 \section{Stability Analysis}\label{sec:stability}
 
-Before conducting the stability analysis, let us define the weight estimation error as $\tilde\wth:= [\tilde\wth_i]_{i\in[0,\cdots,k]}$, where $\tilde\wth_i:=\estwth_i-\idealwth_i$.
+Before conducting the stability analysis, let us define the weight estimation error as $\tilde\wth:= [\tilde\wth_i]_{i\in\{0,\cdots,k\}}$, where $\tilde\wth_i:=\estwth_i-\idealwth_i$.
 The following lemma is introduced for the stability analysis.
 
 \begin{lem} 
-    If $c_j(\estwth),\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in[0,\cdots,k]}$ satisfies Assumption \ref{assum:convex}, then $\norm{\pptfrac{c_j}{\estwth_i}},\ \forall i\in[k-1,\cdots, 0]$, is bounded, provided the norms of $\estwth_i,\ \forall i\in[k,\cdots, i+1]$, remain bounded.
+    If $c_j(\estwth),\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$ satisfies Assumption \ref{assum:convex}, then $\norm{\pptfrac{c_j}{\estwth_i}},\ \forall i\in\{k-1,\cdots, 0\}$, is bounded, provided the norms of $\estwth_i,\ \forall i\in\{k,\cdots, i+1\}$, remain bounded.
     \label{lem:cstr:grad:bound}
 \end{lem}
 
 \begin{proof}
 
-The derivative of $c_j,\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in[0,\cdots,k]}$, with respect to $\estwth_i$ is represented as
+The derivative of $c_j,\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$, with respect to $\estwth_i$ is represented as
 \begin{equation}
     \pptfrac{c_j}{\estwth_i} 
     = 
@@ -930,7 +930,7 @@ Taking the time derivative of $V_2$ yields:
         -
         \underbrace{
         \textstyle\sum_{
-            j\in\mathcal{I}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}
+            j\in\mathcal{I}\setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}
         }
         \lambda_j 
         \estwth_k^\top \pptfrac{c_j}{\estwth_k}
@@ -969,7 +969,7 @@ According to \eqref{eq:lya2:dot}, the invariant set of $\estwth_k$ is defined as
 The satisfaction of the constraints can be verified by the boundedness of $\estwth_k$.
 For $c_{\theta_k}$, if the corresponding Lagrange multiplier $\lambda_{\theta_k}$ increases infinitely by the constraint violation, $\estwth_k$ approaches to the origin as $\Theta_{\estwth_k}^{c_1}$ is squeezed to a point.
 The satisfactions of the remaining control input constraints can be verified implicitly using $c_2$ in \eqref{eq:lya2:dot}.
-Similarly to $c_{\theta_k}$, as the control input constraint $c_j,\ \forall j\in\mathcal{I}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}$ is violated, the corresponding Lagrange multiplier $\lambda_j$ increases infinitely, so does $c_2$.
+Similarly to $c_{\theta_k}$, as the control input constraint $c_j,\ \forall j\in\mathcal{I}\setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$ is violated, the corresponding Lagrange multiplier $\lambda_j$ increases infinitely, so does $c_2$.
 It makes $c_2$ dominates the right-hand side of \eqref{eq:lya2:dot}, which leads $\ddtt V_2$ negative definite.
 This drives $\estwth_k$ to the origin until the constraint is satisfied (\ie by Assumption \ref{assum:convex} and Lemma \ref{lem:convex:angle}, the control input constraints can be considered as convex constraint in $\estwth_k$-space).
 
@@ -1041,8 +1041,8 @@ The boundedness of $\estwth_k$ also can be ensured by the invariant set $\Theta_
 
 \hfill 
 
-The boundedness of inner layers' weights and satisfactions of their constraints $c_j,\ \forall j\in\{\theta_i\}_{i\in[k-1,\cdots,0]}$ can be shown recursively, using \cite[Chap.~4 T.~1.9]{Desoer:2009aa}
-The dynamics of $\estwth_i,\ \forall i\in[k-1,\cdots,0]$ are represented as
+The boundedness of inner layers' weights and satisfactions of their constraints $c_j,\ \forall j\in\{\theta_i\}_{i\in\{k-1,\cdots,0\}}$ can be shown recursively, using \cite[Chap.~4 T.~1.9]{Desoer:2009aa}
+The dynamics of $\estwth_i,\ \forall i\in\{k-1,\cdots,0\}$ are represented as
 \begin{equation}
     \ddtt \estwth_i 
     =
@@ -1054,14 +1054,14 @@ The dynamics of $\estwth_i,\ \forall i\in[k-1,\cdots,0]$ are represented as
         \lambda_{\theta_i}\estwth_i
         +
         \textstyle\sum_{
-            j\in\mathcal{I}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}
+            j\in\mathcal{I}\setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}
         }
         \lambda_j
         \pptfrac{c_j}{\estwth_i}
     \right)
     .
 \end{equation}
-Invoking Lemma \ref{lem:cstr:grad:bound}, $\estwth_i$ is bounded, provided that $\estwth_i,\ \forall i\in[k,\cdots,i+1]$ are bounded, since the system matrix $-\lambda_{\theta_i} \mm I_{\Xi_i}$ is stable and the residual terms are bounded.
+Invoking Lemma \ref{lem:cstr:grad:bound}, $\estwth_i$ is bounded, provided that $\estwth_i,\ \forall i\in\{k,\cdots,i+1\}$ are bounded, since the system matrix $-\lambda_{\theta_i} \mm I_{\Xi_i}$ is stable and the residual terms are bounded.
 Therefore, starting from $(k-1)\textsuperscript{th}$ layer, the boundedness of $\estwth_i$ can be established recursively down to the input layer ($i=0$).
 
 \hfill
@@ -1138,34 +1138,34 @@ The values of the system model parameters are provided in Table~\ref{table:syste
 % ------------------------------------
 % Reference Trajectory
 % ------------------------------------
-The desired trajectory for $\q=[q_1,q_2]^\top $ was generated using fifth-order polynomial functions $\mypoly^5(\mv{x}_1,\mv{x}_2,t_f,t)$, to satisfy the initial $\mv{x}_1$ and final $\mv{x}_2$ angle conditions and zero velocities of the joints, where $t_f$ is the time duration.
+The desired trajectory for $\q=\left(q_1,q_2\right)^\top $ was generated using fifth-order polynomial functions $\mypoly^5(\mv{x}_1,\mv{x}_2,t_f,t)$, to satisfy the initial $\mv{x}_1$ and final $\mv{x}_2$ angle conditions and zero velocities of the joints, where $t_f$ is the time duration.
 The desired trajectory is defined as follows:
 \begin{equation}
     \qd(t) 
     \!=\! 
-    \begin{bmatrix}
+    \begin{pmatrix}
         {q_d}_1\\{q_d}_2
-    \end{bmatrix}
+    \end{pmatrix}
     \!=\!
     \begin{cases}
     \mypoly^5({\qd}_0,{\qd}_1,t_f,t),
         \!&\!
-        \text{if } 0\le t < t_f 
+        \text{if } 0\!\le\!t\!<\!t_f 
         ,
         \\
     \mypoly^5({\qd}_1,{\qd}_2,t_f,t-t_f),
         \!&\!
-        \text{if } t_f\le t < 2t_f 
+        \text{if } t_f\!\le\!t\!<\!2t_f 
         ,
         \\
     \mypoly^5({\qd}_2,{\qd}_1,t_f,t-2t_f),
         \!&\! 
-        \text{if } 2t_f\le t < 3t_f 
+        \text{if } 2t_f\!\le\!t\!<\!3t_f 
         .
         \\
     \mypoly^5({\qd}_1,{\qd}_0,t_f,t-3t_f),
         \!&\!    
-        \text{if } 3t_f\le t < 4t_f 
+        \text{if } 3t_f\!\le\!t\!<\!4t_f 
         ,
         \\
     \end{cases}
