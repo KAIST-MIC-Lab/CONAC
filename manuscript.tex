@@ -291,7 +291,7 @@ where $\q\in \R^n$ denotes the generalized coordinate, $\rbd$ represents disturb
 The terms $\rbM:=\rbM(\q)\in\R^{n\times n}$, $\rbVm:=\rbVm(\q,\dq)\in\R^{n\times n}$, $\rbF:=\rbF(\dq)\in\R^{n}$ and $\rbG:=\rbG(\q)$ represent the unknown inertia matrix, Coriolis/centripetal matrix, friction terms and gravity vector
 The function $\mysat(\cdot):\R^n\to\R^n$ represents the inherent physical limitations of the actuators such that $\norm{\mysat(\rbu)}\le \overline\tau$, where $\overline\tau$ denotes the maximum norm of control input.
 To account for these limitations, it is essential to incorporate physically motivated constraints into the controller design.
-Appendix \ref{sec:appen:cstr} introduces candidate constraints that can be applied to ensure compliance with these physical limitations.
+\ref{sec:appen:cstr} introduces candidate constraints that can be applied to ensure compliance with these physical limitations.
 
 The Euler-Lagrange system \eqref{eq:sys1} satisfy some important physical properties \cite[see, Chap. 3 Tab. 3.2.1]{Lewis:1998aa}.
 We introduce the following properties:
@@ -301,7 +301,7 @@ We introduce the following properties:
 \end{prop}
 
 \begin{prop} 
-    The Coriolis/centripetal matrix $\rbVm$ can always be selected so that the matrix $(\dot{\rbM}-2\rbVm)$ is skew-symmetric.
+    The Coriolis/centripetal matrix $\rbVm$ can always be selected so that the matrix $\dot{\rbM}-2\rbVm$ is skew-symmetric, \ie $\mv{x}^\top(\dot{\rbM}-2\rbVm)\mv{x}=0,\ \forall \mv{x}\in\R^n$.
     \label{prop:skew}
 \end{prop}
 
@@ -323,13 +323,13 @@ Considering the control input saturation function, $\qd(t)$ is supposed to satis
 The architecture of the proposed CoNAC is illustrated in Fig.~\ref{fig:ctrl:diagram}, consisting of: a DNN that functions as a neuro-adaptive controller, and a weight optimizer for the DNN. 
 Section \ref{sec:sub:NAC} presents the neuro-adaptive controller along with the reference generator, and Section \ref{sec:sub:NN definition} defines the DNN model. The weight optimizer will be detailed in Section \ref{sec:sub:weight optimizer}.
 
-\begin{figure*}[!t]
+\begin{figure}[!t]
     \centering
-    \includegraphics[width=0.8\linewidth]{src/figures/Controller.drawio.png}
+    \includegraphics[width=.99\linewidth]{src/figures/Controller.drawio.pdf}
     % \includesvg[width=0.75\linewidth]{Controller.drawio.svg}
     \caption{Architecture of the constrained optimization-based neuro-adaptive controller (CoNAC).}
     \label{fig:ctrl:diagram}
-\end{figure*}
+\end{figure}
 
 \subsection{Neuro-Adaptive Controller Design}\label{sec:sub:NAC}
 
@@ -373,7 +373,10 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
     \begin{aligned}
         \ddtt{V}_1
         =&
-        \fe^\top \rbM (
+        \fe^\top \dot{\rbM}\fe + \tfrac{1}{2}\fe^\top \ddtfrac{\rbM}{\fe}\fe
+        \\
+        =&
+        \fe^\top (
             -\rbVm \fe -\mm K \fe + \mv f
             -\rbd + \mysat(\rbu)
         )
@@ -1377,8 +1380,8 @@ The quantitative comparison of the tracking performance was evaluated using the 
       \includegraphics
     %   \includegraphics[width=\figSizeTwoCol\linewidth]
       {
-        fig/Fig1.pdf
-        % src/script_simulation/figures/compare/Fig1.eps
+        % fig/Fig1.pdf
+        src/script_simulation/figures/compare/Fig1.eps
       }%
       \label{fig:ctrl:result:q1}}
     \hfill
