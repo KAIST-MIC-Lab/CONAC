@@ -9,8 +9,8 @@
 
 You can find papers here:
 
-- First submission: [./subs/1st_sub.pdf](./subs/1st_sub.pdf)
-- Final submission: [still working](./manuscript.pdf)
+- First submission: [./subs/ECC25 1st.pdf](./subs/ECC25%201st.pdf)
+- Final submission: [./subs/ECC25 Final.pdf](./subs/ECC25%20Final.pdf)
 
 ## About this Research
 
