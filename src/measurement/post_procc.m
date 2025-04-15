@@ -1,13 +1,11 @@
-function [data, loss_ratio] = post_procc(ctrl_name)
+function [data, loss_ratio] = post_procc(ctrl_name, ctrl_num)
 
+    % remove the data with large change
     data = readtable("sim_result/"+ctrl_name);
     data = data{1:end-1, 1:28};
-
-    del_ts = [0.001, 0.004];
-
-    pt = find(data(:,2).^2 > 1e-6);
-    data = data(pt, :);
     ori_num = length(data);
+
+    del_ts = [0.002, 0.004];
 
     pt = [];
     % sampling time check
@@ -18,18 +16,28 @@ function [data, loss_ratio] = post_procc(ctrl_name)
         pt = union(pt, tmp_pt);
     end
 
+    control_num = ctrl_num;
     % remove the data with large change
+    tmp_pt = find((data(:,2) - control_num).^2 < 1e-6);
+    data = data(tmp_pt, :);
+
+    pt = 1:size(data,1);
     thr = 1e0;
     for idx = 3:28
         tmp_pt = find((data(2:end,idx) - data(1:end-1,idx)).^2 > thr);
         pt = setdiff(pt, tmp_pt);
     end
-
+    
     data = data(pt, :);
     mod_num = length(data);
-
     loss_ratio = (ori_num - mod_num) / ori_num;
     fprintf('loss ratio: %.3f%%\n', loss_ratio*1e2);
+    
+    % figure(1); clf;
+    % plot(data(:,1), data(:,2)); hold on
+    % plot(data(:,1), data(:,4)); hold on
+
+
 end
 
 

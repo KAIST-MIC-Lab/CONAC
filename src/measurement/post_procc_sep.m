@@ -2,6 +2,7 @@ function [data, loss_ratio] = post_procc_sep(ctrl_name)
 
     % remove the data with large change
     data = readtable("sim_result/"+ctrl_name);
+    data{:,[1:28]} = data{:, [1,2,5:30]};
     data = data{1:end-1, 1:28};
     ori_num = length(data);
 
@@ -20,7 +21,7 @@ function [data, loss_ratio] = post_procc_sep(ctrl_name)
     % seperate
     pt1 = find(data(:,2) == 2);
     pt2 = find(data(:,2) == 3); 
-    pt = setdiff(1:size(data,1), pt1);ww
+    pt = setdiff(1:size(data,1), pt1);
     pt = setdiff(pt, pt2);
     data(pt, 2) = zeros(length(pt), 1);
     
@@ -40,7 +41,7 @@ function [data, loss_ratio] = post_procc_sep(ctrl_name)
 
     return
 
-    del_ts = [0.001, 0.004];
+    del_ts = [0.002, 0.004];
 
     pt = find(data(:,2).^2 > 1e-6);
     data = data(pt, :);

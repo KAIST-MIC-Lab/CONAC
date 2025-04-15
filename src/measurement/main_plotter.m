@@ -2,7 +2,7 @@ clear
 
 ANITMATE = 0;
 AINMATION_SAVE_FLAG = 0;
-SAVE_FLAG = 1;
+SAVE_FLAG = 0;
 POSITION_FLAG = 1; % it will plot fiugures in the same position
 
 %%
@@ -25,12 +25,12 @@ lgd_size = 16;
 fig_height = 230 * 1; 
 fig_width = 800 * 1;
 %% 
-ctrl1_name = "c1.csv"; % CoNAC
+ctrl1_name = "c2-2.csv"; % CoNAC
 ctrl2_name = "c2.csv"; % Aux.
 
 %%
-ctrl1_log = post_procc(ctrl1_name);
-ctrl2_log = post_procc(ctrl2_name);
+ctrl1_log = post_procc(ctrl1_name, 4);
+ctrl2_log = post_procc(ctrl2_name, 4);
 
 %% RESULT PLOTTER
 % T = ctrl1_log.T;
@@ -42,8 +42,8 @@ T = t1(end);
 obs_t1 = 1:length(t1);
 obs_t2 = 1:length(t2);
 
-start_time = 8.5;
-end_time = 9.9;
+start_time = 19;
+end_time = 21;
 
 obs_t1_1 = find(t1 >= start_time & t1 <= end_time);
 obs_t2_1 = find(t2 >= start_time & t2 <= end_time);
@@ -73,9 +73,9 @@ c2_th =     transpose(ctrl2_log(:,23:25));
 c2_zeta =   transpose(ctrl2_log(:,26:27));
 c2_cmp =   transpose(ctrl2_log(:,28));
 
-u_max1 = 10;
-u_max2 = 2;
-u_ball = 10;
+u_ball = 11.5;
+u_max2 = 4;
+u_max1 = sqrt(u_ball^2 - u_max2^2);
 th_max = [11,12,13];
 
 %%
@@ -356,7 +356,7 @@ xlim([0 T])
 % ============================================
 %    Fig. 11: Box-Whisker Plot
 % ============================================
-var_plot
+% var_plot
 
 %% ============================================
 %% SAVE FIGURES

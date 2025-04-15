@@ -31,9 +31,9 @@ end
 
 
 %% 
-ctrl1_name = "12-Apr-2025_16-42-57"; % CoNAC
-ctrl2_name = "12-Apr-2025_16-35-02"; % Aux.
-ctrl3_name = "12-Apr-2025_16-43-22"; % CoNAC 2.
+ctrl1_name = "14-Apr-2025_13-30-51"; % CoNAC
+ctrl2_name = "14-Apr-2025_13-31-05"; % Aux.
+ctrl3_name = "14-Apr-2025_13-31-26"; % CoNAC 2.
 
 % ctrl1_name = "11-Apr-2025_15-56-43"; % CoNAC
 % ctrl2_name = "11-Apr-2025_15-57-02"; % Aux.

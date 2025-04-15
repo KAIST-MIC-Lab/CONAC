@@ -15,7 +15,7 @@ Note:
 import os
 
 COMMIT1 = "6aeb18adc1837a672b27f840c0d8db9bda24ddea" # recent
-COMMIT2 = "1e867d3f66016f2603fbf7f1138cdaa9d0be86cb" 
+COMMIT2 = "1e867d3f66016f2603fbf7f1138cdaa9d0be86cb"
 
 SAVE_DIR = "."
 
@@ -43,13 +43,28 @@ def main():
     print(f"$ git show {commit2}:manuscript.tex > manuscript2.tex")
     os.system(f"git show {commit2}:manuscript.tex > manuscript2.tex")
 
+    os.system("pdflatex -interaction=batchmode manuscript1.tex")
+    os.system("bibtex manuscript1.aux")
+    os.system("pdflatex -interaction=batchmode manuscript1.tex")
+    os.system("pdflatex -interaction=batchmode manuscript1.tex")
+
+    os.system("pdflatex -interaction=batchmode manuscript2.tex")
+    os.system("bibtex manuscript2.aux")
+    os.system("pdflatex -interaction=batchmode manuscript2.tex")
+    os.system("pdflatex -interaction=batchmode manuscript2.tex")
+
     print("Running latexdiff...")
-    print(f"$ latexdiff --flatten manuscript2.tex manuscript1.tex > diff.tex")
-    os.system(f"latexdiff manuscript2.tex manuscript1.tex > diff.tex")
+    print(f"$ latexdiff --flatten ./manuscript2.tex manuscript1.tex > diff.tex")
+    os.system(f"latexdiff --flatten manuscript2.tex manuscript1.tex > diff.tex")
+
+    # return
 
     print("Running pdflatex...")
     print(f"$ pdflatex diff.tex")
-    os.system("pdflatex diff.tex")
+    os.system("pdflatex -interaction=batchmode -interaction=nonstopmode diff.tex")
+    os.system("bibtex diff.aux")
+    os.system("pdflatex -interaction=batchmode -interaction=nonstopmode diff.tex")
+    os.system("pdflatex -interaction=batchmode -interaction=nonstopmode diff.tex")
 
     print("Cleaning up...")
     os.system("rm manuscript1.tex")
@@ -66,7 +81,7 @@ def main():
     os.system("rm *.fdb_latexmk")
     os.system("rm *.fls")
     os.system("rm *.spl")
-    
+
     print("Done! The diff file is saved as diff.tex.")
 
 if __name__ == "__main__":
