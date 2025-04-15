@@ -1,46 +1,66 @@
 function [data, loss_ratio] = post_procc(ctrl_name, ctrl_num)
 
-    % remove the data with large change
-    data = readtable("sim_result/"+ctrl_name);
-    data = data{1:end-1, 1:28};
-    ori_num = length(data);
+    %% DATA LOAD
+    log = readtable("sim_result/"+ctrl_name+".csv");
+    
+    log = log{1:end-1, 1:28};
 
-    del_ts = [0.002, 0.004];
+    %% CONTROL NUMBER CHECK
+    control_num = ctrl_num;
+    % remove the log with large change
+    tmp_pt = find((log(:,2) - control_num).^2 < 1e-6);
+    
+    log = log(tmp_pt, :);
+
+    %% SAMPLING TIME CHECK0
+    ori_num = length(log);
 
     pt = [];
-    % sampling time check
-    for idx = 1:length(del_ts)
-        del_t = del_ts(idx);
-        tmp_pt = find((data(2:end,1) - data(1:end-1,1) - del_t).^2 < 1e-6);
-        
+    for del_t = [0.002, 0.004]
+        tmp_pt = find((log(2:end,1) - log(1:end-1,1) - del_t).^2 < 1e-6);
         pt = union(pt, tmp_pt);
     end
 
-    control_num = ctrl_num;
-    % remove the data with large change
-    tmp_pt = find((data(:,2) - control_num).^2 < 1e-6);
-    data = data(tmp_pt, :);
+    log = log(pt, :);
 
-    pt = 1:size(data,1);
+    %% LARGE CHANGE CHECK
+    pt = 1:size(log,1);
     thr = 1e0;
     for idx = 3:28
-        tmp_pt = find((data(2:end,idx) - data(1:end-1,idx)).^2 > thr);
+        tmp_pt = find((log(2:end,idx) - log(1:end-1,idx)).^2 > thr);
         pt = setdiff(pt, tmp_pt);
     end
     
-    data = data(pt, :);
-    mod_num = length(data);
+    log = log(pt, :);
+
+    %% LOSS CHECK
+    mod_num = length(log);
     loss_ratio = (ori_num - mod_num) / ori_num;
     fprintf('loss ratio: %.3f%%\n', loss_ratio*1e2);
     
-    % figure(1); clf;
-    % plot(data(:,1), data(:,2)); hold on
-    % plot(data(:,1), data(:,4)); hold on
+    %% RUNNING TIME CHECK
+    start_t = log(1,1);
+    end_t = start_t+24;
 
+    data.obs   = find(log(:,1) >= start_t & log(:,1) <= end_t);
 
+    %% STORE IN STRUCTURE
+    data.t      = transpose(log(:,1));  
+    data.t = data.t - data.t(1);
+    data.x1     = transpose(log(:,[3,4]));
+    data.x2     = transpose(log(:,[5,6]));
+    data.xd1    = transpose(log(:,[7,8]));
+    data.xd2    = transpose(log(:,[9,10]));
+    data.u      = transpose(log(:,[11,12]));
+    data.uSat   = transpose(log(:,[13,14]));
+    data.lbd    = transpose(log(:,15:22));
+    data.th     = transpose(log(:,23:25));
+    data.zeta   = transpose(log(:,26:27));
+    data.cmp    = transpose(log(:,28));
+    
 end
 
-
+%% DATA LABEL
 % elapsedTime,
 % CONTROL_FLAG,
 % q(0),

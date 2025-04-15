@@ -1,88 +1,117 @@
 """
 latexdiff.py
-- COMMIT1: Default hash for the first commit (most recent).
-- COMMIT2: Default hash for the second commit.
-- `latexdiff` and `pdflatex` must be installed and available in the system PATH.
-Note:
-- Ensure that the `manuscript.tex` file exists in the specified commits.
-- The script performs cleanup by removing intermediate files generated during 
-    the process.
+- COMMIT1: new commit hash.
+- COMMIT2: old commit hash.
+
+OUTPUT:
+- diff.pdf
 
 - Myeongseok Ryu
 - 2025.04.14
 """
 
 import os
+import subprocess
 
-COMMIT1 = "6aeb18adc1837a672b27f840c0d8db9bda24ddea" # recent
-COMMIT2 = "1e867d3f66016f2603fbf7f1138cdaa9d0be86cb"
+COMMIT1 = "6aeb18adc1837a672b27f840c0d8db9bda24ddea" # new
+COMMIT2 = "732664d84fa6e31b4a6167434ca7f8a5d4d41687" # old
+TEX_FILE_NAME = "{tex_file_name}"
 
 SAVE_DIR = "."
 
+def run_terminal_command(command):
+    print(f"$ {command}")
+    os.system(command)
+
+def compile_tex(file_name):
+    run_terminal_command("pdflatex -interaction=batchmode {file_name}")
+    run_terminal_command("bibtex {file_name[:-4]}.aux")
+    run_terminal_command("pdflatex -interaction=batchmode {file_name}")
+    run_terminal_command("pdflatex -interaction=batchmode {file_name}")
+
+def clean_up():
+    print("Cleaning up...")
+    run_terminal_command("rm tmp1.tex")
+    run_terminal_command("rm tmp2.tex")
+    run_terminal_command("rm tmp1.pdf")
+    run_terminal_command("rm tmp2.pdf")
+    run_terminal_command("rm diff.tex")
+    run_terminal_command("rm *.aux")
+    run_terminal_command("rm *.log")
+    run_terminal_command("rm *.out")
+    run_terminal_command("rm *.bbl")
+    run_terminal_command("rm *.blg")
+    run_terminal_command("rm *.run.xml")
+    run_terminal_command("rm *.toc")   
+    run_terminal_command("rm *.synctex.gz")
+    run_terminal_command("rm *.fdb_latexmk")
+    run_terminal_command("rm *.fls")
+    run_terminal_command("rm *.spl")
+    run_terminal_command("rm *.dvi")
+
 def main():
+    print(f"""  
+        *** LATEXDIFF ***
+        Myeonsgeok Ryu
 
-    print(f"       LATEXDIFF       ")
-    print(f"                       ")
+        INPUT OPTIONS:
+        - r: current working tree
+        - h: HEAD
+        - p: relatively previous
+        """)
 
-    commit1     = input(f"Enter the first commit hash (default: {COMMIT1}, or r: current working tree): ")
-    commit2     = input(f"Enter the second commit hash (default: {COMMIT2}): ")
-    # save_dir    = input(f"Enter the save directory (default: {SAVE_DIR}): ")
+    # -----------------------------
+    # Get input arguments
+    # -----------------------------
+    tex_file_name = input(f"Enter the tex file name (default: {TEX_FILE_NAME}): ")
+
+    if tex_file_name == "":
+        tex_file_name = TEX_FILE_NAME
+
+    commit1     = input(f"Enter the first commit hash of new one (r/H/SHA): ")
         
     if commit1 == "":
-        commit1 = COMMIT1
-    elif commit1 == "r":
+        ValueError("Please enter the commit hash.")
+    elif commit1 == "p":
+        ValueError("option p is not available for the first commit.")
+    elif commit1 == "h":
         commit1 = "HEAD"
+
+    commit2     = input(f"Enter the second commit hash of old one (r/p/SHA): ")
+
     if commit2 == "":
-        commit2 = COMMIT2
+        ValueError("Please enter the second commit hash.")
+    elif commit2 == "p":
+        commit2 = subprocess.check_output(["git", "rev-parse", f"{commit1}^"]).decode("utf-8").strip()
+    elif commit2 == "h":
+        commit2 = "HEAD"
+    
+    try:
+        # -----------------------------
+        # checkout the commit
+        # -----------------------------
+        if commit1 == "r":
+            run_terminal_command(f"cp {tex_file_name} tmp1.tex")
+        else:
+            run_terminal_command(f"git show {commit1}:{tex_file_name} > tmp1.tex")
+            run_terminal_command(f"git show {commit1}:{tex_file_name} > tmp1.tex")
 
-    print(f"Loading manuscript.tex from first commit...")
-    print(f"$ git show {commit1}:manuscript.tex > manuscript1.tex")
-    os.system(f"git show {commit1}:manuscript.tex > manuscript1.tex")
+        run_terminal_command(f"git show {commit2}:{tex_file_name} > tmp2.tex")
 
-    print(f"Loading manuscript.tex from second commit...")
-    print(f"$ git show {commit2}:manuscript.tex > manuscript2.tex")
-    os.system(f"git show {commit2}:manuscript.tex > manuscript2.tex")
+        compile_tex("tmp1.tex")
+        compile_tex("tmp2.tex")
+        run_terminal_command(f"latexdiff --flatten tmp2.tex tmp1.tex > diff.tex")
+        compile_tex("diff.tex")
 
-    os.system("pdflatex -interaction=batchmode manuscript1.tex")
-    os.system("bibtex manuscript1.aux")
-    os.system("pdflatex -interaction=batchmode manuscript1.tex")
-    os.system("pdflatex -interaction=batchmode manuscript1.tex")
+        clean_up()
 
-    os.system("pdflatex -interaction=batchmode manuscript2.tex")
-    os.system("bibtex manuscript2.aux")
-    os.system("pdflatex -interaction=batchmode manuscript2.tex")
-    os.system("pdflatex -interaction=batchmode manuscript2.tex")
+        print("Done! The diff file is saved as diff.tex.")
+    
+    except Exception as e:
+        print("An error occurred while processing the LaTeX files.")
+        print(f"Error: {e}")
 
-    print("Running latexdiff...")
-    print(f"$ latexdiff --flatten ./manuscript2.tex manuscript1.tex > diff.tex")
-    os.system(f"latexdiff --flatten manuscript2.tex manuscript1.tex > diff.tex")
-
-    # return
-
-    print("Running pdflatex...")
-    print(f"$ pdflatex diff.tex")
-    os.system("pdflatex -interaction=batchmode -interaction=nonstopmode diff.tex")
-    os.system("bibtex diff.aux")
-    os.system("pdflatex -interaction=batchmode -interaction=nonstopmode diff.tex")
-    os.system("pdflatex -interaction=batchmode -interaction=nonstopmode diff.tex")
-
-    print("Cleaning up...")
-    os.system("rm manuscript1.tex")
-    os.system("rm manuscript2.tex")
-    os.system("rm diff.tex")
-    os.system("rm *.aux")
-    os.system("rm *.log")
-    os.system("rm *.out")
-    os.system("rm *.bbl")
-    os.system("rm *.blg")
-    os.system("rm *.run.xml")
-    os.system("rm *.toc")   
-    os.system("rm *.synctex.gz")
-    os.system("rm *.fdb_latexmk")
-    os.system("rm *.fls")
-    os.system("rm *.spl")
-
-    print("Done! The diff file is saved as diff.tex.")
+        clean_up()
 
 if __name__ == "__main__":
     main()

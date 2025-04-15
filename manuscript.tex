@@ -87,7 +87,7 @@
 %% \fntext[label3]{}
 
 \title{
-  Constrained Optimization-Based Neuro-Adaptive Control (CONAC) for Uncertain Euler-Lagrange Systems Under Weight and Input Constraints 
+  Constrained Optimization-Based Neuro-Adaptive Control (CONAC) for Weight and Convex Input Constraints 
 } %% Article title
 
 %% use optional labels to link authors explicitly to addresses:
@@ -122,7 +122,11 @@
 
 %% Abstract
 \begin{abstract}
-  This study presents a constrained optimization-based neuro-adaptive controller (CoNAC) for uncertain Euler-Lagrange systems subject to weight norm and input constraints. A deep neural network (DNN) is employed to approximate the ideal stabilizing control law, compensating for lumped system uncertainties while addressing both types of constraints. The weight adaptation laws are formulated through a constrained optimization problem, ensuring first-order optimality conditions at steady state. The controller's stability is rigorously analyzed using Lyapunov theory, guaranteeing bounded tracking errors and DNN weights. Numerical simulations comparing CoNAC with three benchmark controllers demonstrate its effectiveness in tracking error regulation and satisfaction of constraints.
+  This study presents a constrained optimization-based neuro-adaptive controller (CONAC) for weight norm and convex input constraints. 
+  A deep neural network (DNN) is employed to approximate the ideal stabilizing control law, while addressing both types of constraints. 
+  The weight adaptation laws are formulated through a constrained optimization problem, ensuring first-order optimality conditions at steady state. 
+  The controller's stability is rigorously analyzed using Lyapunov theory, guaranteeing bounded tracking errors and DNN weights. 
+  Real-time implementation was conducted on a 2-DOF robotic manipulator, demonstrating the controller's effectiveness in achieving desired trajectory tracking while satisfying constraints.
 \end{abstract}
 
 %%Graphical abstract
@@ -138,7 +142,7 @@
 
 %% Keywords
 \begin{keyword}
-Neuro-adaptive control \sep constrained optimization \sep deep neural network \sep Euler-Lagrange system \sep input constraint
+Neuro-adaptive control \sep constrained optimization \sep deep neural network \sep input constraint
 
 %% keywords here, in the form: keyword \sep keyword
 %% PACS codes here, in the form: \PACS code \sep code
@@ -163,12 +167,12 @@ In this study, the following notation is used:
 
 \begin{itemize}
     \item $\otimes$ denotes the Kronecker product \cite[Definition 7.1.2]{Bernstein:2009aa}.
-    \item $\mv x=[x_i]_{i\in[1,\cdots,n]}\in\R^n$ and $
+    \item $\mv x=[x_i]_{i\in\{1,\cdots,n\}}\in\R^n$ and $
         \mm A
         := 
         [a_{ij}]
         _{
-            i\in[1,\cdots,n],j\in[1,\cdots ,m]
+            i\in\{1,\cdots,n\},j\in\{1,\cdots ,m\}
         }\allowbreak\in\R^{n\times m}
         $ denote a vector and a matrix.
     \item $\myrow_i(\mm A)$ denotes the $i\textsuperscript{th}$ row of the matrix $\mm A\in\R^{n\times m}$. 
@@ -257,9 +261,9 @@ This gap suggests that constrained optimization could be key to addressing both 
 
 The main contributions of this study are listed as follows:
 \begin{itemize}
-    \item A constrained optimization-based neuro-adaptive controller (CoNAC) is developed using a DNN, where input constraints and the boundedness of NN weights are formulated as inequality constraints within the adaptation process.
-    \item The weight adaptation laws in CoNAC are derived using constrained optimization theory to minimize the objective function while satisfying the inequality constraints. The adaptation laws ensure convergence of the weights to the first-order optimality conditions, specifically the Karush-Kuhn-Tucker (KKT) conditions.
-    \item The forward sensitivity method is applied in CoNAC to accurately calculate the gradient of the objective function. \MSRY{WILL BE DELETED}
+    \item A constrained optimization-based neuro-adaptive controller (CONAC) is developed using a DNN, where input constraints and the boundedness of NN weights are formulated as inequality constraints within the adaptation process.
+    \item The weight adaptation laws in CONAC are derived using constrained optimization theory to minimize the objective function while satisfying the inequality constraints. The adaptation laws ensure convergence of the weights to the first-order optimality conditions, specifically the Karush-Kuhn-Tucker (KKT) conditions.
+    % \item The forward sensitivity method is applied in CONAC to accurately calculate the gradient of the objective function. \MSRY{WILL BE DELETED}
     %, enabling more precise real-time adaptation.
 \end{itemize}
 
@@ -269,13 +273,14 @@ The remainder of this paper is organized as follows.
 Section \ref{sec:Problem Formulation} presents the target system and control objective.
 Section \ref{sec:ctrl design} introduces the proposed controller and the architecture of DNN in the controller. 
 In Section \ref{sec:adap_laws}, the weight adaptation laws are developed.
-Candidates of input constraints are presented in \ref{sec:appen:cstr}.
 Section \ref{sec:stability} analyzes the stability of the proposed controller.
-A comparative study of the four selected controllers, including the proposed controller, is reported in Section \ref{sec:sim}.
+A real-time implementation of the proposed controller is presented in Section \ref{sec:sim}, where the proposed controller is applied to a 2-DOF robotic manipulator.
 Finally, Section \ref{sec:conclusion} concludes the paper and discusses potential future work.
-% The appendices provide the proof of the lemma used in the stability analysis.
+The candidates of input constraints are presented in \ref{sec:appen:cstr}.
 
-%  SECTION PROBLEM FORMULATION ============================
+% ====================================
+%  SECTION PROBLEM FORMULATION 
+% ====================================
 \section{Problem Formulation}\label{sec:Problem Formulation}
 
 \subsection{Model Dynamics and Control Objective}
@@ -320,14 +325,14 @@ Considering the control input saturation function, $\qd(t)$ is supposed to satis
 %  SECTION CONTROLLER DESIGN ==============================
 \section{Control Law Development}\label{sec:ctrl design}
 
-The architecture of the proposed CoNAC is illustrated in Fig.~\ref{fig:ctrl:diagram}, consisting of: a DNN that functions as a neuro-adaptive controller, and a weight optimizer for the DNN. 
+The architecture of the proposed CONAC is illustrated in Fig.~\ref{fig:ctrl:diagram}, consisting of: a DNN that functions as a neuro-adaptive controller, and a weight optimizer for the DNN. 
 Section \ref{sec:sub:NAC} presents the neuro-adaptive controller along with the reference generator, and Section \ref{sec:sub:NN definition} defines the DNN model. The weight optimizer will be detailed in Section \ref{sec:sub:weight optimizer}.
 
 \begin{figure}[!t]
     \centering
     \includegraphics[width=.99\linewidth]{src/figures/Controller.drawio.pdf}
     % \includesvg[width=0.75\linewidth]{Controller.drawio.svg}
-    \caption{Architecture of the constrained optimization-based neuro-adaptive controller (CoNAC).}
+    \caption{Architecture of the constrained optimization-based neuro-adaptive controller (CONAC).}
     \label{fig:ctrl:diagram}
 \end{figure}
 
@@ -457,11 +462,20 @@ Finally, one can conclude that the result of \eqref{eq:lya1:dot1} can be obtaine
 
 \subsection{Deep Neural Network (DNN) Model}\label{sec:sub:NN definition}
 
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.99\linewidth]{src/figures/DNN.drawio.pdf}
+    \caption{
+        Architecture of the DNN $\NN({\q}_n;\wth)$ with $2$ hidden layers.
+    }
+    \label{fig:DNN}
+\end{figure}
+
 The DNN architecture $\NN({\q}_n;\wth) := \NN_k$ can be recursively represented as follows:
 \begin{equation}
     \NN_i :=
     \begin{cases}
-        \wV_i^\top \NN_i(\NN_{i-1}), 
+        \wV_i^\top \act_i(\NN_{i-1}), 
         &
         i\in[1,\dots,k],
         \\
@@ -1074,14 +1088,37 @@ Finally, the filtered error $\fe$ and the estimated weights $\estwth$ are bounde
 \end{proof}
 
 %  SECTION SIMULATION ======================================
-\section{Implementation and Validation}\label{sec:sim}
+\section{Real-Time Implementation and Validation}\label{sec:sim}
 
-The proposed CoNAC was validated via numerical simulation and real-time experiment on a two-link manipulator.
+The proposed CONAC was validated via real-time experiment on a two-link manipulator.
 
-\subsection{Numerical Simulation Validation}
+\subsection{Validation Setup}
 
 % ------------------------------------
-% MCU & Robot Model and Ref. Trajectory
+% Real-time Implementation Set-up
+% ------------------------------------
+\begin{figure}[t]
+    \centering
+        \includegraphics[width=\figSizeOneCol\linewidth]
+        {
+            fig/exp_set.jpg
+        }%
+    \caption{
+        Robot setup for the real-time experiment.
+    }
+    \label{fig:ctrl:exp:set}
+  \end{figure}
+
+To validate the effectiveness of the proposed CONAC, a real-time experiment was conducted on a two-link manipulator, as shown in Fig.~\ref{fig:ctrl:exp:set}. 
+The OpenCR1.0 \cite{opencr} with a 32-bit ARM Cortex and a 216 MHz clock frequency was used for the real-time implementation.
+\color{red}
+The experimental setup consisted of a two-link manipulator with a 2-DOF arm, equipped with two @@@@@ servos. 
+The servos were controlled using the OpenCR1.0 board, which was connected to a computer via USB. 
+The reference trajectory was generated using the same method as in the numerical simulation.
+\color{black}
+
+% ------------------------------------
+% Robot Model and Ref. Trajectory
 % ------------------------------------
 The two-link manipulator model is depicted in Fig.~\ref{fig:robot:model}, adapted from \cite{Markus:2013aa}. 
 \MSRY{CORRECT HERE}
@@ -1184,7 +1221,7 @@ To demonstrate the learning capability of NN, the desired trajectory was applied
 % ------------------------------------
 % Control Input Saturation
 % ------------------------------------
-To demonstrate the effectiveness of the proposed CoNAC to handle the combination of the convex input constraints, the saturation function is defined to project the control input onto following convex domain $\Theta_{\mysat}:=\left\{\Theta_{\mysat, {\rbu}}\cap\Theta_{\mysat, {\tau_2}}\right\}$ as depicted in Fig.~\ref{fig:robot:sat}, where
+To demonstrate the effectiveness of the proposed CONAC to handle the combination of the convex input constraints, the saturation function is defined to project the control input onto following convex domain $\Theta_{\mysat}:=\left\{\Theta_{\mysat, {\rbu}}\cap\Theta_{\mysat, {\tau_2}}\right\}$ as depicted in Fig.~\ref{fig:robot:sat}, where
 %
 \begin{subequations}
     \begin{align}
@@ -1226,11 +1263,11 @@ For a comparative study, we implemented 3 controllers.
 The properties of the controllers are summarized in Table~\ref{table:controllers}.
 
 % ------------------------------------
-% Controllers: CoNAC 
+% Controllers: CONAC 
 % ------------------------------------
-\subsubsection*{Controller 1: (C$_1$) CoNAC; proposed}
+\subsubsection*{Controller 1: (C$_1$) CONAC; proposed}
 
-To handle the input saturation, the proposed CoNAC was implemented with the input bound constraint for second link $c_{\overline\tau_2}$ and $c_{\underline\tau_2}$ \eqref{eq:cstr:input:bound} and the nonlinear input norm constraint $c_{\rbu}$ \eqref{eq:cstr:input:norm}, as follows:
+To handle the input saturation, the proposed CONAC was implemented with the input bound constraint for second link $c_{\overline\tau_2}$ and $c_{\underline\tau_2}$ \eqref{eq:cstr:input:bound} and the nonlinear input norm constraint $c_{\rbu}$ \eqref{eq:cstr:input:norm}, as follows:
 \begin{equation}
     c_{\overline\tau_2}     
     =
@@ -1252,19 +1289,19 @@ To handle the input saturation, the proposed CoNAC was implemented with the inpu
     )^2 
     <0
     ,
-    \label{eq:sim:cstr:CoNAC}
+    \label{eq:sim:cstr:CONAC}
 \end{equation}
 where $\overline\tau_2=-\underline{\tau}_2=2.5$ are the absolute bound of the second link actuator, and $\overline\tau=10$ is the maximum feasible norm of the control input.
 Hence, (C$_1$) is possible to use full capability of the actuator.
-The weight constraints $c_{\theta_i},\ \forall i\in[0,\cdots,k]$ were also considered in the CoNAC.
+The weight constraints $c_{\theta_i},\ \forall i\in[0,\cdots,k]$ were also considered in the CONAC.
 As described in \eqref{eq:control:est}, the control input is equal to the output of the NN, and the adaptation law is defined in \eqref{eq:adaptation law}.
 
 The update rate of the Lagrange multipliers was set to $\beta_{\theta_i}=10^{-3},\ \forall i\in[0,\cdots,k]$, and $\beta_{\rbu}=10$ and $\beta_{\overline{\tau}_2}=\beta_{\underline{\tau}_2}=10^{3}$.
 
 % ------------------------------------
-% Controllers: Aux. system in CoNAC-AUX
+% Controllers: Aux. system in CONAC-AUX
 % ------------------------------------
-\subsubsection*{Controller 2: (C$_2$) CoNAC with auxiliary system}
+\subsubsection*{Controller 2: (C$_2$) CONAC with auxiliary system}
 
 On the other hand, the existing auxiliary system \cite{Esfandiari:2014aa,Karason:1994aa,Esfandiari:2015aa} was used to compare with the proposed (C$_1$).
 The auxiliary system is defined as $\ddtt{\mv\zeta} = \mm{A}_\zeta \mv{\zeta} + \mm{B}_\zeta \Delta\rbu,\ \mv{\zeta}\vert_{t=0} = \mv{0}_{2\times1}$, where $\mv{\zeta}\in\R^n$ denotes the auxiliary state, $\mm{A}_\zeta\in\R_{<0}^{n\times n}$, and $\mm{B}_\zeta\in\R^{n\times n}$.
@@ -1279,9 +1316,9 @@ The matrices of the auxiliary system are set to $\mm{A}_\zeta=\mydiag([-10,-10])
 \MSRY{sensitivity와 convergence에 대해서 더 설명이 필요한가?}
 
 % ------------------------------------
-% Controllers: CoNAC with small beta
+% Controllers: CONAC with small beta
 % ------------------------------------
-\subsubsection*{Controller 3: (C$_3$) CoNAC with small $\beta_i$}
+\subsubsection*{Controller 3: (C$_3$) CONAC with small $\beta_i$}
 
 To investigate the effect of the update rate of Lagrange multipliers, (C$_3$) was implemented with small $\beta_i$ values, which are set to $\beta_{\rbu}=1$, and $\beta_{\overline{\tau}_2}=\beta_{\underline{\tau}_2}=10^{2}$.
 The remaining parameters are the same as (C$_1$).
@@ -1295,9 +1332,9 @@ For all controllers ((C$_1$), (C$_2$), and (C$_3$)), the NN input vector ${\q}_n
 The NNs' weights were initialized randomly with uniform distribution in the range of $[-0.1,0.1]$, and the same random seed.
 Each NN architecture had two hidden layers with four nodes (\ie $k=2, l_0=6, l_1=4, l_2=4, l_3=2$), and the adaptation gain was set to $\alpha=0.5$.
 The filtering matrix $\mm{\Lambda}$ was set to $\mm{\Lambda}=\mydiag([5,15])$.
-The sampling rate of the controller was $250$ Hz considering the further real-time implementation, and $1000$ Hz for the simulation.
+The sampling rate of the controller was $250$ Hz considering the real-time implementation, and $1000$ Hz for the simulation.
+\MSRY{CAN Hz?}
 To emphasize the control input constraint handling capability, the weight constraint parameters were selected sufficiently large (\ie $\overline\wth_0=11, \overline\wth_1=12$, and $\overline\wth_2=13$), avoiding the violation of the weight constraints. 
-The readers are referred to the previous papers of the author's \MSRY{ECC, IECON paper} for the demonstration of the capabilities of the proposed CoNAC to address the weight constraints.
 
 The quantitative comparison of the tracking performance was evaluated using the $L_2$-norm of them, (\ie $\sqrt{\int_0^T\norm{h}\,\der t}$, where $h\in\{r_1,r_2\}$ and $T\in\R_{>0}$ denotes the each episode duration time.
 
@@ -1332,7 +1369,7 @@ The quantitative comparison of the tracking performance was evaluated using the 
 %     {\includegraphics[width=\figSizeOneCol\linewidth]{
 %         src/measurement/figures/Fig11.eps
 %     }}
-% \caption{Box-and-Whisker plot of $L_2$-norms of the tracking performances and control input constraint violations of CoNAC and CoNAC-AUX across various parameter values.}
+% \caption{Box-and-Whisker plot of $L_2$-norms of the tracking performances and control input constraint violations of CONAC and CONAC-AUX across various parameter values.}
 %     \label{fig:ctrl:result:var}
 % \end{figure}
 
@@ -1346,9 +1383,9 @@ The quantitative comparison of the tracking performance was evaluated using the 
 %         \!&\!Maximum\!&\!Median\!&\!Minimum\!\\
 %     \hline
 %     \hline
-%     \textbf{CoNAC}\!&\!$11.176\!\times\!10^{-3}$\!&\!$0.590\!\times\!10^{-3}$\!&\!$0.543\!\times\!10^{-3}$ \\
+%     \textbf{CONAC}\!&\!$11.176\!\times\!10^{-3}$\!&\!$0.590\!\times\!10^{-3}$\!&\!$0.543\!\times\!10^{-3}$ \\
 %     \hline
-%     \textbf{CoNAC-AUX}\!&\!$0.560\!\times\!10^{-3}$\!&\!$0.552\!\times\!10^{-3}$\!&\!$0.543\!\times\!10^{-3}$ \\
+%     \textbf{CONAC-AUX}\!&\!$0.560\!\times\!10^{-3}$\!&\!$0.552\!\times\!10^{-3}$\!&\!$0.543\!\times\!10^{-3}$ \\
 %     \hline
 %     \end{tabular}
 %     \label{table:ctrl:result:var}
@@ -1369,7 +1406,7 @@ The quantitative comparison of the tracking performance was evaluated using the 
 %     \hline
 %         \bf{BSC} & \multirow{2}{*}{6} & \multirow{2}{*}{4} & \multirow{2}{*}{4} & \multirow{2}{*}{2} & \multirow{2}{*}{$10^3$} & \multirow{2}{*}{$10^{-4}$} & \multirow{2}{*}{11} & \multirow{2}{*}{12} & \multirow{2}{*}{13} & \multirow{2}{*}{10} & \multirow{2}{*}{11} & 0.5 & & \\
 %     % \hline
-%         \bf{CoNAC-AUX} &  & & & & & & & & & & & 0.5 & $[20,0;0,20]$ & $[10,0;0,10]$ \\
+%         \bf{CONAC-AUX} &  & & & & & & & & & & & 0.5 & $[20,0;0,20]$ & $[10,0;0,10]$ \\
 %     \hline
 %     \end{tabular}
 % \end{table}
@@ -1431,7 +1468,7 @@ The quantitative comparison of the tracking performance was evaluated using the 
 \begin{figure}[t]
     \centering
     \subfloat[Control input $\tau$ in time interval from $19$ s to $21$ s (bird's eye view).]{
-    % \subfloat[Auxiliary states $\mv{\zeta}$ of CoNAC-AUX.]{
+    % \subfloat[Auxiliary states $\mv{\zeta}$ of CONAC-AUX.]{
         \includegraphics[width=\figSizeOneCol\linewidth]
         {
             src/script_simulation/figures/compare/Fig6.eps
@@ -1522,13 +1559,13 @@ Across the two episodes, all controllers enhanced their tracking performances ab
 $60.2 \%$ for (C$_1$), $52.7 \%$ for (C$_2$), and $61.9 \%$ for (C$_3$) in $L_2$ norm of $r_1$, and $84.5 \%$ for (C$_1$), $79.3 \%$ for (C$_2$), and $80.5 \%$ for (C$_3$) in $L_2$ norm of $r_2$, respectively, as shown in Table~\ref{tab:sim:L2}.
 Qualitatively, as described in Fig.~\ref{fig:ctrl:result:q1} and Fig.~\ref{fig:ctrl:result:q2}, the oscillations were suppressed in the second episode, as well.
 This results lead to the conclusion that the NNs in all controllers were able to learn the ideal control input $\rbu^*$ properly, by the filtered error $\fe$, despite the fact that $\rbu^*$ was not known in advance.
-Moreover, since the learning began from the random initialization of the weights and no prior knowledge of the system, the online learning capability of the proposed CoNAC was demonstrated.
+Moreover, since the learning began from the random initialization of the weights and no prior knowledge of the system, the online learning capability of the proposed CONAC was demonstrated.
 
 In addition, it is notable that in both episodes, all controllers failed to track the desired trajectory of $q_1$ in time interval from $7.5$ s to $8.5$ for Episode $1$, and from $19.5$ s to $20.5$ s for Episode $2$.
 This is because the control inputs were saturated in the time intervals, as shown in Fig.~\ref{fig:ctrl:result:tau:1} and Fig.~\ref{fig:ctrl:result:tau:norm}.
 However, 
 
-The tracking performance of CoNAC, (\ie (C$_1$), and (C$_3$)), outperformed (C$_2$) in both episodes, as shown in Table~\ref{tab:sim:L2}.
+The tracking performance of CONAC, (\ie (C$_1$), and (C$_3$)), outperformed (C$_2$) in both episodes, as shown in Table~\ref{tab:sim:L2}.
 This is because, (as wil be discussed in Section \ref{sec:sim:constraint}) (C$_1$) was able to use the full capability of the actuator, while (C$_2$) was limited its first link actuator due to the feature of the auxiliary system.
 
 % ------------------------------------
@@ -1577,95 +1614,10 @@ However, since the weights were adapted to reduce the filtered error $\fe$ while
 The KKT conditions defined in \cite[Def. @@]{Nocedal:2006aa} were satisfied in the simulation, as shown in Fig.~\ref{fig:ctrl:result:scope:beta}, where the Lagrange multipliers $\lambda_j,\ \forall j\in\mathcal I$ were positive and the constraint violations $c_j,\ \forall j\in\mathcal I$ were negative.
 \color{black}
 
-% ------------------------------------
-% Real-time Implementation Set-up
-% ------------------------------------
-\begin{figure}[t]
-    \centering
-        \includegraphics[width=\figSizeOneCol\linewidth]
-        {
-            fig/exp_set.jpg
-        }%
-    \caption{
-        Robot setup for the real-time experiment.
-    }
-    \label{fig:ctrl:exp:set}
-  \end{figure}
+\subsubsection{Computational Time}
+is shown in Fig.~\ref{fig:ctrl:real:result:cmp:time}. The computational time of CONAC was 0.5 ms, which is less than the sampling time of 4 ms. 
+This indicates that the proposed CONAC can be implemented in real-time applications. 
 
-\subsection{Real-time Experiment Validation}
-
-To validate the effectiveness of the proposed CoNAC, a real-time experiment was conducted on a two-link manipulator, as shown in Fig.~\ref{fig:ctrl:exp:set}. 
-The OpenCR1.0 \cite{opencr} with a 32-bit ARM Cortex and a 216 MHz clock frequency was used for the real-time implementation.
-\color{red}
-The experimental setup consisted of a two-link manipulator with a 2-DOF arm, equipped with two @@@@@ servos. 
-The servos were controlled using the OpenCR1.0 board, which was connected to a computer via USB. 
-The reference trajectory was generated using the same method as in the numerical simulation.
-\color{black}
-The equal reference trajectory was applied and the parameters of the CoNAC were set to those whose best performance was achieved in the simulation (\ie $\beta=...$).
-Additionally, the computational time was measured to validate the effectiveness of the proposed CoNAC in real-time applications.
-
-\begin{figure*}[t]
-    \centering
-      \subfloat[Tracking result of $q_1$.]{
-        \includegraphics[width=\figSizeTwoCol\linewidth]
-        {
-            src/script_simulation/figures/compare/Fig1.eps
-        }%
-        \label{fig:ctrl:real:result:q1}}
-      % \vfill
-      \subfloat[Tracking result of $q_2$.]{
-        \includegraphics[width=\figSizeTwoCol\linewidth]
-        {
-            src/script_simulation/figures/compare/Fig2.eps
-        }%
-        \label{fig:ctrl:real:result:q2}}
-      \vfill
-        \subfloat[Control input $\tau_1$.]{
-          \includegraphics[width=\figSizeTwoCol\linewidth]
-          {
-            src/script_simulation/figures/compare/Fig3.eps
-          }%
-          \label{fig:ctrl:real:result:tau:1}}
-      % \vfill
-        \subfloat[Control input $\tau_2$.]{
-          \includegraphics[width=\figSizeTwoCol\linewidth]
-          {
-            src/script_simulation/figures/compare/Fig4.eps
-          }%
-          \label{fig:ctrl:real:result:tau:2}}
-          \vfill
-      \subfloat[Norm of weights $\hat\theta_i$.]{
-          \includegraphics[width=\figSizeTwoCol\linewidth]
-          {
-            src/script_simulation/figures/compare/Fig5.eps
-          }%
-          \label{fig:ctrl:real:result:opt:norm}}
-          % \vfill
-      \subfloat[Lagrange multipliers $\lambda_j$ in logarithmic scale.]{
-          \includegraphics[width=\figSizeTwoCol\linewidth]
-          {
-            src/script_simulation/figures/compare/Fig6.eps
-          }%
-          \label{fig:ctrl:real:result:opt:multiplier}}
-          \vfill
-      \subfloat[Auxiliary states $\mv{\zeta}$ of CoNAC-AUX.]{
-          \includegraphics[width=\figSizeTwoCol\linewidth]
-          {
-            src/script_simulation/figures/compare/Fig7.eps
-          }%
-          \label{fig:ctrl:real:result:opt:zeta}}
-          % \vfill
-      \subfloat[Control input $\tau$ in time interval from $1$ s to $3$ s (bird's eye view).]{
-          \includegraphics[width=\figSizeTwoCol\linewidth]
-          {
-            src/script_simulation/figures/compare/Fig8.eps
-          }%
-          \label{fig:ctrl:real:result:control}}
-    \caption{
-    Simulation results of the CoNAC (blue) and CoNAC-AUX (cyan), and reference signal of $\qd$ (red dashed line).
-    }
-  \label{fig:ctrl:real:result}
-  \end{figure*}
 
 \begin{figure}[t]
     \centering
@@ -1674,37 +1626,19 @@ Additionally, the computational time was measured to validate the effectiveness 
             src/script_simulation/figures/compare/Fig9.eps
         }%
     \caption{
-        Computational time of CoNAC and CoNAC-AUX. 
+        Computational time of CONAC and CONAC-AUX. 
     }
     \label{fig:ctrl:real:result:cmp:time}
   \end{figure}
 
-\subsubsection{Tracking Performance and Constraint Handling}
-
-% ----------------------------
-% tracking performance + learning
-% ----------------------------
-The tracking result of the real-time experiment is shown in Fig.~\ref{fig:ctrl:real:result}.
-
-% ----------------------------
-% cosntraint handling
-% ----------------------------
-
-% ----------------------------
-% computational time
-% ----------------------------
-\subsubsection{Computational Time}
-is shown in Fig.~\ref{fig:ctrl:real:result:cmp:time}. The computational time of CoNAC was 0.5 ms, which is less than the sampling time of 4 ms. 
-This indicates that the proposed CoNAC can be implemented in real-time applications. 
-
 %  SECTION CONCLUSION ======================================
 \section{Conclusion}\label{sec:conclusion}
 
-This paper presented a constrained optimization-based neuro-adaptive controller (CoNAC) for the uncertain Euler-Lagrange system, addressing both weight norm and input constraints through a rigorous optimization framework. The stability of the proposed controller was analyzed using Lyapunov theory, ensuring that the system maintained bounded tracking and estimation errors under real-time adaptation.
+This paper presented a constrained optimization-based neuro-adaptive controller (CONAC) for the uncertain Euler-Lagrange system, addressing both weight norm and input constraints through a rigorous optimization framework. The stability of the proposed controller was analyzed using Lyapunov theory, ensuring that the system maintained bounded tracking and estimation errors under real-time adaptation.
 
-The controller effectively incorporated both the input (bound or norm) constraint and the weight norm constraint, ensuring that both actuator limitations and neural network weights were kept within predefined bounds. By formulating these constraints as part of the optimization process, CoNAC ensured that the weights converged in a way that satisfied the Karush-Kuhn-Tucker (KKT) conditions, guaranteeing optimality and stability.
+The controller effectively incorporated both the input (bound or norm) constraint and the weight norm constraint, ensuring that both actuator limitations and neural network weights were kept within predefined bounds. By formulating these constraints as part of the optimization process, CONAC ensured that the weights converged in a way that satisfied the Karush-Kuhn-Tucker (KKT) conditions, guaranteeing optimality and stability.
 
-Simulation results validated the superior performance of CoNAC compared to conventional methods, such as DNN-BSC and DNN-BSC-A. CoNAC not only handled complex input constraints but also managed the weight norm constraints rigorously, leading to improved tracking accuracy and stability without notable oscillations.
+Simulation results validated the superior performance of CONAC compared to conventional methods, such as DNN-BSC and DNN-BSC-A. CONAC not only handled complex input constraints but also managed the weight norm constraints rigorously, leading to improved tracking accuracy and stability without notable oscillations.
 
 Future work may extend this approach to address constraints on both the system inputs and states, further enhancing the flexibility and robustness of neuro-adaptive control systems using constrained optimization.
 
