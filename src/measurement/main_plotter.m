@@ -345,62 +345,33 @@ ylim([minVal-len*ratio maxVal+len*ratio]);
     ax.FontSize = font_size; 
     ax.FontName = 'Times New Roman';
 
-% %% FIG. 10, 11; FILTERED ERROR
-% figure(10); clf;
-% hF = gcf;
-% hF.Units = fig_unit;
-% hF.Position(3:4) = [fig_width, fig_height];
 
-% e1 = c1_x1-c1_xd1; ed1 = c1_x2-c1_xd2;
-% e2 = c2_x1-c2_xd1; ed2 = c2_x2-c2_xd2;
-% e3 = c3_x1-c3_xd1; ed3 = c3_x2-c3_xd2;
+% =============================================
+%    Fig. 10: Computational Time
+% =============================================
+figure(10); clf;
+hF = gcf; 
+hF.Position(3:4) = [fig_width, fig_height];
 
-% r1 = ed1+[5 0; 0 15]*e1;
-% r2 = ed2+[5 0; 0 15]*e2;
-% r3 = ed3+[5 0; 0 15]*e3;
+plot(data4.t(data4.obs), data4.cmp(1,data4.obs)*1e3, "color", c4, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data3.t(data3.obs), data3.cmp(1,data3.obs)*1e3, "color", c3, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data2.t(data2.obs), data2.cmp(1,data2.obs)*1e3, "color", c2, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data1.t(data1.obs), data1.cmp(1,data1.obs)*1e3, "color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
 
-% plot(t(obs), r3(1,obs), "Color", gray, "LineWidth", line_width, "LineStyle", "-"); hold on
-% plot(t(obs), r2(1,obs), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
-% plot(t(obs), r1(1,obs), "Color", "blue", "LineWidth", line_width, "LineStyle", "-"); hold on
+xlabel("Time / s", "Interpreter", "latex")
+ylabel("Cmp. Time / ms", "Interpreter", "latex")
+set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
+grid on 
+xlim([0 T])
+% ylim([-u_max2*1.25, u_max2*1.25])
+% legend([p1, p2], ["$\tau$", "Saturated $\tau$"], "Interpreter","latex", "FontSize", lgd_size, "FontWeight", "bold", "Location", "northwest")
 
-% grid on; grid minor;
-% xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
-% ylabel('$r_1$ / rad', 'FontSize', font_size, 'Interpreter', 'latex');
-% % maxVal = max(id_ref.Data); minVal = min(id_ref.Data); 
-% % % maxVal = 0; minVal = -1; 
-% % len = maxVal-minVal; ratio = .3;
-% % ylim([minVal-len*ratio maxVal+len*ratio]);
-% % xlim([ctrl_start T+ctrl_start])
-%     ax = gca;
-%     ax.FontSize = font_size; 
-%     ax.FontName = 'Times New Roman';
-
-% figure(11); clf;
-% hF = gcf;
-% hF.Units = fig_unit;
-% hF.Position(3:4) = [fig_width, fig_height];
-
-% plot(t(obs), r3(2,obs), "Color", gray, "LineWidth", line_width, "LineStyle", "-"); hold on
-% plot(t(obs), r2(2,obs), "Color", "cyan", "LineWidth", line_width, "LineStyle", "-"); hold on
-% plot(t(obs), r1(2,obs), "Color", "blue", "LineWidth", line_width, "LineStyle", "-"); hold on
-
-% grid on; grid minor;
-% xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
-% ylabel('$r_2$ / rad', 'FontSize', font_size, 'Interpreter', 'latex');
-% % maxVal = max(id_ref.Data); minVal = min(id_ref.Data); 
-% % % maxVal = 0; minVal = -1; 
-% % len = maxVal-minVal; ratio = .3;
-% % ylim([minVal-len*ratio maxVal+len*ratio]);
-% % xlim([ctrl_start T+ctrl_start])
-%     ax = gca;
-%     ax.FontSize = font_size; 
-%     ax.FontName = 'Times New Roman';
 
 %% SAVE FIGURES
 if SAVE_FLAG
     [~,~] = mkdir("figures/compare");
 
-    for idx = 1:1:9
+    for idx = 1:1:10
 
         f_name = "figures/compare/Fig" + string(idx);
 
@@ -414,7 +385,6 @@ if SAVE_FLAG
         matlab2tikz(char(f_name+".tex"))
     end
 end
-
 
 %% NUMERICAL ANALYSIS
 ctrl_dt = 1/250;
