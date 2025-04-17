@@ -1259,7 +1259,7 @@ These domains \eqref{eq:sat:norm} and \eqref{eq:sat:tau2} can be physically inte
 % ------------------------------------
 % Comparative Study
 % ------------------------------------
-For a comparative study, we implemented 3 controllers.
+For a comparative study, we implemented 4 controllers.
 The properties of the controllers are summarized in Table~\ref{table:controllers}.
 
 % ------------------------------------
@@ -1323,6 +1323,14 @@ The matrices of the auxiliary system are set to $\mm{A}_\zeta=\mydiag([-10,-10])
 To investigate the effect of the update rate of Lagrange multipliers, (C$_3$) was implemented with small $\beta_i$ values, which are set to $\beta_{\rbu}=1$, and $\beta_{\overline{\tau}_2}=\beta_{\underline{\tau}_2}=10^{2}$.
 The remaining parameters are the same as (C$_1$).
 
+% ------------------------------------
+% Controllers: CONAC without ctrl cstr
+% ------------------------------------
+\subsubsection*{Controller 4: (C$_4$) CONAC without control input constraints}
+
+The controller 4 is the same as (C$_1$) but without the control input constraints, to show the effect of the control input constraints.
+In this case, the update rate of the Lagrange multipliers regarding the control input constraints \ie $\beta_{\rbu},\beta_{\overline{\tau}_2},\beta_{\underline{\tau}_2}$ was set to $0$, so that $[\lambda_j]_{j\in\{\rbu,\overline{\tau}_2,\underline{\tau}_2\}}$ are not updated.
+
 \hfill
 
 % ------------------------------------
@@ -1351,11 +1359,13 @@ The quantitative comparison of the tracking performance was evaluated using the 
         \!&\!\bf{Description}\!&\!\bf{Input Constraint}\!\\
     \hline
     \hline
-        (C$_1$) & proposed & $\overline{\tau}=10$ and $\overline{\tau}_2=-\underline{\tau}_2=2.5$ \\
+        (C$_1$)\!&\!proposed\!&\!$\overline{\tau}=10,\overline{\tau}_2=-\underline{\tau}_2=2.5$ \\
     \hline
-        (C$_2$) & aux. sys. & $\overline{\tau}_1=-\underline{\tau}_1=9.682$ and $\overline{\tau_2}=-\underline{\tau_2}=2.5$ \\
+        (C$_2$)\!&\!aux. sys.\!&\!$\overline{\tau}_1\!=\!-\underline{\tau}_1\!=\!9.682,\overline{\tau_2}\!=\!-\underline{\tau_2}\!=\!2.5$\!\\
     \hline
-        (C$_3$) & small $\beta_i$ & $\overline{\tau}=10$ and $\overline{\tau}_2=-\underline{\tau_2}=2.5$ \\
+        (C$_3$)\!&\!small $\beta_i$\!&\!$\overline{\tau}=10,\overline{\tau}_2=-\underline{\tau_2}=2.5$ \\
+    \hline
+        (C$_4$)\!&\!no $\rbu$ constraints\!&\!$[\beta_j]_{j\in\{\rbu,\overline{\tau}_2,\underline{\tau}_2\}}=\mv{0}$ \\
     \hline
     \end{tabular}
     \label{table:controllers}
@@ -1534,17 +1544,26 @@ The quantitative comparison of the tracking performance was evaluated using the 
     \renewcommand{\arraystretch}{1.3}
     \caption{Quantitative comparison of performances' $L_2$ norm.}
     \centering
-    \begin{tabular}{c c c c c c c}
+    \begin{tabular}{c c c c c}
     \hline
-		& \multicolumn{3}{c}{\textbf{Episode 1}}  & \multicolumn{3}{c}{\textbf{Episode 2}} \\
+		& \multicolumn{4}{c}{\textbf{Episode 1}} \\
     \hline
 	\hline 
-		& (C$_1$) & (C$_2$) & (C$_3$) & (C$_1$) & (C$_2$) & (C$_3$) \\
+		& (C$_1$) & (C$_2$) & (C$_3$) & (C$_4$) \\
 	\hline
-		$r_1$ & $0.389$ & $0.403$ & $0.370$ & $0.155$ & $0.191$ & $0.141$ \\ 
+		$r_1$ & $0.389$ & $0.403$ & $0.370$ & $0.370$ \\ 
 	\hline
-        $r_2$ & $0.426$ & $0.456$ & $0.427$ & $0.066$ & $0.094$ & $0.083$ \\
+        $r_2$ & $0.426$ & $0.456$ & $0.427$ & $0.370$ \\
 	\hline
+        & \multicolumn{4}{c}{\textbf{Episode 2}} \\
+    \hline
+    \hline
+        & (C$_1$) & (C$_2$) & (C$_3$) & (C$_4$) \\
+	\hline
+		$r_1$ & $0.389$ & $0.403$ & $0.370$ & $0.370$ \\ 
+	\hline
+        $r_2$ & $0.426$ & $0.456$ & $0.427$ & $0.370$ \\
+    \hline
     \end{tabular}
     \label{tab:sim:L2}
 \end{table}
