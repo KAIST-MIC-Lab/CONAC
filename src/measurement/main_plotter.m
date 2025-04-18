@@ -37,10 +37,16 @@ ctrl3_name = "2025_04_09_13_30"; % CoNAC 2.
 ctrl4_name = "2025_04_09_13_30"; % CoNAC 2.
 
 %%
-data1 = post_procc(ctrl1_name, 4);
-data2 = post_procc(ctrl2_name, 4);
-data3 = post_procc(ctrl3_name, 4);
-data4 = post_procc(ctrl4_name, 4);
+% data1 = post_procc(ctrl1_name, 4);
+% data2 = post_procc(ctrl2_name, 4);
+% data3 = post_procc(ctrl3_name, 4);
+% data4 = post_procc(ctrl4_name, 4);
+
+data1 = trc2data(ctrl1_name, 1);
+data2 = trc2data(ctrl2_name, 2);
+data3 = trc2data(ctrl3_name, 3);
+data4 = trc2data(ctrl4_name, 4);
+
 
 c1 = "blue"; c2="cyan"; c3=gray; c4="yellow";
 th_max = [11 12 13];
@@ -54,26 +60,21 @@ ep_time = 12; T = ep_time * 2;
 start_t = 19;
 end_t = 21;
 
-focus_c1 = find(data1.t >= start_t & data1.t <= end_t);
-focus_c2 = find(data2.t >= start_t & data2.t <= end_t);
-focus_c3 = find(data3.t >= start_t & data3.t <= end_t);
-focus_c4 = find(data4.t >= start_t & data4.t <= end_t);
-
 %% FIG. 1; STATE 1
 figure(1); clf;
 hF = gcf; 
 hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
-plot(data4.t(data4.obs), data4.xd1(1,data4.obs), "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
-plot(data3.t(data3.obs), data3.xd1(1,data3.obs), "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
-plot(data2.t(data2.obs), data2.xd1(1,data2.obs), "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
-plot(data1.t(data1.obs), data1.xd1(1,data1.obs), "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
+plot(data4.r1.Time, data4.r1.Data, "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
+plot(data3.r1.Time, data3.r1.Data, "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
+plot(data2.r1.Time, data2.r1.Data, "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
+plot(data1.r1.Time, data1.r1.Data, "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
 
-plot(data4.t(data4.obs), data4.x1(1,data4.obs), "Color", c4, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data3.t(data3.obs), data3.x1(1,data3.obs), "Color", c3, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data2.t(data2.obs), data2.x1(1,data2.obs), "Color", c2, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data1.t(data1.obs), data1.x1(1,data1.obs), "Color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data4.q1.Time, data4.q1.Data, "Color", c4, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data3.q1.Time, data3.q1.Data, "Color", c3, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data2.q1.Time, data2.q1.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data1.q1.Time, data1.q1.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
 
 plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
 text(.2, -1.8, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
@@ -82,7 +83,7 @@ text(ep_time+.2, -1.8, "Episode 2", "FontSize", font_size, "FontName", 'Times Ne
 grid on; grid minor;
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
 ylabel('$q_1$ / rad', 'FontSize', font_size, 'Interpreter', 'latex');
-maxVal = max(data1.xd1(1,:)); minVal = min(data1.xd1(1,:)); 
+maxVal = max(data1.r1.Data); minVal = min(data1.r1.Data); 
 len = maxVal-minVal; ratio = .3;
 ylim([minVal-len*ratio maxVal+len*ratio]);
 xlim([0 T])
@@ -96,15 +97,15 @@ hF = gcf;
 hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
-plot(data4.t(data4.obs), data4.xd1(2,data4.obs), "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
-plot(data3.t(data3.obs), data3.xd1(2,data3.obs), "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
-plot(data2.t(data2.obs), data2.xd1(2,data2.obs), "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
-plot(data1.t(data1.obs), data1.xd1(2,data1.obs), "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
+plot(data4.r2.Time, data4.r2.Data, "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
+plot(data3.r2.Time, data3.r2.Data, "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
+plot(data2.r2.Time, data2.r2.Data, "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
+plot(data1.r2.Time, data1.r2.Data, "Color", "red", "LineWidth", line_width, "LineStyle", "--"); hold on
 
-plot(data4.t(data4.obs), data4.x1(2,data4.obs), "Color", c4, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data3.t(data3.obs), data3.x1(2,data3.obs), "Color", c3, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data2.t(data2.obs), data2.x1(2,data2.obs), "Color", c2, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data1.t(data1.obs), data1.x1(2,data1.obs), "Color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data4.q2.Time, data4.q2.Data, "Color", c4, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data3.q2.Time, data3.q2.Data, "Color", c3, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data2.q2.Time, data2.q2.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data1.q2.Time, data1.q2.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
 
 plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
 text(.2, -1.8, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
@@ -113,7 +114,7 @@ text(ep_time+.2, -1.8, "Episode 2", "FontSize", font_size, "FontName", 'Times Ne
 grid on; grid minor;
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
 ylabel('$q_2$ / rad', 'FontSize', font_size, 'Interpreter', 'latex');
-maxVal = max(data1.xd1(2,data1.obs)); minVal = min(data1.xd1(2,data1.obs)); 
+maxVal = max(data1.r2.Data); minVal = min(data1.r2.Data); 
 len = maxVal-minVal; ratio = .3;
 ylim([minVal-len*ratio maxVal+len*ratio]);
 xlim([0 T])
@@ -127,10 +128,10 @@ hF = gcf;
 hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
-plot(data4.t(data4.obs), data4.u(1,data4.obs), "Color", c4, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data3.t(data3.obs), data3.u(1,data3.obs), "Color", c3, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data2.t(data2.obs), data2.u(1,data2.obs), "Color", c2, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data1.t(data1.obs), data1.u(1,data1.obs), "Color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data4.u1.Time, data4.u1.Data, "Color", c4, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data3.u1.Time, data3.u1.Data, "Color", c3, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data2.u1.Time, data2.u1.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data1.u1.Time, data1.u1.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
 
 plot([-10 T+10], +1*[u_max1 u_max1], "Color", "black", "LineWidth", line_width, "LineStyle", "--"); hold on
 plot([-10 T+10], -1*[u_max1 u_max1], "Color", "black", "LineWidth", line_width, "LineStyle", "--"); hold on
@@ -156,10 +157,10 @@ hF = gcf;
 hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
-plot(data4.t(data4.obs), data4.u(2,data4.obs), "Color", c4, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data3.t(data3.obs), data3.u(2,data3.obs), "Color", c3, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data2.t(data2.obs), data2.u(2,data2.obs), "Color", c2, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data1.t(data1.obs), data1.u(2,data1.obs), "Color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data4.u2.Time, data4.u2.Data, "Color", c4, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data3.u2.Time, data3.u2.Data, "Color", c3, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data2.u2.Time, data2.u2.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data1.u2.Time, data1.u2.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
 
 plot([-10 T+10], +1*[u_max2 u_max2], "Color", "black", "LineWidth", line_width, "LineStyle", "--"); hold on
 plot([-10 T+10], -1*[u_max2 u_max2], "Color", "black", "LineWidth", line_width, "LineStyle", "--"); hold on
@@ -185,15 +186,15 @@ hF = gcf;
 hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
-norm_u1 = sqrt(data1.u(1,:).^2 + data1.u(2,:).^2);
-norm_u2 = sqrt(data2.u(1,:).^2 + data2.u(2,:).^2);
-norm_u3 = sqrt(data3.u(1,:).^2 + data3.u(2,:).^2);
-norm_u4 = sqrt(data4.u(1,:).^2 + data4.u(2,:).^2);
+norm_u1 = sqrt(data1.u1.Data.^2 + data1.u2.Data.^2);
+norm_u2 = sqrt(data2.u1.Data.^2 + data2.u2.Data.^2);
+norm_u3 = sqrt(data3.u1.Data.^2 + data3.u2.Data.^2);
+norm_u4 = sqrt(data4.u1.Data.^2 + data4.u2.Data.^2);
 
-plot(data4.t(data4.obs), norm_u4(data4.obs), "Color", c4, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data3.t(data3.obs), norm_u3(data3.obs), "Color", c3, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data2.t(data2.obs), norm_u2(data2.obs), "Color", c2, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data1.t(data1.obs), norm_u1(data1.obs), "Color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data4.u1.Time, norm_u4, "Color", c4, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data3.u1.Time, norm_u3, "Color", c3, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data2.u1.Time, norm_u2, "Color", c2, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data1.u1.Time, norm_u1, "Color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
 
 plot([-10 T+10], [u_ball u_ball], "Color", "black", "LineWidth", line_width, "LineStyle", "--"); hold on
 
@@ -226,10 +227,10 @@ plot([-100, 100], [-1, -1] * u_max2, "color", 'black', "LineWidth", line_width, 
 plot([1, 1] * u_max1, [-100, 100], "color", 'black', "LineWidth", line_width, "LineStyle", "-."); hold on
 plot([-1, -1] * u_max1, [-100, 100], "color", 'black', "LineWidth", line_width, "LineStyle", "-."); hold on
 
-plot(data4.u(1,focus_c4), data4.u(2,focus_c4), "Color", c4, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data3.u(1,focus_c3), data3.u(2,focus_c3), "Color", c3, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data2.u(1,focus_c2), data2.u(2,focus_c2), "Color", c2, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data1.u(1,focus_c1), data1.u(2,focus_c1), "Color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data4.u1.Data, data4.u2.Data, "Color", c4, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data3.u1.Data, data3.u2.Data, "Color", c3, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data2.u1.Data, data2.u2.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data1.u1.Data, data1.u2.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
 
 xlabel("$\tau_1$ / Nm", "Interpreter", "latex")
 ylabel("$\tau_2$ / Nm", "Interpreter", "latex")
@@ -237,7 +238,7 @@ set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on; grid minor;
 
 xlim([8 11.5])
-ylim([0.1 1.5])
+ylim([0.1 4.5])
 
 % pbaspect([1 1 1])
 
@@ -251,21 +252,21 @@ plot([-10 T+10], +1*[th_max(1) th_max(1)], "Color", "black", "LineWidth", line_w
 plot([-10 T+10], +1*[th_max(2) th_max(2)], "Color", "black", "LineWidth", line_width, "LineStyle", "-.", 'HandleVisibility','off'); hold on
 plot([-10 T+10], +1*[th_max(3) th_max(3)], "Color", "black", "LineWidth", line_width, "LineStyle", "--", 'HandleVisibility','off'); hold on
 
-plot(data1.t(data1.obs), data1.th(1,data1.obs), "Color", c1, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\hat\theta_0$"); hold on
-plot(data1.t(data1.obs), data1.th(2,data1.obs), "Color", c1, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\hat\theta_0$"); hold on
-plot(data1.t(data1.obs), data1.th(3,data1.obs), "Color", c1, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\hat\theta_1$"); hold on
+plot(data1.th0.Time, data1.th0.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\hat\theta_0$"); hold on
+plot(data1.th1.Time, data1.th1.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\hat\theta_0$"); hold on
+plot(data1.th2.Time, data1.th2.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\hat\theta_1$"); hold on
 
-plot(data2.t(data2.obs), data2.th(1,data2.obs), "Color", c2, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\hat\theta_0$"); hold on
-plot(data2.t(data2.obs), data2.th(2,data2.obs), "Color", c2, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\hat\theta_0$"); hold on
-plot(data2.t(data2.obs), data2.th(3,data2.obs), "Color", c2, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\hat\theta_1$"); hold on
+plot(data2.th0.Time, data2.th0.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\hat\theta_0$"); hold on
+plot(data2.th1.Time, data2.th1.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\hat\theta_0$"); hold on
+plot(data2.th2.Time, data2.th2.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\hat\theta_1$"); hold on
 
-plot(data3.t(data3.obs), data3.th(1,data3.obs), "Color", c3, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\hat\theta_0$"); hold on
-plot(data3.t(data3.obs), data3.th(2,data3.obs), "Color", c3, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\hat\theta_0$"); hold on
-plot(data3.t(data3.obs), data3.th(3,data3.obs), "Color", c3, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\hat\theta_1$"); hold on
+plot(data3.th0.Time, data3.th0.Data, "Color", c3, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\hat\theta_0$"); hold on
+plot(data3.th1.Time, data3.th1.Data, "Color", c3, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\hat\theta_0$"); hold on
+plot(data3.th2.Time, data3.th2.Data, "Color", c3, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\hat\theta_1$"); hold on
 
-plot(data4.t(data4.obs), data4.th(1,data4.obs), "Color", c4, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\hat\theta_0$"); hold on
-plot(data4.t(data4.obs), data4.th(2,data4.obs), "Color", c4, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\hat\theta_0$"); hold on
-plot(data4.t(data4.obs), data4.th(3,data4.obs), "Color", c4, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\hat\theta_1$"); hold on
+plot(data4.th0.Time, data4.th0.Data, "Color", c4, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\hat\theta_0$"); hold on
+plot(data4.th1.Time, data4.th1.Data, "Color", c4, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\hat\theta_0$"); hold on
+plot(data4.th2.Time, data4.th2.Data, "Color", c4, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\hat\theta_1$"); hold on
 
 plot([ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-.", "HandleVisibility", "off"); hold on
 text(.2, 1.5, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman', "HandleVisibility", "off") 
@@ -299,17 +300,17 @@ hF = gcf;
 hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
-semilogy(data1.t(data1.obs), data1.lbd(4,data1.obs), "Color", c1, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\lambda_{u}$"); hold on
-semilogy(data1.t(data1.obs), data1.lbd(6,data1.obs), "Color", c1, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\lambda_{\bar{u}_2}$"); hold on
-semilogy(data1.t(data1.obs), data1.lbd(8,data1.obs), "Color", c1, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\lambda_{\bar{u}_2}$"); hold on
+semilogy(data1.lbdu.Time,     data1.lbdu.Data,     "Color", c1, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\lambda_{u}$"); hold on
+semilogy(data1.lbdu2Max.Time, data1.lbdu2Max.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\lambda_{\bar{u}_2}$"); hold on
+semilogy(data1.lbdu2Min.Time, data1.lbdu2Min.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\lambda_{\bar{u}_2}$"); hold on
 
-semilogy(data3.t(data3.obs), data3.lbd(4,data3.obs), "Color", c3, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\lambda_{u}$"); hold on
-semilogy(data3.t(data3.obs), data3.lbd(6,data3.obs), "Color", c3, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\lambda_{\bar{u}_2}$"); hold on
-semilogy(data3.t(data3.obs), data3.lbd(8,data3.obs), "Color", c3, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\lambda_{\bar{u}_2}$"); hold on
+semilogy(data3.lbdu.Time,     data3.lbdu.Data,     "Color", c3, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\lambda_{u}$"); hold on
+semilogy(data3.lbdu2Max.Time, data3.lbdu2Max.Data, "Color", c3, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\lambda_{\bar{u}_2}$"); hold on
+semilogy(data3.lbdu2Min.Time, data3.lbdu2Min.Data, "Color", c3, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\lambda_{\bar{u}_2}$"); hold on
 
-semilogy(data4.t(data4.obs), data4.lbd(1,data4.obs), "Color", c4, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$(C_4)$: $\lambda_{\theta_0}$"); hold on
-semilogy(data4.t(data4.obs), data4.lbd(2,data4.obs), "Color", c4, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$(C_4)$: $\lambda_{\theta_1}$"); hold on
-semilogy(data4.t(data4.obs), data4.lbd(3,data4.obs), "Color", c4, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$(C_4)$: $\lambda_{\theta_2}$"); hold on
+semilogy(data4.lbdu.Time,     data4.lbdu.Data,     "Color", c4, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$(C_4)$: $\lambda_{\theta_0}$"); hold on
+semilogy(data4.lbdu2Max.Time, data4.lbdu2Max.Data, "Color", c4, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$(C_4)$: $\lambda_{\theta_1}$"); hold on
+semilogy(data4.lbdu2Min.Time, data4.lbdu2Min.Data, "Color", c4, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$(C_4)$: $\lambda_{\theta_2}$"); hold on
 
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
 ylabel('$\lambda_j$ (Log scale)', 'FontSize', font_size, 'Interpreter', 'latex');
@@ -331,7 +332,7 @@ hF = gcf;
 hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
-plot(data2.t(data2.obs), data2.zeta(1,data2.obs), "Color", c2, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data2.zeta1.Time, data2.zeta1.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "-"); hold on
 
 grid on; grid minor;
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
@@ -353,10 +354,10 @@ figure(10); clf;
 hF = gcf; 
 hF.Position(3:4) = [fig_width, fig_height];
 
-plot(data4.t(data4.obs), data4.cmp(1,data4.obs)*1e3, "color", c4, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data3.t(data3.obs), data3.cmp(1,data3.obs)*1e3, "color", c3, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data2.t(data2.obs), data2.cmp(1,data2.obs)*1e3, "color", c2, "LineWidth", line_width, "LineStyle", "-"); hold on
-plot(data1.t(data1.obs), data1.cmp(1,data1.obs)*1e3, "color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data4.cmp.Time, data4.cmp.Data, "color", c4, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data3.cmp.Time, data3.cmp.Data, "color", c3, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data2.cmp.Time, data2.cmp.Data, "color", c2, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data1.cmp.Time, data1.cmp.Data, "color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
 
 xlabel("Time / s", "Interpreter", "latex")
 ylabel("Cmp. Time / ms", "Interpreter", "latex")

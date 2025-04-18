@@ -378,7 +378,9 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
     \begin{aligned}
         \ddtt{V}_1
         =&
-        \fe^\top \dot{\rbM}\fe + \tfrac{1}{2}\fe^\top \ddtfrac{\rbM}{\fe}\fe
+        \fe^\top \rbM \ddtt \fe
+        +
+        \tfrac{1}{2}\fe^\top \dot{\rbM}\fe
         \\
         =&
         \fe^\top (
@@ -425,7 +427,6 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
 where $\rbu^*:= -\mv f$ is the ideal control input whose maximum norm is $\overline\tau$ according to Assumption \ref{assum:feasible} and $\mysat(\cdot)$. 
 Therefore, one can conclude that $\fe$ is exponentially stable so that $\lim_{t\to\infty}\norm{\fe}=\tfrac{\overline\tau_d}{\lambda_{\min}(\mm K)}$, if $\rbu=-\rbu^*$ can be realized.
 However, $\rbu^*$ is not available in practice, since $\mv f$ is unknown.
-\MSRY{여기서는 MVT, IFT을 사용하지 않았기 때문에 아이디얼 제어가 포화되지 않을 필요성이 없다. 실험에서도 포화를 핸들링하는 중에 추종이 완벽히 되지 못하는 것을 보인다.}
 
 To overcome this issue, a DNN is employed to approximate $\rbu^*$.
 Let $\NN:=\NN({\q}_n;\wth): \R^{l}\times\R^{\Xi}\to\R^{n}$ represent the DNN, where ${\q}_n\in\R^{l}$ is the DNN input vector, and $\wth\in\R^{\Xi}$ is the vector of trainable weights.
@@ -466,7 +467,7 @@ Finally, one can conclude that the result of \eqref{eq:lya1:dot1} can be obtaine
     \centering
     \includegraphics[width=0.99\linewidth]{src/figures/DNN.drawio.pdf}
     \caption{
-        Architecture of the DNN $\NN({\q}_n;\wth)$ with $2$ hidden layers.
+        Architecture of the DNN $\NN({\q}_n;\wth)$ with $k=2,l_0=2,l_1=l_2=3,l_3=2$.
     }
     \label{fig:DNN}
 \end{figure}
@@ -572,8 +573,8 @@ where
 and $\act_i:= \act_i(\NN_{i-1})$ and $\act_i':= \pptfrac{\act_i}{\NN_{i-1}}$.
 
 In the following sections, let $\idealNN_i$ represent the output of the $i\textsuperscript{th}$ layer with the ideal weight vector $\idealwth$. 
-Additionally, define $\idealact_i:=\act_i(\idealNN_{i-1})$ and $\act^{*'}_i:= \pptfrac{\idealact_i}{\idealNN_{i-1}}$. 
-Similarly, $\hat\NN_i$ denotes the output of the $i\textsuperscript{th}$ layer with the estimated weight vector $\hat \wth$, and define $\hat\act_i:=\act_i(\hat\NN_{i-1})$ and $\hat\act_i':= \pptfrac{\hat\act_i}{\hat\NN_{i-1}}$, respectively.
+Additionally, define $\idealact_i:=\act_i(\idealNN_{i-1})$ and ${\idealact}'_i:= \pptfrac{\idealact_i}{\idealNN_{i-1}}$. 
+Similarly, $\estNN_i$ denotes the output of the $i\textsuperscript{th}$ layer with the estimated weight vector $\estwth$, and define $\estact_i:=\act_i(\estNN_{i-1})$ and $\estact_i':= \pptfrac{\estact_i}{\estNN_{i-1}}$, respectively.
 
 %  SECTION ADAPTATION LAW DERIVATION =======================
 \section{Weight Adaptation Laws}\label{sec:adap_laws}
@@ -659,9 +660,17 @@ The adaptation law for $\estwth$ defined in \eqref{eq:adap:th} involves the part
 $
     \pptfrac{J}{\rbu}
     =
-    ((\pptfrac{\fe}{\rbu})(\pptfrac{\rbu}{\estwth}))^\top \fe
+    \left(
+        (\pptfrac{\fe}{\rbu})
+        (\pptfrac{\rbu}{\estwth})
+    \right)
+    ^\top \fe
     =
-    ((\pptfrac{\fe}{\rbu})(\pptfrac{\estNN}{\estwth}))^\top \fe
+    \left(
+        (\pptfrac{\fe}{\rbu})
+        (\pptfrac{\estNN}{\estwth})
+    \right)
+    ^\top \fe
 $). 
 Since the objective function depends on $\fe$ of a dynamic system, obtaining the gradient is not straightforward. 
 The recommended method to calculate the exact value of $\pptfrac{J}{\estwth}$ is to use the forward sensitivity method \cite{Sengupta:2014aa} by simulating the sensitivity equation as follows: 
@@ -809,11 +818,11 @@ The weight constraints $\boldsymbol{c}_{\theta}:= [c_{\theta_i}]_{i\in\{0,\cdots
     c_{\theta_i}
     =
     \tfrac{1}{2}
-    (
+    \left(
         \Vert \estwth_i\Vert^2 
         -
         \overline\theta_i^2 
-    )    
+    \right)    
     \le 0
     \label{eq:cstr:weight:ball}
 \end{equation}
@@ -908,7 +917,7 @@ Taking the time derivative of $V_2$ yields:
         =& 
         -\estwth_k^\top 
         (
-            (\mm I_{l_{k+1}}\otimes \hat\act_k^\top)^\top
+            (\mm I_{l_{k+1}}\otimes \estact_k^\top)^\top
             \fe
             +
             \textstyle\sum_{j\in\mathcal{I}}
@@ -919,7 +928,7 @@ Taking the time derivative of $V_2$ yields:
         =&
         -\estwth_k^\top 
         (
-            (\mm I_{l_{k+1}}\otimes \hat\act_k^\top)^\top
+            (\mm I_{l_{k+1}}\otimes \estact_k^\top)^\top
             \fe
             +
             \lambda_{\theta_k}\estwth_k
@@ -938,7 +947,7 @@ Taking the time derivative of $V_2$ yields:
         \lambda_{\theta_k}\norm{\estwth_k}^2
         +
         \underbrace{
-            \norm{(\mm I_{l_{k+1}}\otimes \hat\act_k^\top)}
+            \norm{(\mm I_{l_{k+1}}\otimes {\estact}_k^\top)}
         }_{:=c_1\in\R_{>0}}
         \norm{\fe}
         \norm{\estwth_k}
@@ -1006,7 +1015,7 @@ Consider the Lyapunov function candidate $V_3:=V_1+V_2$ and its time derivative:
         \\
         &
         -\estwth_k^\top (
-            (\mm I_{l_{k+1}}\otimes \hat\act_k^\top)^\top
+            (\mm I_{l_{k+1}}\otimes \estact_k^\top)^\top
             \fe
             +
             \lambda_{\theta_k}\estwth_k
@@ -1454,14 +1463,14 @@ The quantitative comparison of the tracking performance was evaluated using the 
         }%
         \label{fig:ctrl:result:tau:2}}
         \vfill
-    \subfloat[Norm of control input $\tau$.]{
+    \subfloat[Norm of control input $\rbu$.]{
         \includegraphics[width=\figSizeTwoCol\linewidth]
         {
             src/script_simulation/figures/compare/Fig5.eps
         }%
         \label{fig:ctrl:result:tau:norm}}
     \hfill
-    \subfloat[Norm of weights $\hat\theta_i$.]{
+    \subfloat[Norm of weights ${\estwth}_i$.]{
         % \includegraphics
         \includegraphics[width=\figSizeTwoCol\linewidth]
         {
@@ -1614,13 +1623,13 @@ After the constraint was satisfied, the auxiliary state $\zeta_1$ converged to z
 
 
 % beta + zeta
-For the cases of (C$_1$) and (C$_3$), the Lagrange multipliers $\lambda_{\rbu}$ adjusted the adaptation direction of the weights $\widehat{ \mv{\theta}}_1$ to reduce the constraint violation $c_{\rbu}$, as $\lambda_{\rbu}$ increased by the constraint violations.
+For the cases of (C$_1$) and (C$_3$), the Lagrange multipliers $\lambda_{\rbu}$ adjusted the adaptation direction of the weights $\estwth_1$ to reduce the constraint violation $c_{\rbu}$, as $\lambda_{\rbu}$ increased by the constraint violations.
 % comparison; big, small beta
 For more details, the effect of the update rate $\beta_j,\ \forall j\in\mathcal I$ of Lagrange multipliers is shown in Fig.~\ref{fig:lambda_effect} for convex constraint $c_j,\ \forall j\in\mathcal I$ and two different cases of $\lambda_j$.
-With the bigger $\lambda_j$, the adaptation of $\widehat{ \mv{\theta}}_1$ is more assertive than that with smaller $\lambda_j$.
+With the bigger $\lambda_j$, the adaptation of $\estwth_1$ is more assertive than that with smaller $\lambda_j$.
 This leads to a faster satisfaction of the constraint $c_j,\ \forall j\in\mathcal I$, but this also causes oscillation in the adaptation process.
 In Fig.~\ref{fig:ctrl:result:scope:control} and Fig.~\ref{fig:ctrl:result:scope:beta}, $\lambda_j$ of (C$_1$) repeatedly increased and decreased, which indicates that the constraint $c_j,\ \forall j\in\mathcal I$ was satisfied and violated, respectively, in the discrete time implementation.
-Besides, with small $\lambda_j$, the adaptation direction of $\widehat{ \mv{\theta}}_1$ is adjusted more conservatively, which leads to a slower satisfaction of the constraint $c_j,\ \forall j\in\mathcal I$, as shown in Fig.~\ref{fig:ctrl:result:scope:control} and the positively existence of $\lambda_j$ in Fig.~\ref{fig:ctrl:result:scope:beta}.
+Besides, with small $\lambda_j$, the adaptation direction of $\estwth_1$ is adjusted more conservatively, which leads to a slower satisfaction of the constraint $c_j,\ \forall j\in\mathcal I$, as shown in Fig.~\ref{fig:ctrl:result:scope:control} and the positively existence of $\lambda_j$ in Fig.~\ref{fig:ctrl:result:scope:beta}.
 This allows the controller to show a smoother control input.
 However, since the weights were adapted to reduce the filtered error $\fe$ while the control input was saturated, the weights were not able to effectively adapt the weights with respect to the filtered error $\fe$.
 
