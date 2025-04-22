@@ -1,124 +1,32 @@
-%% 
-%% Copyright 2007-2025 Elsevier Ltd
-%% 
-%% This file is part of the 'Elsarticle Bundle'.
-%% ---------------------------------------------
-%% 
-%% It may be distributed under the conditions of the LaTeX Project Public
-%% License, either version 1.3 of this license or (at your option) any
-%% later version.  The latest version of this license is in
-%%    http://www.latex-project.org/lppl.txt
-%% and version 1.3 or later is part of all distributions of LaTeX
-%% version 1999/12/01 or later.
-%% 
-%% The list of all files belonging to the 'Elsarticle Bundle' is
-%% given in the file `manifest.txt'.
-%% 
-%% Template article for Elsevier's document class `elsarticle'
-%% with harvard style bibliographic references
+\documentclass[lettersize,journal]{IEEEtran}
 
-% \documentclass[preprint,12pt,authoryear]{elsarticle}
-
-%% Use the option review to obtain double line spacing
-%% \documentclass[authoryear,preprint,review,12pt]{elsarticle}
-
-%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
-%% for a journal layout:
-%% \documentclass[final,1p,times,authoryear]{elsarticle}
-% \documentclass[final,1p,times,twocolumn,authoryear]{elsarticle}
-% \documentclass[final,3p,times,authoryear]{elsarticle}
-% \documentclass[final,3p,times,twocolumn,authoryear]{elsarticle}
-% \documentclass[final,5p,times,authoryear]{elsarticle}
-\documentclass[final,5p,times,twocolumn,authoryear]{elsarticle}
-
-%% For including figures, graphicx.sty has been loaded in
-%% elsarticle.cls. If you prefer to use the old commands
-%% please give \usepackage{epsfig}
-
-% \usepackage{balance}
 \def\pub{false} % true for publication, false for draft
 \newcommand*{\template}{template}
-\input{\template/preamble/preamble_Elsevier.tex}
+\input{\template/preamble/preamble_journal.tex}
 
 \newcommand*{\figSizeTwoCol}{.49}
 \newcommand*{\figSizeOneCol}{0.98}
 
-% %% The amssymb package provides various useful mathematical symbols
-% \usepackage{amssymb}
-% %% The amsmath package provides various useful equation environments.
-% \usepackage{amsmath}
-% %% The amsthm package provides extended theorem environments
-% %% \usepackage{amsthm}
-
-%% The lineno packages adds line numbers. Start line numbering with
-%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
-%% for the whole article with \linenumbers.
-%% \usepackage{lineno}
-
-\journal{Nuclear Physics B}
+\addbibresource{\template/refs.bib}
 
 \begin{document}
-
-\begin{frontmatter}
-
-%% Title, authors and addresses
-
-%% use the tnoteref command within \title for footnotes;
-%% use the tnotetext command for theassociated footnote;
-%% use the fnref command within \author or \affiliation for footnotes;
-%% use the fntext command for theassociated footnote;
-%% use the corref command within \author for corresponding author footnotes;
-%% use the cortext command for theassociated footnote;
-%% use the ead command for the email address,
-%% and the form \ead[url] for the home page:
-%% \title{Title\tnoteref{label1}}
-%% \tnotetext[label1]{}
-%% \author{Name\corref{cor1}\fnref{label2}}
-%% \ead{email address}
-%% \ead[url]{home page}
-%% \fntext[label2]{}
-%% \cortext[cor1]{}
-%% \affiliation{organization={},
-%%            addressline={}, 
-%%            city={},
-%%            postcode={}, 
-%%            state={},
-%%            country={}}
-%% \fntext[label3]{}
 
 \title{
   Constrained Optimization-Based Neuro-Adaptive Control (CONAC) for Weight and Convex Input Constraints 
 } %% Article title
 
-%% use optional labels to link authors explicitly to addresses:
-%% \author[label1,label2]{}
-%% \affiliation[label1]{organization={},
-%%             addressline={},
-%%             city={},
-%%             postcode={},
-%%             state={},
-%%             country={}}
-%%
-%% \affiliation[label2]{organization={},
-%%             addressline={},
-%%             city={},
-%%             postcode={},
-%%             state={},
-%%             country={}}
-
 \author{
   Myeongseok Ryu, Donghwa Hong, and Kyunghwan Choi
-} %% Author name
+\thanks{
+    Myeongseok Ryu, Donghwa Hong and Kyunghwan Choi are with the Department of Mechanical and Robotics Engineering, Gwangju Institute of Science and Technology (GIST), Gwangju 61005, Korea (e-mail: \{dding\_98, ???, khchoi\}@gist.ac.kr).
+    
+    This work was supported in part by a Korea Research Institute for Defense Technology planning and advancement (KRIT) grant funded by Korea government DAPA (Defense Acquisition Program Administration) (No. KRIT-CT-22-087, Synthetic Battlefield Environment based Integrated Combat Training Platform) and in part by the National Research Foundation of Korea (NRF) grant funded by the Korea government (MSIT) (RS-2025- 00554087). (Corresponding author: Kyunghwan Choi)
+    }}
 
-%% Author affiliation
-\affiliation{organization={
-  Department of Mechanical and Robotics Engineering, Gwangju Institute of Science and Technology (GIST)
-},%Department and Organization
-            addressline={123 Cheomdangwagi-ro, Buk-gu}, 
-            city={Gwangju},
-            postcode={61005}, 
-            % state={},
-            country={Korea}}
+\markboth{Journal of \LaTeX\ Class Files,~Vol.~18, No.~9, September~2020}%
+{How to Use the IEEEtran \LaTeX \ Templates}
+
+\maketitle
 
 %% Abstract
 \begin{abstract}
@@ -129,38 +37,9 @@
   Real-time implementation was conducted on a 2-DOF robotic manipulator, demonstrating the controller's effectiveness in achieving desired trajectory tracking while satisfying constraints.
 \end{abstract}
 
-%%Graphical abstract
-\begin{graphicalabstract}
-%\includegraphics{grabs}
-\end{graphicalabstract}
-
-%%Research highlights
-\begin{highlights}
-\item Research highlight 1
-\item Research highlight 2
-\end{highlights}
-
-%% Keywords
-\begin{keyword}
-Neuro-adaptive control \sep constrained optimization \sep deep neural network \sep input constraint
-
-%% keywords here, in the form: keyword \sep keyword
-%% PACS codes here, in the form: \PACS code \sep code
-
-%% MSC codes here, in the form: \MSC code \sep code
-%% or \MSC[2008] code \sep code (2000 is the default)
-
-\end{keyword}
-
-\end{frontmatter}
-
-%% Add \usepackage{lineno} before \begin{document} and uncomment 
-%% following line to enable line numbers
-%% \linenumbers
-
-%% main text
-%%
-
+\begin{IEEEkeywords}
+    Neuro-adaptive control, constrained optimization, deep neural network, input constraint.
+\end{IEEEkeywords}
 
 \section*{Notation}
 In this study, the following notation is used:
@@ -188,7 +67,7 @@ In this study, the following notation is used:
 
 \subsection{Background}
 
-Many engineering systems, including those in aerospace, robotics, and automotive applications, can be modeled using Euler-Lagrange systems. 
+\IEEEPARstart{M}{any} engineering systems, including those in aerospace, robotics, and automotive applications, can be modeled using Euler-Lagrange systems. 
 These systems are governed by dynamic equations derived from energy principles and describe the motion of mechanical systems with constraints. 
 In practice, however, such systems often exhibit uncertainties due to unmodeled dynamics, parameter variations, or external disturbances. 
 These uncertainties can significantly degrade control performance and, in some cases, lead to instability. 
@@ -209,7 +88,7 @@ When NN outputs are used directly in the control law, this may lead to excessive
 Such constraints are commonly encountered in industrial systems, where actuators are limited by physical and safety requirements in terms of amplitude, rate, or energy \cite{Esfandiari:2021aa}. 
 Failing to address these constraints can degrade control performance or even destabilize the system.
 
-Therefore, addressing these two key issues—ensuring weight boundedness and satisfying input constraints—is essential for the reliable design of neuro-adaptive controllers. 
+Therefore, addressing these two key issues—eensuring weight boundedness and satisfying input constraints—is essential for th reliable design of neuro-adaptive controllers. 
 he following section will provide a detailed review of the existing solutions to these challenges.
 
 \subsection{Literature Review}
@@ -328,13 +207,13 @@ Considering the control input saturation function, $\qd(t)$ is supposed to satis
 The architecture of the proposed CONAC is illustrated in Fig.~\ref{fig:ctrl:diagram}, consisting of: a DNN that functions as a neuro-adaptive controller, and a weight optimizer for the DNN. 
 Section \ref{sec:sub:NAC} presents the neuro-adaptive controller along with the reference generator, and Section \ref{sec:sub:NN definition} defines the DNN model. The weight optimizer will be detailed in Section \ref{sec:sub:weight optimizer}.
 
-\begin{figure}[!t]
+\begin{figure*}[!t]
     \centering
-    \includegraphics[width=.99\linewidth]{src/figures/Controller.drawio.pdf}
+    \includegraphics[width=.69\linewidth]{src/figures/Controller.drawio.pdf}
     % \includesvg[width=0.75\linewidth]{Controller.drawio.svg}
     \caption{Architecture of the constrained optimization-based neuro-adaptive controller (CONAC).}
     \label{fig:ctrl:diagram}
-\end{figure}
+\end{figure*}
 
 \subsection{Neuro-Adaptive Controller Design}\label{sec:sub:NAC}
 
@@ -1160,7 +1039,7 @@ The values of the system model parameters are provided in Table~\ref{table:syste
     \renewcommand{\arraystretch}{1.3}
     \caption{Two-link manipulator parameters of $p\textsuperscript{th}$ link.}
     \centering
-    \begin{tabular}{c m{6.5em} c c c }
+    \begin{tabular}{c m{9.5em} c c c }
     % \begin{tabular}{c c c c c}
     \hline
     \textbf{Symbol} & \textbf{Description} & \textbf{Link 1} & \textbf{Link 2} \\
@@ -1662,9 +1541,11 @@ This indicates that the proposed CONAC can be implemented in real-time applicati
 %  SECTION CONCLUSION ======================================
 \section{Conclusion}\label{sec:conclusion}
 
-This paper presented a constrained optimization-based neuro-adaptive controller (CONAC) for the uncertain Euler-Lagrange system, addressing both weight norm and input constraints through a rigorous optimization framework. The stability of the proposed controller was analyzed using Lyapunov theory, ensuring that the system maintained bounded tracking and estimation errors under real-time adaptation.
+This paper presented a constrained optimization-based neuro-adaptive controller (CONAC) for the uncertain Euler-Lagrange system, addressing both weight norm and input constraints through a rigorous optimization framework. 
+The stability of the proposed controller was analyzed using Lyapunov theory, ensuring that the system maintained bounded tracking and estimation errors under real-time adaptation.
 
-The controller effectively incorporated both the input (bound or norm) constraint and the weight norm constraint, ensuring that both actuator limitations and neural network weights were kept within predefined bounds. By formulating these constraints as part of the optimization process, CONAC ensured that the weights converged in a way that satisfied the Karush-Kuhn-Tucker (KKT) conditions, guaranteeing optimality and stability.
+The controller effectively incorporated both the input (bound or norm) constraint and the weight norm constraint, ensuring that both actuator limitations and neural network weights were kept within predefined bounds. 
+By formulating these constraints as part of the optimization process, CONAC ensured that the weights converged in a way that satisfied the Karush-Kuhn-Tucker (KKT) conditions, guaranteeing optimality and stability.
 
 Simulation results validated the superior performance of CONAC compared to conventional methods, such as DNN-BSC and DNN-BSC-A. CONAC not only handled complex input constraints but also managed the weight norm constraints rigorously, leading to improved tracking accuracy and stability without notable oscillations.
 
@@ -1778,28 +1659,27 @@ The gradients of $c_{\rbu}$ with respect to $\estwth$ are given by
 \end{equation}
 It should be noted that constraints \eqref{eq:cstr:input:bound} and \eqref{eq:cstr:input:norm} can be imposed simultaneously, as their gradients \eqref{eq:cstr:input:bound:grad} and \eqref{eq:cstr:input:norm:grad} are linearly independent, satisfying the LICQ condition.
 
-%% If you have bib database file and want bibtex to generate the
-%% bibitems, please use
-%%
-\bibliographystyle{elsarticle-harv} 
-\bibliography{\template/refs}
+\printbibliography
 
-%% else use the following coding to input the bibitems directly in the
-%% TeX file.
+% \begin{IEEEbiographynophoto}{Jane Doe}
+%     Biography text here without a photo.
+% \end{IEEEbiographynophoto}
 
-%% Refer following link for more details about bibliography and citations.
-%% https://en.wikibooks.org/wiki/LaTeX/Bibliography_Management
+\begin{IEEEbiography}[{
+    \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/msRyu.jpg}}]{IEEE Publications Technology Team}
+    In this paragraph you can place your educational, professional background and research and other interests.
+\end{IEEEbiography}
 
+\begin{IEEEbiography}[{
+    \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/dhHong.jpg}}]{IEEE Publications Technology Team}
+    In this paragraph you can place your educational, professional background and research and other interests.
+\end{IEEEbiography}
 
-% \bibliographystyle{elsarticle-harv}
-% % \bibliography{}
-% \bibliography{\template/refs}
+\begin{IEEEbiography}[{
+    \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/khChoi.jpg}}]{IEEE Publications Technology Team}
+    In this paragraph you can place your educational, professional background and research and other interests.
+\end{IEEEbiography}
 
 
 \end{document}
-
-\endinput
-%%
-%% End of file `elsarticle-template-harv.tex'.
-
 

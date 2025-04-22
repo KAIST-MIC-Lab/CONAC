@@ -49,3 +49,5 @@
 # /*.pdf
 *.sav
 *-checkpoint.ipynb
+*.run.xml
+*.bcf
