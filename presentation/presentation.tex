@@ -1,9 +1,7 @@
 % https://www.overleaf.com/learn/latex/Beamer#Using_a_colortheme
 
 % Inbuilt themes in beamer
-\documentclass{beamer}
-
-
+\documentclass[aspectratio=169]{beamer}
 
 % Theme choice:
 \usetheme{Antibes}
@@ -13,7 +11,7 @@
 \title{
     Imposing a Weight Norm Constraint for Neuro–Adaptive Control 
 } 
-\author{Myeongseok Ryu\inst{1}, Jiyun Kim\inst{2}, \and Kyunghwan Choi\inst{1}}
+\author{Myeongseok Ryu\inst{1}, Jiyun Kim\inst{2}, and Kyunghwan Choi\inst{1}}
 \date{\today}
 
 \institute % (optional)
@@ -28,7 +26,9 @@
 }
 
 \logo{
-    \includegraphics[height=0.5cm]{../template/figs/logo_KAIST.png}
+    \includegraphics[height=0.4cm]{logo_KAIST.png}
+    \hspace{.5cm}%
+    \includegraphics[height=0.4cm]{logo_KAIST.png}
 }
 
 \AtBeginSection[]{%
@@ -84,6 +84,47 @@
             \item This is another list item.
         \end{itemize}
     \end{block}
+\end{frame}
+
+
+\section{Numerical Validation}
+
+\subsection{Simulation Setup}
+\begin{frame}{Weight Norm Constraint}
+    \begin{block}{Weight Norm Constraint}
+        \begin{itemize}
+            \item This is a list item.
+            \item This is another list item.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\subsection{Simulation Results}
+\begin{frame}{Weight Norm Constraint}
+    \begin{block}{Weight Norm Constraint}
+        \begin{itemize}
+            \item This is a list item.
+            \item This is another list item.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\section{Conclusion}
+
+\subsection{Conclusion and Future Work}
+\begin{frame}{Conclusion}
+    \begin{block}{Weight Norm Constraint}
+        \begin{itemize}
+            \item This is a list item.
+            \item This is another list item.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\section{}
+\begin{frame}{}
+    \centering \Large
+    \emph{Thank you for your attention!}
 \end{frame}
 
 \end{document}
