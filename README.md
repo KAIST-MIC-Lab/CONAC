@@ -14,7 +14,7 @@ You can find papers here:
 
 ## About this Research
 
-The objective of this research is to design neuro-adaptive controller using constrained optimiztion theory. 
+The objective of this research is to design neuro-adaptive controller using constrained optimization theory. 
 The main features are as follows.
 
 - Stability of controller is ensured in the sense of Lyapunov.
@@ -27,9 +27,9 @@ The main features are as follows.
 
 ## Authors
 
-- [Ryu Myeongseok](https://github.com/DDingR)
-- Hong Donghwa
-- Choi Kyunghwan
+- [Myeongseok Ryu](https://github.com/DDingR)
+- Donghwa Hong
+- Kyunghwan Choi
 
 # Gantt Chart
 
