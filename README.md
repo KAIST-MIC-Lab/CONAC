@@ -1,11 +1,11 @@
-# Constrained Optimization-Based Neuro-Adaptive Control (CoNAC)
+# Constrained Optimization-Based Neuro-Adaptive Control (CONAC)
 
 - Paper Name: TBD
 - State: TBD
 - Template Version: Robot Branch
 
 > [!Note]
-> This paper will be submitted to [expert systems and applications](https://www.sciencedirect.com/journal/expert-systems-with-applications).
+> This paper will be submitted to [IEEE Transactions on Cybernetics](https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=6221036).
 
 You can find papers here:
 
@@ -30,6 +30,22 @@ The main features are as follows.
 - [Ryu Myeongseok](https://github.com/DDingR)
 - Hong Donghwa
 - Choi Kyunghwan
+
+# Gantt Chart
+
+```mermaid
+gantt
+    title CONAC
+    dateFormat  YYYY-MM-DD
+    axisFormat  CW%U
+    section Writing
+    Introduction: w1, 2025-04-14, 7d
+    Method: w2, after w1, 27d
+    section Validation
+    Measurement: v1,  2025-05-03, 28d
+    section Submission
+    Test and evaluation: t1,   2025-05-31, 5d
+```
 
 
 

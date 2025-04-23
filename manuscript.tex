@@ -18,7 +18,11 @@
 \author{
   Myeongseok Ryu, Donghwa Hong, and Kyunghwan Choi
 \thanks{
-    Myeongseok Ryu, Donghwa Hong and Kyunghwan Choi are with the Department of Mechanical and Robotics Engineering, Gwangju Institute of Science and Technology (GIST), Gwangju 61005, Korea (e-mail: \{dding\_98, ???, khchoi\}@gist.ac.kr).
+    Myeongseok Ryu is with the Cho Chun Shik Graduate School of Mobility, Korean Advanced Institute of Science and Technology (KAIST), Daejeon 34051, Korea (e-mail: dding\_98@kaist.ac.kr).
+
+    Donghwa Hong is with the Department of Mechanical and Robotics Engineering, Gwangju Institute of Science and Technology (GIST), Gwangju 61005, Korea (e-mail: ???@gist.ac.kr).
+
+    Kyunghwan Choi is with the Cho Chun Shik Graduate School of Mobility, Korean Advanced Institute of Science and Technology (KAIST), Daejeon 34051, Korea (e-mail: khchoi@kaist.ac.kr).
     
     This work was supported in part by a Korea Research Institute for Defense Technology planning and advancement (KRIT) grant funded by Korea government DAPA (Defense Acquisition Program Administration) (No. KRIT-CT-22-087, Synthetic Battlefield Environment based Integrated Combat Training Platform) and in part by the National Research Foundation of Korea (NRF) grant funded by the Korea government (MSIT) (RS-2025- 00554087). (Corresponding author: Kyunghwan Choi)
     }}
@@ -34,7 +38,7 @@
   A deep neural network (DNN) is employed to approximate the ideal stabilizing control law, while addressing both types of constraints. 
   The weight adaptation laws are formulated through a constrained optimization problem, ensuring first-order optimality conditions at steady state. 
   The controller's stability is rigorously analyzed using Lyapunov theory, guaranteeing bounded tracking errors and DNN weights. 
-  Real-time implementation was conducted on a 2-DOF robotic manipulator, demonstrating the controller's effectiveness in achieving desired trajectory tracking while satisfying constraints.
+  The proposed controller was validated via real-time implementation conducted on a 2-DOF robotic manipulator, demonstrating the controller's effectiveness in achieving desired trajectory tracking while satisfying constraints.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -55,7 +59,7 @@ In this study, the following notation is used:
         }\allowbreak\in\R^{n\times m}
         $ denote a vector and a matrix.
     \item $\myrow_i(\mm A)$ denotes the $i\textsuperscript{th}$ row of the matrix $\mm A\in\R^{n\times m}$. 
-    \item $\myvec(\mm A):= [\myrow_1(\mm A^\top)  ,\cdots,\myrow_m(\mm A^\top)  ]^\top   $ for $\mm A\in\R^{n\times m}$.
+    \item $\myvec(\mm A):= \left(\myrow_1(\mm A^\top)  ,\cdots,\myrow_m(\mm A^\top)  \right)^\top   $ for $\mm A\in\R^{n\times m}$.
     % \item $\mycol_i(A)$ and $\myrow_j(A)$ denote the $i\textsuperscript{th}$ column and $j\textsuperscript{th}$ row of $A\in\R^{n\times m}$, respectively.
     % \item $\myvec(A):= [\mycol_1(A)^\top  ,\cdots,\mycol_m(A)^\top  ]^\top   $ for $A\in\R^{n\times m}$.
     \item $\lambda_{\min}(\mm A)$ denotes the minimum eigenvalue of the matrix $\mm A\in\R^{n\times n}$.
