@@ -242,7 +242,7 @@ Using $\fe$, the system dynamics \eqref{eq:sys1} can be rewritten as
     \label{eq:sys:filtered}
 \end{equation}
 where $\mm K\in\R^{n\times n}$ denotes arbitrary symmetric positive definite matrix and $
-    \mv f:= \mv f(\q,\dq,\dqd,\ddqd)
+    \mv f:= \mv f(\q,\dq,\qd,\dqd,\ddqd)
     =
     \mm K \fe
     +\rbM(-\ddqd+\mm\Lambda\dot{\mv e})
@@ -361,7 +361,7 @@ The DNN architecture $\NN({\q}_n;\wth) := \NN_k$ can be recursively represented 
     \begin{cases}
         \wV_i^\top \act_i(\NN_{i-1}), 
         &
-        i\in[1,\dots,k],
+        i\in\{1,\dots,k\},
         \\
         \wV_0^\top {\q}_n,
         &
@@ -831,7 +831,7 @@ Taking the time derivative of $V_2$ yields:
         +
         \underbrace{
             \norm{(\mm I_{l_{k+1}}\otimes {\estact}_k^\top)}
-        }_{:=c_1\in\R_{>0}}
+        }_{=:c_1\in\R_{>0}}
         \norm{\fe}
         \norm{\estwth_k}
         \\
@@ -843,7 +843,7 @@ Taking the time derivative of $V_2$ yields:
         }
         \lambda_j 
         \estwth_k^\top \pptfrac{c_j}{\estwth_k}
-        }_{:= c_2 >0,\ \text{by Lemma \ref{lem:convex:angle} and Assumption \ref{assum:LICQ}}}
+        }_{=: c_2 \in\R_{>0},\ \text{by Lemma \ref{lem:convex:angle} and Assumption \ref{assum:LICQ}}}
         \\
         \le&
         -
@@ -1049,15 +1049,15 @@ The values of the system model parameters are provided in Table~\ref{table:syste
     \textbf{Symbol} & \textbf{Description} & \textbf{Link 1} & \textbf{Link 2} \\
     \hline
     \hline 
-    $m_p$ & Mass & 2.465 (kg) & 2.465 (kg) \\
+    $m_p$ & Mass & \multicolumn{2}{c}{2.465 (kg)} \\
     \hline
     $l_p$  & Length & 0.2 (m) & 0.18 (m) \\
     \hline
     ${l_c}_p$ & Center of mass & 0.139 (m) & 0.087 (m) \\
     \hline
-    $b_p$   & Viscous friction coef. &  0.1 (Nms) & 0.1 (Nms) \\
+    $b_p$   & Viscous friction coef. & \multicolumn{2}{c}{0.1 (Nms)} \\
     \hline
-    ${f_c}_p$  & Coulomb friction coef. &  0.24 (Nm) & 0.24 (Nm) \\
+    ${f_c}_p$  & Coulomb friction coef. & \multicolumn{2}{c}{0.24 (Nm)} \\
     \hline
     ${f_s}_p$  & Static friction coef. &  0.3 (Nm) & 0.2 (Nm) \\
     \hline
@@ -1066,6 +1066,34 @@ The values of the system model parameters are provided in Table~\ref{table:syste
     \end{tabular}
     \label{table:system:params}
 \end{table}
+
+% \begin{table}[t]
+%     \renewcommand{\arraystretch}{1.3}
+%     \caption{Two-link manipulator parameters of $p\textsuperscript{th}$ link.}
+%     \centering
+%     \begin{tabular}{c m{9.5em} c c c }
+%     % \begin{tabular}{c c c c c}
+%     \hline
+%     \textbf{Symbol} & \textbf{Description} & \textbf{Link 1} & \textbf{Link 2} \\
+%     \hline
+%     \hline 
+%     $m_p$ & Mass & 2.465 (kg) & 2.465 (kg) \\
+%     \hline
+%     $l_p$  & Length & 0.2 (m) & 0.18 (m) \\
+%     \hline
+%     ${l_c}_p$ & Center of mass & 0.139 (m) & 0.087 (m) \\
+%     \hline
+%     $b_p$   & Viscous friction coef. &  0.1 (Nms) & 0.1 (Nms) \\
+%     \hline
+%     ${f_c}_p$  & Coulomb friction coef. &  0.24 (Nm) & 0.24 (Nm) \\
+%     \hline
+%     ${f_s}_p$  & Static friction coef. &  0.3 (Nm) & 0.2 (Nm) \\
+%     \hline
+%     $I_p$  & Inertia & 0.069 (kgm\textsuperscript{2}) & 0.015 (kgm\textsuperscript{2}) \\
+%     \hline
+%     \end{tabular}
+%     \label{table:system:params}
+% \end{table}
 
 % ------------------------------------
 % Reference Trajectory
@@ -1251,11 +1279,11 @@ The quantitative comparison of the tracking performance was evaluated using the 
         \!&\!\bf{Description}\!&\!\bf{Input Constraint}\!\\
     \hline
     \hline
-        (C$_1$)\!&\!proposed\!&\!$\overline{\tau}=10,\overline{\tau}_2=-\underline{\tau}_2=2.5$ \\
+        (C$_1$)\!&\!large $\beta_j$\!&\!$\overline{\tau}=10,\overline{\tau}_2=-\underline{\tau}_2=2.5$ \\
     \hline
         (C$_2$)\!&\!aux. sys.\!&\!$\overline{\tau}_1\!=\!-\underline{\tau}_1\!=\!9.682,\overline{\tau_2}\!=\!-\underline{\tau_2}\!=\!2.5$\!\\
     \hline
-        (C$_3$)\!&\!small $\beta_i$\!&\!$\overline{\tau}=10,\overline{\tau}_2=-\underline{\tau_2}=2.5$ \\
+        (C$_3$)\!&\!small $\beta_j$\!&\!$\overline{\tau}=10,\overline{\tau}_2=-\underline{\tau_2}=2.5$ \\
     \hline
         (C$_4$)\!&\!no $\rbu$ constraints\!&\!$[\beta_j]_{j\in\{\rbu,\overline{\tau}_2,\underline{\tau}_2\}}=\mv{0}$ \\
     \hline
@@ -1534,7 +1562,7 @@ This indicates that the proposed CONAC can be implemented in real-time applicati
     \centering
         \includegraphics[width=\figSizeOneCol\linewidth]
         {
-            src/script_simulation/figures/compare/Fig9.eps
+            src/measurement/figures/Fig10.eps
         }%
     \caption{
         Computational time of CONAC and CONAC-AUX. 
