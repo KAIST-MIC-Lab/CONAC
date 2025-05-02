@@ -20,21 +20,23 @@ fig_width = 400;
 fig_unit = 'pixels';
 
 %% 
-ctrl1_name = "c1 1.trc";
+ctrl1_name = "c2.trc";
+ctrl_num = 1;
 
 %%
-ctrl_num = 1;
 % data1 = post_procc(ctrl1_name, ctrl_num);
 data1 = trc2data(ctrl1_name, ctrl_num);
 
 c1 = "blue";
 th_max = [8 7 6];
-u_ball = 11.5;
-u_max1 = 10.7819;
-u_max2 = 4;
+u_ball = 11;
+u_max2 = 3.5;
+u_max1 = sqrt(u_ball^2 - u_max2^2);
+
+focus_c1 = find(data1.u1.Time >= 0 & data1.u1.Time <= 24);
 
 %%
-ep_time = 12; T = ep_time * 2;
+ep_time = 12+4; T = ep_time * 2;
 
 start_t = 19;
 end_t = 21;
@@ -177,8 +179,6 @@ hf.Position(3:4) = [fig_width, fig_height];
 
 ang = 0:0.01:2*pi;
 
-focus_c1 = find(data1.u1.Time >= 0 & data1.u1.Time <= 24);
-
 plot(u_ball*cos(ang), u_ball*sin(ang), "color", 'black', "LineWidth", line_width, "LineStyle", "-."); hold on
 plot([-100, 100], [1, 1] * u_max2, "color", 'black', "LineWidth", line_width, "LineStyle", "-."); hold on
 plot([-100, 100], [-1, -1] * u_max2, "color", 'black', "LineWidth", line_width, "LineStyle", "-."); hold on
@@ -243,14 +243,12 @@ hF = gcf;
 hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
-if ctrl_num == 1 || ctrl_num == 2 || ctrl_num == 3
-    semilogy(data1.lbdu.Time, data1.lbdu.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\lambda_{u}$"); hold on
-    semilogy(data1.lbdu2Max.Time, data1.lbdu2Max.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\lambda_{\bar{u}_2}$"); hold on
-    semilogy(data1.lbdu2Min.Time, data1.lbdu2Min.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\lambda_{\bar{u}_2}$"); hold on
-elseif ctrl_num == 4
-    semilogy(data1.lbdth1.Time, data1.lbd1.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\lambda_{\theta_0}$"); hold on
-    semilogy(data1.lbdth2.Time, data1.lbd2.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\lambda_{\theta_1}$"); hold on
-    semilogy(data1.lbdth3.Time, data1.lbd3.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\lambda_{\theta_2}$"); hold on
+if ctrl_num == 1 || ctrl_num == 2
+    semilogy(data1.lbdu.Time, data1.lbdu.Data, "Color", 'r', "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\lambda_{u}$"); hold on
+    semilogy(data1.lbdu2Max.Time, data1.lbdu2Max.Data, "Color", 'g', "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\lambda_{u_2}$ Max"); hold on
+    semilogy(data1.lbdu2Min.Time, data1.lbdu2Min.Data, "Color", 'b', "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\lambda_{u_2}$ Min"); hold on
+elseif ctrl_num == 3 || ctrl_num == 4
+    semilogy(data1.lbdth2.Time, data1.lbdth2.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\lambda_{\theta_2}$"); hold on
 end
 
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
@@ -262,7 +260,7 @@ ylabel('$\lambda_j$ (Log scale)', 'FontSize', font_size, 'Interpreter', 'latex')
     lgd.Interpreter = 'latex';
     lgd.FontSize = lgd_size; 
 grid on; grid minor;
-xlim([start_t end_t])
+% xlim([start_t end_t])
     ax = gca;
     ax.FontSize = font_size; 
     ax.FontName = 'Times New Roman';
@@ -273,8 +271,9 @@ hF = gcf;
 hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
-if ctrl_num == 2
-    plot(data1.zeta1.Time(focus_c1), data2.zeta1.Data(focus_c1), "Color", c2, "LineWidth", line_width, "LineStyle", "-"); hold on
+if ctrl_num == 4
+    plot(data1.z1.Time(focus_c1), data1.z1.Data(focus_c1), "Color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
+    plot(data1.z2.Time(focus_c1), data1.z2.Data(focus_c1), "Color", c1, "LineWidth", line_width, "LineStyle", "-."); hold on
 end
 
 grid on; grid minor;
@@ -314,7 +313,7 @@ figure(11); clf;
 hF = gcf; 
 hF.Position(3:4) = [fig_width, fig_height];
 
-plot(data1.t.Time, data1.t.Data, "color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
+plot(data1.ctrlFlag.Time, data1.ctrlFlag.Data, "color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
 
 xlabel("Time / s", "Interpreter", "latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')

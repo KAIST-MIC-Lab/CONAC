@@ -26,6 +26,10 @@ while true
         continue
     end
 
+    if length(cur_line) ~= 65
+        continue
+    end
+
     cur_data = cur_line(42:64);
     cur_time = str2double(string(cur_line(11:19)))*1e-3;
 
@@ -51,31 +55,26 @@ while true
 end
 
 %% STORE IN STRUCTURE
-if ctrl_num ~= 1
-    error("Unknown control number")
-end
-
 data.q1.Data            = canData.id3.data(:,1);
 data.q1.Time            = canData.id3.time;
 data.q2.Data            = canData.id3.data(:,2);
 data.q2.Time            = canData.id3.time;
+
+data.q1.Data           = norm2ori(data.q1.Data, 2, -1.5);
+data.q2.Data           = norm2ori(data.q2.Data, 1.5, -3);
 
 data.r1.Data            = canData.id3.data(:,3);
 data.r1.Time            = canData.id3.time;
 data.r2.Data            = canData.id3.data(:,4);
 data.r2.Time            = canData.id3.time;
 
+data.r1.Data           = norm2ori(data.r1.Data, 2, -1.5);
+data.r2.Data           = norm2ori(data.r2.Data, 1.5, -3);
+
 data.u1.Data            = canData.id4.data(:,3);
 data.u1.Time            = canData.id4.time;
 data.u2.Data            = canData.id4.data(:,4);
 data.u2.Time            = canData.id4.time;
-
-data.lbdu.Data          = canData.id3.data(:,5);
-data.lbdu.Time          = canData.id3.time;
-data.lbdu2Max.Data      = canData.id4.data(:,1);
-data.lbdu2Max.Time      = canData.id4.time;
-data.lbdu2Min.Data      = canData.id4.data(:,2);
-data.lbdu2Min.Time      = canData.id4.time;
 
 data.th0.Data           = canData.id5.data(:,1);
 data.th0.Time           = canData.id5.time;
@@ -84,21 +83,56 @@ data.th1.Time           = canData.id5.time;
 data.th2.Data           = canData.id5.data(:,3);
 data.th2.Time           = canData.id5.time;
 
-data.t.Data             = canData.id5.data(:,4);
-data.t.Time             = canData.id5.time;
+data.th0.Data           = norm2ori(data.th0.Data, 9, 0);
+data.th1.Data           = norm2ori(data.th1.Data, 9, 0);
+data.th2.Data           = norm2ori(data.th2.Data, 9, 0);
+
+data.ctrlFlag.Data      = canData.id5.data(:,4);
+data.ctrlFlag.Time      = canData.id5.time;
 data.cmp.Data           = canData.id5.data(:,5);
 data.cmp.Time           = canData.id5.time;
 
-%% OBSERVATION TIME
-start_idx = find(data.r1.Data > data.r1.Data(1), 1);
-start_time = data.r1.Time(start_idx);
+if ctrl_num == 1 || ctrl_num == 2
+    data.lbdu.Data          = canData.id3.data(:,5);
+    data.lbdu.Time          = canData.id3.time;
+    data.lbdu2Max.Data      = canData.id4.data(:,1);
+    data.lbdu2Max.Time      = canData.id4.time;
+    data.lbdu2Min.Data      = canData.id4.data(:,2);
+    data.lbdu2Min.Time      = canData.id4.time;
+elseif ctrl_num == 3
+    data.lbdth2.Data        = canData.id4.data(:,2);
+    data.lbdth2.Time        = canData.id3.time;
+elseif ctrl_num == 4
+    data.lbdth2.Data        = canData.id3.data(:,5);
+    data.lbdth2.Time        = canData.id3.time;    
+    data.z1.Data            = canData.id4.data(:,1);
+    data.z1.Time            = canData.id4.time;
+    data.z2.Data            = canData.id4.data(:,2);
+    data.z2.Time            = canData.id4.time;
+else
+    error("Unknown ctrl_num")
+end
 
 data_names = fieldnames(data);
+
+%% 
+
+for data_idx = 1:length(data_names)
+    data_name = data_names{data_idx};
+    
+    data.(data_name).Time = data.(data_name).Time - data.(data_name).Time(1);
+end
+
+%% OBSERVATION TIME
+% start_idx = find(data.r1.Data > data.r1.Data(1), 1);
+start_idx = find(data.ctrlFlag.Data ~= 0, 1);
+start_time = data.r1.Time(start_idx);
+
 for data_idx = 1:length(data_names)
     data_name = data_names{data_idx};
 
     start_idx = find(data.(data_name).Time >= start_time, 1);
-    end_idx = find(data.(data_name).Time >= start_time+24, 1);
+    end_idx = find(data.(data_name).Time >= start_time+24+16, 1);
     
     if isempty(end_idx)
         end_idx = length(data.(data_name).Time);
@@ -122,7 +156,7 @@ function data = unpack5(cur_data)
     
     data = [...
         data1 data2 data3 data4 data5
-    ] * 1e-2;
+    ] * 1e-3;
 end
 
 function data = unpack4(cur_data)
@@ -148,4 +182,10 @@ function data = hex2udec(data, bit)
     end
 end
 
+function data = norm2ori(data, M, m)
+    bit_max = 2^11-1;
+
+    data = data * 1e3;
+    data = .5*( (M-m)*data/bit_max + (M+m) );
+end
 
