@@ -381,7 +381,7 @@ plot(data2.cmp.Time, data2.cmp.Data, "color", c2, "LineWidth", line_width, "Line
 plot(data1.cmp.Time, data1.cmp.Data, "color", c1, "LineWidth", line_width, "LineStyle", "-"); hold on
 
 xlabel("Time / s", "Interpreter", "latex")
-ylabel("Cmp. Time / ms", "Interpreter", "latex")
+ylabel("Comp. Time / ms", "Interpreter", "latex")
 set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
 grid on 
 xlim(general_lim)
