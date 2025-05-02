@@ -1001,10 +1001,10 @@ Finally, the filtered error $\fe$ and the estimated weights $\estwth$ are bounde
 
 To validate the effectiveness of the proposed CONAC, a real-time experiment was conducted on a two-link manipulator, as shown in Fig.~\ref{fig:ctrl:exp:set}. 
 The OpenCR1.0 board \cite{opencr} with a 32-bit ARM Cortex and a 216 MHz clock frequency was used for the real-time implementation.
-\color{red}
-The experimental setup consisted of a two-link manipulator with a 2-DOF arm, equipped with two @@@@@ servos. 
+\DHHO{
+The experimental setup consisted of a two-link manipulator actuated by two Cubemars AK10-90 servo motors. 
 The servos were controlled using the OpenCR1.0 board which transmits the reference angle to the servos via controller area network (CAN) communication.
-\color{black}
+}
 The system dynamics of the two-link manipulator is described in \eqref{eq:sys1}, the estimated system parameters are provided in Table~\ref{table:system:params}. 
 
 % ------------------------------------
@@ -1040,9 +1040,9 @@ The system dynamics of the two-link manipulator is described in \eqref{eq:sys1},
     \hline 
     $m_p$ & Mass & \multicolumn{2}{c}{2.465 (kg)} \\
     \hline
-    $l_p$  & Length & 0.2 (m) & 0.18 (m) \\
+    $l_p$  & Length & \multicolumn{2}{c}{0.2 (m)} \\  
     \hline
-    ${l_c}_p$ & Center of mass & 0.139 (m) & 0.087 (m) \\
+    ${l_c}_p$ & Center of mass & \multicolumn{2}{c}{0.139 (m)} \\
     \hline
     $b_p$   & Viscous friction coef. & \multicolumn{2}{c}{0.1 (Nms)} \\
     \hline
@@ -1050,7 +1050,7 @@ The system dynamics of the two-link manipulator is described in \eqref{eq:sys1},
     \hline
     ${f_s}_p$  & Static friction coef. &  0.3 (Nm) & 0.2 (Nm) \\
     \hline
-    $I_p$  & Inertia & 0.069 (kgm\textsuperscript{2}) & 0.015 (kgm\textsuperscript{2}) \\
+    $I_p$  & Inertia & \multicolumn{2}{c} {0.069 (kgm\textsuperscript{2})} \\
     \hline
     \end{tabular}
     \label{table:system:params}
@@ -1120,7 +1120,7 @@ The desired trajectory is defined as follows:
     \end{cases}
     \label{eq:desired trajectory}
 \end{equation}
-where ${\qd}_0:=\left(-\tfrac{1}{2}\pi,0\right)^\top$, ${\qd}_1:=\left(\tfrac{1}{4}\pi,-\tfrac{1}{2}\pi\right)^\top$, ${\qd}_2:=\left(-\tfrac{1}{4}\pi,\tfrac{1}{4}\pi\right)^\top$, and $t_f=3$ s.
+where ${\qd}_0:=\left(-\tfrac{1}{3}\pi,\tfrac{1}{3}\pi\right)^\top$, ${\qd}_1:=\left(\tfrac{1}{4}\pi,-\tfrac{1}{2}\pi\right)^\top$, ${\qd}_2:=\left(-\tfrac{1}{4}\pi,\tfrac{1}{4}\pi\right)^\top$, and $t_f=3$ s.
 To demonstrate the learning capability of NN, the desired trajectory was applied twice; let us call the first and second iterations of the reference trajectory as Episode $1$ and Episode $2$, respectively.
 
 % However, since the NN's weights are initialized randomly, large reference trajectories should be avoided to mitigate the effect of initial poor performance of the controller.
@@ -1140,7 +1140,7 @@ To demonstrate the effectiveness of the proposed CONAC to handle the combination
             \rbu
             \mid
             \norm{\rbu} \le 
-            10
+            11
             % \overline\tau
         \right\}
         \label{eq:sat:norm}
@@ -1152,7 +1152,7 @@ To demonstrate the effectiveness of the proposed CONAC to handle the combination
             \tau_2
             \mid
             \vert{\tau_2}\vert \le 
-            2.5
+            3.5
             % \overline\tau_2
         \right\}
         .
@@ -1200,12 +1200,12 @@ To handle the input saturation, the proposed CONAC was implemented with the inpu
     ,
     \label{eq:sim:cstr:CONAC}
 \end{equation}
-where $\overline\tau_2=-\underline{\tau}_2=2.5$ are the absolute bound of the second link actuator, and $\overline\tau=10$ is the maximum feasible norm of the control input.
+where $\overline\tau_2=-\underline{\tau}_2=3.5$ are the absolute bound of the second link actuator, and $\overline\tau=11$ is the maximum feasible norm of the control input.
 Hence, (C$_1$) is possible to use full capability of the actuator.
 The weight constraints $c_{\theta_i},\ \forall i\in[0,\cdots,k]$ were also considered in the CONAC.
 As described in \eqref{eq:control:est}, the control input is equal to the output of the NN, and the adaptation law is defined in \eqref{eq:adaptation law}.
 
-The update rate of the Lagrange multipliers was set to $\beta_{\theta_i}=10^{-3},\ \forall i\in[0,\cdots,k]$, and $\beta_{\rbu}=10$ and $\beta_{\overline{\tau}_2}=\beta_{\underline{\tau}_2}=10^{3}$.
+The update rate of the Lagrange multipliers was set to $\beta_{\theta_i}=10^{0},\ \forall i\in[0,\cdots,k]$, and $\beta_{\rbu}=10^{1}$ and $\beta_{\overline{\tau}_2}=\beta_{\underline{\tau}_2}=10^{2}$.
 
 % ------------------------------------
 % Controllers: Aux. system in CONAC-AUX
@@ -1216,12 +1216,12 @@ On the other hand, the existing auxiliary system \cite{Esfandiari:2014aa,Karason
 The auxiliary system is defined as $\ddtt{\mv\zeta} = \mm{A}_\zeta \mv{\zeta} + \mm{B}_\zeta \Delta\rbu,\ \mv{\zeta}\vert_{t=0} = \mv{0}_{2\times1}$, where $\mv{\zeta}\in\R^n$ denotes the auxiliary state, $\mm{A}_\zeta\in\R_{<0}^{n\times n}$, and $\mm{B}_\zeta\in\R^{n\times n}$.
 The auxiliary state $\mv{\zeta}$ is affected by the saturated control input $\Delta\rbu$, whose entry is defined as $\Delta\tau_{i} = 
 \tau_{i}-\max(\underline\tau_i,\min(\overline\tau_i,\tau_i)),\ \forall i\in\{1,2\}$.
-Since, the auxiliary system only considers the input bound constraint, $\overline{\tau}_1$ is set to $9.682$ to approximately match the maximum allowable norm of the control input $\overline\tau$, (\ie $\overline{\tau}_1^2+\overline{\tau}_2^2=\overline{\tau}^2$, and $\overline{\tau}_2=2.5$ and $\overline{\tau}=10$).
+Since, the auxiliary system only considers the input bound constraint, $\overline{\tau}_1$ is set to $10.428$ to approximately match the maximum allowable norm of the control input $\overline\tau$, (\ie $\overline{\tau}_1^2+\overline{\tau}_2^2=\overline{\tau}^2$, and $\overline{\tau}_2=3.5$ and $\overline{\tau}=11$).
 
 The auxiliary state are used in the adaptation law \eqref{eq:adap:th:approx} by substituting $\fe$ with $\fe+\mv{\zeta}$.
 Hence, the weights are adapted to reduce not only the tracking error $\fe$ but also the auxiliary state $\mv{\zeta}$.
 
-The matrices of the auxiliary system are set to $\mm{A}_\zeta=\mydiag([-10,-10])$ and $\mm{B}_\zeta=\mydiag([10^3,10^3])$, considering the tradeoff between the sensitivity of the control saturation, and the convergence speed.
+The matrices of the auxiliary system are set to $\mm{A}_\zeta=\mydiag([-10,-10])$ and $\mm{B}_\zeta=\mydiag([800,800])$, considering the tradeoff between the sensitivity of the control saturation, and the convergence speed.
 \MSRY{sensitivity와 convergence에 대해서 더 설명이 필요한가?}
 
 % ------------------------------------
@@ -1229,7 +1229,7 @@ The matrices of the auxiliary system are set to $\mm{A}_\zeta=\mydiag([-10,-10])
 % ------------------------------------
 \subsubsection*{Controller 3: (C$_3$) CONAC with small $\beta_i$}
 
-To investigate the effect of the update rate of Lagrange multipliers, (C$_3$) was implemented with small $\beta_i$ values, which are set to $\beta_{\rbu}=1$, and $\beta_{\overline{\tau}_2}=\beta_{\underline{\tau}_2}=10^{2}$.
+To investigate the effect of the update rate of Lagrange multipliers, (C$_3$) was implemented with small $\beta_i$ values, which are set to $\beta_{\rbu}=10^{-1}$, and $\beta_{\overline{\tau}_2}=\beta_{\underline{\tau}_2}=10^{0}$.
 The remaining parameters are the same as (C$_1$).
 
 % ------------------------------------
@@ -1246,10 +1246,11 @@ In this case, the update rate of the Lagrange multipliers regarding the control 
 % Controller Parameters
 % ------------------------------------
 For all controllers ((C$_1$), (C$_2$), and (C$_3$)), the NN input vector ${\q}_n$ was set as ${\q}_n=\left(\q^\top,\dq^\top,\fe^\top,1\right)^\top\in\R^{3n+1}$ with the augmented scalar $1$ included to account for the bias term in the weight matrix. 
-The NNs' weights were initialized randomly with uniform distribution in the range of $[-0.1,0.1]$, and the same random seed.
-Each NN architecture had two hidden layers with four nodes (\ie $k=2, l_0=6, l_1=4, l_2=4, l_3=2$), and the adaptation gain was set to $\alpha=0.5$.
+The NNs' weights were initialized randomly with uniform distribution in the range of $[-0.5,0.5]$, and the same random seed.
+Each NN architecture had two hidden layers with four nodes \DHHO{k=2? (\ie $k=2, l_0=6, l_1=4, l_2=4, l_3=2$)}, and the adaptation gain was set to $\alpha=0.2$.
 The filtering matrix $\mm{\Lambda}$ was set to $\mm{\Lambda}=\mydiag([5,15])$.
-The sampling rate of the controller was $250$ Hz considering the real-time implementation, and $1000$ Hz for the simulation.
+\DHHO{ simulation?
+    The sampling rate of the controller was $250$ Hz considering the real-time implementation, and $1000$ Hz for the simulation.}
 \MSRY{CAN Hz?}
 To emphasize the control input constraint handling capability, the weight constraint parameters were selected sufficiently large (\ie $\overline\wth_0=11, \overline\wth_1=12$, and $\overline\wth_2=13$), avoiding the violation of the weight constraints. 
 
@@ -1268,11 +1269,11 @@ The quantitative comparison of the tracking performance was evaluated using the 
         \!&\!\bf{Description}\!&\!\bf{Input Constraint}\!\\
     \hline
     \hline
-        (C$_1$)\!&\!large $\beta_j$\!&\!$\overline{\tau}=10,\overline{\tau}_2=-\underline{\tau}_2=2.5$ \\
+        (C$_1$)\!&\!large $\beta_j$\!&\!$\overline{\tau}=11,\overline{\tau}_2=-\underline{\tau}_2=3.5$ \\
     \hline
-        (C$_2$)\!&\!aux. sys.\!&\!$\overline{\tau}_1\!=\!-\underline{\tau}_1\!=\!9.682,\overline{\tau_2}\!=\!-\underline{\tau_2}\!=\!2.5$\!\\
+        (C$_2$)\!&\!aux. sys.\!&\!$\overline{\tau}_1\!=\!-\underline{\tau}_1\!=\!10.428,\overline{\tau_2}\!=\!-\underline{\tau_2}\!=\!3.5$\!\\
     \hline
-        (C$_3$)\!&\!small $\beta_j$\!&\!$\overline{\tau}=10,\overline{\tau}_2=-\underline{\tau_2}=2.5$ \\
+        (C$_3$)\!&\!small $\beta_j$\!&\!$\overline{\tau}=11,\overline{\tau}_2=-\underline{\tau_2}=3.5$ \\
     \hline
         (C$_4$)\!&\!no $\rbu$ constraints\!&\!$[\beta_j]_{j\in\{\rbu,\overline{\tau}_2,\underline{\tau}_2\}}=\mv{0}$ \\
     \hline
