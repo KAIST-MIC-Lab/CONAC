@@ -1,7 +1,7 @@
 \documentclass[lettersize,journal]{IEEEtran}
 
 \def\pub{false} % true for publication, false for draft
-\newcommand*{\template}{template}
+\newcommand*{\template}{template} 
 \input{\template/preamble/preamble_journal.tex}
 
 \newcommand*{\figSizeTwoCol}{.49}
@@ -34,11 +34,11 @@
 
 %% Abstract
 \begin{abstract}
-  This study presents a constrained optimization-based neuro-adaptive controller (CONAC) for weight norm and convex input constraints. 
-  A deep neural network (DNN) is employed to approximate the ideal stabilizing control law, while addressing both types of constraints. 
+  This study presents a constrained optimization-based neuro-adaptive controller (CONAC) for uncertain Euler-Lagrange systems under weight norm and convex input constraints. 
+  A deep neural network (DNN) is employed to approximate the ideal stabilizing control law, while learning the unknown system dynamics and,  addressing both types of constraints, simultaneously.
   The weight adaptation laws are formulated through a constrained optimization problem, ensuring first-order optimality conditions at steady state. 
   The controller's stability is rigorously analyzed using Lyapunov theory, guaranteeing bounded tracking errors and DNN weights. 
-  The proposed controller was validated via real-time implementation conducted on a 2-DOF robotic manipulator, demonstrating the controller's effectiveness in achieving desired trajectory tracking while satisfying constraints.
+  The proposed controller was validated via a real-time implementation conducted on a 2-DOF robotic manipulator, demonstrating the controller's effectiveness in achieving desired trajectory tracking while satisfying constraints.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -159,7 +159,7 @@ In Section \ref{sec:adap_laws}, the weight adaptation laws are developed.
 Section \ref{sec:stability} analyzes the stability of the proposed controller.
 A real-time implementation of the proposed controller is presented in Section \ref{sec:sim}, where the proposed controller is applied to a 2-DOF robotic manipulator.
 Finally, Section \ref{sec:conclusion} concludes the paper and discusses potential future work.
-The candidates of input constraints are presented in \ref{sec:appen:cstr}.
+The candidates of input constraints are presented in Appendix \ref{sec:appen:cstr}.
 
 % ====================================
 %  SECTION PROBLEM FORMULATION 
@@ -168,20 +168,20 @@ The candidates of input constraints are presented in \ref{sec:appen:cstr}.
 
 \subsection{Model Dynamics and Control Objective}
 
-Consider an uncertain Euler-Lagrange system modeled as
+We consider an uncertain Euler-Lagrange system modeled as
 \begin{equation}
     \rbM\ddq + \rbVm + \rbF + \rbG + \rbd
     =
     \mysat(\rbu)
     \label{eq:sys1}
 \end{equation}
-where $\q\in \R^n$ denotes the generalized coordinate, $\rbd$ represents disturbance and $\rbu\in\R^n$ denotes the control input. 
-The terms $\rbM:=\rbM(\q)\in\R^{n\times n}$, $\rbVm:=\rbVm(\q,\dq)\in\R^{n\times n}$, $\rbF:=\rbF(\dq)\in\R^{n}$ and $\rbG:=\rbG(\q)$ represent the unknown inertia matrix, Coriolis/centripetal matrix, friction terms and gravity vector
+where $\q\in \R^n$ denotes the generalized coordinate, $\rbd$ represents disturbance and $\rbu\in\R^n$ denotes the generalized control input. 
+The terms $\rbM:=\rbM(\q)\in\R^{n\times n}$, $\rbVm:=\rbVm(\q,\dq)\in\R^{n\times n}$, $\rbF:=\rbF(\dq)\in\R^{n}$ and $\rbG:=\rbG(\q)$ represent the unknown inertia matrix, Coriolis/centripetal matrix, friction vector and gravity vector
 The function $\mysat(\cdot):\R^n\to\R^n$ represents the inherent physical limitations of the actuators such that $\norm{\mysat(\rbu)}\le \overline\tau$, where $\overline\tau$ denotes the maximum norm of control input.
 To account for these limitations, it is essential to incorporate physically motivated constraints into the controller design.
-\ref{sec:appen:cstr} introduces candidate constraints that can be applied to ensure compliance with these physical limitations.
+Appendix \ref{sec:appen:cstr} introduces candidate constraints that can be applied to ensure compliance with these physical limitations.
 
-The Euler-Lagrange system \eqref{eq:sys1} satisfy some important physical properties \cite[see,][Chap. 3 Tab. 3.2.1]{Lewis:1998aa}.
+The Euler-Lagrange system \eqref{eq:sys1} satisfies some important physical properties \cite[Chap. 3 Tab. 3.2.1]{Lewis:1998aa}.
 We introduce the following properties:
 \begin{prop} 
     The inertia matrix $\rbM$ is symmetric, positive definite and bounded.
@@ -189,7 +189,7 @@ We introduce the following properties:
 \end{prop}
 
 \begin{prop} 
-    The Coriolis/centripetal matrix $\rbVm$ can always be selected so that the matrix $\dot{\rbM}-2\rbVm$ is skew-symmetric, \ie $\mv{x}^\top(\dot{\rbM}-2\rbVm)\mv{x}=0,\ \forall \mv{x}\in\R^n$.
+    The Coriolis/centripetal matrix $\rbVm$ can always be selected so that the matrix $\ddtt{\rbM}-2\rbVm$ is skew-symmetric, \ie $\mv{x}^\top(\ddtt{\rbM}-2\rbVm)\mv{x}=0,\ \forall \mv{x}\in\R^n$.
     \label{prop:skew}
 \end{prop}
 
@@ -198,10 +198,11 @@ We introduce the following properties:
     \label{prop:dis_bound}
 \end{prop}
 
-In conclusion, the control objective is to develop a neuro-adaptive controller that enables $\q$ to track a continuously differentiable desired trajectory $\qd:=\qd(t): \R \to \R^n$, compensating for the external disturbance while addressing the imposed constraints.
-Considering the control input saturation function, $\qd(t)$ is supposed to satisfy the following assumption:
+In conclusion, the control objective is to develop a neuro-adaptive controller that enables $\q$ to track a continuously differentiable desired trajectory $\qd:=\qd(t): \R_{\ge0} \to \R^n$, compensating for the unknown system dynamics while addressing the imposed constraints.
+The desired trajectory $\qd(t)$ is supposed to satisfy the following assumption:
 \begin{assum}
-    The desired trajectory $\qd(t)$ is bounded so that $\norm{\qd(t)}\le \overline{q}_d$ and available to design a feasible control input in the presence of the control input saturation.
+    The desired trajectory $\qd(t)$ is bounded so that $\norm{\qd(t)}\le \overline{q}_d$ and available to design a bounded control input. 
+    \MSRY{수정이 필요할 수 있음}
     \label{assum:feasible}
 \end{assum}
 
@@ -209,7 +210,9 @@ Considering the control input saturation function, $\qd(t)$ is supposed to satis
 \section{Control Law Development}\label{sec:ctrl design}
 
 The architecture of the proposed CONAC is illustrated in Fig.~\ref{fig:ctrl:diagram}, consisting of: a DNN that functions as a neuro-adaptive controller, and a weight optimizer for the DNN. 
-Section \ref{sec:sub:NAC} presents the neuro-adaptive controller along with the reference generator, and Section \ref{sec:sub:NN definition} defines the DNN model. The weight optimizer will be detailed in Section \ref{sec:sub:weight optimizer}.
+Before we proceed to the controller design, we first revisit some mathematical preliminaries in Section \ref{sec:sub:math preliminaries}. 
+Then, we introduce the neuro-adaptive controller in Section \ref{sec:sub:NAC}, followed by the DNN model in Section \ref{sec:sub:NN definition}. 
+The constrained optimization-based weight adaptation laws will be presented in Section \ref{sec:adap_laws}.
 
 \begin{figure}[!t]
     \centering
@@ -219,20 +222,64 @@ Section \ref{sec:sub:NAC} presents the neuro-adaptive controller along with the 
     \label{fig:ctrl:diagram}
 \end{figure}
 
+\subsection{Mathematical Preliminaries}\label{sec:sub:math preliminaries}
+
+Later, the following proposition and lemma will be used in further sections:
+
+\begin{propsit}[see, {\cite[Chap. 7 Prop. 7.1.9]{Bernstein:2009aa}}] \label{propsit:kron}
+	For matrix $\mm A\in\R^{n\times m}$ and vector $\mv b\in\mathbb R^n$, we have the following property
+	\begin{equation}
+		\mm A^\top \mv b 
+		= 
+		\myvec(\mm A^\top\mv b)
+		=
+		\myvec(\mv b^\top\mm A)
+		= 
+		(\mm{I}_{m}\otimes \mv b^\top) \myvec(\mm A)
+		.
+	\end{equation}
+\end{propsit}
+
+
+\begin{lem} \label{lem:stable:set}
+    For Lyapunov function $V:=V(\mv{x})\ge0$ with $\mv{x}\in\R^n$, if the time derivative of $V$ is given by $\ddtt V\le -a_1 \mv{x}^\top \mv{x} + a_2 \mv{x}$ for some positive constants $a_1\in\R$ and $a_2\in\R$, then $\mv{x}$ is bounded by $\mv{x}\in\{\mv{x}\mid\norm{\mv{x}}\le\tfrac{a_2}{a_1}\}$.
+\end{lem}
+
+\begin{proof}
+    The time derivative of $V$ can be rewritten as
+    \begin{equation}
+        \ddtt V
+        \le
+        -a_1 \norm{\mv{x}}^2 + a_2 \norm{\mv{x}}
+        =
+        -a_1
+        \left(
+            \norm{\mv{x}}-\tfrac{a_2}{2a_1}
+        \right)^2
+        -
+        \tfrac{a_2^2}{4a_1}
+        .
+        \label{eq:lem:lya:dot}
+    \end{equation}
+    According to \eqref{eq:lem:lya:dot}, one can conclude that $\ddtt V$ is negative definite if $\norm{\mv{x}}\le\tfrac{a_2}{a_1}$ holds.
+    In other words, $\mv{x}$ remains within the bounded set $\{\mv{x}\mid\norm{\mv{x}}\le\tfrac{a_2}{a_1}\}$.
+\end{proof}
+
+
 \subsection{Neuro-Adaptive Controller Design}\label{sec:sub:NAC}
 
 First, let us define the filtered tracking error $\fe\in\R^n$ as 
 \begin{equation}
-    \fe := \dot{\mv e}-\mm\Lambda \mv e
+    \fe := \ddtt{\mv e}-\mm\Lambda \mv e
     ,
     \label{eq:err:filtered}
 \end{equation}
-where $\mv e := \q - \qd$ denotes the tracking error, $\dot{\mv e} := \dq - \dqd$ represents the derivative of the tracking error, and $\mm\Lambda\in\R^{n\times n}_{>0}$ is a user-designed filtering matrix.
+where $\mv e := \q - \qd$ denotes the tracking error, $\ddtt{\mv e} := \dq - \dqd$ represents the time derivative of the tracking error, and $\mm\Lambda\in\R^{n\times n}_{>0}$ is a user-designed filtering matrix.
 Since \eqref{eq:err:filtered} is stable system, it implies that $\mv e$ is bounded if $\fe$ is bounded.
 
 Using $\fe$, the system dynamics \eqref{eq:sys1} can be rewritten as
 \begin{equation}
-    \rbM \dot\fe
+    \rbM \ddtt\fe
     =
     -\rbVm \fe
     -\mm K \fe
@@ -241,11 +288,11 @@ Using $\fe$, the system dynamics \eqref{eq:sys1} can be rewritten as
     ,
     \label{eq:sys:filtered}
 \end{equation}
-where $\mm K\in\R^{n\times n}$ denotes arbitrary symmetric positive definite matrix and $
+where $\mm{K}=\mm{K}^\top\in\R^{n\times n}_{>0}$ denotes arbitrary unknown matrix and $
     \mv f:= \mv f(\q,\dq,\qd,\dqd,\ddqd)
     =
     \mm K \fe
-    +\rbM(-\ddqd+\mm\Lambda\dot{\mv e})
+    +\rbM(-\ddqd+\mm\Lambda\ddtt{\mv e})
     +
     \rbVm(-\dqd+\mm\Lambda\mv e)
     -
@@ -254,6 +301,9 @@ where $\mm K\in\R^{n\times n}$ denotes arbitrary symmetric positive definite mat
     \rbG
     \in\R^n
 $ denotes the lumped system uncertainty.
+\color{red}
+The unknown matrix $\mm{K}$ is not available to design in practice, 
+\color{black}
 
 Consider the Lyapunov function $V_1:= \tfrac{1}{2}\fe^\top \rbM\fe$. 
 Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
@@ -263,7 +313,7 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
         =&
         \fe^\top \rbM \ddtt \fe
         +
-        \tfrac{1}{2}\fe^\top \dot{\rbM}\fe
+        \tfrac{1}{2}\fe^\top \ddtt{\rbM}\fe
         \\
         =&
         \fe^\top (
@@ -274,7 +324,7 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
         &
         +
         \tfrac{1}{2}
-        \fe^\top \dot{\rbM}\fe
+        \fe^\top \ddtt{\rbM}\fe
         \\
         =&
         -
@@ -288,7 +338,7 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
         &
         +
         \tfrac{1}{2}
-        \fe^\top(\dot{\rbM}- 2\rbVm)\fe
+        \fe^\top(\ddtt{\rbM}- 2\rbVm)\fe
         \\
         \le&
         -\lambda_{\min}(\mm K)\norm{\fe}^2
@@ -296,34 +346,36 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
         \overline\tau_d\norm{\fe}
         +
         \fe^\top (\mv f+\mysat(\rbu))
-        \\
-        \le&
-        -\lambda_{\min}(\mm K)\norm{\fe}^2
-        +
-        \overline\tau_d\norm{\fe}
-        +
-        \fe^\top (\mysat(\rbu)-\rbu^*)
-        ,
+        % \\
+        % \le&
+        % -\lambda_{\min}(\mm K)\norm{\fe}^2
+        % +
+        % \overline\tau_d\norm{\fe}
+        % +
+        % \fe^\top (\mysat(\rbu)-\rbu^*)
+        .
     \end{aligned}
     \label{eq:lya1:dot1}
-\end{equation}
-where $\rbu^*:= -\mv f$ is the ideal control input whose maximum norm is $\overline\tau$ according to Assumption \ref{assum:feasible} and $\mysat(\cdot)$. 
-Therefore, one can conclude that $\fe$ is exponentially stable so that $\lim_{t\to\infty}\norm{\fe}=\tfrac{\overline\tau_d}{\lambda_{\min}(\mm K)}$, if $\rbu=-\rbu^*$ can be realized.
-However, $\rbu^*$ is not available in practice, since $\mv f$ is unknown.
+\end{equation} 
+Therefore, one can conclude that $\fe$ is exponentially stable so that $\lim_{t\to\infty}\norm{\fe}=\tfrac{\overline\tau_d}{\lambda_{\min}(\mm K)}$, if the lumped system uncertainty $\mv f$ can be cancelled out by the control input $\rbu$ neglecting the control input saturation.
+Hence, let us define the ideal control input $\rbu^*$ as $-\mv f$.
+However, $\rbu^*$ is not available in practice, since system dynamics in $\mv f$ is unknown.
 
 To overcome this issue, a DNN is employed to approximate $\rbu^*$.
 Let $\NN:=\NN({\q}_n;\wth): \R^{l}\times\R^{\Xi}\to\R^{n}$ represent the DNN, where ${\q}_n\in\R^{l}$ is the DNN input vector, and $\wth\in\R^{\Xi}$ is the vector of trainable weights.
 The architecture of $\NN({\q}_n;\wth)$ will be defined in Section \ref{eq:DNN:architecture}.
-According to the universal approximation theorem for DNNs \cite{Kidger:2020aa}, $\NN({\q}_n;\wth)$ can approximate a nonlinear function $\mv g(\cdot)$ with an ideal weight vector $\idealwth$ on a compact subset $\Omega_{NN}\in\R^{l}$ to $\mv\epsilon$-accuracy, such that $\sup_{{\q}_n\in\Omega_{NN}}\norm{ \NN({\q}_n;\idealwth) - \mv g(\cdot)} = \mv\epsilon < \infty$.
-Furthermore, the theorem states that the norm of $\idealwth$ is bounded, \ie $\norm{\idealwth}\le \overline\wth<\infty$.
+According to the universal approximation theorem for DNNs \cite{Kidger:2020aa}, $\NN({\q}_n;\wth)$ can approximate a nonlinear function, for instance $\mv g(\cdot)$, with an ideal weight vector $\idealwth$ on a compact subset $\Omega_{NN}\in\R^{l}$ to $\epsilon$-accuracy, such that $\sup_{{\q}_n\in\Omega_{NN}}\norm{ \NN({\q}_n;\idealwth) - \mv g(\cdot)} = \epsilon < \infty$.
+% Furthermore, the theorem states that the norm of $\idealwth$ is bounded, \ie $\norm{\idealwth}\le \overline\wth<\infty$.
 In this study, $\idealwth$ is defined as a local optimal point, rather than a global optimal point.
 
 In conclusion, the ideal control law $\rbu^*$ is expressed by the DNN approximation with the ideal weight vector $\idealNN:=\NN({\q}_n;\idealwth)$ as follows:
 \begin{align}
-    \rbu^*=& \idealNN+\mv\epsilon,
+    \rbu^*=& \idealNN+\mv\epsilon
+    ,
     \label{eq:control:ideal}
 \end{align}
-which is estimated online by
+where $\mv\epsilon\in\R^n$ is the approximation error vector, which is bounded by $\norm{\mv\epsilon}\le \epsilon$.
+The approximated control input $\rbu^*$ is estimated online by
 \begin{align}
     \rbu =& \estNN,
     \label{eq:control:est}
@@ -343,6 +395,9 @@ Substituting \eqref{eq:control:ideal} and \eqref{eq:control:est} into \eqref{eq:
     \label{eq:lya1:dot2}
 \end{equation}
 Finally, one can conclude that the result of \eqref{eq:lya1:dot1} can be obtained by adapting $\estwth$ to $\idealwth$ (\ie $\hat\NN\to\idealNN$).
+Importantly, input (voltage) saturation
+is not yet considered; this will be done next.
+Note that the control input saturation is not considered in derivation of the ideal control input; this will be addressed in further section.
 
 \subsection{Deep Neural Network (DNN) Model}\label{sec:sub:NN definition}
 
@@ -350,7 +405,7 @@ Finally, one can conclude that the result of \eqref{eq:lya1:dot1} can be obtaine
     \centering
     \includegraphics[width=0.99\linewidth]{src/figures/DNN.drawio.pdf}
     \caption{
-        Architecture of the DNN $\NN({\q}_n;\wth)$ with $k=2,l_0=2,l_1=l_2=3,l_3=2$.
+        Architecture of the DNN $\NN({\q}_n;\wth)$ with $k=2,l_0=2,l_1=l_2=3$, and $l_3=2$.
     }
     \label{fig:DNN}
 \end{figure}
@@ -361,7 +416,7 @@ The DNN architecture $\NN({\q}_n;\wth) := \NN_k$ can be recursively represented 
     \begin{cases}
         \wV_i^\top \act_i(\NN_{i-1}), 
         &
-        i\in\{1,\dots,k\},
+        i\in\{1,\dots ,k\},
         \\
         \wV_0^\top {\q}_n,
         &
@@ -377,8 +432,8 @@ Notice that the output size of $\NN(\cdot)$ is the same as that of the control i
 
 One of the widely used activation functions for large DNNs is from the ReLU family \cite{Maas:2013aa}, which effectively avoids the gradient vanishing problem during error backpropagation. 
 However, for control applications, where relatively shallow DNNs are typically sufficient, and the gradient vanishing issue is less severe, the sigmoid function or the hyperbolic tangent function is commonly used as the activation function. 
-These functions simplify stability analysis due to their continuous differentiability, and their outputs and gradients satisfy $\norm{\act_i(\mv x)} < \infty$ and  $\norm{\ddtfrac{\act_i(\mv x)}{\mv x}}_F < \infty,\ \forall\mv x\in\R^{l_i}$. 
-In this study, the hyperbolic tangent function $\tanh(\cdot)$ was selected as the activation function (\ie $\sigma(x) = \tanh(x),\ \forall x\in\R$), which provides desirable boundedness with $\norm{\sigma(x)}<1$ and $\norm{\ddtfrac{\sigma(x)}{x}}< 1$.
+These functions simplify stability analysis, since they are continuously differentiable and their outputs and gradients are bounded. 
+In this study, the hyperbolic tangent function $\tanh(\cdot)$ was selected as the activation function (\ie $\sigma(x) = \tanh(x),\ \forall x\in\R$), which provides desirable boundedness with $\norm{\sigma(x)}<1$ and $\norm{\ddtfrac{\sigma(x)}{x}}\le 1$.
 
 For simplicity, each layer's weights are vectorized as $\wth_i:=\myvec(\wV_i)\in\R^{\Xi_i}$, where $\Xi_i:= (l_i+1)l_{i+1}$ is the number of weights in the $i\textsuperscript{th}$ layer. 
 The total weight vector $\wth\in\R^{\Xi}$ is defined by augmenting $\wth_i$ for all $i\in \{0,\cdots,k\}$ as 
@@ -398,7 +453,8 @@ The total weight vector $\wth\in\R^{\Xi}$ is defined by augmenting $\wth_i$ for 
         \myvec(\wV_0)
     \end{pmatrix},
 \end{equation}
-where $\Xi={\sum_{i=0}^{k} \Xi_i}$ represents the total number of weights. The gradient of $ \NN({\q}_n;\wth)$ with respect to $\wth$ is defined as
+where $\Xi={\sum_{i=0}^{k} \Xi_i}$ represents the total number of weights. 
+The gradient of $ \NN({\q}_n;\wth)$ with respect to $\wth$ can be obtained using Proposition \ref{propsit:kron} and the chain rule as follows:
 \begin{equation}
     \pptfrac{\NN}{\wth}=
     \begin{bmatrix}
@@ -453,11 +509,11 @@ where
     \end{cases}
     \label{eq:NN:grad}
 \end{equation}
-and $\act_i:= \act_i(\NN_{i-1})$ and $\act_i':= \pptfrac{\act_i}{\NN_{i-1}}$.
+and $\act_i:= \act_i(\NN_{i-1})$ and $\act_i':= \ddtfrac{\act_i}{\NN_{i-1}}$.
 
 In the following sections, let $\idealNN_i$ represent the output of the $i\textsuperscript{th}$ layer with the ideal weight vector $\idealwth$. 
-Additionally, define $\idealact_i:=\act_i(\idealNN_{i-1})$ and ${\idealact}'_i:= \pptfrac{\idealact_i}{\idealNN_{i-1}}$. 
-Similarly, $\estNN_i$ denotes the output of the $i\textsuperscript{th}$ layer with the estimated weight vector $\estwth$, and define $\estact_i:=\act_i(\estNN_{i-1})$ and $\estact_i':= \pptfrac{\estact_i}{\estNN_{i-1}}$, respectively.
+Additionally, define $\idealact_i:=\act_i(\idealNN_{i-1})$ and ${\idealact}'_i:= \ddtfrac{\idealact_i}{\idealNN_{i-1}}$. 
+Similarly, $\estNN_i$ denotes the output of the $i\textsuperscript{th}$ layer with the estimated weight vector $\estwth$, and define $\estact_i:=\act_i(\estNN_{i-1})$ and $\estact_i':= \ddtfrac{\estact_i}{\estNN_{i-1}}$, respectively.
 
 %  SECTION ADAPTATION LAW DERIVATION =======================
 \section{Weight Adaptation Laws}\label{sec:adap_laws}
@@ -479,7 +535,7 @@ The control objective can be represented as follows:
     \label{eq:opt:problem1}
 \end{equation}
 where $J(\fe;\estwth):= \tfrac{1}{2} \fe^\top \fe$ is the objective function.
-Inequality constraints $c_j,\ \forall j\in\mathcal{I}$, are imposed during the weight adaptation process to minimize the objective function, where $\mathcal I$ denotes the set of the imposed inequality constraints. 
+Inequality constraints $c_j:=c_j(\estwth),\ \forall j\in\mathcal{I}$, are imposed during the weight adaptation process to minimize the objective function, where $\mathcal I$ denotes the set of the imposed inequality constraints. 
 Here, $\fe$ is considered a pre-defined data or parameter for this optimization problem. The Lagrangian function is defined as
 \begin{equation}
     L(
@@ -496,7 +552,7 @@ Here, $\fe$ is considered a pre-defined data or parameter for this optimization 
 \end{equation}
 where $\lambda_j$ denotes the Lagrange multiplier for each constraint.
 
-The adaptation laws for $\estwth$ and $[\lambda]_{j\in\mathcal I}$ are derived to solve the dual problem of \eqref{eq:opt:problem1} (\ie  $\min_{\estwth} \max_{[\lambda]_{j\in\mathcal I}}L(\fe,\estwth,[\lambda]_{j\in\mathcal I})$), as follows:
+The adaptation laws for $\estwth$ and $[\lambda_j]_{j\in\mathcal I}$ are derived to solve the dual problem of \eqref{eq:opt:problem1} (\ie  $\min_{\estwth} \max_{[\lambda_j]_{j\in\mathcal I}}L(\fe,\estwth,[\lambda_j]_{j\in\mathcal I})$), as follows:
 \begin{subequations}
     \begin{align}
             \ddtt{\estwth}
@@ -526,20 +582,23 @@ The adaptation laws for $\estwth$ and $[\lambda]_{j\in\mathcal I}$ are derived t
             \lambda_j & = \max(\lambda_j,0) ,
         \label{eq:adap:lbd:max}
     \end{align}
-    \label{eq:adaptation law}
+    \label{eq:adaptation law}%             %%
 \end{subequations}
 where $\alpha\in\R_{>0}$ denotes the adaptation gain (learning rate) and $\beta_j\in\R_{>0}$ denotes the update rate of the Lagrange multipliers in $\mathcal I$, and the arguments of $L$ and $J$ are suppressed for brevity. 
 % By selecting $\alpha_i\in\R_{>0},\ \forall i\in[1,\cdots,n]$, one can weight the importance of each component of the gradient of the objective function, allowing for a more tailored adaptation process.
-The Lagrange multipliers associated with inequality constraints are non-negative, \ie $\lambda_j\ge 0$, and they become zero when their corresponding constraints are inactive. When a constraint $c_j$ becomes active (\ie violated), the corresponding Lagrange multiplier $\lambda_j$ increases to address the violation. Once the violation is resolved and the constraint is no longer active (\ie $c_j < 0$), the multiplier decreases gradually until it returns to zero. Note that this adaption law is similar to the ALM in \cite{Nocedal:2006aa}, where the adaptation law for Lagrange multipliers is given by $\lambda_j\leftarrow \max\left(\lambda_j-\tfrac{c_j}{\mu},0\right)$, with $\mu\in\R_{>0}$ being the penalty parameter. 
+The Lagrange multipliers associated with inequality constraints are non-negative, \ie $\lambda_j\ge 0$, due to \eqref{eq:adap:lbd:max}. 
+When a constraint $c_j$ becomes active, \ie $c_j > 0$, the corresponding Lagrange multiplier $\lambda_j$ increases to address the violation, \ie see, \eqref{eq:adap:lbd}.
+Once the violation is resolved and the constraint is no longer active, \ie $c_j \le 0$, the multiplier decreases gradually until it returns to zero.
+Note that this adaption law is similar to the ALM in \cite{Nocedal:2006aa}, where the adaptation law for Lagrange multipliers is given by $\lambda_j\leftarrow \max\left(\lambda_j+\tfrac{c_j}{\mu},0\right)$, with $\mu\in\R_{>0}$ being the penalty parameter. 
 
-At steady state, where $\ddtt{\estwth}=0$ and $\ddtt\lambda_j=0$, the KKT conditions are satisfied, \ie $\pptfrac{L}{\estwth}=0$, $c_j \le 0$, $\lambda_j \ge 0$, and $\lambda_j c_j=0$ \cite[Chap.~12 T.~12.1]{Nocedal:2006aa}.
+At steady state, where $\ddtt{\estwth}=0$ and $\ddtt\lambda_j=0$, the KKT conditions are satisfied, \ie $\pptfrac{L}{\estwth}=0$, $c_j \le 0$, $\lambda_j \ge 0$, and $\lambda_j c_j=0$.
 In other words, the proposed optimizer updates $\estwth$ and $\lambda_j$ in a way that satisfies the KKT conditions. 
 These conditions represent the first-order necessary conditions for optimality, guiding the updates toward candidates for a locally optimal point.
 % The KKT condition is satisfied, when $\estwth$ converges to $\idealwth$, since $\partial L/\partial \estwth=0$ (i.e. the first-order necessary condition of the optimality is satisfied.).
 
 \subsection{Approximation of the Gradient of Objective Function}
 
-The adaptation law for $\estwth$ defined in \eqref{eq:adap:th} involves the partial derivative of the state vector with respect to control input $\pptfrac{\fe}{\rbu}$ (\ie 
+The adaptation law for $\estwth$ defined in \eqref{eq:adap:th} involves the partial derivative of the filtered error with respect to control input $\pptfrac{\fe}{\rbu}$, \ie 
 $
     \pptfrac{J}{\rbu}
     =
@@ -554,9 +613,9 @@ $
         (\pptfrac{\estNN}{\estwth})
     \right)
     ^\top \fe
-$). 
-Since the objective function depends on $\fe$ of a dynamic system, obtaining the gradient is not straightforward. 
-The recommended method to calculate the exact value of $\pptfrac{J}{\estwth}$ is to use the forward sensitivity method \cite{Sengupta:2014aa} by simulating the sensitivity equation as follows: 
+$. 
+Since the objective function depends on $\fe$ of a dynamic system, obtaining $\pptfrac{\fe}{\rbu}$ is not straightforward. 
+The recommended method to calculate the exact value of $\pptfrac{\fe}{\rbu}$ is to use the forward sensitivity method \cite{Sengupta:2014aa} by simulating the sensitivity equation as follows: 
 \begin{equation}
     \ddtt (
         \pptfrac{\fe}{\rbu}
@@ -565,27 +624,27 @@ The recommended method to calculate the exact value of $\pptfrac{J}{\estwth}$ is
     \pptfrac{}{
         \rbu
     }
-    \left[
+    \left(
         \rbM^{-1}(
             -\rbVm \fe
             -\mm K \fe
             + \mv f
             -\rbd + \mysat(\rbu)
         )
-    \right]
+    \right)
     .
 \end{equation}
-However, this method cannot be realized, since we do not have the exact system dynamics (\ie $\rbM,\rbVm, \rbF$ and $ \rbG$).
+However, this method cannot be realized, since we do not have the exact system dynamics, \ie $\rbM,\rbVm, \rbF$ and $ \rbG$.
 Additionally, the computational cost of the forward sensitivity method is high, as the number of NN's weights are generally large.
 
 In \cite{Douratsos:2007aa,Saerens:1991aa}, the authors approximate $\pptfrac{\fe}{\rbu}$ as $
     \pptfrac{\fe}{\rbu}
     \approx
-    [
+    \left[
         \mysign(\pptfrac{r_i}{\tau_j})
-    ]_{i,j\in\{1,\cdots,m\}}
-$ using the sign of each entry (\ie control direction).
-However, this method is not suitable for \eqref{eq:sys1}, since the control directions are unknown, but the sign of the control input is known (\ie $\rbM^{-1}$ is positive definite matrix in the view of Property \ref{prop:M}).
+    \right]_{i,j\in\{1,\cdots,m\}}
+$ using the sign of each entry, \ie control direction.
+However, this method is not suitable for \eqref{eq:sys:filtered}, since the control directions are unknown, but the sign of the control input is known, \ie $\rbM^{-1}$ is positive definite matrix in the view of Property \ref{prop:M}.
 Therefore, we propose to approximate $\pptfrac{\fe}{\rbu}$ as $\pptfrac{\fe}{\rbu}\approx \mm I_n$ and one can conclude \eqref{eq:adap:th} as follows:
 \begin{equation}
     \ddtt{\estwth}
@@ -615,11 +674,11 @@ Therefore, we propose to approximate $\pptfrac{\fe}{\rbu}$ as $\pptfrac{\fe}{\rb
 %         \REQUIRE $\xi$, $\estwth$, $\lambda_j$, $\eta$
 %         \ENSURE  $\estwth$, $\lambda_j$, $\eta$
 %         \STATE Set $\mathcal A \leftarrow \mathcal A\cup \{j\}$ for all $c_j\ge0$;
-%         \STATE Determine update matrix $\dot\eta$ using \eqref{eq. eta dynamics 1};
-%         \STATE Update $\eta\leftarrow \eta +\dot\eta\cdot T_s$; 
-%         \STATE Determine update directions $\dot{\estwth}$, $[\dot\lambda_j]_{j\in\mathcal A}$ using \eqref{eq. adaptation law th}, \eqref{eq. adaptation law L};
-%         \STATE Update weight vector $\estwth\leftarrow \estwth+\dot{\estwth}\cdot T_s$;
-%         \STATE Update multipliers $[\lambda_j]_{j\in\mathcal A}\leftarrow [\lambda_j]_{j\in\mathcal A}+[\dot\lambda_j]_{j\in\mathcal A}\cdot T_s$;
+%         \STATE Determine update matrix $\ddtt\eta$ using \eqref{eq. eta dynamics 1};
+%         \STATE Update $\eta\leftarrow \eta +\ddtt\eta\cdot T_s$; 
+%         \STATE Determine update directions $\ddtt{\estwth}$, $[\ddtt\lambda_j]_{j\in\mathcal A}$ using \eqref{eq. adaptation law th}, \eqref{eq. adaptation law L};
+%         \STATE Update weight vector $\estwth\leftarrow \estwth+\ddtt{\estwth}\cdot T_s$;
+%         \STATE Update multipliers $[\lambda_j]_{j\in\mathcal A}\leftarrow [\lambda_j]_{j\in\mathcal A}+[\ddtt\lambda_j]_{j\in\mathcal A}\cdot T_s$;
 %         \STATE $[\lambda_j]_{j\in\mathcal A}\leftarrow \max([\lambda_j]_{j\in\mathcal A}, 0)$;
 %         \STATE Set $\mathcal A \leftarrow \mathcal A - \{j\}$ for all $\lambda_j=0$;
 %         \STATE \textbf{RETURN};
@@ -630,6 +689,7 @@ Therefore, we propose to approximate $\pptfrac{\fe}{\rbu}$ as $\pptfrac{\fe}{\rb
 \subsection{Constraint Candidates}\label{sec:sub:cstr} 
 
 This section introduces conditions which imposed constraints must satisfy and the weight constraints.
+\MSRY{assumption 2 세타 기준으로 바꾸기; 위에 어펜딕스 순서를 좀 바꿔봐}
 The potential control input constraints are presented in Appendix \ref{sec:appen:cstr}.
 First, we introduce the following assumptions for the constraints.
 
@@ -706,7 +766,7 @@ The weight constraints $\boldsymbol{c}_{\theta}:= [c_{\theta_i}]_{i\in\{0,\cdots
         -
         \overline\theta_i^2 
     \right)    
-    \le 0
+    % \le 0
     \label{eq:cstr:weight:ball}
 \end{equation}
 with $\overline\theta_i<\infty$ denoting the maximum allowable norm for $\estwth_i$. 
@@ -1156,7 +1216,7 @@ The effectiveness of the proposed CONAC to handle the combination of the convex 
         .
         \label{eq:sat:tau2}
     \end{align}
-    \label{eq:sat}
+    \label{eq:sat}% %%
 \end{subequations}
 These domains \eqref{eq:sat:norm} and \eqref{eq:sat:tau2} can be physically interpreted as a combination of the voltage source limitation of the actuators and the torque limitation of the second link actuator, respectively.
 
