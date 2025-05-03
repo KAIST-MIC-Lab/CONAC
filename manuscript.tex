@@ -49,7 +49,7 @@
 In this study, the following notation is used:
 
 \begin{itemize}
-    \item $\otimes$ denotes the Kronecker product \cite[Definition 7.1.2]{Bernstein:2009aa}.
+    \item $\otimes$ denotes the Kronecker product \cite[Chap. 7 Def. 7.1.2]{Bernstein:2009aa}.
     \item A vector and matrix are denoted by $\mv{x}=[x_i]_{i\in\{1,\cdots,n\}}\in\R^n$ and $
         \mm A
         := 
@@ -1235,6 +1235,7 @@ Consequently, the weights are adapted to reduce not only the tracking error $\fe
 
 The matrices of the auxiliary system were set to $\mm{A}_\zeta=\mydiag([-10,-10])$ and $\mm{B}_\zeta=\mydiag([10^3,10^3])$, considering the tradeoff between the sensitivity of the control saturation, and the convergence speed of the auxiliary system.
 Since, the auxiliary system only considers the saturation of each control input (\ie which is same as the input bound constraint \eqref{eq:cstr:input:bound}), $\overline{\tau}_1$ was set to $9.682$ to approximately match the maximum allowable norm of the control input $\overline\tau$, with respect to $\overline{\tau}_2=2.5$ and $\overline{\tau}=10$, (\ie $\overline{\tau}_1^2+\overline{\tau}_2^2=\overline{\tau}^2$).
+For simplicity, let (C$_4$) be imposed with input bound constraint for the first link actuator, \ie $c_{\overline{\tau}_1}$ and $c_{\underline{\tau}_1}$.
 
 \hfill
 
@@ -1413,18 +1414,18 @@ The quantitative comparison of the tracking performance was evaluated using the 
 	\hline 
 		& (C$_1$) & (C$_2$) & (C$_3$) & (C$_4$) \\
 	\hline
-		$e_1\times10^{3}$ & $25.013$ & $21.719$ & $23.168$ & $24.195$ \\
+		$e_1\times10^{3}$ / rad & $25.013$ & $21.719$ & $23.168$ & $24.195$ \\
 	\hline
-        $e_2\times10^{3}$ & $22.651$ & $10.530$ & $13.062$ & $12.927$ \\
+        $e_2\times10^{3}$ / rad & $22.651$ & $10.530$ & $13.062$ & $12.927$ \\
 	\hline
         & \multicolumn{4}{c}{\textbf{Episode 2}} \\
     \hline
     \hline
         & (C$_1$) & (C$_2$) & (C$_3$) & (C$_4$) \\
 	\hline
-		$e_1\times10^{3}$ & $7.513$ & $8.021$ & $8.408$ & $19.721$ \\
+		$e_1\times10^{3}$ / rad & $7.513$ & $8.021$ & $8.408$ & $19.721$ \\
 	\hline
-        $e_2\times10^{3}$ & $2.617$ & $2.435$ & $3.553$ & $4.256$ \\
+        $e_2\times10^{3}$ / rad & $2.617$ & $2.435$ & $3.553$ & $4.256$ \\
     \hline
     \end{tabular}
     \label{tab:sim:L2}

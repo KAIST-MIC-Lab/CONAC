@@ -2,7 +2,7 @@ clear
 figure(1); close
 figure(1);
 
-AINMATION_SAVE_FLAG = 0;
+AINMATION_SAVE_FLAG = 1;
 video_name = "sample";
 gray = "#808080";
 
@@ -11,13 +11,26 @@ more_red = "#A2142F";
 
 line_width = 1.5;
 font_size = 12;
-T = 24;
+ep_time = 12;
+T = 2*ep_time;
 accel = 10;
+idleTime1 = 3+8;
+idleTime2 = 4;
+
+animation_end_t = T + idleTime1;
+
+PhaseList = {
+    "Idle 1",
+    "Episode 1",
+    "Episode 2",
+    "Idle 2"
+};
+
 %% 
-ctrl1_name = "c1 1.trc"; % CoNAC
-ctrl2_name = "c1 2.trc"; % Aux.
-ctrl3_name = "c1 1.trc"; % CoNAC 2.
-ctrl4_name = "c1 3.trc"; % CoNAC 2.
+ctrl1_name = "c1.trc"; 
+ctrl2_name = "c2.trc";
+ctrl3_name = "c3.trc"; 
+ctrl4_name = "c4.trc"; 
 
 %%
 data1 = trc2data(ctrl1_name, 1);
@@ -25,11 +38,11 @@ data2 = trc2data(ctrl2_name, 1);
 data3 = trc2data(ctrl3_name, 1);
 data4 = trc2data(ctrl4_name, 1);
 
-c1 = "blue"; c2="cyan"; c3=gray; c4=[1 0.5 1 ];
-th_max = [11 12 13];
-u_ball = 12;
-u_max1 = 10;
-u_max2 = 3;
+c1 = "blue"; c2="cyan"; c3=gray; c4="magenta";
+th_max = [6 6 6];
+u_ball = 11;
+u_max2 = 3.5;
+u_max1 = sqrt(u_ball^2 - u_max2^2);
 
 %%
 dt = data1.q1.Time(2) - data1.q1.Time(1);
@@ -40,14 +53,14 @@ L2 = .45;
 
 %% SAVE VIDEO
 if AINMATION_SAVE_FLAG
-    v = VideoWriter("sim_result/"+video_name, 'MPEG-4');
+    v = VideoWriter("figures/"+video_name, 'MPEG-4');
     % v.Quality = 100;
     v.FrameRate = 1/dt/accel; 
     open(v);
 end
 
 %% ANIMATE
-for t = 0:dt*accel:T
+for t = 0:dt*accel:animation_end_t
     t_idx1 = find(data1.q1.Time >= t, 1);
     t_idx2 = find(data2.q1.Time >= t, 1);
     t_idx3 = find(data3.q1.Time >= t, 1);
@@ -108,15 +121,32 @@ for t = 0:dt*accel:T
         "Marker","o", ...
         "LineWidth", line_width ...
         ); hold on
-    
+
+    %  phase
+    if t < idleTime1
+        p_idx = 1;
+    elseif t < idleTime1 + ep_time
+        p_idx = 2;
+    elseif t < idleTime1 + 2*ep_time
+        p_idx = 3;
+    else
+        p_idx = 4;
+    end
+    text(.25,-.85,0, ...
+        "Phase: "+PhaseList(p_idx), ...
+        "FontSize", font_size+5, ...
+        "FontName", "Times New Roman" ...
+        );
+
     %  time
-    text(.25,.85,0, ...
+    text(.25,-.95,0, ...
         sprintf( ...
-            'Time: %.2f/%.0f s (%.1f%%) ', t, T, round(t/T*100, 3) ...
+            'Time: %.2f/%.0f s (%.1f%%) ', t, animation_end_t, round(t/animation_end_t*100, 3) ...
         ), ...
         "FontSize", font_size, ...
         "FontName", "Times New Roman" ...
         );
+
 
     grid on
     set(gca, 'XTickLabel', [])

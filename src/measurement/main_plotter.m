@@ -1,7 +1,7 @@
 clear
 
 %%
-SAVE_FLAG = 1;
+SAVE_FLAG = 0;
 POSITION_FLAG = 1; % it will plot fiugures in the same position
 TEX_CONVERT_FLAG = 0;
 gray = "#808080";
@@ -44,7 +44,7 @@ data4 = trc2data(ctrl4_name, 4);
 
 
 c1 = "blue"; c2="cyan"; c3=gray; c4="magenta";
-th_max = [5 5.5 6];
+th_max = [6 6 6];
 u_ball = 11;
 u_max2 = 3.5;
 u_max1 = sqrt(u_ball^2 - u_max2^2);

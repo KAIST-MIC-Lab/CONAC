@@ -142,6 +142,12 @@ for data_idx = 1:length(data_names)
     data.(data_name).Time = data.(data_name).Time(start_idx:end_idx)-start_time;
 end
 
+%% OVERFLOW CORRECTION
+data.q1                 = pseudoEdit(data.q1, 2, -1.5);
+% data.q2                 = pseudoEdit(data.q2, 1.5, -3);
+data.r1                 = pseudoEdit(data.r1, 2, -1.5);
+% data.r2                 = pseudoEdit(data.r2, 1.5, -3);
+
 end
 
 %% LOCAL FUNCTIONS
@@ -187,5 +193,19 @@ function data = norm2ori(data, M, m)
 
     data = data * 1e3;
     data = .5*( (M-m)*data/bit_max + (M+m) );
+end
+
+function data = pseudoEdit(data, M, m)
+
+    idleTime1 = 3+8;
+    T = 24;
+
+    check_range = union(find(data.Time >= 35), find(data.Time <= 11));
+    % check_range = union(find(data.Time >= idleTime1+T), find(data.Time <= idleTime1));
+    edit_idx = setdiff(check_range, find(data.Data < 0));
+    % edit_idx = check_range;
+
+    data.Data(edit_idx) = data.Data(edit_idx) - (M-m);
+
 end
 
