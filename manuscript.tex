@@ -1,5 +1,6 @@
 \documentclass[lettersize,journal]{IEEEtran}
 
+
 \def\pub{false} % true for publication, false for draft
 \newcommand*{\template}{template} 
 \input{\template/preamble/preamble_journal.tex}
@@ -92,7 +93,7 @@ When NN outputs are used directly in the control law, this may lead to excessive
 Such constraints are commonly encountered in industrial systems, where actuators are limited by physical and safety requirements in terms of amplitude, rate, or energy \cite{Esfandiari:2021aa}. 
 Failing to address these constraints can degrade control performance or even destabilize the system.
 
-Therefore, addressing these two key issues—eensuring weight boundedness and satisfying input constraints—is essential for th reliable design of neuro-adaptive controllers. 
+Therefore, addressing these two key issues—ensuring weight boundedness and satisfying input constraints—is essential for th reliable design of neuro-adaptive controllers. 
 he following section will provide a detailed review of the existing solutions to these challenges.
 
 \subsection{Literature Review}
@@ -144,13 +145,15 @@ This gap suggests that constrained optimization could be key to addressing both 
 
 The main contributions of this study are listed as follows:
 \begin{itemize}
-    \item A constrained optimization-based neuro-adaptive controller (CONAC) is developed using a DNN, where input constraints and the boundedness of NN weights are formulated as inequality constraints within the adaptation process.
+    \item A constrained optimization-based neuro-adaptive controller (CONAC) is developed using a DNN, where input constraints and the boundedness of DNN weights are formulated as inequality constraints within the adaptation process.
     \item The weight adaptation laws in CONAC are derived using constrained optimization theory to minimize the objective function while satisfying the inequality constraints. The adaptation laws ensure convergence of the weights to the first-order optimality conditions, specifically the Karush-Kuhn-Tucker (KKT) conditions defined in \cite[Chap. 12 Thm. 12.1]{Nocedal:2006aa}. 
     % \item The forward sensitivity method is applied in CONAC to accurately calculate the gradient of the objective function. \MSRY{WILL BE DELETED}
     %, enabling more precise real-time adaptation.
 \end{itemize}
 
 \subsection{Organization}
+
+\MSRY{Started from here}
 
 The remainder of this paper is organized as follows. 
 Section \ref{sec:Problem Formulation} presents the target system and control objective.
@@ -202,7 +205,6 @@ In conclusion, the control objective is to develop a neuro-adaptive controller t
 The desired trajectory $\qd(t)$ is supposed to satisfy the following assumption:
 \begin{assum}
     The desired trajectory $\qd(t)$ is bounded so that $\norm{\qd(t)}\le \overline{q}_d$ and available to design a bounded control input. 
-    \MSRY{수정이 필요할 수 있음}
     \label{assum:feasible}
 \end{assum}
 
@@ -301,9 +303,9 @@ where $\mm{K}=\mm{K}^\top\in\R^{n\times n}_{>0}$ denotes arbitrary unknown matri
     \rbG
     \in\R^n
 $ denotes the lumped system uncertainty.
-\color{red}
-The unknown matrix $\mm{K}$ is not available to design in practice, 
-\color{black}
+% \color{red}
+% The unknown matrix $\mm{K}$ is not available to design in practice, 
+% \color{black}
 
 Consider the Lyapunov function $V_1:= \tfrac{1}{2}\fe^\top \rbM\fe$. 
 Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
@@ -357,12 +359,12 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
     \end{aligned}
     \label{eq:lya1:dot1}
 \end{equation} 
-Therefore, one can conclude that $\fe$ is exponentially stable so that $\lim_{t\to\infty}\norm{\fe}=\tfrac{\overline\tau_d}{\lambda_{\min}(\mm K)}$, if the lumped system uncertainty $\mv f$ can be cancelled out by the control input $\rbu$ neglecting the control input saturation.
+Therefore, invoking Lemma \ref{lem:stable:set}, one can conclude that $\fe$ is exponentially stable so that $\lim_{t\to\infty}\norm{\fe}=\tfrac{\overline\tau_d}{\lambda_{\min}(\mm K)}$, if the lumped system uncertainty $\mv f$ can be cancelled out by the control input $\rbu$ neglecting the control input saturation.
 Hence, let us define the ideal control input $\rbu^*$ as $-\mv f$.
 However, $\rbu^*$ is not available in practice, since system dynamics in $\mv f$ is unknown.
 
 To overcome this issue, a DNN is employed to approximate $\rbu^*$.
-Let $\NN:=\NN({\q}_n;\wth): \R^{l}\times\R^{\Xi}\to\R^{n}$ represent the DNN, where ${\q}_n\in\R^{l}$ is the DNN input vector, and $\wth\in\R^{\Xi}$ is the vector of trainable weights.
+Let $\NN:=\NN({\q}_n;\wth): \R^{l_0+1}\times\R^{\Xi}\to\R^{n}$ represent the DNN, where ${\q}_n\in\R^{l_0+1}$ is the DNN input vector, and $\wth\in\R^{\Xi}$ is the vector of trainable weights.
 The architecture of $\NN({\q}_n;\wth)$ will be defined in Section \ref{eq:DNN:architecture}.
 According to the universal approximation theorem for DNNs \cite{Kidger:2020aa}, $\NN({\q}_n;\wth)$ can approximate a nonlinear function, for instance $\mv g(\cdot)$, with an ideal weight vector $\idealwth$ on a compact subset $\Omega_{NN}\in\R^{l}$ to $\epsilon$-accuracy, such that $\sup_{{\q}_n\in\Omega_{NN}}\norm{ \NN({\q}_n;\idealwth) - \mv g(\cdot)} = \epsilon < \infty$.
 % Furthermore, the theorem states that the norm of $\idealwth$ is bounded, \ie $\norm{\idealwth}\le \overline\wth<\infty$.
@@ -374,7 +376,7 @@ In conclusion, the ideal control law $\rbu^*$ is expressed by the DNN approximat
     ,
     \label{eq:control:ideal}
 \end{align}
-where $\mv\epsilon\in\R^n$ is the approximation error vector, which is bounded by $\norm{\mv\epsilon}\le \epsilon$.
+where $\mv\epsilon\in\R^n$ is the approximation error vector, which is bounded by $\norm{\mv\epsilon}\le \bar{\epsilon}$.
 The approximated control input $\rbu^*$ is estimated online by
 \begin{align}
     \rbu =& \estNN,
@@ -584,7 +586,7 @@ The adaptation laws for $\estwth$ and $[\lambda_j]_{j\in\mathcal I}$ are derived
     \end{align}
     \label{eq:adaptation law}%             %%
 \end{subequations}
-where $\alpha\in\R_{>0}$ denotes the adaptation gain (learning rate) and $\beta_j\in\R_{>0}$ denotes the update rate of the Lagrange multipliers in $\mathcal I$, and the arguments of $L$ and $J$ are suppressed for brevity. 
+where $\alpha\in\R_{>0}$ denotes the adaptation gain (learning rate) and $\beta_j\in\R_{>0}$ denotes the update rate of the Lagrange multipliers in $\mathcal I$, and the arguments of $L(\cdot)$ and $J(\cdot)$ are suppressed for brevity. 
 % By selecting $\alpha_i\in\R_{>0},\ \forall i\in[1,\cdots,n]$, one can weight the importance of each component of the gradient of the objective function, allowing for a more tailored adaptation process.
 The Lagrange multipliers associated with inequality constraints are non-negative, \ie $\lambda_j\ge 0$, due to \eqref{eq:adap:lbd:max}. 
 When a constraint $c_j$ becomes active, \ie $c_j > 0$, the corresponding Lagrange multiplier $\lambda_j$ increases to address the violation, \ie see, \eqref{eq:adap:lbd}.
@@ -617,9 +619,10 @@ $.
 Since the objective function depends on $\fe$ of a dynamic system, obtaining $\pptfrac{\fe}{\rbu}$ is not straightforward. 
 The recommended method to calculate the exact value of $\pptfrac{\fe}{\rbu}$ is to use the forward sensitivity method \cite{Sengupta:2014aa} by simulating the sensitivity equation as follows: 
 \begin{equation}
-    \ddtt (
+    \ddtt 
+    \left(
         \pptfrac{\fe}{\rbu}
-    )
+    \right)
     =
     \pptfrac{}{
         \rbu
@@ -635,7 +638,7 @@ The recommended method to calculate the exact value of $\pptfrac{\fe}{\rbu}$ is 
     .
 \end{equation}
 However, this method cannot be realized, since we do not have the exact system dynamics, \ie $\rbM,\rbVm, \rbF$ and $ \rbG$.
-Additionally, the computational cost of the forward sensitivity method is high, as the number of NN's weights are generally large.
+Additionally, the computational cost of the forward sensitivity method is high, as the number of DNN's weights are generally large.
 
 In \cite{Douratsos:2007aa,Saerens:1991aa}, the authors approximate $\pptfrac{\fe}{\rbu}$ as $
     \pptfrac{\fe}{\rbu}
@@ -686,15 +689,46 @@ Therefore, we propose to approximate $\pptfrac{\fe}{\rbu}$ as $\pptfrac{\fe}{\rb
 %     \label{alg1}
 % \end{algorithm}
 
-\subsection{Constraint Candidates}\label{sec:sub:cstr} 
+\subsection{Essential and Potential Constraint Candidates}\label{sec:sub:cstr} 
 
-This section introduces conditions which imposed constraints must satisfy and the weight constraints.
-\MSRY{assumption 2 세타 기준으로 바꾸기; 위에 어펜딕스 순서를 좀 바꿔봐}
-The potential control input constraints are presented in Appendix \ref{sec:appen:cstr}.
-First, we introduce the following assumptions for the constraints.
+This section introduces essential constraint to be imposed for the stability of the proposed CONAC, and conditions for the potential control input constraints.
+
+First, weight constraints are essential to prevent the weights from diverging during the adaptation process.
+The weight constraints $\mv{c}_{\theta}(\estwth):= [c_{\theta_i}(\estwth)]_{i\in\{0,\cdots ,k\}}\in\mathbb R^{k+1}$ are defined for each layer's weight as follows:
+\begin{equation}
+    c_{\theta_i}
+    =
+    \tfrac{1}{2}
+    \left(
+        \Vert \estwth_i\Vert^2 
+        -
+        \overline\theta_i^2 
+    \right)    
+    % \le 0
+    \label{eq:cstr:weight:ball}
+\end{equation}
+with $\overline\theta_i<\infty$ denoting the maximum allowable norm for $\estwth_i$, and the arguments of $c_{\theta_i}(\cdot)$ are omitted for brevity.
+The gradient of $\mv{c}_\theta:=\mv c_{\theta}(\estwth)$ with respect to $\estwth$ is given by
+\begin{equation}
+    \pptfrac{c_{\theta_i}}{\estwth_j} 
+    =
+    \begin{cases}
+        \estwth_i,
+        &
+        \text{if } i=j,
+        \\
+        \mv{0},
+        &
+        \text{if } i\ne j
+        .
+    \end{cases} 
+    \label{eq:cstr:weight:ball:grad}
+\end{equation}
+
+Next, we introduce the conditions for the potential control input constraints presented in Appendix \ref{sec:appen:cstr} as follows:
 
 \begin{assum}
-    The constraint functions $c_j(\estwth),\ \forall j\in\mathcal I$ are convex in the $\tau$-space and satisfy $c_j(0) \le 0$ and $c_j(\idealwth)\le 0$.
+    The constraint functions $c_j(\estwth),\ \forall j\in\mathcal I$ are convex in the $\tau$-space and satisfy $c_j(0) \le 0$ \color{red} and $c_j(\idealwth)\le 0$ \color{black}. \MSRY{desired controller가 제약조건 밖으로 나갈 수 있기 때문에 적절하지 않을 수 있음}
     \label{assum:convex}
 \end{assum}
 
@@ -709,7 +743,12 @@ First, we introduce the following assumptions for the constraints.
     This assumption will be used in the stability analysis (see, Lemma \ref{lem:convex:angle}).
 \end{remark}
 
-The following Lemma is introduced for the stability analysis.
+%  SECTION STABILITY ANALYSIS ==============================
+\section{Stability Analysis}\label{sec:stability}
+
+Before conducting the stability analysis, let us define the weight estimation error as $\tilde\wth:= [\tilde\wth_i]_{i\in\{0,\cdots,k\}}$, where $\tilde\wth_i:=\estwth_i-\idealwth_i$.
+The following lemmas are introduced for the stability analysis. 
+
 \begin{lem}
     If Assumptions \ref{assum:convex} and \ref{assum:LICQ} are satisfied, the angle between $\pptfrac{c_j}{\estwth_k}$ and $\estwth_k$ is positive when $c_j$ is active, \ie $\pptfrac{c_j}{\estwth_k}^\top\estwth_k>0$.
     \label{lem:convex:angle}
@@ -717,7 +756,7 @@ The following Lemma is introduced for the stability analysis.
 
 \begin{proof}
 
-Since $\rbu = \estNN$, using \cite[Proposition 7.1.9]{Bernstein:2009aa}, a linear map $\mm T(\cdot):\estwth_k\to\rbu$ can be derived: 
+Since $\rbu = \estNN$, using Proposition \ref{propsit:kron}, a linear map $\mm T(\cdot):\estwth_k\to\rbu$ which is independent of $\estwth_k$, can be derived: 
 \begin{equation}\label{eq:linear:map}
     \begin{aligned}
     \rbu 
@@ -744,7 +783,7 @@ Since $\rbu = \estNN$, using \cite[Proposition 7.1.9]{Bernstein:2009aa}, a linea
         \mm I_{l_{k+1}}
         \otimes 
         \estact_k^\top
-    )^\top}_{:=\mm T(\estact_k)}
+    )^\top}_{=:\mm T(\estact_k)}
     \estwth_k 
     =
     \mm T(\estact_k) \estwth_k.
@@ -755,47 +794,8 @@ that $\pptfrac{c_j}{\estwth_k}^\top\estwth_k>0$.
 
 \end{proof}
 
-The weight constraints are essential to prevent the weights from diverging during the adaptation process.
-The weight constraints $\boldsymbol{c}_{\theta}:= [c_{\theta_i}]_{i\in\{0,\cdots ,k\}}\in\mathbb R^{k+1}$ are defined for each layer's weight as follows:
-\begin{equation}
-    c_{\theta_i}
-    =
-    \tfrac{1}{2}
-    \left(
-        \Vert \estwth_i\Vert^2 
-        -
-        \overline\theta_i^2 
-    \right)    
-    % \le 0
-    \label{eq:cstr:weight:ball}
-\end{equation}
-with $\overline\theta_i<\infty$ denoting the maximum allowable norm for $\estwth_i$. 
-The gradient of $\boldsymbol{c}_\theta$ with respect to $\estwth$ is given by
-\begin{equation}
-    \pptfrac{c_{\theta_i}}{\estwth_j} 
-    =
-    \begin{cases}
-        \estwth_i,
-        &
-        \text{if } i=j,
-        \\
-        \mv{0},
-        &
-        \text{if } i\ne j
-        .
-    \end{cases} 
-    \label{eq:cstr:weight:ball:grad}
-\end{equation}
-Note that $\mv c_{\theta}$ satisfies Assumption \ref{assum:convex} and \ref{assum:LICQ} invoking Lemma \ref{lem:convex:angle} and \eqref{eq:cstr:weight:ball:grad}, respectively.
-
-%  SECTION STABILITY ANALYSIS ==============================
-\section{Stability Analysis}\label{sec:stability}
-
-Before conducting the stability analysis, let us define the weight estimation error as $\tilde\wth:= [\tilde\wth_i]_{i\in\{0,\cdots,k\}}$, where $\tilde\wth_i:=\estwth_i-\idealwth_i$.
-The following lemma is introduced for the stability analysis.
-
 \begin{lem} 
-    If $c_j(\estwth),\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$ satisfies Assumption \ref{assum:convex}, then $\norm{\pptfrac{c_j}{\estwth_i}},\ \forall i\in\{k-1,\cdots, 0\}$, is bounded, provided the norms of $\estwth_i,\ \forall i\in\{k,\cdots, i+1\}$, remain bounded.
+    If control input constraint $c_j(\estwth),\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$ satisfies Assumption \ref{assum:convex}, then $\norm{\pptfrac{c_j}{\estwth_i}},\ \forall i\in\{k-1,\cdots, 0\}$, is bounded, provided the norms of $\estwth_i,\ \forall i\in\{k,\cdots, i+1\}$, remain bounded.
     \label{lem:cstr:grad:bound}
 \end{lem}
 
@@ -811,47 +811,59 @@ The derivative of $c_j,\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in\{0,\c
 \end{equation}
 where $\pptfrac{\tau}{\estNN}=\mm I_n$, which is bounded. 
 From the linear mapping in \eqref{eq:linear:map}, $\rbu$ is bounded as long as $\estwth_k$ is bounded (by the condition of the lemma), and $\norm{\act_k(\cdot)}$ is bounded due to the properties of the activation functions. 
-By Assumption \ref{assum:convex}, the function $c_j$ is convex. 
+By Assumption \ref{assum:convex}, the function $c_j$ is convex in $\rbu$-space.
 The convex function has a bounded derivative with respect to $\rbu$, since $\rbu$ is a bounded variable (\ie $\pptfrac{c_j}{\rbu}$ is bounded). 
 Furthermore, $\pptfrac{\estNN}{\estwth_i}$ is bounded, provided that the norms of $\estwth_i,\ \forall i \in[k,\cdots,i+1]$, are bounded. 
 This can be verified by using the definition of $\pptfrac{\estNN}{\estwth_i}$ given in \eqref{eq:NN:grad}.
-Consequently, $\norm{\pptfrac{c_j}{\estwth_i}},\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in[0,\cdots,k]}$, is bounded, when $\estwth_i,\ \forall i\in [k,\cdots,i+1]$ are bounded.
+Consequently, $\norm{\pptfrac{c_j}{\estwth_i}},\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$, is bounded, when $\estwth_i,\ \forall i\in \{k,\cdots,i+1\}$ are bounded.
 
 \end{proof}
 
 The following theorem shows that $\estwth$ and $\fe$ are bounded.
 
 \begin{theorem}
-    For the dynamical system in \eqref{eq:sys1}, the neuro-adaptive controller \eqref{eq:control:est} and weight adaptation laws \eqref{eq:adaptation law} ensure the boundedness of the filtered error $\fe$ and the weight estimate $\estwth$. 
-    This holds with the weight norm constraint \eqref{eq:cstr:weight:ball} and input constraints satisfying Assumption \ref{assum:convex} and \ref{assum:LICQ}.
+    For the dynamical system in \eqref{eq:sys1}, the neuro-adaptive controller \eqref{eq:control:est} and weight adaptation laws \eqref{eq:adaptation law} ensure the boundedness of the filtered error $\fe$ and the weight estimate $\estwth$ under control input constraints satisfying Assumption \ref{assum:convex} and \ref{assum:LICQ}
+    This holds with the weight norm constraint \eqref{eq:cstr:weight:ball}.
 \end{theorem}
 
 \begin{proof}
 
-The boundednesses of $\estwth$ and $\fe$ are analyzed recursively from the last $k\textsuperscript{th}$ layer to the first layer of $\estNN$. 
-Without loss of generality, weight constraint $c_{\theta_i},\ \forall i\in[0,\cdots,k]$ is supposed to be active.
-This assumption is reasonable, since even if the constraint is inactive 
-\MSRY{Add the reason why it is reasonable.}
-We consider two cases: (C$_1$) control input constraints are active, and (C$_2$) control input constraints are inactive.
-Using the fact that amplitude of the control input is only depends on $\estwth_k$ (\ie see \eqref{eq:control:est}, \eqref{eq:DNN:architecture} and $\norm{\act_k}<\infty$), the boundedness of inner layers' weights will be verified after the boundedness of $\estwth_k$ and $\fe$ is confirmed. 
+% The boundednesses of $\estwth$ and $\fe$ are analyzed recursively from the last $k\textsuperscript{th}$ layer to the first layer of $\estNN$. 
+Invoking the fact that amplitude of the control input is only depends on $\estwth_k$, \ie see, \eqref{eq:control:est}, \eqref{eq:DNN:architecture} and $\norm{\act_k}<\infty$, the boundedness of inner layers' weights will be verified after the boundedness of $\estwth_k$ and $\fe$ is confirmed. 
+Without loss of generality, weight constraint $c_{\theta_i},\ \forall i\in\{0,\cdots,k\}$ is supposed to be active.
+This assumption is reasonable, since even if $c_{\theta_i}$ is inactive, $\estwth$ is adapted to reduce $J(·)$ without considering the constraint, unless $c_{\theta_i}$ is
+violated.
+We consider two cases: control input is saturated, and control input is not saturated.
 
-\subsection*{Case (C$_1$): Control input constraints are active.}
+\subsection*{Case 1: Control input is saturated.}
 
-As the result of the time derivative of $V_1$, the invariant set $\Theta_{\fe}^{c_1}$ of $\fe$ (\ie if $\fe$ leaves $\Theta_{\fe}^{c_1}$, $\ddtt V_1$ is negative) can be obtained as w
+As the result of the time derivative of $V_1$ in \eqref{eq:lya1:dot2}, the invariant set $\Theta_{\fe}^{1}$ of $\fe$ (\ie if $\fe$ leaves $\Theta_{\fe}^{1}$, $\ddtt V_1$ is negative) can be obtained using Lemma \ref{lem:stable:set} as follows:
 \begin{equation}
-    \Theta_{\fe}^{c_1} 
+    \Theta_{\fe}^{1} 
     = 
     \left\{ 
         \fe \in \R^n 
         \mid 
         \norm{\fe} 
         \le 
-        \tfrac{2\overline\tau+\overline\tau_d}{\lambda_{\min}(\mm K)}
+        \tfrac{
+            \overline\tau_d
+            +
+            \overline\tau
+            +
+            \bar{\theta}_k\sqrt{l_{k}+1}
+            +
+            \bar{\epsilon}
+        }{
+            \lambda_{\min}(\mm K)
+        }
     \right\}
     .
     \label{eq:invariant:c1:fe}
 \end{equation}
+It is notable that the ideal DNN $\idealNN_k={\idealwV_k}^\top\idealact$ is bounded by $\bar{\theta}_k\sqrt{l_{k}+1}$, since $\norm{\idealwV_k}_F = \norm{\idealwth}_k \le \bar{\theta}_k$, and $\norm{\idealact_k}\le \sqrt{l_{k}+1}$.
 
+\MSRY{Explain with active set, later}
 To investigate the boundedness of $\estwth_k$, consider the Lyapunov function candidate $V_2:=\tfrac{1}{2\alpha}\estwth_k^\top \estwth_k$.
 Taking the time derivative of $V_2$ yields:
 \begin{equation}
@@ -859,18 +871,18 @@ Taking the time derivative of $V_2$ yields:
         \ddtt  V_2 
         =& 
         -\estwth_k^\top 
-        (
+        \left(
             (\mm I_{l_{k+1}}\otimes \estact_k^\top)^\top
             \fe
             +
             \textstyle\sum_{j\in\mathcal{I}}
             \lambda_j 
             \pptfrac{c_j}{\estwth_k}
-        )
+        \right)
         \\
         =&
         -\estwth_k^\top 
-        (
+        \Big(
             (\mm I_{l_{k+1}}\otimes \estact_k^\top)^\top
             \fe
             +
@@ -883,7 +895,7 @@ Taking the time derivative of $V_2$ yields:
             }
             \lambda_j 
             \pptfrac{c_j}{\estwth_k}
-        )
+        \Big)
         \\
         \le&
         -
@@ -891,34 +903,34 @@ Taking the time derivative of $V_2$ yields:
         +
         \underbrace{
             \norm{(\mm I_{l_{k+1}}\otimes {\estact}_k^\top)}
-        }_{=:c_1\in\R_{>0}}
+        }_{=:{\gamma}_1\in\R_{>0}}
         \norm{\fe}
         \norm{\estwth_k}
         \\
         &
-        -
         \underbrace{
-        \textstyle\sum_{
-            j\in\mathcal{I}\setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}
-        }
-        \lambda_j 
-        \estwth_k^\top \pptfrac{c_j}{\estwth_k}
-        }_{=: c_2 \in\R_{>0},\ \text{by Lemma \ref{lem:convex:angle} and Assumption \ref{assum:LICQ}}}
+            -
+            \textstyle\sum_{
+                j\in\mathcal{I}\setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}
+            }
+            \lambda_j 
+            \estwth_k^\top \pptfrac{c_j}{\estwth_k}
+        }_{=:{\gamma}_2<0,\ \text{by Lemma \ref{lem:convex:angle} and Assumption \ref{assum:LICQ}}}
         \\
         \le&
         -
         \lambda_{\theta_k}\norm{\estwth_k}^2
         +
-        c_1     
+        {\gamma}_1     
         \norm{\fe}
         \norm{\estwth_k}
         .
     \end{aligned}
     \label{eq:lya2:dot}
 \end{equation}
-According to \eqref{eq:lya2:dot}, the invariant set of $\estwth_k$ is defined as
+According to \eqref{eq:lya2:dot} and Lemma \ref{lem:stable:set}, the invariant set of $\estwth_k$ is defined as
 \begin{equation}
-    \Theta_{\theta_k}^{c_1} 
+    \Theta_{\theta_k}^{1} 
     = 
     \left\{ 
         \estwth_k \in \R^{\Xi_{k}} 
@@ -926,7 +938,16 @@ According to \eqref{eq:lya2:dot}, the invariant set of $\estwth_k$ is defined as
         \norm{\estwth_k} 
         \le 
         \tfrac{
-            c_1(2\overline\tau+\overline\tau_d)
+            {\gamma}_1
+            (
+                \overline\tau_d
+                +
+                \overline\tau
+                +
+                \bar{\theta}_k\sqrt{l_{k}+1}
+                +
+                \bar{\epsilon}
+            )
         }{
             \lambda_{\theta_k}\lambda_{\min}(\mm K)
         }
@@ -936,17 +957,17 @@ According to \eqref{eq:lya2:dot}, the invariant set of $\estwth_k$ is defined as
 \end{equation}
 
 The satisfaction of the constraints can be verified by the boundedness of $\estwth_k$.
-For $c_{\theta_k}$, if the corresponding Lagrange multiplier $\lambda_{\theta_k}$ increases infinitely by the constraint violation, $\estwth_k$ approaches to the origin as $\Theta_{\estwth_k}^{c_1}$ is squeezed to a point.
-The satisfactions of the remaining control input constraints can be verified implicitly using $c_2$ in \eqref{eq:lya2:dot}.
-Similarly to $c_{\theta_k}$, as the control input constraint $c_j,\ \forall j\in\mathcal{I}\setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$ is violated, the corresponding Lagrange multiplier $\lambda_j$ increases infinitely, so does $c_2$.
-It makes $c_2$ dominates the right-hand side of \eqref{eq:lya2:dot}, which leads $\ddtt V_2$ negative definite.
-This drives $\estwth_k$ to the origin until the constraint is satisfied (\ie by Assumption \ref{assum:convex} and Lemma \ref{lem:convex:angle}, the control input constraints can be considered as convex constraint in $\estwth_k$-space).
+For $c_{\theta_k}$, if the corresponding Lagrange multiplier $\lambda_{\theta_k}$ increases infinitely by the constraint violation, $\estwth_k$ approaches to the origin as $\Theta_{\estwth_k}^{1}$ is squeezed to a point.
+The satisfactions of the remaining control input constraints can be verified implicitly using ${\gamma}_2$ in \eqref{eq:lya2:dot}.
+Similarly to $c_{\theta_k}$, as the control input constraint $c_j,\ \forall j\in\mathcal{I}\setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$ is violated, the corresponding Lagrange multiplier $\lambda_j$ increases infinitely, so does ${\gamma}_2$.
+It makes ${\gamma}_2$ dominates the right-hand side of \eqref{eq:lya2:dot}, which leads $\ddtt V_2$ negative definite.
+This drives $\estwth_k$ to the origin until the constraint is satisfied, \ie by Assumption \ref{assum:convex} and Lemma \ref{lem:convex:angle}, the control input constraints can be considered as convex constraint in $\estwth_k$-space.
 
-Therefore, the boundedness of $\estwth$ and $\fe$ are guaranteed by the invariant sets $\Theta_{\fe}^{c_1}$ and $\Theta_{\theta_k}^{c_1}$ and satisfactions of $c_j,\ \forall j\in\mathcal{I}$ are confirmed.
+Therefore, the boundedness of $\estwth_k$ and $\fe$ are guaranteed by the invariant sets $\Theta_{\fe}^{1}$ and $\Theta_{\theta_k}^{1}$ and satisfactions of $c_j,\ \forall j\in\mathcal{I}$ are confirmed.
 
-\subsection*{Case (C$_2$): Control input constraints are inactive.}
+\subsection*{Case 2: Control input is not saturated.}
 
-Since, here, the control input constraints are inactive, $\mysat(\cdot)$ in \eqref{eq:lya1:dot2} and $c_j,\ \forall j\in\mathcal{I}$ in \eqref{eq:lya2:dot} can be removed.
+Since, here, the control input constraints are inactive, $\mysat(\cdot)$ in \eqref{eq:lya1:dot2} and $c_j,\ \forall j\in\mathcal I \setminus \{\wth_i\}_{\{i\in[0,\cdots,k\}}$ in \eqref{eq:lya2:dot} can be removed.
 Consider the Lyapunov function candidate $V_3:=V_1+V_2$ and its time derivative:
 \begin{equation}
     \begin{aligned}
@@ -969,9 +990,7 @@ Consider the Lyapunov function candidate $V_3:=V_1+V_2$ and its time derivative:
         +\fe^\top \estNN
         +(
             \overline\tau_d+\norm{
-                \underbrace{
-                    \idealNN+\mv\epsilon
-                }_{=\rbu^*}
+                \idealNN+\mv\epsilon
             }
         )
         \norm{\fe}
@@ -981,17 +1000,29 @@ Consider the Lyapunov function candidate $V_3:=V_1+V_2$ and its time derivative:
         -\lambda_{\theta_k}\norm{\estwth_k}^2
         \\
         \le&
-        -\lambda_{\min}(\mm K)\norm{\fe}^2
-        +(\overline\tau_d+\overline\tau)
+        -
+        \lambda_{\min}(\mm K)
+        \norm{\fe}^2
+        +
+        \left(
+            \overline\tau_d
+            +
+            \bar{\theta}_k\sqrt{l_{k}+1}
+            +
+            \bar{\epsilon}
+        \right)
         \norm{\fe}
-        -\lambda_{\theta_k}\norm{\estwth_k}^2
+        \\
+        &
+        -
+        \lambda_{\theta_k}\norm{\estwth_k}^2
         .
     \end{aligned}
     \label{eq:lya3:dot}
 \end{equation}
-Like in Case (C$_1$), the boundedness of $\fe$ can be verified by the invariant sets $\Theta_{\fe}^{c_2}$ defined as
+Like in Case 1, the boundedness of $\fe$ can be verified by the invariant sets $\Theta_{\fe}^{2}$ defined as
 \begin{equation}
-    \Theta_{\fe}^{c_2}
+    \Theta_{\fe}^{2}
     =
     \left\{ 
         \fe \in \R^n 
@@ -999,18 +1030,22 @@ Like in Case (C$_1$), the boundedness of $\fe$ can be verified by the invariant 
         \norm{\fe} 
         \le 
         \tfrac{
-            \overline\tau_d+\overline\tau
+            \overline\tau_d
+            +
+            \bar{\theta}_k\sqrt{l_{k}+1}
+            +
+            \bar{\epsilon}
         }{
             \lambda_{\min}(\mm K)
         }
     \right\}
     .
 \end{equation}
-The boundedness of $\estwth_k$ also can be ensured by the invariant set $\Theta_{\theta_k}^{c_2}=\{ \estwth_k \in \R^{\Xi_{k}} \mid \norm{\estwth_k} \le \overline\theta_k \}$, as $\lambda_{\theta_k}$ exists positive until $c_{\theta_k}$ is satisfied.
+The boundedness of $\estwth_k$ also can be ensured by the invariant set $\Theta_{\theta_k}^{2}=\{ \estwth_k \in \R^{\Xi_{k}} \mid \norm{\estwth_k} \le \overline\theta_k \}$, as $\lambda_{\theta_k}$ exists positive unless $c_{\theta_k}$ is satisfied.
 
 \hfill 
 
-The boundedness of inner layers' weights and satisfactions of their constraints $c_j,\ \forall j\in\{\theta_i\}_{i\in\{k-1,\cdots,0\}}$ can be shown recursively, using \cite[Chap.~4 T.~1.9]{Desoer:2009aa}
+The boundedness of inner layers' weights and satisfactions of their constraints $c_j,\ \forall j\in\{\theta_i\}_{i\in\{k-1,\cdots,0\}}$ can be shown recursively, using \cite[Chap.~4 Thm.~1.9]{Desoer:2009aa}.
 The dynamics of $\estwth_i,\ \forall i\in\{k-1,\cdots,0\}$ are represented as
 \begin{equation}
     \ddtt \estwth_i 
@@ -1062,15 +1097,15 @@ Finally, the filtered error $\fe$ and the estimated weights $\estwth$ are bounde
 To validate the effectiveness of the proposed CONAC, a real-time experiment was conducted on a two-link manipulator, as shown in Fig.~\ref{fig:ctrl:exp:set}. 
 The OpenCR1.0 board \cite{opencr} with a 32-bit ARM Cortex and a 216 MHz clock frequency was used for the real-time implementation.
 The two-link manipulator actuated by two Cubemars AK10-90 servo motors. 
-The servos were controlled using the OpenCR1.0 board which transmits the reference angle to the servos via controller area network (CAN) communication.
-The system dynamics of the two-link manipulator is described in \eqref{eq:sys1}, the estimated system parameters are provided in Table~\ref{table:system:params}. 
+The servos were controlled using the OpenCR1.0 board which transmits the reference angle to the corresponding servo via controller area network (CAN) communication.
+The system dynamics of the two-link manipulator can be represented as Euler-Lagrange equation \eqref{eq:sys1} and described as Fig.~\ref{fig:robot:model}, and the estimated system parameters are provided in Table~\ref{table:system:params}. 
 
 % ------------------------------------
 % Robot Model Figure and Table
 % ------------------------------------
 \begin{figure}[t]
     \centering
-    \subfloat[Two-link manipulator model.]{
+    \subfloat[Two-link manipulator model.\MSRY{ADD inertia}]{
         \includegraphics[width=0.75\linewidth]{src/figures/RobotModel.drawio.pdf}
         \label{fig:robot:model}
     }
@@ -1145,51 +1180,53 @@ The system dynamics of the two-link manipulator is described in \eqref{eq:sys1},
 % ------------------------------------
 % Reference Trajectory
 % ------------------------------------
-The desired trajectory for $\qd=\left({q_d}_1,{q_d}_2\right)^\top $ was generated using fifth-order polynomial functions $\mypoly^5(\mv{x}_1,\mv{x}_2,t_f,t)$, to satisfy the initial $\mv{x}_1$ and final $\mv{x}_2$ angle conditions and zero velocities of the joints, where $t_f$ is the time duration.
+The desired trajectory for $\qd=\left({q_d}_1,{q_d}_2\right)^\top $ was generated using the quintic (5$\textsuperscript{th}$-order) polynomial functions $\mathcal{P}^5(t;\mv{x}_1,\mv{x}_2,t_f)$, to satisfy the initial $\mv{x}_1$ and final $\mv{x}_2$ angle conditions and zero velocities of the joints, where $t_f$ is the time duration.
 The desired trajectory is defined as follows:
 \begin{equation}
     \qd(t) 
-    \!=\! 
+    =
     \begin{pmatrix}
-        {q_d}_1\\{q_d}_2
+        {\qd}_1
+        \\
+        {\qd}_2
     \end{pmatrix}
-    \!=\!
+    =
     \begin{cases}
-    \mypoly^5({\qd}_0,{\qd}_1,t_f,t),
-        \!&\!
-        \text{if } 0\!\le\!t\!<\!t_f 
+    \mathcal{P}^5(t;{\qd}_0,{\qd}_1,t_f),
+        &
+        \text{if } 0 \le t < t_f 
         ,
         \\
-    \mypoly^5({\qd}_1,{\qd}_2,t_f,t-t_f),
-        \!&\!
-        \text{if } t_f\!\le\!t\!<\!2t_f 
+    \mathcal{P}^5(t;{\qd}_1,{\qd}_2,t_f),
+        &
+        \text{if } t_f \le t < 2t_f 
         ,
         \\
-    \mypoly^5({\qd}_2,{\qd}_1,t_f,t-2t_f),
-        \!&\! 
-        \text{if } 2t_f\!\le\!t\!<\!3t_f 
-        .
+    \mathcal{P}^5(t;{\qd}_2,{\qd}_1,t_f),
+        & 
+        \text{if } 2t_f \le t < 3t_f 
+        ,
         \\
-    \mypoly^5({\qd}_1,{\qd}_0,t_f,t-3t_f),
-        \!&\!    
-        \text{if } 3t_f\!\le\!t\!<\!4t_f 
+    \mathcal{P}^5(t;{\qd}_1,{\qd}_0,t_f),
+        &    
+        \text{if } 3t_f \le t < 4t_f 
         ,
         \\
     \end{cases}
     \label{eq:desired trajectory}
 \end{equation}
-where ${\qd}_0:=\left(-\tfrac{1}{3}\pi,\tfrac{1}{3}\pi\right)^\top$, ${\qd}_1:=\left(\tfrac{1}{4}\pi,-\tfrac{1}{2}\pi\right)^\top$, ${\qd}_2:=\left(-\tfrac{1}{4}\pi,\tfrac{1}{4}\pi\right)^\top$, and $t_f=3$ s.
-To demonstrate the learning capability of NN, the desired trajectory was applied twice; let us call the first and second iterations of the reference trajectory as Episode $1$ and Episode $2$, respectively.
+where ${\qd}_0:=\left(-\tfrac{1}{3}\pi,\tfrac{1}{3}\pi\right)^\top$, ${\qd}_1:=\left(\tfrac{1}{4}\pi,-\tfrac{1}{2}\pi\right)^\top$, ${\qd}_2:=\left(-\tfrac{1}{4}\pi,\tfrac{1}{4}\pi\right)^\top$, and $t_f=3$ s, and illustrated in Fig.~\ref{fig:robot:model}.
+To demonstrate the learning capability of DNN, the desired trajectory was applied twice; let us call the first and second iterations of the reference trajectory as Episode $1$ and Episode $2$, respectively.
 
-However, since the NN's weights are initialized randomly, large reference trajectories should be avoided to mitigate the effect of initial poor performance of the controller.
+However, since the DNN's weights are initialized randomly, large reference trajectories should be avoided to mitigate the effect of initial poor performance of the controller.
 Hence, in advance of the reference trajectory, the manipulator was initially positioned at ${\qd}^{\rm{origin}}=\left(-\tfrac{1}{2}\pi,0\right)^\top$ (\ie stable equilibrium point).
-Then, a reference trajectory was applied to the manipulator to move from ${\qd}^{\rm{origin}}$ to ${\qd}_0$ which is the initial and final points of the episode.
-After the manipulator reached ${\qd}_0$, the constant reference trajectory $\qd={\qd}_0$ was applied for $t_f=8$ s to be steady and to avoid the effect of the transient response.
+Then, a reference trajectory was applied to the manipulator to move from ${\qd}^{\rm{origin}}$ to ${\qd}_0$ in 3 seconds, \ie $\mathcal{P}^5(t;{\qd}^{\rm{origin}},{\qd}_0,3)$, which is the initial and final points of the episode.
+After the manipulator reached ${\qd}_0$, the constant reference trajectory $\qd={\qd}_0$ was applied for 8 seconds to be steady and to avoid the effect of the transient response.
 
 % ------------------------------------
 % Control Input Saturation
 % ------------------------------------
-The effectiveness of the proposed CONAC to handle the combination of the convex input constraints was demonstrated by defining the saturation function which projects the control input onto following convex domain $\Theta_{\mysat}:=\left\{\Theta_{\mysat, {\rbu}}\cap\Theta_{\mysat, {\tau_2}}\right\}$ as depicted in Fig.~\ref{fig:robot:sat}, where
+The effectiveness of the proposed CONAC to handle the combination of the convex input constraints was demonstrated by defining the saturation function which projects the control input onto following convex set $\Theta_{\mysat}:=\left\{\Theta_{\mysat, {\rbu}}\cap\Theta_{\mysat, {\tau_2}}\right\}$ as depicted in Fig.~\ref{fig:robot:sat}, where
 \begin{subequations}
     \begin{align}
         \Theta_{\mysat, {\rbu}}
@@ -1218,7 +1255,7 @@ The effectiveness of the proposed CONAC to handle the combination of the convex 
     \end{align}
     \label{eq:sat}% %%
 \end{subequations}
-These domains \eqref{eq:sat:norm} and \eqref{eq:sat:tau2} can be physically interpreted as a combination of the voltage source limitation of the actuators and the torque limitation of the second link actuator, respectively.
+These sets \eqref{eq:sat:norm} and \eqref{eq:sat:tau2} can be physically interpreted as the voltage source limitation of the actuators and the torque limitation of the second link actuator, respectively.
 
 \hfill
 
@@ -1231,9 +1268,9 @@ The properties of the controllers are summarized in Table~\ref{table:controllers
 % ------------------------------------
 % Controllers: CONAC 
 % ------------------------------------
-\subsubsection*{Controller 1: (C$_1$) CONAC with large $\beta_j$}
+\subsubsection*{Controller 1: \normalfont{(C$_1$)} \textit{CONAC with large $\beta_j$}}
 
-To handle the input saturation, the proposed CONAC was implemented with the input bound constraint \eqref{eq:cstr:input:bound} for second link $c_{\overline\tau_2}$ and $c_{\underline\tau_2}$ and the nonlinear input norm constraint $c_{\rbu}$ \eqref{eq:cstr:input:norm}, as follows:
+To handle the input saturation, the proposed CONAC was implemented with the input bound constraint \eqref{eq:cstr:input:bound} $c_{\overline\tau_2}$ and $c_{\underline\tau_2}$ for second link, and the nonlinear input norm constraint $c_{\rbu}$ \eqref{eq:cstr:input:norm}, as follows:
 \begin{equation}
     c_{\overline\tau_2}     
     =
@@ -1250,61 +1287,62 @@ To handle the input saturation, the proposed CONAC was implemented with the inpu
     c_{\rbu}
     =
     \tfrac{1}{2}
-    (
+    \left(
         \norm{\rbu}-\overline\tau
-    )^2 
+    \right)^2 
     % <0
     ,
     \label{eq:sim:cstr:CONAC}
 \end{equation}
-where $\overline\tau_2=-\underline{\tau}_2=3.5$ are the absolute bound of the second link actuator, and $\overline\tau=11$ is the maximum feasible norm of the control input.
+where $\overline\tau_2=-\underline{\tau}_2=3.5$ are the absolute bound of the second link actuator's torque, and $\overline\tau=11$ is the maximum feasible norm of the first and second torques.
 Hence, (C$_1$) is possible to use full capability of the actuator.
-The weight constraints $c_{\theta_i},\ \forall i\in[0,\cdots,k]$ were also considered in the CONAC.
-As described in \eqref{eq:control:est}, the control input is equal to the output of the NN, and the adaptation law is defined in \eqref{eq:adaptation law}.
+The weight constraints $c_{\theta_i},\ \forall i\in\{0,\cdots,k\}$ were also considered in the CONAC.
+As described in \eqref{eq:control:est}, the control input (torques) is equal to the output of the DNN, and the adaptation law is defined in \eqref{eq:adaptation law}.
 
-The update rate of the Lagrange multipliers was set to large values such that $\beta_{\theta_i}=10^{-3},\ \forall i\in[0,\cdots,k]$, and $\beta_{\rbu}=10$ and $\beta_{\overline{\tau}_2}=\beta_{\underline{\tau}_2}=10^{3}$, to investigate the effect of the large update rate of Lagrange multipliers.
+The update rates of the Lagrange multipliers for weight constraints were set to $\beta_{\theta_i}=10^{-3},\ \forall i\in\{0,\cdots,k\}$, and ,for control input constraints, the update rates were set to large values such that $\beta_{\rbu}=10$ and $\beta_{\overline{\tau}_2}=\beta_{\underline{\tau}_2}=10^{3}$ to investigate the effect of the large values of update rates.
 
 % ------------------------------------
 % Controllers: CONAC with small beta
 % ------------------------------------
-\subsubsection*{Controller 2: (C$_2$) CONAC with small $\beta_j$}
+\subsubsection*{Controller 2: \normalfont{(C$_2$)} \textit{CONAC with small $\beta_j$}}
 
-As the second controller, the proposed CONAC was implemented with the same input bound constraint \eqref{eq:sim:cstr:CONAC} as (C$_1$), but with small $\beta_j$ values such that $\beta_{\theta_i}=10^{-3},\ \forall i\in[0,\cdots,k]$, and $\beta_{\rbu}=10$ and $\beta_{\overline{\tau}_2}=\beta_{\underline{\tau}_2}=10^{3}$.
-The remaining parameters were the same as (C$_1$).
+As the second controller, the proposed CONAC was implemented with the same input bound constraint \eqref{eq:sim:cstr:CONAC} as (C$_1$), but with small update rate values such that $\beta_{\rbu}=10$ and $\beta_{\overline{\tau}_2}=\beta_{\underline{\tau}_2}=10^{3}$.
+The remaining properties and parameters were the same as (C$_1$).
 
 % ------------------------------------
 % Controllers: CONAC without ctrl cstr
 % ------------------------------------
-\subsubsection*{Controller 3: (C$_3$) CONAC without control input constraints}
+\subsubsection*{Controller 3: \normalfont{(C$_3$)} \textit{CONAC without control input constraints}}
 
 The third controller was the same as (C$_1$) and (C$_2$), but without the control input constraints, to emphasize the control input constraint handling capability of the proposed CONAC.
-In this case, the update rate of the Lagrange multipliers regarding the control input constraints \ie $\beta_{\rbu},\beta_{\overline{\tau}_2},\beta_{\underline{\tau}_2}$ was set to $0$, so that $[\lambda_j]_{j\in\{\rbu,\overline{\tau}_2,\underline{\tau}_2\}}$ are not updated.
-The remaining properties were the same as (C$_1$) and (C$_2$).
+In this case, the update rate of the Lagrange multipliers regarding the control input constraints, \ie $\beta_{\rbu},\beta_{\overline{\tau}_2},\beta_{\underline{\tau}_2}$, was set to $0$, so that $[\lambda_j]_{j\in\{\rbu,\overline{\tau}_2,\underline{\tau}_2\}}$ are not updated (see, \eqref{eq:adap:lbd}).
+The remaining properties and parameters were the same as (C$_1$) and (C$_2$).
 
 % ------------------------------------
 % Controllers: Aux. system in CONAC-AUX
 % ------------------------------------
-\subsubsection*{Controller 4: (C$_4$) CONAC with auxiliary system instead of control input constraints}
+\subsubsection*{Controller 4: \normalfont{(C$_4$)} \textit{CONAC with auxiliary system instead of control input constraints}}
 
-On the other hand, the existing auxiliary system \cite{Esfandiari:2014aa,Karason:1994aa,Esfandiari:2015aa} was used to compare with the proposed CONAC.
-The auxiliary system is defined as $\ddtt{\mv\zeta} = \mm{A}_\zeta \mv{\zeta} + \mm{B}_\zeta \Delta\rbu,\ \mv{\zeta}\vert_{t=0} = \mv{0}_{2\times1}$, where $\mv{\zeta}\in\R^n$ denotes the auxiliary state, $\mm{A}_\zeta\in\R_{<0}^{n\times n}$, and $\mm{B}_\zeta\in\R^{n\times n}$.
+On the other hand, the existing auxiliary system \cite{Esfandiari:2014aa,Karason:1994aa,Esfandiari:2015aa} was used to compare with the proposed CONAC with control input constraints by replacing them with the auxiliary system.
+The auxiliary system is defined as $\ddtt{\mv\zeta} = \mm{A}_\zeta \mv{\zeta} + \mm{B}_\zeta \Delta\rbu,\ \mv{\zeta}\vert_{t=0} = \mv{0}_{2\times1}$, where $\mv{\zeta}\in\R^n$ denotes the auxiliary state variables, and $\mm{A}_\zeta\in\R_{<0}^{n\times n}$, and $\mm{B}_\zeta\in\R^{n\times n}$ are user-designed matrices.
 The auxiliary state $\mv{\zeta}$ is affected by the overflow amount of the control input $\Delta\rbu$, whose entries are defined as $\Delta\tau_{i} = 
 \tau_{i}-\max(\underline\tau_i,\min(\overline\tau_i,\tau_i)),\ \forall i\in\{1,2\}$.
 The auxiliary state are used in the adaptation law \eqref{eq:adap:th:approx} by substituting $\fe$ with $\fe+\mv{\zeta}$.
 Consequently, the weights are adapted to reduce not only the tracking error $\fe$ but also the auxiliary state $\mv{\zeta}$, minimizing the control input constraint saturation.
 
 The matrices of the auxiliary system were set to $\mm{A}_\zeta=\mydiag([-10,-10])$ and $\mm{B}_\zeta=\mydiag([10^3,10^3])$, considering the tradeoff between the sensitivity of the control saturation, and the convergence speed of the auxiliary system.
-Since, the auxiliary system only considers the saturation of each control input (\ie which is same as the input bound constraint \eqref{eq:cstr:input:bound}), $\overline{\tau}_1$ was set to $9.682$ to approximately match the maximum allowable norm of the control input $\overline\tau$, with respect to $\overline{\tau}_2=2.5$ and $\overline{\tau}=10$, (\ie $\overline{\tau}_1^2+\overline{\tau}_2^2=\overline{\tau}^2$).
-For simplicity, let (C$_4$) be imposed with input bound constraint for the first link actuator, \ie $c_{\overline{\tau}_1}$ and $c_{\underline{\tau}_1}$.
+Since, the auxiliary system only considers the saturation of each control input, \ie which is same as the input bound constraint \eqref{eq:cstr:input:bound}, $\overline{\tau}_1$ was set to $10.428$ to approximately match the maximum allowable norm of the control input $\overline\tau$, with respect to $\overline{\tau}_2=3.5$ and $\overline{\tau}=11$, \ie $\overline{\tau}_1^2+\overline{\tau}_2^2=\overline{\tau}^2$).
+For simplicity, let say (C$_4$) was imposed with input bound constraint for the first link actuator, \ie $c_{\overline{\tau}_1}$ and $c_{\underline{\tau}_1}$.
+\MSRY{사실, 제약조건이 부여된 것은 아니기 떄문에 위와 같이 표현하였음}
 
 \hfill
 
 % ------------------------------------
 % Controller Parameters
 % ------------------------------------
-For all controllers ((C$_1$), (C$_2$), (C$_3$), and (C$_4$)), the NN input vector ${\q}_n$ was set as ${\q}_n=\left(\q^\top,\dq^\top,\fe^\top,1\right)^\top\in\R^{3n+1}$ with the augmented scalar $1$ included to account for the bias term in the weight matrix. 
-The NNs' weights were initialized randomly with uniform distribution in the range of $[-0.1,0.1]$, and the same random seed.
-Each NN architecture had two hidden layers with four nodes (\ie $k=2$, and $l_0=6, l_1=4, l_2=4$, and $l_3=2$), and the adaptation gain was set to $\alpha=0.5$.
+For all controllers ((C$_1$), (C$_2$), (C$_3$), and (C$_4$)), the DNN input vector ${\q}_n$ was set as ${\q}_n=\left(\q^\top,\dq^\top,\fe^\top,1\right)^\top\in\R^{3n+1}$ with the augmented scalar $1$ included to account for the bias term in the weight matrix. 
+The DNNs' weights were initialized randomly with uniform distribution in the range of $[-0.1,0.1]$, and the same random seed.
+All DNN architectures have two hidden layers with four nodes, \ie $k=2$, and $l_0=6, l_1=4, l_2=4$, and $l_3=2$, and the adaptation gain was set to $\alpha=0.5$.
 The filtering matrix $\mm{\Lambda}$ was set to $\mm{\Lambda}=\mydiag([5,15])$.
 The sampling rate of the controller was $250$ Hz considering the real-time implementation.
 The weight constraint parameters were selected as $\overline\wth_0=\overline\wth_1=\overline\wth_2=6$.
@@ -1323,16 +1361,16 @@ The quantitative comparison of the tracking performance was evaluated using the 
     \centering
     \begin{tabular}{c l l}
     \hline
-        \!&\!\bf{Description}\!&\!\bf{Input Constraint}\!\\
+        &\bf{Description}&\bf{Input Constraint}\\
     \hline
     \hline
-        (C$_1$)\!&\!large $\beta_j$\!&\!$\overline{\tau}=11,\overline{\tau}_2=-\underline{\tau}_2=3.5$ \\
+        (C$_1$)&large $\beta_j$&$\overline{\tau}=11,\overline{\tau}_2=-\underline{\tau}_2=3.5$ \\
     \hline
-        (C$_2$)\!&\!small $\beta_j$\!&\!$\overline{\tau}=10,\overline{\tau}_2=-\underline{\tau_2}=2.5$ \\
+        (C$_2$)&small $\beta_j$&$\overline{\tau}=10,\overline{\tau}_2=-\underline{\tau_2}=3.5$ \\
     \hline
-        (C$_3$)\!&\!no $\rbu$ constraints\!&\!$[\beta_j]_{j\in\{\rbu,\overline{\tau}_2,\underline{\tau}_2\}}=\mv{0}$ \\
+        (C$_3$)&no $\rbu$ constraints&$[\beta_j]_{j\in\{\rbu,\overline{\tau}_2,\underline{\tau}_2\}}=\mv{0}$ \\
     \hline
-        (C$_4$)\!&\!aux. sys.\!&\!$\overline{\tau}_1\!=\!-\underline{\tau}_1\!=\!9.682,\overline{\tau_2}\!=\!-\underline{\tau_2}\!=\!2.5$\!\\
+        (C$_4$)&aux. sys.&$\overline{\tau}_1=-\underline{\tau}_1=10.428,\overline{\tau_2}=-\underline{\tau_2}=3.5$\\
     \hline
     \end{tabular}
     \label{table:controllers}
@@ -1391,48 +1429,6 @@ The quantitative comparison of the tracking performance was evaluated using the 
   }
 \label{fig:ctrl:result}
 \end{figure*}
-
-\begin{figure}[t]
-    \centering
-    \subfloat[Control input $\tau$ in time interval from $29.4$ s to $31.9$ s (bird's eye view).]{
-    % \subfloat[Auxiliary states $\mv{\zeta}$ of CONAC-AUX.]{
-        \includegraphics[width=\figSizeOneCol\linewidth]
-        {
-            src/measurement/figures/compare/Fig6.eps
-        }%
-        \label{fig:ctrl:result:scope:control}}
-        \vfill
-    \subfloat[Lagrange multipliers $\lambda_j$  in time interval from $29.4$ s to $31.9$ s.]{
-        \includegraphics[width=\figSizeOneCol\linewidth]
-        {
-            src/measurement/figures/compare/Fig8.eps
-        }%
-        \label{fig:ctrl:result:scope:beta}}
-        \vfill
-    \subfloat[Auxiliary states in time interval from $29.4$ s to $31.9$ s.]{
-        \includegraphics[width=\figSizeOneCol\linewidth]
-        {
-            src/measurement/figures/compare/Fig9.eps
-        }%
-        \label{fig:ctrl:result:scope:aux}}
-  \caption{
-    Constraint handling process of (C$_1$) \protect\colorLine{blue}{solid}, (C$_2$) \protect\colorLine{cyan}{solid}, (C$_3$) \protect\colorLine{gray}{solid}, (C$_4$) \protect\colorLine{magenta}{solid} in time interval from $29.4$ s to $31.9$ s.
-  }
-\label{fig:ctrl:result:scope}
-\end{figure}
-
-\begin{figure}[!t]
-	\centering
-	\includegraphics[width=0.6\linewidth]{
-		src/figures/lambda_effect.drawio.pdf
-		}
-	\caption{
-		The effect of Lagrange multiplier $\lambda_{j}$ on the adaptation direction of $\widehat{ \mv{\theta}}_1$.
-		The notation ($\cdot'$) and ($\cdot''$) represent two different cases of bigger and smaller Lagrange multiplier, respectively (i.e., $\lambda_{j}' > \lambda_{j}''$).
-	}
-	% \vspace{1mm}
-	\label{fig:lambda_effect}
-\end{figure}
 
 % ------------------------------------
 % Norm of error in Episode 1: 
@@ -1501,36 +1497,73 @@ The quantitative comparison of the tracking performance was evaluated using the 
 The real-time implementation results are shown in Fig.~\ref{fig:ctrl:result} and the quantitative comparison of the tracking performance is given in Table~\ref{tab:sim:L2}.
 Across the two episodes, all controllers enhanced their tracking performances about $70 \%$ for (C$_1$), $63.1 \%$ for (C$_2$), $63.7 \%$ for (C$_3$), and $18.5 \%$ for (C$_4$) in $L_2$ norm of $e_1$, and $88.4 \%$ for (C$_1$), $76.9 \%$ for (C$_2$), $72.8 \%$ for (C$_3$), and $67.1 \%$ for (C$_4$) in $L_2$ norm of $e_2$, respectively, as shown in Table~\ref{tab:sim:L2}.
 Qualitatively, as described in Fig.~\ref{fig:ctrl:result:q1} and Fig.~\ref{fig:ctrl:result:q2}, the oscillations were suppressed in the second episode.
-This results lead to the conclusion that the NNs in all controllers were able to learn the ideal control input $\rbu^*$ properly, by the filtered error $\fe$, despite the fact that $\rbu^*$ was not known in advance.
+This results lead to the conclusion that the DNNs in all controllers were able to learn the ideal control input $\rbu^*$ properly, by the filtered error $\fe$, despite the fact that $\rbu^*$ was unknown in advance.
 Moreover, since the learning began from the random initialization of the weights and no prior knowledge of the system, the online learning capability of the proposed CONAC was demonstrated.
 
-In addition, it is notable that in both episodes, all controllers failed to track the desired trajectory of $q_1$ in time interval from $17.5$ s to $19.9$ for Episode $1$, and from $29.5$ s to $31.9$ s for Episode $2$.
+In addition, it is notable that in both episodes, all controllers failed to track the desired trajectory of $q_1$ in time intervals from $17.5$ s to $19.9$ for Episode $1$, and from $23.5$ s to $25.9$ s and from $29.5$ s to $31.9$ s for Episode $2$.
 This is because the control inputs were saturated in the time intervals, as shown in Fig.~\ref{fig:ctrl:result:tau:1} and Fig.~\ref{fig:ctrl:result:tau:norm}.
 
-The tracking performances of CONAC with control input constraints, (\ie (C$_1$), and (C$_2$)), outperformed CONAC with the auxiliary system (C$_4$) in both episodes, as shown in Table~\ref{tab:sim:L2}.
+The tracking performances of CONAC with control input constraints, \ie (C$_1$), and (C$_2$), outperformed CONAC with the auxiliary system (C$_4$) in both episodes, as shown in Table~\ref{tab:sim:L2}.
 This is because, (as wil be discussed in Section \ref{sec:sim:constraint}) (C$_1$), and (C$_2$) were able to use the full capability of the actuator, while (C$_4$) was limited its first link actuator due to the feature of the auxiliary system.
 The tracking performance of (C$_3$) was also better than (C$_4$), but worse than (C$_1$) and (C$_2$), since the control input constraints were not considered in (C$_3$).
+Without consideration of the control input saturation, DDN became confused by the difference between its output (control input) and the saturated control input, which leads to the poor performance of (C$_3$).
 
 % ------------------------------------
 % Control Input Saturation
 % ------------------------------------
+\begin{figure}[t]
+    \centering
+    \subfloat[Control input $\tau$ in time interval from $29.4$ s to $31.9$ s (bird's eye view).]{
+    % \subfloat[Auxiliary states $\mv{\zeta}$ of CONAC-AUX.]{
+        \includegraphics[width=\figSizeOneCol\linewidth]
+        {
+            src/measurement/figures/compare/Fig6.eps
+        }%
+        \label{fig:ctrl:result:scope:control}}
+        \vfill
+    \subfloat[Lagrange multipliers $\lambda_j$  in time interval from $29.4$ s to $31.9$ s.]{
+        \includegraphics[width=\figSizeOneCol\linewidth]
+        {
+            src/measurement/figures/compare/Fig8.eps
+        }%
+        \label{fig:ctrl:result:scope:beta}}
+        \vfill
+    \subfloat[Auxiliary states in time interval from $29.4$ s to $31.9$ s.]{
+        \includegraphics[width=\figSizeOneCol\linewidth]
+        {
+            src/measurement/figures/compare/Fig9.eps
+        }%
+        \label{fig:ctrl:result:scope:aux}}
+  \caption{
+    Constraint handling process of (C$_1$) \protect\colorLine{blue}{solid}, (C$_2$) \protect\colorLine{cyan}{solid}, (C$_3$) \protect\colorLine{gray}{solid}, and (C$_4$) \protect\colorLine{magenta}{solid} in time interval from $29.4$ s to $31.9$ s.
+  }
+\label{fig:ctrl:result:scope}
+\end{figure}
+
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=0.6\linewidth]{
+		src/figures/lambda_effect.drawio.pdf
+		}
+	\caption{
+		The effect of Lagrange multiplier $\lambda_{j}$ on the adaptation direction of $\widehat{ \mv{\theta}}_1$.
+		The notation ($\cdot'$) and ($\cdot''$) represent two different cases of bigger and smaller Lagrange multiplier, respectively (i.e., $\lambda_{j}' > \lambda_{j}''$).
+	}
+	% \vspace{1mm}
+	\label{fig:lambda_effect}
+\end{figure}
+
 \hfill
 \subsubsection{Constraint Handling} \label{sec:sim:constraint}
 
 In this section, the constraint handling capability of all controllers are investigated.
 
-\hfill
-
-As shown in Fig.~\ref{fig:ctrl:result:tau:1}, Fig.~\ref{fig:ctrl:result:tau:2}, and Fig.~\ref{fig:ctrl:result:tau:norm}, all controllers except (C$_3$) which did not consider the control input saturation, satisfied the control input saturation illustrated in Fig.~\ref{fig:robot:sat}, with $c_{\rbu},c_{\overline\tau_2}$ and $c_{\underline\tau_2}$ for (C$_1$), and (C$_2$), and $c_{\overline\tau_1},c_{\underline\tau_1},c_{\overline\tau_2}$, and $c_{\underline\tau_2}$ for (C$_4$), as the weights were adapted to reduce the constraint violations, using Lagrange multipliers $\lambda_j,\ \forall j\in\mathcal{I}$, and auxiliary state $\mv{\zeta}$, respectively.
+As shown in Fig.~\ref{fig:ctrl:result:tau:1}, Fig.~\ref{fig:ctrl:result:tau:2}, and Fig.~\ref{fig:ctrl:result:tau:norm}, all controllers except (C$_3$) which did not consider the control input saturation, satisfied the control input saturation illustrated in Fig.~\ref{fig:robot:sat}, with $c_{\rbu},c_{\overline\tau_2}$ and $c_{\underline\tau_2}$ for (C$_1$), and (C$_2$), and $c_{\overline\tau_1},c_{\underline\tau_1},c_{\overline\tau_2}$, and $c_{\underline\tau_2}$ for (C$_4$), as the weights were adapted to reduce the constraint violations, using Lagrange multipliers $\lambda_j,\ \forall j\in\{\rbu,\overline{\tau}_2,\underline{\tau}_2\}$, and auxiliary state $\mv{\zeta}$, respectively.
 It is worth to note that the control input constraints were violated repeatedly, since the controllers were implemented in discrete time with a low sampling rate of $250$ Hz.
-
-\hfill
 
 Even though all controllers except (C$_3$) satisfied the input saturation, (C$_4$) was not able to use the full capability of the actuator, as shown in Fig.~\ref{fig:ctrl:result:scope:control} which shows the bird-eye view of the control input $\rbu$ in time interval from $29.4$ s to $31.9$ s.
 This is because, as aforementioned, the auxiliary system only considers saturation of each control input, and the maximum value of the first link's torque $\overline{\tau}_1$ was set to approximately match the maximum allowable norm of the control input $\overline\tau$, instead of $c_{\rbu}$.
 In contrast, (C$_1$), and (C$_2$) were able to use the full capability of the actuator with the combination of the input bound constraints $c_{\overline\tau_2}$ and $c_{\underline\tau_2}$, and the nonlinear input norm constraint $c_{\rbu}$ which is completely match the feasible domain of the control input $\Theta_{\mysat}$.
-
-\hfill
 
 % zeta
 The detail of the constraint handling in the time interval from $29.4$ s to $31.9$ s, is now investigated.
@@ -1544,16 +1577,17 @@ For the cases of (C$_1$) and (C$_2$), the Lagrange multipliers $\lambda_{\rbu}$ 
 For more details, the effect of the update rate $\beta_j,\ \forall j\in\mathcal I$ of Lagrange multipliers is shown in Fig.~\ref{fig:lambda_effect} for convex constraint $c_j,\ \forall j\in\mathcal I$ and two different cases of $\lambda_j$.
 With the bigger $\lambda_j$, the adaptation of $\estwth_1$ is more assertive than that with smaller $\lambda_j$.
 This leads to a faster satisfaction of the constraint $c_j,\ \forall j\in\mathcal I$, but this also causes oscillation in the adaptation process.
-In Fig.~\ref{fig:ctrl:result:scope:control} and Fig.~\ref{fig:ctrl:result:scope:beta}, $\lambda_j$ of (C$_1$) repeatedly increased and decreased, which indicates that the constraint $c_j,\ \forall j\in\mathcal I$ was satisfied and violated, respectively, in the discrete time implementation.
-Besides, with small $\lambda_j$, the adaptation direction of $\estwth_1$ is adjusted more conservatively, which leads to a slower satisfaction of the constraint $c_j,\ \forall j\in\mathcal I$, as shown in Fig.~\ref{fig:ctrl:result:scope:control} and the positively existence of $\lambda_j$ in Fig.~\ref{fig:ctrl:result:scope:beta}.
+In Fig.~\ref{fig:ctrl:result:scope:control} and Fig.~\ref{fig:ctrl:result:scope:beta}, $\lambda_{\rbu}$ of (C$_1$) repeatedly increased and decreased, which indicates that the constraint $c_{\rbu}$ was satisfied and violated, respectively, in the discrete time implementation.
+Besides, with small $\lambda_{\rbu}$, the adaptation direction of $\estwth_1$ is adjusted more conservatively, which leads to a slower satisfaction of the constraint $c_{\rbu}$, as shown in Fig.~\ref{fig:ctrl:result:scope:control} and the positively existence of $\lambda_{\rbu}$ in Fig.~\ref{fig:ctrl:result:scope:beta}.
 This allows the controller to show a smoother control input.
 However, since the weights were adapted to reduce the filtered error $\fe$ while the control input was saturated, the weights were not able to effectively adapt the weights with respect to the filtered error $\fe$.
 
 \hfill 
 
-Finally, the weight norm constraints $c_{\theta_i},\ \forall i\in\mathcal I$ are investigated.
+Finally, the weight norm constraints $c_{\theta_i},\ \forall i\in\{0,\cdots,2\}$ are investigated.
 The weight norm constraints were not activated except for the outer layer weights $c_{\theta_2}$ of (C$_3$), as shown in Fig.~\ref{fig:ctrl:result:weight}.
 This is because the weights of (C$_1$), (C$_2$), and (C$_4$) were suppressed by the control input constraints, while (C$_3$) was not.
+\MSRY{필요하다면 왜 제어입력 제약하는게 가중치 제약도 되는지 추가 가능}
 In addition, the inner and hidden layer weights constraints were not violated (\ie $\norm{\estwth_0},\norm{\estwth_1}$ were uniformly lower than $\norm{\estwth_2}$), since the backpropagated error was multiplied by the gradient of the activation function, which is limited from $-1$ to $1$, \ie see, \eqref{eq:gradient:phi}.  
 
 The details of the constraint handling process are shown in Fig.~\ref{fig:ctrl:result:scope}, as well.
@@ -1565,9 +1599,10 @@ In Fig.~\ref{fig:ctrl:result:scope:beta}, the Lagrange multipliers $\lambda_{\th
 \hfill
 \subsubsection{Satisfaction of Karsh-Kuhn-Tucker (KKT) conditions}
 
-\MSRY{ADD MORE DETAILS}
+\MSRY{이 부분도 IECON과 마찬가지로 이산으로 돌아감으로 바로 보여주기는 힘들 수 있을 것 같습니다. 실제로 보시면 많은 진동이 보여서 정상상태의 KKT를 주장할 수 있을지 의문입니다.}
 
-The KKT conditions were satisfied in the simulation, as shown in Fig.~\ref{fig:ctrl:result:scope:beta}, where the Lagrange multipliers $\lambda_j,\ \forall j\in\mathcal I$ were positive and the constraint violations $c_j,\ \forall j\in\mathcal I$ were negative.
+Since the proposed CONAC was implemented in discrete time, demonstration regarding the KKT conditions in steady state is not straightforward.
+However, as the weights and Lagrange multipliers were almost constant when the constraints were violated, the satisfaction of the KKT conditions can be implicitly shown, since the Lagrange multipliers of active constraints were positive and inactive constraints were zero.
 
 % ------------------------------------
 % Computational Time
@@ -1575,9 +1610,10 @@ The KKT conditions were satisfied in the simulation, as shown in Fig.~\ref{fig:c
 \hfill
 \subsubsection{Effectiveness of CONAC in Real-time Applications}
 
-The effectiveness of the proposed CONAC in real-time applications was evaluated by measuring the computational time measured using CPU clock ticks.
+The effectiveness of the proposed CONAC in real-time applications was evaluated by measuring the computational time measured using CPU clock ticks of the OpenCR1.0 board.
 The computational times are shown in Fig.~\ref{fig:ctrl:real:result:cmp:time} indicates that the proposed CONAC can be implemented in real-time applications with a sampling rate of $250$ Hz.
 In addition, it is notable that the computational time decreased as the weights converged.
+\MSRY{삭제해야할수있음; C4는 그러하지 않기 때문}
 
 \begin{figure}[t]
     \centering
@@ -1594,13 +1630,14 @@ In addition, it is notable that the computational time decreased as the weights 
 %  SECTION CONCLUSION ======================================
 \section{Conclusion}\label{sec:conclusion}
 
-This paper presented a constrained optimization-based neuro-adaptive controller (CONAC) for the uncertain Euler-Lagrange system, addressing both weight norm and input constraints through a rigorous optimization framework. 
+This paper presented a constrained optimization-based neuro-adaptive controller (CONAC) for the uncertain Euler-Lagrange system, addressing both weight and input constraints through a rigorous optimization framework. 
 The stability of the proposed controller was analyzed using Lyapunov theory, ensuring that the system maintained bounded tracking and estimation errors under real-time adaptation.
 
 The controller effectively incorporated both the input (bound or norm) constraint and the weight norm constraint, ensuring that both actuator limitations and neural network weights were kept within predefined bounds. 
 By formulating these constraints as part of the optimization process, CONAC ensured that the weights converged in a way that satisfied the Karush-Kuhn-Tucker (KKT) conditions, guaranteeing optimality and stability.
 
-A real-time implementation validated the superior performance of CONAC compared to conventional methods, such as DNN-BSC and DNN-BSC-A. CONAC not only handled complex input constraints but also managed the weight norm constraints rigorously, leading to improved tracking accuracy and stability without notable oscillations.
+A real-time implementation validated the superior performance of CONAC compared to conventional method. 
+The CONAC not only handled complex input constraints but also managed the weight norm constraints rigorously, leading to improved tracking accuracy and stability without notable oscillations.
 
 Future work may extend this approach to address constraints on both the system inputs and states, further enhancing the flexibility and robustness of neuro-adaptive control systems using constrained optimization.
 
@@ -1608,13 +1645,13 @@ Future work may extend this approach to address constraints on both the system i
 %% appendix sections are then done as normal sections
 \appendix
 
-\section{Input Constraint Candidates}\label{sec:appen:cstr} 
+\subsection{Input Constraint Candidates}\label{sec:appen:cstr} 
 
-This section introduces potential weight and input constraints that can be used in the proposed neuro-adaptive controller. 
+This section introduces potential weight and input constraints that can be used in the proposed CONAC. 
 
-\subsection{Input Bound Constraint}\label{sec:appen:cstr:input:bound}
+\subsubsection{Input Bound Constraint}\label{sec:appen:cstr:input:bound}
 
-Most physical systems have control input limits due to electrical and mechanical limitations. These are expressed as $\boldsymbol{c}_{\overline \tau}:= [c_{\overline \tau_i}]_{i\in[1,\cdots,n]}$ and $\boldsymbol{c}_{\underline\tau}:= [c_{\underline\tau_i}]_{i\in[1,\cdots,n]}$, where
+Most physical systems have control input limits due to electrical and mechanical limitations. These are expressed as $\mv{c}_{\overline \tau}:= [c_{\overline \tau_i}]_{i\in[1,\cdots,n]}$ and $\mv{c}_{\underline\tau}:= [c_{\underline\tau_i}]_{i\in[1,\cdots,n]}$, where
 \begin{equation}
     \begin{aligned}
         c_{\overline \tau_i}=\tau_{(i)} - {\tau_{\overline \tau_i}}
@@ -1625,18 +1662,21 @@ Most physical systems have control input limits due to electrical and mechanical
     \end{aligned}
     \label{eq:cstr:input:bound}
 \end{equation}
-with $\tau_{\overline \tau_i}$ and $\tau_{\underline\tau_i}$ representing the maximum and minimum control input bounds, respectively.
+with $\tau_{\overline \tau_i}\in\R_{>0}$ and $\tau_{\underline\tau_i}\in\R_{>0}$ representing the maximum and minimum control input bounds, respectively.
 % The corresponding Lagrange multipliers are $\lambda_{u_j,i},\ \forall j\in[M,m]$. 
-The gradients of $\boldsymbol{c}_{\overline \tau}$ and $\boldsymbol{c}_{\underline\tau}$ with respect to $\estwth$ are given by
+The gradients of $\mv{c}_{\overline \tau}$ and $\mv{c}_{\underline\tau}$ with respect to $\estwth$ are given by
 \begin{equation}
     \begin{aligned}
-        \pptfrac{\boldsymbol c_{\overline \tau}}{\estwth}
+        \pptfrac{\mv c_{\overline \tau}}{\estwth}
         =& 
-        \begin{bmatrix}
-            \pptfrac{c_{\overline \tau_1}}{\estwth}^\top \\
-            \vdots \\
-            \pptfrac{c_{\overline \tau_n}}{\estwth}^\top
-        \end{bmatrix}
+        \left[
+            \pptfrac{c_{\overline \tau_i}}{\estwth}^\top
+        \right]_{i\in\{1,\cdots,n\}}
+        % \begin{bmatrix}
+        %     \pptfrac{c_{\overline \tau_1}}{\estwth}^\top \\
+        %     \vdots \\
+        %     \pptfrac{c_{\overline \tau_n}}{\estwth}^\top
+        % \end{bmatrix}
         = 
             +\pptfrac{\estNN}{\estwth}
             \\
@@ -1644,7 +1684,7 @@ The gradients of $\boldsymbol{c}_{\overline \tau}$ and $\boldsymbol{c}_{\underli
         =
         +
         \begin{bmatrix}
-            (I_{l_{k+1}}\otimes \estact_{k}^\top)&
+            (\mm{I}_{l_{k+1}}\otimes \estact_{k}^\top)&
             \!\cdots\! &
             (
                 \cdot
@@ -1654,21 +1694,24 @@ The gradients of $\boldsymbol{c}_{\overline \tau}$ and $\boldsymbol{c}_{\underli
         \mathbb R^{n\times \Xi}
         , 
         \\
-        \pptfrac{\boldsymbol c_{\underline\tau}}{\estwth}         
+        \pptfrac{\mv c_{\underline\tau}}{\estwth}         
         =
         & 
-        \begin{bmatrix}
-            \pptfrac{c_{\underline\tau_1}}{\estwth}^\top \\
-            \vdots \\
-            \pptfrac{c_{\underline\tau_n}}{\estwth}^\top
-        \end{bmatrix}
+        \left[
+            \pptfrac{c_{\underline\tau_i}}{\estwth}^\top
+        \right]_{i\in\{1,\cdots,n\}}
+        % \begin{bmatrix}
+        %     \pptfrac{c_{\underline\tau_1}}{\estwth}^\top \\
+        %     \vdots \\
+        %     \pptfrac{c_{\underline\tau_n}}{\estwth}^\top
+        % \end{bmatrix}
         = 
         -\pptfrac{\estNN}{\estwth}
         \\
         =&
         =
         -\begin{bmatrix}
-            (I_{l_{k+1}}\otimes \estact_{k}^\top)&
+            (\mm{I}_{l_{k+1}}\otimes \estact_{k}^\top)&
             % V_k^\top \phi_{k}' (I_{l_{k}}\otimes  \phi_{k-1}^\top)&
             \!\cdots\! &
             (
@@ -1682,11 +1725,17 @@ The gradients of $\boldsymbol{c}_{\overline \tau}$ and $\boldsymbol{c}_{\underli
     \label{eq:cstr:input:bound:grad}
 \end{equation}
 
-\subsection{Input Norm Constraint}\label{sec:appen:cstr:input:norm}
+\subsubsection{Input Norm Constraint}\label{sec:appen:cstr:input:norm}
 
-Consider the control input $\tau$ as the torque of each actuator corresponding to its generalized coordinate. Since torque is typically linearly proportional to current, actuators that share a common power source are often subject to total current limitations. This can be captured by the following inequality constraint: 
+Consider the control input $\rbu$ as the torque of each actuator corresponding to its generalized coordinate. Since torque is typically linearly proportional to current, actuators that share a common power source are often subject to total current limitations. This can be captured by the following inequality constraint: 
 \begin{equation}
-    c_{\rbu}=\norm{\mv{\tau}}^2 -\overline\tau^2
+    c_{\rbu}
+    =
+    \norm{
+        \mv{\tau}
+    }^2 
+    -
+    \overline\tau^2
     ,
     \label{eq:cstr:input:norm}
 \end{equation}
@@ -1694,14 +1743,14 @@ with $\overline\tau\in\R_{>0}$ denoting the maximum allowable control input magn
 % The corresponding Lagrangian multiplier is $\lambda_{u_b}$. 
 The gradients of $c_{\rbu}$ with respect to $\estwth$ are given by
 \begin{equation}
-    \pptfrac{\boldsymbol c_{\rbu}}{\estwth}
+    \pptfrac{\mv c_{\rbu}}{\estwth}
     \!=\! 
-    \textstyle\sum_{i=1}^n 2\tau_{(i)} 
+    \textstyle\sum_{i=1}^n 2\tau_{i} 
     \left(
         \myrow_i
-        (
+        \left(
             \pptfrac{\estNN}{\estwth}
-        )
+        \right)
     \right)^\top  
     \!=\! 
     {\pptfrac{\estNN}{\estwth}}^\top
@@ -1710,7 +1759,7 @@ The gradients of $c_{\rbu}$ with respect to $\estwth$ are given by
     \in \mathbb R^{\Xi}.
     \label{eq:cstr:input:norm:grad}
 \end{equation}
-It should be noted that constraints \eqref{eq:cstr:input:bound} and \eqref{eq:cstr:input:norm} can be imposed simultaneously, as their gradients \eqref{eq:cstr:input:bound:grad} and \eqref{eq:cstr:input:norm:grad} are linearly independent, satisfying the LICQ condition.
+It should be noted that constraints \eqref{eq:cstr:input:bound} and \eqref{eq:cstr:input:norm} can be imposed simultaneously, as their gradients \eqref{eq:cstr:input:bound:grad} and \eqref{eq:cstr:input:norm:grad} are linearly independent, satisfying Assumption \ref{assum:LICQ}, \ie the LICQ condition.
 
 \printbibliography
 
@@ -1720,7 +1769,7 @@ It should be noted that constraints \eqref{eq:cstr:input:bound} and \eqref{eq:cs
 
 \begin{IEEEbiography}[{
     \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/msRyu.jpg}}]{Myeongseok Ryu}
-    received the B.S. degree in mechanical engineering from Incheon National University, South Korea, in 2023, abd the M.S. degree in mechanical engineering from Gwangju Institute of Science and Technology (GIST), South Korea, in 2025. 
+    received the B.S. degree in mechanical engineering from Incheon National University, South Korea, in 2023, and the M.S. degree in mechanical engineering from Gwangju Institute of Science and Technology (GIST), South Korea, in 2025. 
     He is currently pursuing the Ph.D. degree in mechanical engineering at GIST.
 
     His research interests include adaptive control, neural-networks, and constrained optimization.
