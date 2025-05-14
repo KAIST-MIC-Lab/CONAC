@@ -19,7 +19,7 @@
 \author{
   Myeongseok Ryu, Donghwa Hong, and Kyunghwan Choi
 \thanks{
-    Myeongseok Ryu and Kyunghwan Choi are with the Cho Chun Shik Graduate School of Mobility, Korean Advanced Institute of Science and Technology (KAIST), Daejeon 34051, Korea (e-mail: dding\_98@kaist.ac.kr and khchoi@kaist.ac.kr).
+    Myeongseok Ryu and Kyunghwan Choi are with the Cho Chun Shik Graduate School of Mobility, Korean Advanced Institute of Science and Technology (KAIST), Daejeon 34051, Korea (e-mail: dding\_98@kaist.ac.kr and kh.choi@kaist.ac.kr).
 
     Donghwa Hong is with the Department of Mechanical and Robotics Engineering, Gwangju Institute of Science and Technology (GIST), Gwangju 61005, Korea (e-mail: fairytale@gm.gist.ac.kr).
 
@@ -33,11 +33,13 @@
 
 %% Abstract
 \begin{abstract}
-  This study presents a constrained optimization-based neuro-adaptive controller (CONAC) for uncertain Euler-Lagrange systems under weight norm and convex input constraints. 
-  A deep neural network (DNN) is employed to approximate the ideal stabilizing control law, while learning the unknown system dynamics and,  addressing both types of constraints, simultaneously.
-  The weight adaptation laws are formulated through a constrained optimization problem, ensuring first-order optimality conditions at steady state. 
-  The controller's stability is rigorously analyzed using Lyapunov theory, guaranteeing bounded tracking errors and DNN weights. 
-  The proposed controller was validated via a real-time implementation conducted on a 2-DOF robotic manipulator, demonstrating the controller's effectiveness in achieving desired trajectory tracking while satisfying constraints.
+  This study presents a constrained optimization-based neuro-adaptive controller (CONAC) for uncertain Euler-Lagrange systems subject to weight norm and convex input constraints. 
+  A deep neural network (DNN) is employed to approximate the ideal stabilizing control law while simultaneously learning the unknown system dynamics and addressing both types of constraints within a constrained optimization framework.
+  The weight adaptation laws are formulated to solve the defined constrained optimization problem, ensuring satisfaction of first-order optimality conditions at steady state.
+  The controller's stability is rigorously analyzed using Lyapunov theory, guaranteeing bounded tracking errors and bounded DNN weights. 
+  The proposed controller is validated through a real-time implementation on a 2-DOF robotic manipulator, demonstrating its effectiveness in achieving accurate trajectory tracking while satisfying all imposed constraints.
+  
+  via a real-time implementation conducted on a 2-DOF robotic manipulator, demonstrating the controller's effectiveness in achieving desired trajectory tracking while satisfying constraints.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -49,7 +51,7 @@ In this study, the following notation is used:
 
 \begin{itemize}
     \item $\otimes$ denotes the Kronecker product \cite[Chap. 7 Def. 7.1.2]{Bernstein:2009aa}.
-    \item A vector and matrix are denoted by $\mv{x}=[x_i]_{i\in\{1,\cdots,n\}}\in\R^n$ and $
+    \item A vector and a matrix are denoted by $\mv{x}=[x_i]_{i\in\{1,\cdots,n\}}\in\R^n$ and $
         \mm A
         := 
         [a_{ij}]
@@ -58,7 +60,7 @@ In this study, the following notation is used:
         }\allowbreak\in\R^{n\times m}
         $, respectively.
     \item $\myrow_i(\mm A)$ denotes the $i\textsuperscript{th}$ row of the matrix $\mm A\in\R^{n\times m}$. 
-    \item $\myvec(\mm A):=(\myrow_1(\mm A^\top),\cdots,\myrow_m(\mm A^\top)  )^\top$ for $\mm{A}\in\R^{n\times m}$, denotes vectorization of $\mm A$.
+    \item For $\mm{A}\in\R^{n\times m}$, denotes the vectorization of $\mm A$, $\myvec(\mm A):=(\myrow_1(\mm A^\top),\cdots,\myrow_m(\mm A^\top)  )^\top$.
     % \item $\mycol_i(A)$ and $\myrow_j(A)$ denote the $i\textsuperscript{th}$ column and $j\textsuperscript{th}$ row of $A\in\R^{n\times m}$, respectively.
     % \item $\myvec(A):= [\mycol_1(A)^\top  ,\cdots,\mycol_m(A)^\top  ]^\top   $ for $A\in\R^{n\times m}$.
     \item $\lambda_{\min}(\mm A)$ denotes the minimum eigenvalue of the matrix $\mm A\in\R^{n\times n}$.
@@ -78,7 +80,7 @@ To address these challenges, adaptive control methods have been widely employed 
 
 More recently, neuro-adaptive control approaches have been introduced to approximate unknown system dynamics or entire control laws using neural networks (NNs) \cite{Farrell:2006aa}. 
 NNs are well-known for their universal approximation property, which allows them to approximate any smooth function over a compact set with minimal error. 
-Various types of NNs have been utilized in neuro-adaptive control, including simpler architectures like single-hidden layer (SHL) neural networks \cite{Ge:2010aa, Yesildirek:1995aa} and radial basis function (RBF) neural networks \cite{Liu:2013ab,Ge:2002aa}, as well as more complex models like deep neural networks (DNNs) \cite{Patil:2022aa} and their variations. 
+Various types of NNs have been utilized in neuro-adaptive control, including simpler architectures like single-hidden layer (SHL) NNs \cite{Ge:2010aa, Yesildirek:1995aa} and radial basis function (RBF) neural networks \cite{Liu:2013ab,Ge:2002aa}, as well as more complex models like deep neural networks (DNNs) \cite{Patil:2022aa} and their variations. 
 SHL and RBF NNs are often employed to approximate uncertain system dynamics or controllers due to their simplicity \cite{Esfandiari:2014aa,Esfandiari:2015aa,Yesildirek:1995aa,Gao:2006aa}, while DNNs offer greater expressive power, making them more effective for complex system approximations \cite{Rolnick:2018aa}. 
 Additionally, variations of DNNs, such as long short-term memory (LSTM) networks for time-varying dynamics \cite{Liu:2013ab} and physics-informed neural networks (PINNs) for leveraging physical system knowledge \cite{Hart:2024aa}, have further extended the capabilities of neuro-adaptive control systems.
 
@@ -91,8 +93,8 @@ When NN outputs are used directly in the control law, this may lead to excessive
 Such constraints are commonly encountered in industrial systems, where actuators are limited by physical and safety requirements in terms of amplitude, rate, or energy \cite{Esfandiari:2021aa}. 
 Failing to address these constraints can degrade control performance or even destabilize the system.
 
-Therefore, addressing these two key issues—ensuring weight boundedness and satisfying input constraints—is essential for th reliable design of neuro-adaptive controllers. 
-he following section will provide a detailed review of the existing solutions to these challenges.
+Therefore, addressing these two key issues—ensuring weight boundedness and satisfying input constraints—is essential for the reliable design of neuro-adaptive controllers. 
+The following section provides a detailed review of existing solutions to these challenges.
 
 \subsection{Literature Review}
 
@@ -141,10 +143,18 @@ This gap suggests that constrained optimization could be key to addressing both 
 
 \subsection{Contributions}
 
+\KHCH{Abstract에 있는 것처럼 이 내용도 하나 추가해두죠.
+
+The controller’s stability is rigorously
+analyzed using Lyapunov theory, guaranteeing bounded
+tracking errors and DNN weights.}
+
 The main contributions of this study are listed as follows:
 \begin{itemize}
-    \item A constrained optimization-based neuro-adaptive controller (CONAC) is developed using a DNN, where input constraints and the boundedness of DNN weights are formulated as inequality constraints within the adaptation process.
-    \item The weight adaptation laws in CONAC are derived using constrained optimization theory to minimize the objective function while satisfying the inequality constraints. The adaptation laws ensure convergence of the weights to the first-order optimality conditions, specifically the Karush-Kuhn-Tucker (KKT) conditions defined in \cite[Chap. 12 Thm. 12.1]{Nocedal:2006aa}. 
+    \item A constrained optimization-based neuro-adaptive controller (CONAC) is proposed, where the design of a deep neural network (DNN) is formulated as a constrained optimization problem. In this formulation, weight norm and convex input constraints are incorporated as inequality constraints, while minimizing a given objective function.
+    % \item A constrained optimization-based neuro-adaptive controller (CONAC) is developed using a DNN, where input constraints and the boundedness of DNN weights are formulated as inequality constraints within the adaptation process.
+    \item The adaptation laws for DNN weights in CONAC are systematically derived to solve the defined problem, using constrained optimization theory. These laws guarantee convergence to the first-order optimality conditions, specifically the Karush–Kuhn–Tucker (KKT) conditions, as described in \cite[Chap. 12 Thm. 12.1]{Nocedal:2006aa}.
+    % \item The weight adaptation laws in CONAC are derived using constrained optimization theory to minimize the objective function while satisfying the inequality constraints. The adaptation laws ensure convergence of the weights to the first-order optimality conditions, specifically the Karush-Kuhn-Tucker (KKT) conditions defined in \cite[Chap. 12 Thm. 12.1]{Nocedal:2006aa}. 
     % \item The forward sensitivity method is applied in CONAC to accurately calculate the gradient of the objective function. \MSRY{WILL BE DELETED}
     %, enabling more precise real-time adaptation.
 \end{itemize}
@@ -176,43 +186,43 @@ We consider an uncertain Euler-Lagrange system modeled as
     \mysat(\rbu)
     \label{eq:sys1}
 \end{equation}
-where $\q\in \R^n$ denotes the generalized coordinate, $\rbd$ represents disturbance and $\rbu\in\R^n$ denotes the generalized control input. 
-The terms $\rbM:=\rbM(\q)\in\R^{n\times n}$, $\rbVm:=\rbVm(\q,\dq)\in\R^{n\times n}$, $\rbF:=\rbF(\dq)\in\R^{n}$ and $\rbG:=\rbG(\q)$ represent the unknown inertia matrix, Coriolis/centripetal matrix, friction vector and gravity vector
+where $\q\in \R^n$ denotes the generalized coordinate, $\rbd$ represents the disturbance and $\rbu\in\R^n$ denotes the generalized control input. 
+The terms $\rbM:=\rbM(\q)\in\R^{n\times n}$, $\rbVm:=\rbVm(\q,\dq)\in\R^{n\times n}$, $\rbF:=\rbF(\dq)\in\R^{n}$, and $\rbG:=\rbG(\q)$ represent the unknown inertia matrix, Coriolis/centripetal matrix, friction vector, and gravity vector, respectively.
 The function $\mysat(\cdot):\R^n\to\R^n$ represents the inherent physical limitations of the actuators such that $\norm{\mysat(\rbu)}\le \overline\tau$, where $\overline\tau$ denotes the maximum norm of control input.
 To account for these limitations, it is essential to incorporate physically motivated constraints into the controller design.
 Appendix \ref{sec:appen:cstr} introduces candidate constraints that can be applied to ensure compliance with these physical limitations.
 
-The Euler-Lagrange system \eqref{eq:sys1} satisfies some important physical properties \cite[Chap. 3 Tab. 3.2.1]{Lewis:1998aa}.
-We introduce the following properties:
+The Euler-Lagrange system \eqref{eq:sys1} satisfies several important physical properties, as presented in \cite[Chap. 3 Tab. 3.2.1]{Lewis:1998aa}. 
+The key properties are introduced below:
 \begin{prop} 
-    The inertia matrix $\rbM$ is symmetric, positive definite and bounded.
+    The inertia matrix $\rbM$ is symmetric, positive definite, and bounded.
     \label{prop:M}
 \end{prop}
 
 \begin{prop} 
-    The Coriolis/centripetal matrix $\rbVm$ can always be selected so that the matrix $\ddtt{\rbM}-2\rbVm$ is skew-symmetric, \ie $\mv{x}^\top(\ddtt{\rbM}-2\rbVm)\mv{x}=0,\ \forall \mv{x}\in\R^n$.
+    The Coriolis/centripetal\MSRY{인용 책 그대로 적은 것입니다.} matrix $\rbVm$ can always be selected\MSRY{상동.} so that the matrix $\ddtt{\rbM}-2\rbVm$ is skew-symmetric, \ie $\mv{x}^\top(\ddtt{\rbM}-2\rbVm)\mv{x}=0,\ \forall \mv{x}\in\R^n$.
     \label{prop:skew}
 \end{prop}
 
 \begin{prop}
-    The disturbance $\rbd$ is bounded so that $\norm{\rbd}\le \overline\tau_d$.
+    The disturbance $\rbd$ is bounded, \ie $\norm{\rbd}\le \overline\tau_d$.
     \label{prop:dis_bound}
 \end{prop}
 
-In conclusion, the control objective is to develop a neuro-adaptive controller that enables $\q$ to track a continuously differentiable desired trajectory $\qd:=\qd(t): \R_{\ge0} \to \R^n$, compensating for the unknown system dynamics while addressing the imposed constraints.
+The control objective is to develop a neuro-adaptive controller that enables $\q$ to track a continuously differentiable desired trajectory $\qd:=\qd(t): \R_{\ge0} \to \R^n$, compensating for the unknown system dynamics while addressing the imposed constraints.
 The desired trajectory $\qd(t)$ is supposed to satisfy the following assumption:
 \begin{assum}
-    The desired trajectory $\qd(t)$ is bounded so that $\norm{\qd(t)}\le \overline{q}_d$ and available to design a bounded control input. 
+    The desired trajectory $\qd(t)$ is assumed to be bounded, i.e., $\norm{\qd(t)}\le \overline{q}_d$ , and available for designing a bounded control input.
     \label{assum:feasible}
 \end{assum}
 
 %  SECTION CONTROLLER DESIGN ==============================
 \section{Control Law Development}\label{sec:ctrl design}
 
-The architecture of the proposed CONAC is illustrated in Fig.~\ref{fig:ctrl:diagram}, consisting of: a DNN that functions as a neuro-adaptive controller, and a weight optimizer for the DNN. 
-Before we proceed to the controller design, we first revisit some mathematical preliminaries in Section \ref{sec:sub:math preliminaries}. 
-Then, we introduce the neuro-adaptive controller in Section \ref{sec:sub:NAC}, followed by the DNN model in Section \ref{sec:sub:NN definition}. 
-The constrained optimization-based weight adaptation laws will be presented in Section \ref{sec:adap_laws}.
+The architecture of the proposed CONAC is illustrated in Fig.~\ref{fig:ctrl:diagram}, and consists of a DNN that functions as a neuro-adaptive controller, and a weight optimizer for the DNN.
+Before proceeding to the controller design, some mathematical preliminaries are revisited in Section \ref{sec:sub:math preliminaries}. 
+Section \ref{sec:sub:NAC} introduces the neuro-adaptive controller, followed by the DNN model in Section \ref{sec:sub:NN definition}. 
+The constrained optimization-based weight adaptation laws are presented in Section \ref{sec:adap_laws}.
 
 \begin{figure}[!t]
     \centering
@@ -224,10 +234,10 @@ The constrained optimization-based weight adaptation laws will be presented in S
 
 \subsection{Mathematical Preliminaries}\label{sec:sub:math preliminaries}
 
-Later, the following proposition and lemma will be used in further sections:
+The following proposition and lemma will be used in subsequent sections:
 
 \begin{propsit}[see, {\cite[Chap. 7 Prop. 7.1.9]{Bernstein:2009aa}}] \label{propsit:kron}
-	For matrix $\mm A\in\R^{n\times m}$ and vector $\mv b\in\mathbb R^n$, we have the following property
+	For matrix $\mm A\in\R^{n\times m}$ and vector $\mv b\in\mathbb R^n$, the following property holds:
 	\begin{equation}
 		\mm A^\top \mv b 
 		= 
@@ -242,7 +252,7 @@ Later, the following proposition and lemma will be used in further sections:
 
 
 \begin{lem} \label{lem:stable:set}
-    For Lyapunov function $V:=V(\mv{x})\ge0$ with $\mv{x}\in\R^n$, if the time derivative of $V$ is given by $\ddtt V\le -a_1 \mv{x}^\top \mv{x} + a_2 \mv{x}$ for some positive constants $a_1\in\R$ and $a_2\in\R$, then $\mv{x}$ is bounded by $\mv{x}\in\{\mv{x}\mid\norm{\mv{x}}\le\tfrac{a_2}{a_1}\}$.
+    For Lyapunov function $V:=V(\mv{x})\ge0$ with $\mv{x}\in\R^n$, if the time derivative of $V$ is given by $\ddtt V\le -a_1 \mv{x}^\top \mv{x} + a_2 \mv{x}$ for some positive constants $a_1\in\R$ and $a_2\in\R$, then $\mv{x}$ is bounded as $\mv{x}\in\{\mv{x}\mid\norm{\mv{x}}\le\tfrac{a_2}{a_1}\}$.
 \end{lem}
 
 \begin{proof}
@@ -268,7 +278,7 @@ Later, the following proposition and lemma will be used in further sections:
 
 \subsection{Neuro-Adaptive Controller Design}\label{sec:sub:NAC}
 
-First, let us define the filtered tracking error $\fe\in\R^n$ as 
+First, the filtered tracking error $\fe\in\R^n$ is defined as 
 \begin{equation}
     \fe := \ddtt{\mv e}-\mm\Lambda \mv e
     ,
@@ -288,7 +298,7 @@ Using $\fe$, the system dynamics \eqref{eq:sys1} can be rewritten as
     ,
     \label{eq:sys:filtered}
 \end{equation}
-where $\mm{K}=\mm{K}^\top\in\R^{n\times n}_{>0}$ denotes arbitrary unknown matrix and $
+where $\mm{K}=\mm{K}^\top\in\R^{n\times n}_{>0}$ denotes an arbitrary unknown matrix and $
     \mv f:= \mv f(\q,\dq,\qd,\dqd,\ddqd)
     =
     \mm K \fe
@@ -357,25 +367,25 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
     \end{aligned}
     \label{eq:lya1:dot1}
 \end{equation} 
-Therefore, invoking Lemma \ref{lem:stable:set}, one can conclude that $\fe$ is exponentially stable so that $\lim_{t\to\infty}\norm{\fe}=\tfrac{\overline\tau_d}{\lambda_{\min}(\mm K)}$, if the lumped system uncertainty $\mv f$ can be cancelled out by the control input $\rbu$ neglecting the control input saturation.
-Hence, let us define the ideal control input $\rbu^*$ as $-\mv f$.
-However, $\rbu^*$ is not available in practice, since system dynamics in $\mv f$ is unknown.
+Therefore, invoking Lemma \ref{lem:stable:set}, it can be concluded that the filtered error $\fe$ is exponentially stable, with $\lim_{t\to\infty}\norm{\fe}=\tfrac{\overline\tau_d}{\lambda_{\min}(\mm K)}$, provided that the lumped system uncertainty $\mv{f}$ can be perfectly cancelled by the control input $\rbu$, neglecting the effect of input saturation.
+Hence, the ideal control input $\rbu^*$ is defined as $-\mv f$.
+However, $\rbu^*$ is not available in practice, since system dynamics encapsulated in $\mv f$ are unknown.
 
 To overcome this issue, a DNN is employed to approximate $\rbu^*$.
 Let $\NN:=\NN({\q}_n;\wth): \R^{l_0+1}\times\R^{\Xi}\to\R^{n}$ represent the DNN, where ${\q}_n\in\R^{l_0+1}$ is the DNN input vector, and $\wth\in\R^{\Xi}$ is the vector of trainable weights.
-The architecture of $\NN({\q}_n;\wth)$ will be defined in Section \ref{eq:DNN:architecture}.
-According to the universal approximation theorem for DNNs \cite{Kidger:2020aa}, $\NN({\q}_n;\wth)$ can approximate a nonlinear function, for instance $\mv g(\cdot)$, with an ideal weight vector $\idealwth$ on a compact subset $\Omega_{NN}\in\R^{l}$ to $\epsilon$-accuracy, such that $\sup_{{\q}_n\in\Omega_{NN}}\norm{ \NN({\q}_n;\idealwth) - \mv g(\cdot)} = \epsilon < \infty$.
+The architecture of $\NN({\q}_n;\wth)$ will be presented in Section \ref{sec:sub:NN definition}.
+According to the universal approximation theorem for DNNs \cite{Kidger:2020aa}, $\NN({\q}_n;\wth)$ can approximate a nonlinear function, denoted as $\mv g(\cdot)$, with an ideal weight vector $\idealwth$ over a compact subset $\Omega_{NN}\in\R^{l}$ to within $\epsilon$-accuracy, such that $\sup_{{\q}_n\in\Omega_{NN}}\norm{ \NN({\q}_n;\idealwth) - \mv g(\cdot)} = \epsilon < \infty$.
 % Furthermore, the theorem states that the norm of $\idealwth$ is bounded, \ie $\norm{\idealwth}\le \overline\wth<\infty$.
-In this study, $\idealwth$ is defined as a local optimal point, rather than a global optimal point.
+In this study, $\idealwth$ is considered a locally optimal solution, rather than a global one.
 
-In conclusion, the ideal control law $\rbu^*$ is expressed by the DNN approximation with the ideal weight vector $\idealNN:=\NN({\q}_n;\idealwth)$ as follows:
+Accordingly, the ideal control law $\rbu^*$ can be approximated by the DNN with the ideal weight vector $\idealNN:=\NN({\q}_n;\idealwth)$ as follows:
 \begin{align}
     \rbu^*=& \idealNN+\mv\epsilon
     ,
     \label{eq:control:ideal}
 \end{align}
-where $\mv\epsilon\in\R^n$ is the approximation error vector, which is bounded by $\norm{\mv\epsilon}\le \bar{\epsilon}$.
-The approximated control input $\rbu^*$ is estimated online by
+where $\mv\epsilon\in\R^n$ is the approximation error vector, bounded by $\norm{\mv\epsilon}\le \bar{\epsilon}$.
+The control input $\rbu^*$ is estimated online by
 \begin{align}
     \rbu =& \estNN,
     \label{eq:control:est}
@@ -394,10 +404,8 @@ Substituting \eqref{eq:control:ideal} and \eqref{eq:control:est} into \eqref{eq:
     .
     \label{eq:lya1:dot2}
 \end{equation}
-Finally, one can conclude that the result of \eqref{eq:lya1:dot1} can be obtained by adapting $\estwth$ to $\idealwth$ (\ie $\hat\NN\to\idealNN$).
-Importantly, input (voltage) saturation
-is not yet considered; this will be done next.
-Note that the control input saturation is not considered in derivation of the ideal control input; this will be addressed in further section.
+Therefore, one can conclude that the result of \eqref{eq:lya1:dot1} can be obtained by adapting $\estwth$ to $\idealwth$ (\ie $\hat\NN\to\idealNN$), neglecting the effect of input saturation.
+Note that the control input saturation has not yet been considered in the derivation of the ideal control input; this will be addressed in the subsequent section.
 
 \subsection{Deep Neural Network (DNN) Model}\label{sec:sub:NN definition}
 
@@ -513,7 +521,7 @@ and $\act_i:= \act_i(\NN_{i-1})$ and $\act_i':= \ddtfrac{\act_i}{\NN_{i-1}}$.
 
 In the following sections, let $\idealNN_i$ represent the output of the $i\textsuperscript{th}$ layer with the ideal weight vector $\idealwth$. 
 Additionally, define $\idealact_i:=\act_i(\idealNN_{i-1})$ and ${\idealact}'_i:= \ddtfrac{\idealact_i}{\idealNN_{i-1}}$. 
-Similarly, $\estNN_i$ denotes the output of the $i\textsuperscript{th}$ layer with the estimated weight vector $\estwth$, and define $\estact_i:=\act_i(\estNN_{i-1})$ and $\estact_i':= \ddtfrac{\estact_i}{\estNN_{i-1}}$, respectively.
+Similarly, $\estNN_i$ denotes the output of the $i\textsuperscript{th}$ layer with the estimated weight vector $\estwth$, and define $\estact_i:=\act_i(\estNN_{i-1})$ and $\estact_i':= \ddtfrac{\estact_i}{\estNN_{i-1}}$.
 
 %  SECTION ADAPTATION LAW DERIVATION =======================
 \section{Weight Adaptation Laws}\label{sec:adap_laws}
@@ -536,7 +544,8 @@ The control objective can be represented as follows:
 \end{equation}
 where $J(\fe;\estwth):= \tfrac{1}{2} \fe^\top \fe$ is the objective function.
 Inequality constraints $c_j:=c_j(\estwth),\ \forall j\in\mathcal{I}$, are imposed during the weight adaptation process to minimize the objective function, where $\mathcal I$ denotes the set of the imposed inequality constraints. 
-Here, $\fe$ is considered a pre-defined data or parameter for this optimization problem. The Lagrangian function is defined as
+Here, $\fe$ is considered a pre-defined data or static parameter for this optimization problem, so that the adaptation process does not consider the dynamics of $\fe$.
+The Lagrangian function is defined as
 \begin{equation}
     L(
         \fe,\estwth,[\lambda_j]_{j\in\mathcal I}
@@ -579,7 +588,7 @@ The adaptation laws for $\estwth$ and $[\lambda_j]_{j\in\mathcal I}$ are derived
             \quad \forall j\in\mathcal I,
         \label{eq:adap:lbd}
             \\
-            \lambda_j & = \max(\lambda_j,0) ,
+            \lambda_j & \leftarrow \max(\lambda_j,0) ,
         \label{eq:adap:lbd:max}
     \end{align}
     \label{eq:adaptation law}%             %%
@@ -1628,16 +1637,16 @@ In addition, it is notable that the computational time decreased as the weights 
 %  SECTION CONCLUSION ======================================
 \section{Conclusion}\label{sec:conclusion}
 
-This paper presented a constrained optimization-based neuro-adaptive controller (CONAC) for the uncertain Euler-Lagrange system, addressing both weight and input constraints through a rigorous optimization framework. 
-The stability of the proposed controller was analyzed using Lyapunov theory, ensuring that the system maintained bounded tracking and estimation errors under real-time adaptation.
+This paper proposed a constrained optimization-based neuro-adaptive controller (CONAC) for uncertain Euler-Lagrange systems, addressing both weight norm and input constraints through a rigorous optimization framework. 
+The stability of the proposed controller was analyzed via Lyapunov theory, demonstrating bounded tracking and estimation errors under real-time adaptation.
 
-The controller effectively incorporated both the input (bound or norm) constraint and the weight norm constraint, ensuring that both actuator limitations and neural network weights were kept within predefined bounds. 
-By formulating these constraints as part of the optimization process, CONAC ensured that the weights converged in a way that satisfied the Karush-Kuhn-Tucker (KKT) conditions, guaranteeing optimality and stability.
+The controller effectively incorporated both convex input constraints and weight norm constraints, ensuring that actuator limitations and neural network parameters\MSRY{Weight?} remained within predefined bounds. 
+By embedding these constraints into the optimization process, CONAC ensured convergence of the weights in accordance with the Karush-Kuhn-Tucker (KKT) conditions, thereby achieving both stability and optimality.
 
-A real-time implementation validated the superior performance of CONAC compared to conventional method. 
-The CONAC not only handled complex input constraints but also managed the weight norm constraints rigorously, leading to improved tracking accuracy and stability without notable oscillations.
+A real-time implementation validated the superior performance of CONAC compared to conventional methods. 
+The proposed controller successfully handled complex input constraints while rigorously managing weight norms, resulting in improved tracking accuracy and stable performance without significant oscillations.
 
-Future work may extend this approach to address constraints on both the system inputs and states, further enhancing the flexibility and robustness of neuro-adaptive control systems using constrained optimization.
+Future work may extend this approach to include constraints on both control inputs and system states, further enhancing the flexibility and robustness of neuro-adaptive control systems within constrained optimization frameworks.
 
 %% The Appendices part is started with the command \appendix;
 %% appendix sections are then done as normal sections
@@ -1768,8 +1777,7 @@ It should be noted that constraints \eqref{eq:cstr:input:bound} and \eqref{eq:cs
 \begin{IEEEbiography}[{
     \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/msRyu.jpg}}]{Myeongseok Ryu}
     received the B.S. degree in mechanical engineering from Incheon National University, South Korea, in 2023, and the M.S. degree in mechanical engineering from Gwangju Institute of Science and Technology (GIST), South Korea, in 2025. 
-    He is currently pursuing the Ph.D. degree in mechanical engineering at GIST.
-
+    He is currently serving as a researcher at the Cho Chun Shik Graduate School of Mobility, KAIST, South Korea.
     His research interests include adaptive control, neural-networks, and constrained optimization.
 \end{IEEEbiography}
 
@@ -1779,8 +1787,8 @@ It should be noted that constraints \eqref{eq:cstr:input:bound} and \eqref{eq:cs
 \end{IEEEbiography}
 
 \begin{IEEEbiography}[{
-    \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/khChoi.jpg}}]{IEEE Publications Technology Team}
-    In this paragraph you can place your educational, professional background and research and other interests.
+    \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/khChoi.jpg}}]{Kyunghwan Choi}
+    Kyunghwan Choi received his B.S., M.S., and Ph.D. degrees in Mechanical Engineering from KAIST, Daejeon, South Korea, in 2014, 2016, and 2020, respectively. Following his Ph.D., he worked at the Center for Eco-Friendly \& Smart Vehicles at KAIST as a Postdoctoral Fellow and later as a Research Assistant Professor. In 2022, he joined GIST as an Assistant Professor in the Department of Mechanical and Robotics Engineering. Currently, he serves as an Assistant Professor at the Cho Chun Shik Graduate School of Mobility at KAIST, where he is also the Director of the Mobility Intelligence and Control Laboratory. His research focuses on optimal and learning-based control for connected, automated, and electrified vehicles (CAEVs).
 \end{IEEEbiography}
 
 
