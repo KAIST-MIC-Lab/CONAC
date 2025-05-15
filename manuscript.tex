@@ -228,7 +228,7 @@ The constrained optimization-based weight adaptation laws are presented in Secti
     \centering
     \includegraphics[width=.99\linewidth]{src/figures/Controller.drawio.pdf}
     % \includesvg[width=0.75\linewidth]{Controller.drawio.svg}
-    \caption{Architecture of the constrained optimization-based neuro-adaptive controller (CONAC).}
+    \caption{Architecture of the constrained optimization-based neuro-adaptive controller (CONAC). \MSRY{SAT은 좀더 명확히 하기 위해서 사용하였음; 그렇지 않으면 아래 실험 피규어를 통해 포화를 넘어선 제어가 이ㅔㅂ력된다고 생각할까봐 그렇습니다; ddt의 경우 수식과 통일하기 위함이 맞습니다.}}
     \label{fig:ctrl:diagram}
 \end{figure}
 
@@ -647,15 +647,19 @@ The recommended method to calculate the exact value of $\pptfrac{\fe}{\rbu}$ is 
 However, this method cannot be realized, since we do not have the exact system dynamics, \ie $\rbM,\rbVm, \rbF$ and $ \rbG$.
 Additionally, the computational cost of the forward sensitivity method is high, as the number of DNN's weights are generally large.
 
-In \cite{Douratsos:2007aa,Saerens:1991aa}, the authors approximate $\pptfrac{\fe}{\rbu}$ as $
+\KHCH{control direction과 sign of control input이 서로 다른 의미를 가지고 있지만 독자가 헷갈려할 수도 있을 것 같습니다. 이 부분 고민해주세요.}
+In \cite{Douratsos:2007aa,Saerens:1991aa}, the authors approximate $\pptfrac{\fe}{\rbu}$ by taking the sign of each entry, \ie
+$
     \pptfrac{\fe}{\rbu}
     \approx
     \left[
         \mysign(\pptfrac{r_i}{\tau_j})
     \right]_{i,j\in\{1,\cdots,m\}}
-$ using the sign of each entry, \ie control direction.
-However, this method is not suitable for \eqref{eq:sys:filtered}, since the control directions are unknown, but the sign of the control input is known, \ie $\rbM^{-1}$ is positive definite matrix in the view of Property \ref{prop:M}.
-Therefore, we propose to approximate $\pptfrac{\fe}{\rbu}$ as $\pptfrac{\fe}{\rbu}\approx \mm I_n$ and one can conclude \eqref{eq:adap:th} as follows:
+$ 
+assuming known control directions.
+However, this approach is not applicable to \eqref{eq:sys:filtered}, where control directions are unknown.
+Instead, since the sign of the control input is known—owing to the positive definiteness of $\rbM^{-1}$ (see, Property \ref{prop:M})—we approximate $\pptfrac{\fe}{\rbu}\approx \mm I_n$.
+Consequently, the adaptation law in \eqref{eq:adap:th} becomes:
 \begin{equation}
     \ddtt{\estwth}
     \approx
@@ -698,7 +702,7 @@ Therefore, we propose to approximate $\pptfrac{\fe}{\rbu}$ as $\pptfrac{\fe}{\rb
 
 \subsection{Essential and Potential Constraint Candidates}\label{sec:sub:cstr} 
 
-This section introduces essential constraint to be imposed for the stability of the proposed CONAC, and conditions for the potential control input constraints.
+This section introduces essential constraints required to ensure the stability of the proposed CONAC, as well as candidate conditions for potential control input constraints.
 
 First, weight constraints are essential to prevent the weights from diverging during the adaptation process.
 The weight constraints $\mv{c}_{\theta}(\estwth):= [c_{\theta_i}(\estwth)]_{i\in\{0,\cdots ,k\}}\in\mathbb R^{k+1}$ are defined for each layer's weight as follows:
@@ -732,10 +736,10 @@ The gradient of $\mv{c}_\theta:=\mv c_{\theta}(\estwth)$ with respect to $\estwt
     \label{eq:cstr:weight:ball:grad}
 \end{equation}
 
-Next, we introduce the conditions for the potential control input constraints presented in Appendix \ref{sec:appen:cstr} as follows:
+Next, we present the following assumptions, which specify the conditions for the potential control input constraints introduced in Appendix \ref{sec:appen:cstr}:
 
 \begin{assum}
-    The constraint functions $c_j(\estwth),\ \forall j\in\mathcal I$ are convex in the $\tau$-space and satisfy $c_j(0) \le 0$ \color{red} and $c_j(\idealwth)\le 0$ \color{black}. \MSRY{desired controller가 제약조건 밖으로 나갈 수 있기 때문에 적절하지 않을 수 있음}
+    The constraint functions $c_j(\estwth),\ \forall j\in\mathcal I$, are convex in the $\tau$-space and satisfy $c_j(0) \le 0$ \color{red} and $c_j(\idealwth)\le 0$ \color{black}. \MSRY{desired controller가 제약조건 밖으로 나갈 수 있기 때문에 적절하지 않을 수 있음}
     \label{assum:convex}
 \end{assum}
 
@@ -745,7 +749,7 @@ Next, we introduce the conditions for the potential control input constraints pr
 \end{assum}
 
 \begin{remark}
-    Assumption \ref{assum:convex} is not restrictive, since the saturation functions are convex in practice including the origin.
+    Assumption \ref{assum:convex} is not restrictive, since the saturation functions are convex\KHCH{앞에 convex라는 표현이 나오지 않았는데 확인부탁합니다.}\MSRY{컨벡스란 말이 없지만 practical하게 대부분의 포화 함수는 컨벡스라는 말을 의도하였습니다.} in practice including the origin.
     Moreover, Assumption \ref{assum:LICQ} is a standard assumption in optimization problems, which ensures that the gradients of the active constraints are linearly independent.
     This assumption will be used in the stability analysis (see, Lemma \ref{lem:convex:angle}).
 \end{remark}
@@ -757,13 +761,13 @@ Before conducting the stability analysis, let us define the weight estimation er
 The following lemmas are introduced for the stability analysis. 
 
 \begin{lem}
-    If Assumptions \ref{assum:convex} and \ref{assum:LICQ} are satisfied, the angle between $\pptfrac{c_j}{\estwth_k}$ and $\estwth_k$ is positive when $c_j$ is active, \ie $\pptfrac{c_j}{\estwth_k}^\top\estwth_k>0$.
+    If Assumptions \ref{assum:convex} and \ref{assum:LICQ} hold, then for each active constraint $c_j$, the angle between $\pptfrac{c_j}{\estwth_k}$ and $\estwth_k$ is positive; that is $\pptfrac{c_j}{\estwth_k}^\top\estwth_k>0$.
     \label{lem:convex:angle}
 \end{lem}
 
 \begin{proof}
 
-Since $\rbu = \estNN$, using Proposition \ref{propsit:kron}, a linear map $\mm T(\cdot):\estwth_k\to\rbu$ which is independent of $\estwth_k$, can be derived: 
+Since $\rbu = \estNN$, using Proposition \ref{propsit:kron}, a linear mapping $\mm T(\cdot):\estwth_k\to\rbu$ that is independent of $\estwth_k$, can be derived using Proposition \ref{propsit:kron}:
 \begin{equation}\label{eq:linear:map}
     \begin{aligned}
     \rbu 
@@ -796,7 +800,7 @@ Since $\rbu = \estNN$, using Proposition \ref{propsit:kron}, a linear map $\mm T
     \mm T(\estact_k) \estwth_k.
     \end{aligned}
 \end{equation}
-Therefore, the convexity of the input constraints in $\rbu$-space (assumed in Assumption \ref{assum:convex}) holds in $\estwth_k$-space, implying
+Therefore, the convexity of the input constraints in the $\rbu$-space (see, Assumption \ref{assum:convex}) is preserved in $\estwth_k$-space, implying
 that $\pptfrac{c_j}{\estwth_k}^\top\estwth_k>0$.
 
 \end{proof}
@@ -826,25 +830,24 @@ Consequently, $\norm{\pptfrac{c_j}{\estwth_i}},\ \forall j\in\mathcal I \setminu
 
 \end{proof}
 
-The following theorem shows that $\estwth$ and $\fe$ are bounded.
+The following theorem states that $\estwth$ and $\fe$ are bounded.
 
 \begin{theorem}
-    For the dynamical system in \eqref{eq:sys1}, the neuro-adaptive controller \eqref{eq:control:est} and weight adaptation laws \eqref{eq:adaptation law} ensure the boundedness of the filtered error $\fe$ and the weight estimate $\estwth$ under control input constraints satisfying Assumption \ref{assum:convex} and \ref{assum:LICQ}
+    For the dynamical system described in \eqref{eq:sys1}, the neuro-adaptive controller in \eqref{eq:control:est} with the weight adaptation laws in \eqref{eq:adaptation law} ensure the boundedness of the filtered error $\fe$ and the weight estimate $\estwth$, under the control input constraints satisfying Assumption \ref{assum:convex} and \ref{assum:LICQ}.
     This holds with the weight norm constraint \eqref{eq:cstr:weight:ball}.
 \end{theorem}
 
 \begin{proof}
 
 % The boundednesses of $\estwth$ and $\fe$ are analyzed recursively from the last $k\textsuperscript{th}$ layer to the first layer of $\estNN$. 
-Invoking the fact that amplitude of the control input is only depends on $\estwth_k$, \ie see, \eqref{eq:control:est}, \eqref{eq:DNN:architecture} and $\norm{\act_k}<\infty$, the boundedness of inner layers' weights will be verified after the boundedness of $\estwth_k$ and $\fe$ is confirmed. 
+Invoking the fact that the amplitude of the control input depends only on $\estwth_k$, \ie see, \eqref{eq:control:est}, \eqref{eq:DNN:architecture} and $\norm{\act_k}<\infty$, the boundedness of inner layers' weights follows once the boundedness of $\estwth_k$ and $\fe$ is established.
 Without loss of generality, weight constraint $c_{\theta_i},\ \forall i\in\{0,\cdots,k\}$ is supposed to be active.
-This assumption is reasonable, since even if $c_{\theta_i}$ is inactive, $\estwth$ is adapted to reduce $J(·)$ without considering the constraint, unless $c_{\theta_i}$ is
-violated.
-We consider two cases: control input is saturated, and control input is not saturated.
+This assumption is justified because, even if $c_{\theta_i}$ is inactive, $\estwth$ is adapted to minimize the objective function $J(·)$ as long as the constraint is not violated.
+We consider two cases: (1) the control input is saturated, and (2) the control input is not saturated.
 
 \subsection*{Case 1: Control input is saturated.}
 
-As the result of the time derivative of $V_1$ in \eqref{eq:lya1:dot2}, the invariant set $\Theta_{\fe}^{1}$ of $\fe$ (\ie if $\fe$ leaves $\Theta_{\fe}^{1}$, $\ddtt V_1$ is negative) can be obtained using Lemma \ref{lem:stable:set} as follows:
+As a\MSRY{a?} result of the time derivative of $V_1$ in \eqref{eq:lya1:dot2}, the invariant set $\Theta_{\fe}^{1}$ of $\fe$ (\ie if $\fe$ leaves $\Theta_{\fe}^{1}$, $\ddtt V_1$ is negative) can be obtained using Lemma \ref{lem:stable:set} as follows:
 \begin{equation}
     \Theta_{\fe}^{1} 
     = 
@@ -963,19 +966,20 @@ According to \eqref{eq:lya2:dot} and Lemma \ref{lem:stable:set}, the invariant s
     \label{eq:invariant:c1:wth}
 \end{equation}
 
-The satisfaction of the constraints can be verified by the boundedness of $\estwth_k$.
-For $c_{\theta_k}$, if the corresponding Lagrange multiplier $\lambda_{\theta_k}$ increases infinitely by the constraint violation, $\estwth_k$ approaches to the origin as $\Theta_{\estwth_k}^{1}$ is squeezed to a point.
-The satisfactions of the remaining control input constraints can be verified implicitly using ${\gamma}_2$ in \eqref{eq:lya2:dot}.
-Similarly to $c_{\theta_k}$, as the control input constraint $c_j,\ \forall j\in\mathcal{I}\setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$ is violated, the corresponding Lagrange multiplier $\lambda_j$ increases infinitely, so does ${\gamma}_2$.
+The satisfaction of the constraints can be verified through the boundedness of $\estwth_k$.
+For the weight constraint $c_{\theta_k}$, if the corresponding Lagrange multiplier $\lambda_{\theta_k}$ increases infinitely due to the constraint violation, $\estwth_k$ approaches to the origin, as the invariant set $\Theta_{\estwth_k}^{1}$ shrinks to a point.
+The remaining control input constraints can be validated implicitly through the term ${\gamma}_2$ in \eqref{eq:lya2:dot}.
+Similarly to $c_{\theta_k}$, when a control input constraint $c_j,\ \forall j\in\mathcal{I}\setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$ is violated, the corresponding Lagrange multiplier $\lambda_j$ increases infinitely, leading to increase in ${\gamma}_2$.
 It makes ${\gamma}_2$ dominates the right-hand side of \eqref{eq:lya2:dot}, which leads $\ddtt V_2$ negative definite.
-This drives $\estwth_k$ to the origin until the constraint is satisfied, \ie by Assumption \ref{assum:convex} and Lemma \ref{lem:convex:angle}, the control input constraints can be considered as convex constraint in $\estwth_k$-space.
+This drives $\estwth_k$ to the origin until the constraint is satisfied.
+By Assumption \ref{assum:convex} and Lemma \ref{lem:convex:angle}, the control input constraints can be considered as convex constraint in the $\estwth_k$-space.
 
-Therefore, the boundedness of $\estwth_k$ and $\fe$ are guaranteed by the invariant sets $\Theta_{\fe}^{1}$ and $\Theta_{\theta_k}^{1}$ and satisfactions of $c_j,\ \forall j\in\mathcal{I}$ are confirmed.
+Therefore, the boundedness of $\estwth_k$ and $\fe$ is guaranteed by the invariant sets $\Theta_{\fe}^{1}$ and $\Theta_{\theta_k}^{1}$, and the satisfactions of $c_j,\ \forall j\in\mathcal{I}$ is ensured.
 
 \subsection*{Case 2: Control input is not saturated.}
 
-Since, here, the control input constraints are inactive, $\mysat(\cdot)$ in \eqref{eq:lya1:dot2} and $c_j,\ \forall j\in\mathcal I \setminus \{\wth_i\}_{\{i\in[0,\cdots,k\}}$ in \eqref{eq:lya2:dot} can be removed.
-Consider the Lyapunov function candidate $V_3:=V_1+V_2$ and its time derivative:
+Since, the control input constraints are inactive, the saturation function $\mysat(\cdot)$ in \eqref{eq:lya1:dot2} and the constraint functions $c_j,\ \forall j\in\mathcal I \setminus \{\wth_i\}_{\{i\in[0,\cdots,k\}}$ in \eqref{eq:lya2:dot} can be removed.
+Consider the Lyapunov function candidate $V_3:=V_1+V_2$, whose time derivative is given by:
 \begin{equation}
     \begin{aligned}
         \ddtt V_3
@@ -1027,7 +1031,7 @@ Consider the Lyapunov function candidate $V_3:=V_1+V_2$ and its time derivative:
     \end{aligned}
     \label{eq:lya3:dot}
 \end{equation}
-Like in Case 1, the boundedness of $\fe$ can be verified by the invariant sets $\Theta_{\fe}^{2}$ defined as
+Following the same reasoning as in Case 1, the boundedness of $\fe$ is ensured by the invariant set:
 \begin{equation}
     \Theta_{\fe}^{2}
     =
@@ -1048,12 +1052,12 @@ Like in Case 1, the boundedness of $\fe$ can be verified by the invariant sets $
     \right\}
     .
 \end{equation}
-The boundedness of $\estwth_k$ also can be ensured by the invariant set $\Theta_{\theta_k}^{2}=\{ \estwth_k \in \R^{\Xi_{k}} \mid \norm{\estwth_k} \le \overline\theta_k \}$, as $\lambda_{\theta_k}$ exists positive unless $c_{\theta_k}$ is satisfied.
+The boundedness of $\estwth_k$ also can be ensured by the invariant set $\Theta_{\theta_k}^{2}=\{ \estwth_k \in \R^{\Xi_{k}} \mid \norm{\estwth_k} \le \overline\theta_k \}$, as $\lambda_{\theta_k}$ remains positive unless the weight constraint $c_{\theta_k}$ is satisfied.
 
 \hfill 
 
-The boundedness of inner layers' weights and satisfactions of their constraints $c_j,\ \forall j\in\{\theta_i\}_{i\in\{k-1,\cdots,0\}}$ can be shown recursively, using \cite[Chap.~4 Thm.~1.9]{Desoer:2009aa}.
-The dynamics of $\estwth_i,\ \forall i\in\{k-1,\cdots,0\}$ are represented as
+The boundedness of the inner-layer weights and the satisfaction of their corresponding constraints $c_j,\ \forall j\in\{\theta_i\}_{i\in\{k-1,\cdots,0\}}$, can be established recursively using \cite[Chap.~4 Thm.~1.9]{Desoer:2009aa}.
+The dynamics of $\estwth_i,\ \forall i\in\{k-1,\cdots,0\}$, are represented as
 \begin{equation}
     \ddtt \estwth_i 
     =
@@ -1072,12 +1076,12 @@ The dynamics of $\estwth_i,\ \forall i\in\{k-1,\cdots,0\}$ are represented as
     \right)
     .
 \end{equation}
-Invoking Lemma \ref{lem:cstr:grad:bound}, $\estwth_i$ is bounded, provided that $\estwth_i,\ \forall i\in\{k,\cdots,i+1\}$ are bounded, since the system matrix $-\lambda_{\theta_i} \mm I_{\Xi_i}$ is stable and the residual terms are bounded.
-Therefore, starting from $(k-1)\textsuperscript{th}$ layer, the boundedness of $\estwth_i$ can be established recursively down to the input layer ($i=0$).
+By Lemma \ref{lem:cstr:grad:bound} $\estwth_i$ is bounded, provided that $\estwth_i,\ \forall i\in\{k,\cdots,i+1\}$, are bounded, since the system matrix $-\lambda_{\theta_i} \mm I_{\Xi_i}$ is stable and the residual terms are bounded.
+Therefore, starting from the $(k-1)\textsuperscript{th}$ layer, the boundedness of $\estwth_i$ can be established recursively down to the input layer ($i=0$).
 
 \hfill
 
-Finally, the filtered error $\fe$ and the estimated weights $\estwth$ are bounded and the imposed constraints $c_j,\ \forall j\in\mathcal I$ are satisfied.
+In conclusion, the filtered tracking error $\fe$ and the entire set of estimated weights $\estwth$ are bounded, and all imposed constraints $c_j,\ \forall j\in\mathcal I$ are satisfied.
 
 \end{proof}
 
@@ -1096,7 +1100,7 @@ Finally, the filtered error $\fe$ and the estimated weights $\estwth$ are bounde
             src/figures/exp_set.drawio.png
         }%
     \caption{
-        Robot setup for the real-time experiment.
+        Experimental setup of the two-link robotic manipulator used for real-time validation.
     }
     \label{fig:ctrl:exp:set}
 \end{figure}
@@ -1105,7 +1109,8 @@ To validate the effectiveness of the proposed CONAC, a real-time experiment was 
 The OpenCR1.0 board \cite{opencr} with a 32-bit ARM Cortex and a 216 MHz clock frequency was used for the real-time implementation.
 The two-link manipulator actuated by two Cubemars AK10-90 servo motors. 
 The servos were controlled using the OpenCR1.0 board which transmits the reference angle to the corresponding servo via controller area network (CAN) communication.
-The system dynamics of the two-link manipulator can be represented as Euler-Lagrange equation \eqref{eq:sys1} and described as Fig.~\ref{fig:robot:model}, and the estimated system parameters are provided in Table~\ref{table:system:params}. 
+The system dynamics of the two-link manipulator can follow the Euler-Lagrange equation \eqref{eq:sys1} and are illustrated in Fig.~\ref{fig:robot:model}. 
+The estimated system parameters are provided in Table~\ref{table:system:params}. 
 
 % ------------------------------------
 % Robot Model Figure and Table
@@ -1187,34 +1192,35 @@ The system dynamics of the two-link manipulator can be represented as Euler-Lagr
 % ------------------------------------
 % Reference Trajectory
 % ------------------------------------
-The desired trajectory for $\qd=\left({q_d}_1,{q_d}_2\right)^\top $ was generated using the quintic (5$\textsuperscript{th}$-order) polynomial functions $\mathcal{P}^5(t;\mv{x}_1,\mv{x}_2,t_f)$, to satisfy the initial $\mv{x}_1$ and final $\mv{x}_2$ angle conditions and zero velocities of the joints, where $t_f$ is the time duration.
-The desired trajectory is defined as follows:
+The desired trajectory $\qd=\left({q_d}_1,{q_d}_2\right)^\top $ was generated using quintic (5$\textsuperscript{th}$-order) polynomial functions $\mathcal{P}^5(t;\mv{x}_1,\mv{x}_2,t_f)$, which satisfy the initial and final joint angles $\mv{x}_1$ and $\mv{x}_2$, as well as zero initial and final joint velocities. 
+Here, $t_f$ denotes the duration of each segment.
+The desired (reference) trajectory is defined as follows:
 \begin{equation}
     \qd(t) 
     =
     \begin{pmatrix}
-        {\qd}_1
+        {q_d}_1
         \\
-        {\qd}_2
+        {q_d}_2
     \end{pmatrix}
     =
     \begin{cases}
-    \mathcal{P}^5(t;{\qd}_0,{\qd}_1,t_f),
+    \mathcal{P}^5(t;\mv{q}_d^{(0)},\mv{q}_d^{(1)},t_f),
         &
         \text{if } 0 \le t < t_f 
         ,
         \\
-    \mathcal{P}^5(t;{\qd}_1,{\qd}_2,t_f),
+    \mathcal{P}^5(t;\mv{q}_d^{(1)},\mv{q}_d^{(2)},t_f),
         &
         \text{if } t_f \le t < 2t_f 
         ,
         \\
-    \mathcal{P}^5(t;{\qd}_2,{\qd}_1,t_f),
+    \mathcal{P}^5(t;\mv{q}_d^{(2)},\mv{q}_d^{(1)},t_f),
         & 
         \text{if } 2t_f \le t < 3t_f 
         ,
         \\
-    \mathcal{P}^5(t;{\qd}_1,{\qd}_0,t_f),
+    \mathcal{P}^5(t;\mv{q}_d^{(1)},\mv{q}_d^{(0)},t_f),
         &    
         \text{if } 3t_f \le t < 4t_f 
         ,
@@ -1222,8 +1228,19 @@ The desired trajectory is defined as follows:
     \end{cases}
     \label{eq:desired trajectory}
 \end{equation}
-where ${\qd}_0:=\left(-\tfrac{1}{3}\pi,\tfrac{1}{3}\pi\right)^\top$, ${\qd}_1:=\left(\tfrac{1}{4}\pi,-\tfrac{1}{2}\pi\right)^\top$, ${\qd}_2:=\left(-\tfrac{1}{4}\pi,\tfrac{1}{4}\pi\right)^\top$, and $t_f=3$ s, and illustrated in Fig.~\ref{fig:robot:model}.
-To demonstrate the learning capability of DNN, the desired trajectory was applied twice; let us call the first and second iterations of the reference trajectory as Episode $1$ and Episode $2$, respectively.
+where 
+$
+    \mv{q}_d^{(0)}:=\left(-\tfrac{1}{3}\pi,\tfrac{1}{3}\pi\right)^\top
+$, 
+$
+    \mv{q}_d^{(1)}:=\left(\tfrac{1}{4}\pi,-\tfrac{1}{2}\pi\right)^\top
+$, 
+$
+    \mv{q}_d^{(2)}:=\left(-\tfrac{1}{4}\pi,\tfrac{1}{4}\pi\right)^\top
+$, 
+and $t_f=3$ s, and the reference trajectory is illustrated in Fig.~\ref{fig:robot:model}.
+To demonstrate the learning capability of the DNN, the desired trajectory was applied twice. 
+The first and second repetitions of the reference trajectory are referred to as Episode $1$ and Episode $2$, respectively.
 
 However, since the DNN's weights are initialized randomly, large reference trajectories should be avoided to mitigate the effect of initial poor performance of the controller.
 Hence, in advance of the reference trajectory, the manipulator was initially positioned at ${\qd}^{\rm{origin}}=\left(-\tfrac{1}{2}\pi,0\right)^\top$ (\ie stable equilibrium point).
@@ -1777,13 +1794,14 @@ It should be noted that constraints \eqref{eq:cstr:input:bound} and \eqref{eq:cs
 \begin{IEEEbiography}[{
     \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/msRyu.jpg}}]{Myeongseok Ryu}
     received the B.S. degree in mechanical engineering from Incheon National University, South Korea, in 2023, and the M.S. degree in mechanical engineering from Gwangju Institute of Science and Technology (GIST), South Korea, in 2025. 
-    He is currently serving as a researcher at the Cho Chun Shik Graduate School of Mobility, KAIST, South Korea.
+    He is currently serving as a researcher at the Cho Chun Shik Graduate School of Mobility, Korea Advanced Institute of Science and Technology (KAIST), South Korea.
     His research interests include adaptive control, neural-networks, and constrained optimization.
 \end{IEEEbiography}
 
 \begin{IEEEbiography}[{
-    \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/dhHong.jpg}}]{IEEE Publications Technology Team}
-    In this paragraph you can place your educational, professional background and research and other interests.
+    \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/dhHong.jpg}}]{Donghwa Hong}
+    Donghwa Hong received his B.S. degree in Physics and Engineering Physics from Yonsei University, Wonju, South Korea, in 2023. He is currently pursuing the M.S. degree in Mechanical Engineering from GIST, Gwangju, South Korea.  
+His research interests include robot control, neural-networks, and model identification. 
 \end{IEEEbiography}
 
 \begin{IEEEbiography}[{
