@@ -159,8 +159,6 @@ The main contributions of this study are listed as follows:
 
 \subsection{Organization}
 
-\MSRY{Started from here}
-
 The remainder of this paper is organized as follows. 
 Section \ref{sec:Problem Formulation} presents the target system and control objective.
 Section \ref{sec:ctrl design} introduces the proposed controller and the architecture of DNN in the controller. 
@@ -832,13 +830,13 @@ The following theorem states that $\estwth$ and $\fe$ are bounded.
 
 \begin{theorem}
     For the dynamical system described in \eqref{eq:sys1}, the neuro-adaptive controller in \eqref{eq:control:est} with the weight adaptation laws in \eqref{eq:adaptation law} ensure the boundedness of the filtered error $\fe$ and the weight estimate $\estwth$, under the control input constraints satisfying Assumption \ref{assum:convex} and \ref{assum:LICQ}.
-    This holds with the weight norm constraint \eqref{eq:cstr:weight:ball}.
+    This holds under the weight norm constraint \eqref{eq:cstr:weight:ball}.
 \end{theorem}
 
 \begin{proof}
 
 % The boundednesses of $\estwth$ and $\fe$ are analyzed recursively from the last $k\textsuperscript{th}$ layer to the first layer of $\estNN$. 
-Invoking the fact that the amplitude of the control input depends only on $\estwth_k$, \ie see, \eqref{eq:control:est}, \eqref{eq:DNN:architecture} and $\norm{\act_k}<\infty$, the boundedness of inner layers' weights follows once the boundedness of $\estwth_k$ and $\fe$ is established.
+Invoking the fact that the amplitude of the control input depends only on $\estwth_k$, \ie see, \eqref{eq:control:est}, and \eqref{eq:DNN:architecture} and $\norm{\act_k}<\infty$, the boundedness of inner layers' weights follows once the boundedness of $\estwth_k$ and $\fe$ is established.
 Without loss of generality, weight constraint $c_{\theta_i},\ \forall i\in\{0,\cdots,k\}$ is supposed to be active.
 This assumption is justified because, even if $c_{\theta_i}$ is inactive, $\estwth$ is adapted to minimize the objective function $J(·)$ as long as the constraint is not violated.
 We consider two cases: (1) the control input is saturated, and (2) the control input is not saturated.
@@ -965,9 +963,9 @@ According to \eqref{eq:lya2:dot} and Lemma \ref{lem:stable:set}, the invariant s
 \end{equation}
 
 The satisfaction of the constraints can be verified through the boundedness of $\estwth_k$.
-For the weight constraint $c_{\theta_k}$, if the corresponding Lagrange multiplier $\lambda_{\theta_k}$ increases infinitely due to the constraint violation, $\estwth_k$ approaches to the origin, as the invariant set $\Theta_{\estwth_k}^{1}$ shrinks to a point.
+For the weight constraint $c_{\theta_k}$, if the corresponding Lagrange multiplier $\lambda_{\theta_k}$ increases sufficiently large \MSRY{본래 infinitely였습니다만 무한까지 가는 것을 가정하지 않기 때문에 충분히 커질때로 바꿈} due to the constraint violation, $\estwth_k$ approaches to the origin, as the invariant set $\Theta_{\estwth_k}^{1}$ shrinks to a point.
 The remaining control input constraints can be validated implicitly through the term ${\gamma}_2$ in \eqref{eq:lya2:dot}.
-Similarly to $c_{\theta_k}$, when a control input constraint $c_j,\ \forall j\in\mathcal{I}\setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$ is violated, the corresponding Lagrange multiplier $\lambda_j$ increases infinitely, leading to increase in ${\gamma}_2$.
+Similarly to $c_{\theta_k}$, when a control input constraint $c_j,\ \forall j\in\mathcal{I}\setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$ is violated, the corresponding Lagrange multiplier $\lambda_j$ increases sufficiently large \MSRY{위와 같은 이유로 변경}, leading to increase in ${\gamma}_2$.
 It makes ${\gamma}_2$ dominates the right-hand side of \eqref{eq:lya2:dot}, which leads $\ddtt V_2$ negative definite.
 This drives $\estwth_k$ to the origin until the constraint is satisfied.
 By Assumption \ref{assum:convex} and Lemma \ref{lem:convex:angle}, the control input constraints can be considered as convex constraint in the $\estwth_k$-space.
@@ -1240,6 +1238,10 @@ and $t_f=3$ s, and the reference trajectory is illustrated in Fig.~\ref{fig:robo
 To demonstrate the learning capability of the DNN, the desired trajectory was applied twice. 
 The first and second repetitions of the reference trajectory are referred to as Episode $1$ and Episode $2$, respectively.
 
+\KHCH{여기 아래부터는 글이 많아서 표현 수정을 하나씩 하지 못했습니다. 우선 아래에 있는 메모 반영해주시고, 최종적으로 chatGPT 등 통해서 표현 정리해주세요.
+
+표현이 조금 어색하거나 구어스러운 부분들이 있습니다.}
+
 However, since the DNN's weights are initialized randomly, large reference trajectories should be avoided to mitigate the effect of initial poor performance of the controller.
 Hence, in advance of the reference trajectory, the manipulator was initially positioned at ${\qd}^{\rm{origin}}=\left(-\tfrac{1}{2}\pi,0\right)^\top$ (\ie stable equilibrium point).
 Then, a reference trajectory was applied to the manipulator to move from ${\qd}^{\rm{origin}}$ to ${\qd}_0$ in 3 seconds, \ie $\mathcal{P}^5(t;{\qd}^{\rm{origin}},{\qd}_0,3)$, which is the initial and final points of the episode.
@@ -1277,20 +1279,29 @@ The effectiveness of the proposed CONAC to handle the combination of the convex 
     \end{align}
     \label{eq:sat}% %%
 \end{subequations}
-These sets \eqref{eq:sat:norm} and \eqref{eq:sat:tau2} can be physically interpreted as the voltage source limitation of the actuators and the torque limitation of the second link actuator, respectively.
-
-\hfill
+These sets, \eqref{eq:sat:norm} and \eqref{eq:sat:tau2}, can be physically interpreted as the voltage source limitation of the actuators and the torque limitation of the second link actuator, respectively.
+\KHCH{
+    (30a)의 의미를 다음과 같이 바꾸는게 명확하겠습니다. 
+    These sets, (30a) and (30b), can be physically interpreted as the current limitation imposed by the power source and the torque limitation of the second joint actuator, respectively.
+}
+\MSRY{
+    전압 제한이 곧 전류 제한인 것인가요?
+    전류 제한이라 하면 상태에 대한 제약조건이 부여된 것인가라는 오해가 생길가 걱정입니다.
+}
+The corresponding control input constraints of \eqref{eq:sat:norm} and \eqref{eq:sat:tau2}, are defined in Appendix \ref{sec:appen:cstr} as input bound constraint \eqref{eq:cstr:input:norm} and nonlinear input norm constraint \eqref{eq:cstr:input:bound}, respectively.
+\MSRY{sets들과 제약조건을 이어주기 위하여 추가}
 
 % ------------------------------------
 % Comparative Study
 % ------------------------------------
+\hfill
 For a comparative study, we implemented 4 controllers.
 The properties of the controllers are summarized in Table~\ref{table:controllers}.
 
 % ------------------------------------
 % Controllers: CONAC 
 % ------------------------------------
-\subsubsection*{Controller 1: \normalfont{(C$_1$)} \textit{CONAC with large $\beta_j$}}
+\subsubsection*{Controller 1: \normalfont{(C$_1$)} \textit{CONAC with large update rate of Lagrange Multipliers, $\beta_j,\forall j\in\mathcal{I}$}}
 
 To handle the input saturation, the proposed CONAC was implemented with the input bound constraint \eqref{eq:cstr:input:bound} $c_{\overline\tau_2}$ and $c_{\underline\tau_2}$ for second link, and the nonlinear input norm constraint $c_{\rbu}$ \eqref{eq:cstr:input:norm}, as follows:
 \begin{equation}
@@ -1326,7 +1337,7 @@ The update rates of the Lagrange multipliers for weight constraints were set to 
 % ------------------------------------
 % Controllers: CONAC with small beta
 % ------------------------------------
-\subsubsection*{Controller 2: \normalfont{(C$_2$)} \textit{CONAC with small $\beta_j$}}
+\subsubsection*{Controller 2: \normalfont{(C$_2$)} \textit{CONAC with small update rate of Lagrange Multipliers, $\beta_j,\forall j\in\mathcal{I}$}}
 
 As the second controller, the proposed CONAC was implemented with the same input bound constraint \eqref{eq:sim:cstr:CONAC} as (C$_1$), but with small update rate values such that $\beta_{\rbu}=10$ and $\beta_{\overline{\tau}_2}=\beta_{\underline{\tau}_2}=10^{3}$.
 The remaining properties and parameters were the same as (C$_1$).
@@ -1501,9 +1512,13 @@ The quantitative comparison of the tracking performance was evaluated using the 
     \hline
         & (C$_1$) & (C$_2$) & (C$_3$) & (C$_4$) \\
 	\hline
-		$e_1\times10^{3}$ / rad & $7.513$ & $8.021$ & $8.408$ & $19.721$ \\
-	\hline
-        $e_2\times10^{3}$ / rad & $2.617$ & $2.435$ & $3.553$ & $4.256$ \\
+    \multirow{2}{*}{$e_1\times10^{3}$ / rad} 
+        & $7.513$ & $8.021$ & $8.408$ & $19.721$ \\
+        & ($-70.0\%$) & ($-63.1\%$) & ($-63.7\%$) & ($-18.5\%$) \\
+    \hline
+    \multirow{2}{*}{$e_2\times10^{3}$ / rad} 
+        & $2.617$ & $2.435$ & $3.553$ & $4.256$ \\
+        & ($-88.4\%$) & ($-76.9\%$) & ($-72.8\%$) & ($-67.1\%$) \\
     \hline
     \end{tabular}
     \label{tab:sim:L2}
@@ -1527,8 +1542,14 @@ This is because the control inputs were saturated in the time intervals, as show
 
 The tracking performances of CONAC with control input constraints, \ie (C$_1$), and (C$_2$), outperformed CONAC with the auxiliary system (C$_4$) in both episodes, as shown in Table~\ref{tab:sim:L2}.
 This is because, (as wil be discussed in Section \ref{sec:sim:constraint}) (C$_1$), and (C$_2$) were able to use the full capability of the actuator, while (C$_4$) was limited its first link actuator due to the feature of the auxiliary system.
+\KHCH{
+    문단이 misleading 할 수 있습니다.
+C3가 C4보다는 낫다고 되어 있는데 마지막에는 C3가 poor 하다고 합니다. 명료한 결론으로 바꿔주세요.
+명확하지 않게 C4처럼 constraint를 고려하면 고려안하는 C3보다 더 안 좋아질 수 있다 등의 논리가 필요해보입니다.   
+}
 The tracking performance of (C$_3$) was also better than (C$_4$), but worse than (C$_1$) and (C$_2$), since the control input constraints were not considered in (C$_3$).
 Without consideration of the control input saturation, DDN became confused by the difference between its output (control input) and the saturated control input, which leads to the poor performance of (C$_3$).
+
 
 % ------------------------------------
 % Control Input Saturation
@@ -1589,19 +1610,21 @@ In contrast, (C$_1$), and (C$_2$) were able to use the full capability of the ac
 
 % zeta
 The detail of the constraint handling in the time interval from $29.4$ s to $31.9$ s, is now investigated.
-First, for (C$_4$), the auxiliary state $\zeta_1$ generated by constraint violation of $c_{\overline\tau_1}$. 
+First, for (C$_4$), the auxiliary state $\zeta_1$ generated by constraint violation of $c_{\overline\tau_1}$. \KHCH{FIg6c를 언급하며 설명되면 좋겠습니다}
 As the weights were adapted to reduce not only $\fe$ but also $\mv{\zeta}$, the constraint violation of $c_{\overline\tau_1}$ was reduced, as shown in Fig.~\ref{fig:ctrl:result:scope:control}.
 After the constraint was satisfied, the auxiliary state $\zeta_1$ converged to zero, by the stable state matrix $\mm{A}_\zeta$ in the auxiliary system, \ie $\ddtt\mv{\zeta} = \mm{A}_\zeta \mv{\zeta} + \mm{B}_\zeta \Delta\rbu$ with $\Delta\rbu=\mv{0}_{2\times1}$.
 
 % beta + zeta
 For the cases of (C$_1$) and (C$_2$), the Lagrange multipliers $\lambda_{\rbu}$ adjusted the adaptation direction of the weights $\estwth_1$ to reduce the constraint violation $c_{\rbu}$, as $\lambda_{\rbu}$ increased by the constraint violations.
 % comparison; big, small beta
+\KHCH{여기 아래 부터는, beta의 영향에 대해 설명하는데 lambda가 크고 작음만 언급됩니다. 명료하게 설명 수정해주세요.}
 For more details, the effect of the update rate $\beta_j,\ \forall j\in\mathcal I$ of Lagrange multipliers is shown in Fig.~\ref{fig:lambda_effect} for convex constraint $c_j,\ \forall j\in\mathcal I$ and two different cases of $\lambda_j$.
 With the bigger $\lambda_j$, the adaptation of $\estwth_1$ is more assertive than that with smaller $\lambda_j$.
 This leads to a faster satisfaction of the constraint $c_j,\ \forall j\in\mathcal I$, but this also causes oscillation in the adaptation process.
 In Fig.~\ref{fig:ctrl:result:scope:control} and Fig.~\ref{fig:ctrl:result:scope:beta}, $\lambda_{\rbu}$ of (C$_1$) repeatedly increased and decreased, which indicates that the constraint $c_{\rbu}$ was satisfied and violated, respectively, in the discrete time implementation.
 Besides, with small $\lambda_{\rbu}$, the adaptation direction of $\estwth_1$ is adjusted more conservatively, which leads to a slower satisfaction of the constraint $c_{\rbu}$, as shown in Fig.~\ref{fig:ctrl:result:scope:control} and the positively existence of $\lambda_{\rbu}$ in Fig.~\ref{fig:ctrl:result:scope:beta}.
 This allows the controller to show a smoother control input.
+\KHCH{흐름상 잘 이해되지 않습니다}
 However, since the weights were adapted to reduce the filtered error $\fe$ while the control input was saturated, the weights were not able to effectively adapt the weights with respect to the filtered error $\fe$.
 
 \hfill 
@@ -1612,6 +1635,7 @@ This is because the weights of (C$_1$), (C$_2$), and (C$_4$) were suppressed by 
 \MSRY{필요하다면 왜 제어입력 제약하는게 가중치 제약도 되는지 추가 가능}
 In addition, the inner and hidden layer weights constraints were not violated (\ie $\norm{\estwth_0},\norm{\estwth_1}$ were uniformly lower than $\norm{\estwth_2}$), since the backpropagated error was multiplied by the gradient of the activation function, which is limited from $-1$ to $1$, \ie see, \eqref{eq:gradient:phi}.  
 
+\KHCH{반복해서 이 내용을 설명할 필요가 있을까요?}
 The details of the constraint handling process are shown in Fig.~\ref{fig:ctrl:result:scope}, as well.
 In Fig.~\ref{fig:ctrl:result:scope:beta}, the Lagrange multipliers $\lambda_{\theta_2}$ were increased by the constraint violations, and the adaptation direction of the weights $\estwth_2$ was adjusted to reduce the constraint violations.
 
@@ -1621,10 +1645,11 @@ In Fig.~\ref{fig:ctrl:result:scope:beta}, the Lagrange multipliers $\lambda_{\th
 \hfill
 \subsubsection{Satisfaction of Karsh-Kuhn-Tucker (KKT) conditions}
 
-\MSRY{이 부분도 IECON과 마찬가지로 이산으로 돌아감으로 바로 보여주기는 힘들 수 있을 것 같습니다. 실제로 보시면 많은 진동이 보여서 정상상태의 KKT를 주장할 수 있을지 의문입니다.}
-
 Since the proposed CONAC was implemented in discrete time, demonstration regarding the KKT conditions in steady state is not straightforward.
 However, as the weights and Lagrange multipliers were almost constant when the constraints were violated, the satisfaction of the KKT conditions can be implicitly shown, since the Lagrange multipliers of active constraints were positive and inactive constraints were zero.
+
+\MSRY{이 부분도 IECON과 마찬가지로 이산으로 돌아감으로 바로 보여주기는 힘들 수 있을 것 같습니다. 실제로 보시면 많은 진동이 보여서 정상상태의 KKT를 주장할 수 있을지 의문입니다.}
+% reference 자체가 계속 움직이니까 엄밀하게는 steady state를 보장할 수 없습니다. rough 하게는 theta norm이 어느정도 수렴하므로 이 것을 기반으로 주장해볼 수도 있습니다. theta_dot이 평균적으로는 0에 가까운 것 같서요
 
 % ------------------------------------
 % Computational Time
