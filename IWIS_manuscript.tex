@@ -1,15 +1,16 @@
-\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out if you need a4paper
+% \documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out if you need a4paper
+\documentclass[conference]{IEEEtran}
 
 %\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4 paper
 
 \IEEEoverridecommandlockouts                              % This command is only needed if 
                                                           % you want to use the \thanks command
 
-\overrideIEEEmargins                                      % Needed to meet printer requirements.
+% \overrideIEEEmargins                                      % Needed to meet printer requirements.
 
-\makeatletter
-\let\NAT@parse\undefined
-\makeatother
+% \makeatletter
+% \let\NAT@parse\undefined
+% \makeatother
 
 
 \def\pub{true} % true for publication, false for draft
@@ -17,32 +18,43 @@
 \input{\template/preamble/preamble_conf.tex}
 
 
-\title{\LARGE \bf
-    WIP: Constrained Optimization-Based Neuro-Adaptive Control (CONAC) for Constrained Systems
-}
-
-\author{Myeongseok Ryu, and Kyunghwan Choi% <-this % stops a space
-    \thanks{
-        Myeongseok Ryu and Kyunghwan Choi are with the Cho Chun Shik Graduate School of Mobility, Korea Advanced Institute of Science and Technology (KAIST), Daejeon 34051, Republic of Korea {\tt\small \{dding\_98, kh.choi\}@kaist.ac.kr}
-    }%
-}
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+\pagestyle{empty}
 
 \begin{document}
 
+
+\title{\LARGE \bf
+    Constrained Optimization-Based Neuro-Adaptive Control (CONAC) for Constrained Systems
+}
+
+\author{
+    \IEEEauthorblockN{1\textsuperscript{st}\,Myeongseok\,Ryu and 2\textsuperscript{nd}\,Kyunghwan\,Choi}
+    \IEEEauthorblockA{\textit{Cho Chun Shik Graduate School of Mobility} \\
+    \textit{Korea Advanced Institute of Science and Technology}\\
+    Daejeon, Republic of Korea \\
+    \{dding\_98, kh.choi\}@kaist.ac.kr}
+    }
+
+
 \maketitle
 \thispagestyle{empty}
-\pagestyle{empty}
+% \pagestyle{empty}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
     This paper reports on work in progress to review and improve the effectiveness of the constrained optimization-based neuro-adaptive control (CONAC) for weight, control input, and state constraints.
     Our preliminary results show that the CONAC can handle the weight constraints and control input constraints.
-  A deep neural network (DNN) is employed to approximate the ideal stabilizing control law while simultaneously learning the unknown system dynamics and addressing the constraints within a constrained optimization framework.
-  The weight adaptation laws are formulated to solve the defined constrained optimization problem, ensuring satisfaction of first-order optimality conditions at steady state.
-  The controller's stability is rigorously analyzed using Lyapunov theory, guaranteeing bounded tracking errors and bounded DNN weights. 
-  The CONAC is validated through a real-time implementation on a 2-DOF robotic manipulator, demonstrating its effectiveness in achieving accurate trajectory tracking while satisfying all imposed constraints.
+  A neural network (NN) was employed to approximate the ideal stabilizing control law while simultaneously learning the unknown system dynamics and addressing the constraints within a constrained optimization framework.
+  The controller's stability was rigorously analyzed using Lyapunov theory, guaranteeing bounded tracking errors and bounded NN weights. 
+  The CONAC was validated through a real-time implementation on a 2-DOF robotic manipulator, demonstrating its effectiveness in achieving accurate trajectory tracking while satisfying all imposed constraints.
   Finally, we discuss the extension of the CONAC to handle state constraints, which is a crucial aspect for practical applications in various engineering systems.
 \end{abstract}
+\begin{IEEEkeywords}
+	Neuro-adaptive control, Constrained Optimization, Constrained Systems
+\end{IEEEkeywords}
+
 
 \section{Introduction}
 
@@ -137,7 +149,7 @@ To solve the dual problem of the Lagrangian function, the adaptation law was der
 \end{subequations}
 
 The stability of the CONAC under weight constraints was rigorously analyzed using Lyapunov theory, \ie see, Theorem 1 in \cite{Ryu:2024aa}.
-The theorem guarantees that the tracking error $\mv{e}$ and the DNN weights $\estwth$ are bounded, ensuring that weight constraints are satisfied.
+The theorem guarantees that the tracking error $\mv{e}$ and the NN weights $\estwth$ are bounded, ensuring that weight constraints are satisfied.
 
 The numerical simulation demonstrated the effectiveness of the CONAC in handling weight constraints in a 2-DOF robotic manipulator system, comparing the existing adaptive control methods including $\epsilon$-modification and $\sigma$-modification methods.
 The results showed that the CONAC outperformed these methods in terms of tracking performance and weight constraint satisfaction with smaller dependency on the tuning parameters.
@@ -180,7 +192,7 @@ $
 is imposed for the case of \cite{Ryu:2024ab}.
 
 The adaptation law is derived using the same approach as in \eqref{eq:adaptation law}.
-The stability of the extended CONAC was also analyzed using Lyapunov theory, ensuring that the tracking error $\mv{e}$ and the DNN weights $\estwth$ are bounded, and the control input constraints are satisfied.
+The stability of the extended CONAC was also analyzed using Lyapunov theory, ensuring that the tracking error $\mv{e}$ and the NN weights $\estwth$ are bounded, and the control input constraints are satisfied.
 
 To demonstrate the effectiveness of the CONAC, a numerical simulation was conducted on a nonlinear synchronous machine drive with control input constraints \cite{Ryu:2024ab} and real-time implementation on a 2-DOF robotic manipulator \cite{Ryu:2025aa}.
 Both results showed that the CONAC can effectively handle control input constraints while achieving accurate trajectory tracking.
