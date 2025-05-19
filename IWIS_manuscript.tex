@@ -1,0 +1,235 @@
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out if you need a4paper
+
+%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4 paper
+
+\IEEEoverridecommandlockouts                              % This command is only needed if 
+                                                          % you want to use the \thanks command
+
+\overrideIEEEmargins                                      % Needed to meet printer requirements.
+
+\makeatletter
+\let\NAT@parse\undefined
+\makeatother
+
+
+\def\pub{true} % true for publication, false for draft
+\newcommand*{\template}{template}
+\input{\template/preamble/preamble_conf.tex}
+
+
+\title{\LARGE \bf
+    WIP: Constrained Optimization-Based Neuro-Adaptive Control (CONAC) for Constrained Systems
+}
+
+\author{Myeongseok Ryu, and Kyunghwan Choi% <-this % stops a space
+    \thanks{
+        Myeongseok Ryu and Kyunghwan Choi are with the Cho Chun Shik Graduate School of Mobility, Korea Advanced Institute of Science and Technology (KAIST), Daejeon 34051, Republic of Korea {\tt\small \{dding\_98, kh.choi\}@kaist.ac.kr}
+    }%
+}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+    This paper reports on work in progress to review and improve the effectiveness of the constrained optimization-based neuro-adaptive control (CONAC) for weight, control input, and state constraints.
+    Our preliminary results show that the CONAC can handle the weight constraints and control input constraints.
+  A deep neural network (DNN) is employed to approximate the ideal stabilizing control law while simultaneously learning the unknown system dynamics and addressing the constraints within a constrained optimization framework.
+  The weight adaptation laws are formulated to solve the defined constrained optimization problem, ensuring satisfaction of first-order optimality conditions at steady state.
+  The controller's stability is rigorously analyzed using Lyapunov theory, guaranteeing bounded tracking errors and bounded DNN weights. 
+  The CONAC is validated through a real-time implementation on a 2-DOF robotic manipulator, demonstrating its effectiveness in achieving accurate trajectory tracking while satisfying all imposed constraints.
+  Finally, we discuss the extension of the CONAC to handle state constraints, which is a crucial aspect for practical applications in various engineering systems.
+\end{abstract}
+
+\section{Introduction}
+
+
+Many engineering systems, including those in aerospace, robotics, and automotive applications, can be modeled using Euler-Lagrange systems. 
+These systems are governed by dynamic equations derived from energy principles and describe the motion of mechanical systems with constraints. 
+In practice, however, such systems often exhibit uncertainties due to unmodeled dynamics, parameter variations, or external disturbances. 
+To address these uncertainties, adaptive control techniques have been widely employed.
+
+More recently, neuro-adaptive control approaches have been introduced to approximate unknown system dynamics or entire control laws using neural networks (NNs). 
+NNs are well-known for their universal approximation property, which allows them to approximate any smooth function over a compact set with minimal error. 
+Various types of NNs have been utilized in neuro-adaptive control, including simpler architectures like single-hidden layer (SHL) NNs \cite{Ge:2010aa} and radial basis function (RBF) neural networks \cite{Liu:2013ab}, as well as more complex models like deep neural networks (DNNs) \cite{Patil:2022aa} and their variations. 
+SHL and RBF NNs are often employed to approximate uncertain system dynamics or controllers due to their simplicity \cite{Esfandiari:2015aa}, while DNNs offer greater expressive power, making them more effective for complex system approximations \cite{Rolnick:2018aa}. 
+Additionally, variations of DNNs, such as long short-term memory (LSTM) networks for time-varying dynamics \cite{Liu:2013ab} and physics-informed neural networks (PINNs) for leveraging physical system knowledge \cite{Hart:2024aa}, have further extended the capabilities of neuro-adaptive control systems.
+
+A critical aspect of neuro-adaptive control is the weight adaptation law, which governs how NN parameters are updated. 
+Most studies derived these laws using Lyapunov-based methods, ensuring the boundedness of the tracking error and weight estimation error, thus maintaining system stability under uncertainty.
+
+However, significant challenges persist in using NNs for adaptive control. 
+First, the boundedness of NN weights is not inherently guaranteed, which can result in unbounded outputs. 
+When NN outputs are used directly in the control law, this may lead to excessive control inputs, violating input constraints. 
+Such constraints are commonly encountered in industrial systems, where actuators are limited by physical and safety requirements in terms of amplitude, rate, or energy \cite{Esfandiari:2021aa}. 
+Failing to address these constraints can degrade control performance or even destabilize the system.
+Moreover, the excessive control inputs may lead to violations of the state constraints, which are often related to safety and performance requirements in practical applications.
+Therefore, addressing these constraints is essential for the reliable design of neuro-adaptive controllers. 
+
+\section{Constrained Optimization-based Neuro-Adaptive Control}
+
+In this section, we revisit our previous work on the constrained optimization-based neuro-adaptive control (CONAC) for weight \cite{Ryu:2024aa} and control constraints \cite{Ryu:2024ab,Ryu:2025aa}.
+
+\subsection{CONAC for Weight Constraints}
+
+In \cite{Ryu:2024aa}, we proposed the first version of the CONAC to handle weight constraints.
+By formulating the boundedness of the NN weights as a inequality constraint, a unified constrained optimization problem was defined as follows:
+\begin{equation}
+    \begin{matrix}
+        \min_{\estwth} \ J(\mv{e};\estwth):= 
+        \tfrac{1}{2} \mv{e}^\top \mv{e}
+        \\ \\
+        \begin{aligned}
+        \text{subject to }&
+            c_i(\estwth)
+            :=
+            \tfrac{1}{2}
+            \left(
+                \estwth_i^\top \estwth_i - {\bar\theta}_i^2
+            \right)
+        \le0, \quad \forall i\in\{0,\ldots,k\} \\
+        \end{aligned}
+        ,
+    \end{matrix}
+    \label{eq:opt:problem1}
+\end{equation}
+where $J(\cdot)$ denotes the objective function, $c_i(\cdot)$ denotes the constraint function, $\estwth=[\estwth_i]_{\{0,\cdots,k\}}$ is the vector of NN weights, $\mv{e}$ is the tracking error, and $\bar\theta_i$ is the upper bound of the $i\textsuperscript{th}$ layer's weight of $k$ layers.
+The optimization problem \eqref{eq:opt:problem1} was reformulated as a Lagrangian function as follows:
+$
+    L(\estwth,\mv{\lambda}) = J(\mv{e};\estwth) + \sum_{i=0}^k \lambda_i \tfrac{1}{2}(\estwth_i^\top \estwth_i - {\bar\theta}_i^2)
+    ,
+$
+where $\lambda_i$ is the Lagrange multiplier associated with the $i\textsuperscript{th}$ constraint $c_i(\estwth)$.
+To solve the dual problem of the Lagrangian function, the adaptation law was derived using gradient descent method for weight adaptation and gradient ascent method for Lagrange multipliers as follows:
+\begin{subequations}
+    \begin{align}
+            \ddtt{\estwth}
+            &
+            =
+            -\alpha \pptfrac{L}{\estwth}
+            =
+            -\alpha 
+            \left(
+                \pptfrac{J}{\estwth}
+                +
+                \textstyle\sum_{i=0}^k
+                \lambda_i
+                \pptfrac{c_i}{\estwth}
+            \right),
+        \label{eq:adap:th}
+            \\
+            \ddtt\lambda_i
+            & 
+            = 
+            \beta_i\pptfrac{L}{\lambda_i} 
+            = 
+            \beta_i c_i ,
+            \quad \forall i\in\{0,\ldots,k\}
+        \label{eq:adap:lbd}
+            \\
+            \lambda_i & \leftarrow \max(\lambda_i,0) ,
+        \label{eq:adap:lbd:max}
+    \end{align}
+    \label{eq:adaptation law}%             %%
+\end{subequations}
+
+The stability of the CONAC under weight constraints was rigorously analyzed using Lyapunov theory, \ie see, Theorem 1 in \cite{Ryu:2024aa}.
+The theorem guarantees that the tracking error $\mv{e}$ and the DNN weights $\estwth$ are bounded, ensuring that weight constraints are satisfied.
+
+The numerical simulation demonstrated the effectiveness of the CONAC in handling weight constraints in a 2-DOF robotic manipulator system, comparing the existing adaptive control methods including $\epsilon$-modification and $\sigma$-modification methods.
+The results showed that the CONAC outperformed these methods in terms of tracking performance and weight constraint satisfaction with smaller dependency on the tuning parameters.
+
+\subsection{CONAC for Control Constraints}
+
+The CONAC was further extended to handle control input constraints in \cite{Ryu:2024ab,Ryu:2025aa}.
+In \cite{Ryu:2024ab}, the CONAC was formulated to handle a control input saturation defined as $\mysat(\mv{u})=\tfrac{\mv{u}}{\norm{\mv{u}}}\cdot\bar{u}$ if $\norm{\mv{u}}>\bar{u}$, and $\mv{u}$ otherwise, where $\bar{u}$ is the upper bound of the control input.
+Furthermore, the CONAC was extended for any convex control input constraints in \cite{Ryu:2025aa}.
+
+In other words, the control input constraint is defined as an inequality constraint as follows:
+\begin{equation}
+    \begin{matrix}
+        \min_{\estwth} \ J(\mv{e};\estwth):= 
+        \tfrac{1}{2} \mv{e}^\top \mv{e}
+        \\ \\
+        \begin{aligned}
+        \text{subject to }&
+        \tfrac{1}{2}
+            \left(
+                \estwth_i^\top \estwth_i - {\bar\theta}_i^2
+            \right)
+        \le0, &\forall 0\in\{1,\ldots,k\}, \\
+        &
+        c_j(\estwth) \le 0, &\forall j\in\mathcal{I}
+        ,
+        \end{aligned}
+    \end{matrix}
+    \label{eq:opt:problem2}
+\end{equation}
+where $c_j(\estwth)$ denotes convex constraint function, and $\mathcal{I}$ is the set of indices of the convex constraints.
+For example, the 
+$
+    \tfrac{1}{2}
+    \left(
+        \norm{\mv{u}}^2 - {\bar u}^2
+    \right)
+    \le0
+$
+is imposed for the case of \cite{Ryu:2024ab}.
+
+The adaptation law is derived using the same approach as in \eqref{eq:adaptation law}.
+The stability of the extended CONAC was also analyzed using Lyapunov theory, ensuring that the tracking error $\mv{e}$ and the DNN weights $\estwth$ are bounded, and the control input constraints are satisfied.
+
+To demonstrate the effectiveness of the CONAC, a numerical simulation was conducted on a nonlinear synchronous machine drive with control input constraints \cite{Ryu:2024ab} and real-time implementation on a 2-DOF robotic manipulator \cite{Ryu:2025aa}.
+Both results showed that the CONAC can effectively handle control input constraints while achieving accurate trajectory tracking.
+
+\section{Extension to State Constraints}
+
+The preliminary results of the CONAC for weight and control input constraints are promising.
+However, for safety and performance requirements in practical applications, it is crucial to extend the CONAC to handle state constraints.
+We are currently working on this extension to handle state constraints by integrating the existing methods for state constraints such as barrier Lyapunov functions (BLFs) \cite{Ames:2019aa}.
+This extension can be applied to various control problems, including robotic systems with limited manipulability, vehicle systems with limited velocity, and other systems with state constraints.
+
+\section{Conclusion} 
+
+In this paper, we reviewed our previous work on the constrained optimization-based neuro-adaptive controller (CONAC) for weight and control input constraints and presented further development.
+The CONAC has shown promising results in numerical simulations and real-time implementations, demonstrating its effectiveness in achieving accurate trajectory tracking while satisfying all imposed constraints.
+Moreover, since the NNs in the CONAC have the online learning capability and stability guarantee, the CONAC can be applied to various engineering systems with uncertainties and constraints, even in systems with no prior knowledge of the dynamics.
+The extension to handle state constraints is an important step towards practical applications, and we are actively working on this aspect.
+
+\addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
+                                  % on the last page of the document manually. It shortens
+                                  % the textheight of the last page by a suitable amount.
+                                  % This command does not take effect until the next page
+                                  % so it should come on the page before the last. Make
+                                  % sure that you do not shorten the textheight too much.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section*{APPENDIX}
+
+% Appendixes should appear before the acknowledgment.
+
+% \section*{ACKNOWLEDGMENT}
+
+% The preferred spelling of the word ÒacknowledgmentÓ in America is without an ÒeÓ after the ÒgÓ. Avoid the stilted expression, ÒOne of us (R. B. G.) thanks . . .Ó  Instead, try ÒR. B. G. thanksÓ. Put sponsor acknowledgments in the unnumbered footnote on the first page.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% {\footnotesize
+    \bibliographystyle{ieeetr}
+    \bibliography{\template/refs}
+% }
+
+\end{document}
+

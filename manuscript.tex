@@ -8,7 +8,7 @@
 \newcommand*{\figSizeTwoCol}{.49}
 \newcommand*{\figSizeOneCol}{0.98}
 
-\addbibresource{\template/refs.bib}
+% \addbibresource{\template/refs.bib}
 
 \begin{document}
 
@@ -38,8 +38,6 @@
   The weight adaptation laws are formulated to solve the defined constrained optimization problem, ensuring satisfaction of first-order optimality conditions at steady state.
   The controller's stability is rigorously analyzed using Lyapunov theory, guaranteeing bounded tracking errors and bounded DNN weights. 
   The proposed controller is validated through a real-time implementation on a 2-DOF robotic manipulator, demonstrating its effectiveness in achieving accurate trajectory tracking while satisfying all imposed constraints.
-  
-  via a real-time implementation conducted on a 2-DOF robotic manipulator, demonstrating the controller's effectiveness in achieving desired trajectory tracking while satisfying constraints.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -1785,11 +1783,8 @@ The gradients of $c_{\rbu}$ with respect to $\estwth$ are given by
 \end{equation}
 It should be noted that constraints \eqref{eq:cstr:input:bound} and \eqref{eq:cstr:input:norm} can be imposed simultaneously, as their gradients \eqref{eq:cstr:input:bound:grad} and \eqref{eq:cstr:input:norm:grad} are linearly independent, satisfying Assumption \ref{assum:LICQ}, \ie the LICQ condition.
 
-\printbibliography
-
-% \begin{IEEEbiographynophoto}{Jane Doe}
-%     Biography text here without a photo.
-% \end{IEEEbiographynophoto}
+\bibliographystyle{IEEEtran}
+\bibliography{\template/refs}
 
 \begin{IEEEbiography}[{
     \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/msRyu.jpg}}]{Myeongseok Ryu}
