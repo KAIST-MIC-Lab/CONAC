@@ -21,7 +21,7 @@
 \thanks{
     Myeongseok Ryu and Kyunghwan Choi are with the Cho Chun Shik Graduate School of Mobility, Korean Advanced Institute of Science and Technology (KAIST), Daejeon 34051, Korea (e-mail: dding\_98@kaist.ac.kr and kh.choi@kaist.ac.kr).
 
-    Donghwa Hong is with the Department of Mechanical and Robotics Engineering, Gwangju Institute of Science and Technology (GIST), Gwangju 61005, Korea (e-mail: fairytale@gm.gist.ac.kr).
+    Donghwa Hong is with the Department of Mechanical and Robotics Engineering, Gwangju Institute of Science and Technology (GIST), Gwangju 61005, Korea (e-mail: fairytalef00@gm.gist.ac.kr).
 
     This work was supported in part by a Korea Research Institute for Defense Technology planning and advancement (KRIT) grant funded by Korea government DAPA (Defense Acquisition Program Administration) (No. KRIT-CT-22-087, Synthetic Battlefield Environment based Integrated Combat Training Platform) and in part by the National Research Foundation of Korea (NRF) grant funded by the Korea government (MSIT) (RS-2025- 00554087). (Corresponding author: Kyunghwan Choi)
     }}
@@ -224,7 +224,7 @@ The constrained optimization-based weight adaptation laws are presented in Secti
     \centering
     \includegraphics[width=.99\linewidth]{src/figures/Controller.drawio.pdf}
     % \includesvg[width=0.75\linewidth]{Controller.drawio.svg}
-    \caption{Architecture of the constrained optimization-based neuro-adaptive controller (CONAC). \MSRY{SAT은 좀더 명확히 하기 위해서 사용하였음; 그렇지 않으면 아래 실험 피규어를 통해 포화를 넘어선 제어가 이ㅔㅂ력된다고 생각할까봐 그렇습니다; ddt의 경우 수식과 통일하기 위함이 맞습니다.}}
+    \caption{Architecture of the constrained optimization-based neuro-adaptive controller (CONAC). \MSRY{SAT은 좀더 명확히 하기 위해서 사용하였음; 그렇지 않으면 아래 실험 피규어를 통해 포화를 넘어선 제어가 입력된다고 생각할까봐 그렇습니다; ddt의 경우 수식과 통일하기 위함이 맞습니다.}}
     \label{fig:ctrl:diagram}
 \end{figure}
 
@@ -735,7 +735,7 @@ The gradient of $\mv{c}_\theta:=\mv c_{\theta}(\estwth)$ with respect to $\estwt
 Next, we present the following assumptions, which specify the conditions for the potential control input constraints introduced in Appendix \ref{sec:appen:cstr}:
 
 \begin{assum}
-    The constraint functions $c_j(\estwth),\ \forall j\in\mathcal I$, are convex in the $\tau$-space and satisfy $c_j(0) \le 0$ \color{red} and $c_j(\idealwth)\le 0$ \color{black}. \MSRY{desired controller가 제약조건 밖으로 나갈 수 있기 때문에 적절하지 않을 수 있음}
+    The constraint functions $c_j(\estwth),\ \forall j\in\mathcal I$, are convex in the $\tau$-space and satisfy $c_j(0) \le 0$ and $c_j(\idealwth)\le 0$.
     \label{assum:convex}
 \end{assum}
 
@@ -963,7 +963,7 @@ According to \eqref{eq:lya2:dot} and Lemma \ref{lem:stable:set}, the invariant s
 \end{equation}
 
 The satisfaction of the constraints can be verified through the boundedness of $\estwth_k$.
-For the weight constraint $c_{\theta_k}$, if the corresponding Lagrange multiplier $\lambda_{\theta_k}$ increases sufficiently large \MSRY{본래 infinitely였습니다만 무한까지 가는 것을 가정하지 않기 때문에 충분히 커질때로 바꿈} due to the constraint violation, $\estwth_k$ approaches to the origin, as the invariant set $\Theta_{\estwth_k}^{1}$ shrinks to a point.
+For the weight constraint $c_{\theta_k}$, if the corresponding Lagrange multiplier $\lambda_{\theta_k}$ \color{red}increases sufficiently large\color{black} \MSRY{본래 infinitely였습니다만 무한까지 가는 것을 가정하지 않기 때문에 충분히 커질때로 바꿈} due to the constraint violation, $\estwth_k$ approaches to the origin, as the invariant set $\Theta_{\estwth_k}^{1}$ shrinks to a point.
 The remaining control input constraints can be validated implicitly through the term ${\gamma}_2$ in \eqref{eq:lya2:dot}.
 Similarly to $c_{\theta_k}$, when a control input constraint $c_j,\ \forall j\in\mathcal{I}\setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$ is violated, the corresponding Lagrange multiplier $\lambda_j$ increases sufficiently large \MSRY{위와 같은 이유로 변경}, leading to increase in ${\gamma}_2$.
 It makes ${\gamma}_2$ dominates the right-hand side of \eqref{eq:lya2:dot}, which leads $\ddtt V_2$ negative definite.
@@ -1239,11 +1239,10 @@ To demonstrate the learning capability of the DNN, the desired trajectory was ap
 The first and second repetitions of the reference trajectory are referred to as Episode $1$ and Episode $2$, respectively.
 
 \KHCH{여기 아래부터는 글이 많아서 표현 수정을 하나씩 하지 못했습니다. 우선 아래에 있는 메모 반영해주시고, 최종적으로 chatGPT 등 통해서 표현 정리해주세요.
-
 표현이 조금 어색하거나 구어스러운 부분들이 있습니다.}
 
 However, since the DNN's weights are initialized randomly, large reference trajectories should be avoided to mitigate the effect of initial poor performance of the controller.
-Hence, in advance of the reference trajectory, the manipulator was initially positioned at ${\qd}^{\rm{origin}}=\left(-\tfrac{1}{2}\pi,0\right)^\top$ (\ie stable equilibrium point).
+Hence, in advance of the reference trajectory, the manipulator was initially positioned at ${\qd}^{\rm{origin}}=\left(-\tfrac{1}{2}\pi,0\right)^\top$, \ie stable equilibrium point.
 Then, a reference trajectory was applied to the manipulator to move from ${\qd}^{\rm{origin}}$ to ${\qd}_0$ in 3 seconds, \ie $\mathcal{P}^5(t;{\qd}^{\rm{origin}},{\qd}_0,3)$, which is the initial and final points of the episode.
 After the manipulator reached ${\qd}_0$, the constant reference trajectory $\qd={\qd}_0$ was applied for 8 seconds to be steady and to avoid the effect of the transient response.
 
@@ -1382,7 +1381,7 @@ The weight constraint parameters were selected as $\overline\wth_0=\overline\wth
 \MSRY{어차피 내부는 안걸리니까 그림 더 깔끔하게 다 6이라고 함} 
 The control results were collected via CAN communication with PCAN USB  and recorded in a computer with a sampling rate of $250$ Hz.
 
-The quantitative comparison of the tracking performance was evaluated using the $L_2$-norm of them, (\ie $\sqrt{\int_0^T\norm{h}\,\der t}$, where $h\in\{e_1,e_2\}$ and $T\in\R_{>0}$ denotes the each episode duration time.
+The quantitative comparison of the tracking performance was evaluated using the $L_2$-norm of them, \ie $\sqrt{\int_0^T\norm{h}\,\der t}$, where $h\in\{e_1,e_2\}$ and $T\in\R_{>0}$ denotes the each episode duration time.
 
 % ------------------------------------
 % Controller Table
@@ -1494,7 +1493,7 @@ The quantitative comparison of the tracking performance was evaluated using the 
 % ------------------------------------
 \begin{table}[!t]
     \renewcommand{\arraystretch}{1.3}
-    \caption{Quantitative comparison of performances' $L_2$ norm.}
+    \caption{Quantitative\,comparison\,of\,performances'\,$L_2$\,norm.}
     \centering
     \begin{tabular}{c c c c c}
     \hline
@@ -1541,14 +1540,21 @@ In addition, it is notable that in both episodes, all controllers failed to trac
 This is because the control inputs were saturated in the time intervals, as shown in Fig.~\ref{fig:ctrl:result:tau:1} and Fig.~\ref{fig:ctrl:result:tau:norm}.
 
 The tracking performances of CONAC with control input constraints, \ie (C$_1$), and (C$_2$), outperformed CONAC with the auxiliary system (C$_4$) in both episodes, as shown in Table~\ref{tab:sim:L2}.
-This is because, (as wil be discussed in Section \ref{sec:sim:constraint}) (C$_1$), and (C$_2$) were able to use the full capability of the actuator, while (C$_4$) was limited its first link actuator due to the feature of the auxiliary system.
+This is because, (as will be discussed in Section \ref{sec:sim:constraint}) (C$_1$), and (C$_2$) were able to use the full capability of the actuator, while (C$_4$) was limited its first link actuator due to the feature of the auxiliary system.
 \KHCH{
     문단이 misleading 할 수 있습니다.
 C3가 C4보다는 낫다고 되어 있는데 마지막에는 C3가 poor 하다고 합니다. 명료한 결론으로 바꿔주세요.
 명확하지 않게 C4처럼 constraint를 고려하면 고려안하는 C3보다 더 안 좋아질 수 있다 등의 논리가 필요해보입니다.   
 }
-The tracking performance of (C$_3$) was also better than (C$_4$), but worse than (C$_1$) and (C$_2$), since the control input constraints were not considered in (C$_3$).
-Without consideration of the control input saturation, DDN became confused by the difference between its output (control input) and the saturated control input, which leads to the poor performance of (C$_3$).
+\MSRY{반영 중}
+The tracking performance of (C$_3$) was also better than (C$_4$), but this is because (C$_3$) produced excessively large control inputs which hits the actuator limits, without considering the control input saturation.
+This may lead to the conclusion that CONAC without control input constraints outperformed the auxiliary system.
+However, since the CONAC adapts the weights to reduce the tracking error, \ie which is the only feedback signal, the CONAC increases the control input excessively to reduce the tracking error, which can not be regulated due to the actuator limits.
+In Fig.~\ref{fig:ctrl:result:tau:2}, and Fig.~\ref{fig:ctrl:result:tau:norm}, the violations of the control input saturations grow larger in every saturated time interval.
+Moreover, this large violation occurs oscillations in the control input (adaptation), 
+
+% The tracking performance of (C$_3$) was also better than (C$_4$), but worse than (C$_1$) and (C$_2$), since the control input constraints were not considered in (C$_3$).
+% Without consideration of the control input saturation, DDN became confused by the difference between its output (control input) and the saturated control input, which leads to the poor performance of (C$_3$).
 
 
 % ------------------------------------
