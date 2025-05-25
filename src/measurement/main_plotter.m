@@ -33,14 +33,14 @@ end
 
 %% 
 % ctrl1_name = "c1.trc"; 
-% ctrl2_name = "c2.trc";
-% ctrl3_name = "c3.trc"; 
-% ctrl4_name = "c4.trc"; 
+ctrl2_name = "c2.trc";
+ctrl3_name = "c3.trc"; 
+ctrl4_name = "c4.trc"; 
 
 ctrl1_name = "re_c1.trc"; 
-ctrl2_name = "re_c3.trc";
-ctrl3_name = "re_c4.trc"; 
-ctrl4_name = "re_c2.trc"; 
+% ctrl2_name = "re_c3.trc";
+% ctrl3_name = "re_c4.trc"; 
+% ctrl4_name = "re_c2.trc"; 
 
 data1 = trc2data(ctrl1_name, 1);
 data2 = trc2data(ctrl2_name, 2);

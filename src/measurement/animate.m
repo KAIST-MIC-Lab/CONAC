@@ -27,7 +27,7 @@ PhaseList = {
 };
 
 %% 
-ctrl1_name = "c1.trc"; 
+ctrl1_name = "re_c1.trc"; 
 ctrl2_name = "c2.trc";
 ctrl3_name = "c3.trc"; 
 ctrl4_name = "c4.trc"; 
