@@ -82,7 +82,7 @@ Various types of NNs have been utilized in neuro-adaptive control, including sim
 SHL and RBF NNs are often employed to approximate uncertain system dynamics or controllers due to their simplicity \cite{Esfandiari:2014aa,Esfandiari:2015aa,Yesildirek:1995aa,Gao:2006aa}.
 However, since DNNs offer greater expressive power, making them more effective for complex system approximations \cite{Rolnick:2018aa}, variations of DNNs, such as long short-term memory (LSTM) networks for time-varying dynamics \cite{Griffis:2023aa} and physics-informed NNs (PINNs) for leveraging physical system knowledge \cite{Hart:2024aa}, have further extended the capabilities of neuro-adaptive control systems.
 
-A critical aspect of neuro-adaptive control is the weight adaptation law, which governs how NN parameters are updated. 
+A critical aspect of neuro-adaptive control is the weight adaptation law, which governs how NN werights are updated. 
 Most studies derived these laws using Lyapunov-based methods, ensuring the boundedness of the tracking error and weight estimation error, thus maintaining system stability under uncertainty.
 
 However, two significant challenges persist in using NNs for adaptive control. 
@@ -186,6 +186,8 @@ We consider an uncertain Euler-Lagrange system modeled as
 where $\q\in \R^n$ denotes the generalized coordinate, $\rbd$ represents the disturbance and $\rbu\in\R^n$ denotes the generalized control input. 
 The terms $\rbM:=\rbM(\q)\in\R^{n\times n}$, $\rbVm:=\rbVm(\q,\dq)\in\R^{n\times n}$, $\rbF:=\rbF(\dq)\in\R^{n}$, and $\rbG:=\rbG(\q)$ represent the unknown inertia matrix, Coriolis/centripetal matrix, friction vector, and gravity vector, respectively.
 The function $\mysat(\cdot):\R^n\to\R^n$ represents the inherent physical limitations of the actuators such that $\norm{\mysat(\rbu)}\le \overline\tau$, where $\overline\tau$ denotes the maximum norm of control input.
+\MSRY{포화가 컨벡스하다는 가정을 추가했습니다.}
+In this study, the saturation function $\mysat(\cdot)$ is assumed to be convex, which is practically common in many engineering systems, since the actuator limits are naturally convex, such as min/max torque limits, and bounds look like a box or ball in the input space.
 To account for these limitations, it is essential to incorporate physically motivated constraints into the controller design.
 Appendix \ref{sec:appen:cstr} introduces candidate constraints that can be applied to ensure compliance with these physical limitations.
 
@@ -197,7 +199,7 @@ The key properties are introduced below:
 \end{prop}
 
 \begin{prop} 
-    The Coriolis/centripetal\MSRY{인용 책 그대로 적은 것입니다.} matrix $\rbVm$ can always be selected\MSRY{상동.} so that the matrix $\ddtt{\rbM}-2\rbVm$ is skew-symmetric, \ie $\mv{x}^\top(\ddtt{\rbM}-2\rbVm)\mv{x}=0,\ \forall \mv{x}\in\R^n$.
+    The Coriolis/centripetal matrix $\rbVm$ can always be selected, so that the matrix $\ddtt{\rbM}-2\rbVm$ is skew-symmetric, \ie $\mv{x}^\top(\ddtt{\rbM}-2\rbVm)\mv{x}=0,\ \forall \mv{x}\in\R^n$.
     \label{prop:skew}
 \end{prop}
 
@@ -225,7 +227,7 @@ The constrained optimization-based weight adaptation laws are presented in Secti
     \centering
     \includegraphics[width=.99\linewidth]{src/figures/Controller.drawio.pdf}
     % \includesvg[width=0.75\linewidth]{Controller.drawio.svg}
-    \caption{Architecture of the constrained optimization-based neuro-adaptive controller (CONAC). \MSRY{SAT은 좀더 명확히 하기 위해서 사용하였음; 그렇지 않으면 아래 실험 피규어를 통해 포화를 넘어선 제어가 입력된다고 생각할까봐 그렇습니다; ddt의 경우 수식과 통일하기 위함이 맞습니다.}}
+    \caption{Architecture of the constrained optimization-based neuro-adaptive controller (CONAC).}
     \label{fig:ctrl:diagram}
 \end{figure}
 
@@ -591,7 +593,6 @@ The adaptation laws for $\estwth$ and $[\lambda_j]_{j\in\mathcal I}$ are derived
     \label{eq:adaptation law}%             %%
 \end{subequations}
 where $\alpha\in\R_{>0}$ denotes the adaptation gain (learning rate) and $\beta_j\in\R_{>0}$ denotes the update rate of the Lagrange multipliers in $\mathcal I$, and the arguments of $L(\cdot)$ and $J(\cdot)$ are suppressed for brevity. 
-% By selecting $\alpha_i\in\R_{>0},\ \forall i\in[1,\cdots,n]$, one can weight the importance of each component of the gradient of the objective function, allowing for a more tailored adaptation process.
 The Lagrange multipliers associated with inequality constraints are non-negative, \ie $\lambda_j\ge 0$, due to \eqref{eq:adap:lbd:max}. 
 When a constraint $c_j$ becomes active, \ie $c_j > 0$, the corresponding Lagrange multiplier $\lambda_j$ increases to address the violation, \ie see, \eqref{eq:adap:lbd}.
 Once the violation is resolved and the constraint is no longer active, \ie $c_j \le 0$, the multiplier decreases gradually until it returns to zero.
@@ -745,7 +746,7 @@ Next, we present the following assumptions, which specify the conditions for the
 \end{assum}
 
 \begin{remark}
-    Assumption \ref{assum:convex} is not restrictive, since the saturation functions are convex\KHCH{앞에 convex라는 표현이 나오지 않았는데 확인부탁합니다.}\MSRY{컨벡스란 말이 없지만 practical하게 대부분의 포화 함수는 컨벡스라는 말을 의도하였습니다.} in practice including the origin.
+    Assumption \ref{assum:convex} is not restrictive, since, as aforementioned, the control input saturation is practically convex.
     Moreover, Assumption \ref{assum:LICQ} is a standard assumption in optimization problems, which ensures that the gradients of the active constraints are linearly independent.
     This assumption will be used in the stability analysis (see, Lemma \ref{lem:convex:angle}).
 \end{remark}
@@ -820,7 +821,7 @@ where $\pptfrac{\tau}{\estNN}=\mm I_n$, which is bounded.
 From the linear mapping in \eqref{eq:linear:map}, $\rbu$ is bounded as long as $\estwth_k$ is bounded (by the condition of the lemma), and $\norm{\act_k(\cdot)}$ is bounded due to the properties of the activation functions. 
 By Assumption \ref{assum:convex}, the function $c_j$ is convex in $\rbu$-space.
 The convex function has a bounded derivative with respect to $\rbu$, since $\rbu$ is a bounded variable (\ie $\pptfrac{c_j}{\rbu}$ is bounded). 
-Furthermore, $\pptfrac{\estNN}{\estwth_i}$ is bounded, provided that the norms of $\estwth_i,\ \forall i \in[k,\cdots,i+1]$, are bounded. 
+Furthermore, $\pptfrac{\estNN}{\estwth_i}$ is bounded, provided that the norms of $\estwth_i,\ \forall i \in\{k,\cdots,i+1\}$, are bounded. 
 This can be verified by using the definition of $\pptfrac{\estNN}{\estwth_i}$ given in \eqref{eq:NN:grad}.
 Consequently, $\norm{\pptfrac{c_j}{\estwth_i}},\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$, is bounded, when $\estwth_i,\ \forall i\in \{k,\cdots,i+1\}$ are bounded.
 
@@ -843,7 +844,7 @@ We consider two cases: (1) the control input is saturated, and (2) the control i
 
 \subsection*{Case 1: Control input is saturated.}
 
-As a\MSRY{a?} result of the time derivative of $V_1$ in \eqref{eq:lya1:dot2}, the invariant set $\Theta_{\fe}^{1}$ of $\fe$ (\ie if $\fe$ leaves $\Theta_{\fe}^{1}$, $\ddtt V_1$ is negative) can be obtained using Lemma \ref{lem:stable:set} as follows:
+As a result of the time derivative of $V_1$ in \eqref{eq:lya1:dot2}, the invariant set $\Theta_{\fe}^{1}$ of $\fe$ (\ie if $\fe$ leaves $\Theta_{\fe}^{1}$, $\ddtt V_1$ is negative) can be obtained using Lemma \ref{lem:stable:set} as follows:
 \begin{equation}
     \Theta_{\fe}^{1} 
     = 
@@ -896,7 +897,7 @@ Taking the time derivative of $V_2$ yields:
         &
             +
             \textstyle\sum_{
-                j\in\mathcal{I}\setminus \{\wth_i\}_{i\in[0,\cdots,k]}
+                j\in\mathcal{I}\setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}
             }
             \lambda_j 
             \pptfrac{c_j}{\estwth_k}
@@ -962,9 +963,9 @@ According to \eqref{eq:lya2:dot} and Lemma \ref{lem:stable:set}, the invariant s
 \end{equation}
 
 The satisfaction of the constraints can be verified through the boundedness of $\estwth_k$.
-For the weight norm constraint $c_{\theta_k}$, if the corresponding Lagrange multiplier $\lambda_{\theta_k}$ \color{red}increases sufficiently large\color{black} \MSRY{본래 infinitely였습니다만 무한까지 가는 것을 가정하지 않기 때문에 충분히 커질때로 바꿈} due to the constraint violation, $\estwth_k$ approaches to the origin, as the invariant set $\Theta_{\estwth_k}^{1}$ shrinks to a point.
+For the weight norm constraint $c_{\theta_k}$, if the corresponding Lagrange multiplier $\lambda_{\theta_k}$ increases sufficiently large, due to the constraint violation, $\estwth_k$ approaches to the origin, as the invariant set $\Theta_{\estwth_k}^{1}$ shrinks to a point.
 The remaining control input constraints can be validated implicitly through the term ${\gamma}_2$ in \eqref{eq:lya2:dot}.
-Similarly to $c_{\theta_k}$, when a control input constraint $c_j,\ \forall j\in\mathcal{I}\setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$ is violated, the corresponding Lagrange multiplier $\lambda_j$ increases sufficiently large \MSRY{위와 같은 이유로 변경}, leading to increase in ${\gamma}_2$.
+Similarly to $c_{\theta_k}$, when a control input constraint $c_j,\ \forall j\in\mathcal{I}\setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$ is violated, the corresponding Lagrange multiplier $\lambda_j$ increases sufficiently large, leading to increase in ${\gamma}_2$.
 It makes ${\gamma}_2$ dominates the right-hand side of \eqref{eq:lya2:dot}, which leads $\ddtt V_2$ negative definite.
 This drives $\estwth_k$ to the origin until the constraint is satisfied.
 By Assumption \ref{assum:convex} and Lemma \ref{lem:convex:angle}, the control input constraints can be considered as convex constraint in the $\estwth_k$-space.
@@ -973,7 +974,7 @@ Therefore, the boundedness of $\estwth_k$ and $\fe$ is guaranteed by the invaria
 
 \subsection*{Case 2: Control input is not saturated.}
 
-Since, the control input constraints are inactive, the saturation function $\mysat(\cdot)$ in \eqref{eq:lya1:dot2} and the constraint functions $c_j,\ \forall j\in\mathcal I \setminus \{\wth_i\}_{\{i\in[0,\cdots,k\}}$ in \eqref{eq:lya2:dot} can be removed.
+Since, the control input constraints are inactive, the saturation function $\mysat(\cdot)$ in \eqref{eq:lya1:dot2} and the constraint functions $c_j,\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$ in \eqref{eq:lya2:dot} can be removed.
 Consider the Lyapunov function candidate $V_3:=V_1+V_2$, whose time derivative is given by:
 \begin{equation}
     \begin{aligned}
@@ -1233,6 +1234,7 @@ The first and second repetitions of the reference trajectory are referred to as 
 
 \KHCH{여기 아래부터는 글이 많아서 표현 수정을 하나씩 하지 못했습니다. 우선 아래에 있는 메모 반영해주시고, 최종적으로 chatGPT 등 통해서 표현 정리해주세요.
 표현이 조금 어색하거나 구어스러운 부분들이 있습니다.}
+\MSRY{빠른시일내에 수정 예정입니다.}
 
 However, since the DNN's weights are initialized randomly, large reference trajectories should be avoided to mitigate the effect of initial poor performance of the controller.
 Hence, in advance of the reference trajectory, the manipulator was initially positioned at ${\qd}^{\rm{origin}}=\left(-\tfrac{1}{2}\pi,0\right)^\top$, \ie stable equilibrium point.
@@ -1271,15 +1273,7 @@ The effectiveness of the proposed CONAC to handle the combination of the convex 
     \end{align}
     \label{eq:sat}% %%
 \end{subequations}
-These sets, \eqref{eq:sat:norm} and \eqref{eq:sat:tau2}, can be physically interpreted as the voltage source limitation of the actuators and the torque limitation of the second link actuator, respectively.
-\KHCH{
-    (30a)의 의미를 다음과 같이 바꾸는게 명확하겠습니다. 
-    These sets, (30a) and (30b), can be physically interpreted as the current limitation imposed by the power source and the torque limitation of the second joint actuator, respectively.
-}
-\MSRY{
-    전압 제한이 곧 전류 제한인 것인가요?
-    전류 제한이라 하면 상태에 대한 제약조건이 부여된 것인가라는 오해가 생길가 걱정입니다.
-    }
+These sets, \eqref{eq:sat:norm} and \eqref{eq:sat:tau2}, can be physically interpreted as the current limitation imposed by the power source and the torque limitation of the second joint actuator, respectively.
 The corresponding control input constraints of \eqref{eq:sat:norm} and \eqref{eq:sat:tau2}, are mathematically defined in Appendix \ref{sec:appen:cstr} as input bound constraint \eqref{eq:cstr:input:norm} and nonlinear input norm constraint \eqref{eq:cstr:input:bound}, respectively.
 \MSRY{sets들과 제약조건을 이어주기 위하여 추가}
     
@@ -1679,7 +1673,7 @@ The computational times shown in Fig.~\ref{fig:ctrl:real:result:cmp:time}, indic
 This paper proposed a constrained optimization-based neuro-adaptive controller (CONAC) for uncertain Euler-Lagrange systems, addressing both weight norm and input constraints through a rigorous optimization framework. 
 The stability of the proposed controller was analyzed via Lyapunov theory, demonstrating bounded tracking and estimation errors under real-time adaptation.
 
-The controller effectively incorporated both convex input constraints and weight norm constraints, ensuring that actuator limitations and neural network parameters\MSRY{Weight?} remained within predefined bounds. 
+The controller effectively incorporated both convex input constraints and weight norm constraints, ensuring that actuator limitations and neural network weights remained within predefined bounds. 
 By embedding these constraints into the optimization process, CONAC ensured convergence of the weights in accordance with the Karush-Kuhn-Tucker (KKT) conditions, thereby achieving both stability and optimality.
 
 A real-time implementation validated the superior performance of CONAC compared to conventional methods. 
@@ -1697,7 +1691,7 @@ This section introduces potential weight and input constraints that can be used 
 
 \subsubsection{Input Bound Constraint}\label{sec:appen:cstr:input:bound}
 
-Most physical systems have control input limits due to electrical and mechanical limitations. These are expressed as $\mv{c}_{\overline \tau}:= [c_{\overline \tau_i}]_{i\in[1,\cdots,n]}$ and $\mv{c}_{\underline\tau}:= [c_{\underline\tau_i}]_{i\in[1,\cdots,n]}$, where
+Most physical systems have control input limits due to electrical and mechanical limitations. These are expressed as $\mv{c}_{\overline \tau}:= [c_{\overline \tau_i}]_{i\in\{1,\cdots,n\}}$ and $\mv{c}_{\underline\tau}:= [c_{\underline\tau_i}]_{i\in\{1,\cdots,n\}}$, where
 \begin{equation}
     \begin{aligned}
         c_{\overline \tau_i}=\tau_{(i)} - {\tau_{\overline \tau_i}}
@@ -1709,7 +1703,6 @@ Most physical systems have control input limits due to electrical and mechanical
     \label{eq:cstr:input:bound}
 \end{equation}
 with $\tau_{\overline \tau_i}\in\R_{>0}$ and $\tau_{\underline\tau_i}\in\R_{>0}$ representing the maximum and minimum control input bounds, respectively.
-% The corresponding Lagrange multipliers are $\lambda_{u_j,i},\ \forall j\in[M,m]$. 
 The gradients of $\mv{c}_{\overline \tau}$ and $\mv{c}_{\underline\tau}$ with respect to $\estwth$ are given by
 \begin{equation}
     \begin{aligned}
