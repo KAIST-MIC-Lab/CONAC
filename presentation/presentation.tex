@@ -42,7 +42,9 @@
 \usepackage{calc}
 
 \usepackage{svg}
-
+\usepackage{media9}             %pdflatex, latex+dvips+ps2pdf, xelatex
+\usepackage{multimedia}
+\usepackage{animate}
 
 % Title page details: 
 \title{
@@ -150,7 +152,7 @@
   \textbf{Challenges}
   \small{
     \begin{itemize}
-      \item \textbf{Optimality}: In general, the adaptation laws are deriven with respect to the tracking error, which may not guarantee optimal performance.
+      \item \textbf{Optimality}: In general, the adaptation laws are driven with respect to the tracking error, which may not guarantee optimal performance.
       \item \textbf{Unpredictable Amplitude of NN Weights}: 
         \begin{itemize}
           \item NN weights may diverge, leading to instability.
@@ -286,6 +288,18 @@
 \subsection{Simulation Results}
 
 \begin{frame}{Representative Simulation Results}
+
+  % % \movie[width=3cm,height=2cm,poster]{}{overall.mp4}
+  % \begin{figure}
+  %   \centering
+  %   \href{https://youtu.be/U5uDbJQkGY8}{
+  %     \includegraphics[width=.1\textwidth]{figures/KAIST-hi.png}
+  %   }
+  % \end{figure}
+
+  % \animategraphics[loop,width=4cm]{gifs/overall-}
+  \animategraphics[loop,width=4cm]{10}{gifs/overall-}{0}{10}
+
 
 \end{frame}
 
