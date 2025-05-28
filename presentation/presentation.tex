@@ -8,19 +8,17 @@
 \input{../template/symbols/symbols_NN.tex}
 \input{../template/symbols/symbols_robot.tex}
 
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Block options: Default, Alert, Example
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 % % Theme choice:
 % \usetheme{Antibes}
 % % \usecolortheme{beaver}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Use roboto Font (recommended)
-\usepackage[sfdefault]{roboto}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-% Use roboto Font (recommended)
-\usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault]{roboto}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -42,6 +40,9 @@
 \usepackage{schemabloc}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \usepackage{calc}
+
+\usepackage{svg}
+
 
 % Title page details: 
 \title{
@@ -70,10 +71,11 @@
 \setbeamerfont{institute}{size=\normalsize}
 
 \logo{
-    \includegraphics[height=0.3cm]{logo_KAIST.png}
-    \hspace{.5cm}%
-    \includegraphics[height=0.3cm]{logo_KAIST.png}
-}
+  \vspace{-.7cm}%
+  \includegraphics[height=0.3cm]{assets/MIC_Lab_logo.jpg}
+  \includegraphics[height=0.3cm]{assets/kaist_logo.png}
+  \hspace{.6cm}%
+  }
 
 \AtBeginSection[]{%
   \frame<beamer>{ 
@@ -82,16 +84,16 @@
   }
 }
 
-\AtBeginSubsection[]{%
-  \begin{frame}
-  \vfill
-  \centering
-    \insertsectionhead
-    \\
-    \large\textbf{\insertsubsectionhead}
-  \vfill
-  \end{frame}
-}
+% \AtBeginSubsection[]{%
+%   \begin{frame}
+%   \vfill
+%   \centering
+%     \insertsectionhead
+%     \\
+%     \large\textbf{\insertsubsectionhead}
+%   \vfill
+%   \end{frame}
+% }
 
 \titlegraphic{logo_KAIST.png}
 
@@ -112,36 +114,275 @@
 
 \subsection{Introduction to Neuro–Adaptive Control}
 
-\begin{frame}{What is Neuro–Adaptive Control?}
+\begin{frame}{\insertsubsectionhead}{What is Neuro–Adaptive Control?}
 
-  \begin{block}{Neuro–Adaptive Control}
-      \begin{itemize}
-          \visible<+->{
-            \item \textbf{Neuro–adaptive control} is a control strategy that combines \textbf{neural networks (NNs)} with \textbf{adaptive control techniques}.
-          }
-          \visible<+->{
-            \item It is used to handle uncertainties and nonlinearity in dynamic systems \cite{Arefinia:2020aa}. 
-          }
-      \end{itemize}
-  \end{block}
+  \textbf{Neuro–Adaptive Control}
+  \small{
+    \begin{itemize}
+      \item \textbf{Neuro–adaptive control} (NAC) is a control strategy that combines \textbf{neural networks (NNs)} with \textbf{adaptive control techniques} \cite{Farrell:2006aa}.
+      \item It is used to handle \textbf{uncertainties} and \textbf{nonlinearity} in dynamic systems. 
+    \end{itemize}
+  }
 
   \begin{figure}
-    \includegraphics[width=0.4\textwidth]{../fig/fig5.eps}
-    \caption{Architecture of the constrained optimization-based neuro-adaptive controller (CONAC).}
+    \includegraphics[width=0.55\textwidth]{figures/NAC.drawio.pdf}
   \end{figure}
 
 \end{frame} 
 
 
-\begin{frame}{Effectiveness of Neuro–Adaptive Control}
-  
+\begin{frame}{\insertsubsectionhead}{What is Neuro–Adaptive Control?}
+
+  \textbf{Advantages of Neuro-Adaptive Control}
+  \small{
+    \begin{itemize}
+      \item \textbf{Adaptability}: NAC adapts to changing environments and system dynamics.
+      \item \textbf{Stability Guarantee}: The closed-loop stability is ensured using \textbf{Lyapunov stability theory}.
+      \item \textbf{Online Learning Capability}: NAC adapts in \textbf{real-time} to new data with stability guarantees.
+      \item \textbf{Robustness}: NAC handles \textbf{uncertainties and disturbances} effectively with adaptive control techniques.
+    \end{itemize}
+  }
   
 \end{frame}
 
-\subsection{Limitations of Neuro–Adaptive Control}
-
-\begin{frame}{Inherent Challenges in Neuro–Adaptive Control}
+\begin{frame}{\insertsubsectionhead}{Existing Challenges in NAC}
   
+  \textbf{Challenges}
+  \small{
+    \begin{itemize}
+      \item \textbf{Optimality}: In general, the adaptation laws are deriven with respect to the tracking error, which may not guarantee optimal performance.
+      \item \textbf{Unpredictable Amplitude of NN Weights}: 
+        \begin{itemize}
+          \item NN weights may diverge, leading to instability.
+          \item This can result in unpredictable behavior of the controller.
+        \end{itemize}
+      \item \textbf{Parameter Dependency}: 
+    \end{itemize}
+  }
+
+  \begin{figure}
+    \includegraphics[width=0.25\textwidth]{figures/KAIST-hi.png}
+  \end{figure}
+
+\end{frame}
+
+\subsection{Literature Review}
+
+\begin{frame}{\insertsubsectionhead}
+  
+  In general, the NN outputs are bounded by limiting the maximum amplitude of the NN weights.
+
+  \begin{enumerate}
+    \begin{columns}[T,onlytextwidth]
+        \column{0.49\textwidth}
+          \item \textbf{Projection Operator}
+
+          \begin{itemize}
+            \item Cats 
+            \item Dogs 
+            \item Birds
+          \end{itemize}
+
+        \column{0.49\textwidth}
+          \begin{figure}
+            \includegraphics[width=0.4\textwidth]{figures/KAIST-hi.png}
+          \end{figure}
+      \end{columns}
+
+      \begin{columns}[T,onlytextwidth]
+        \column{0.49\textwidth}
+          \item \textbf{$\epsilon$-modification, and $\sigma$-modification}
+
+          \begin{itemize}
+            \item Cats 
+            \item Dogs 
+            \item Birds
+          \end{itemize}
+
+        \column{0.49\textwidth}
+          \begin{figure}
+            \includegraphics[width=0.4\textwidth]{figures/KAIST-hi.png}
+          \end{figure}
+      \end{columns}
+  \end{enumerate}
+\end{frame}
+
+\subsection{Research Objectives}
+
+\begin{frame}{\insertsubsectionhead}
+
+  \textbf{Objective 1: Optimality}
+  \begin{itemize}
+    \item Formulate a constrained optimization problem to minimize the tracking error.
+    \item Guarantee the stability of the system and the NN weights.
+  \end{itemize}
+
+  \textbf{Objective 2: Stability}
+  \begin{itemize}
+    \item Derive an adaptation law that guarantees the stability of the system.
+    \item Ensure that the NN weights remain bounded during operation.
+  \end{itemize}
+
+  \textbf{Objective 3: Boundedness of }
+  \begin{itemize}
+    \item Ensure the controller is robust to uncertainties and disturbances.
+    \item Validate the proposed method through numerical simulations.
+  \end{itemize}
+
+\end{frame}
+
+\section{Proposed Method}
+
+\subsection{Problem Formulation}
+
+\begin{frame}{\insertsubsectionhead}{Original Control Problem}
+  \textbf{Objectives}:
+  \begin{itemize}
+    \item Minimize the tracking error by adapting the NN weights $\estwth$.
+    \item Guarantee the stability of the system and the NN weights $\estwth$.
+  \end{itemize}
+  
+  \begin{figure}
+    \includegraphics[width=0.5\textwidth]{figures/problem.drawio.pdf}
+    % \includesvg{figures/problem.drawio}
+    \caption{Architecture of the constrained optimization-based neuro-adaptive controller (CONAC).}
+  \end{figure}
+
+  \let\thefootnote\relax\footnote{
+    \textit{Notations}: 
+      $\mm{M}$: Inertia matrix, $\mm{C}$: Coriolis matrix, $\mm{G}$: Gravity vector, $\mv{\tau}$: Control input, $\mv{q}$: Joint position, $\estwth$: Estimated NN weights.
+      }
+
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Equvalent Constrained Optimization Problem}
+
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Inequality Constraint for Weight Boundedness}
+
+\end{frame}
+
+\subsection{Adaptation Law Derivation}
+
+\begin{frame}{\insertsubsectionhead}{Steepest Descent Method}
+
+
+\end{frame}
+\subsection{Stability Analysis}
+
+\begin{frame}{\insertsubsectionhead}{Lyapunov Stability Analysis}
+
+
+\end{frame}
+
+\section{Numerical Validation}
+
+\subsection{Simulation Setup}
+\begin{frame}{\insertsubsectionhead}{2-Link Robotic Manipulator}
+    
+\end{frame}
+
+\subsection{Simulation Results}
+
+\begin{frame}{Representative Simulation Results}
+
+\end{frame}
+
+\begin{frame}{Box-and-Whisker Plots}
+  
+  \begin{columns}
+    \column{0.5\textwidth}
+      \begin{figure}
+        \includegraphics[width=\textwidth]{figures/BoxWhisker.drawio.png}
+        \caption{Parameter dependencies of the proposed method.}
+      \end{figure}
+
+    \column{0.5\textwidth}
+      \begin{table}
+        \caption{Largest cities in the world (source: Wikipedia)}
+        \begin{tabular}{@{} lr @{}}
+          \toprule
+          City & Population\\
+          \midrule
+          Mexico City & 20,116,842\\
+          Shanghai & 19,210,000\\
+          Peking & 15,796,450\\
+          Istanbul & 14,160,467\\
+          \bottomrule
+        \end{tabular}
+    \end{table}
+    
+  \end{columns}
+
+\end{frame}
+
+\begin{frame}{Parameter Dependencies}
+
+  \begin{columns}
+
+    \column{0.33\textwidth}
+      \begin{figure}      
+        \includegraphics[width=0.99\textwidth]{figures/ECC/fig9.eps}
+        \caption{Weight norms of NAC-L2}
+      \end{figure}
+      
+    \column{0.33\textwidth}
+
+      \begin{figure}
+        \includegraphics[width=0.99\textwidth]{figures/ECC/fig10.eps}
+        \caption{Weight norms of NAC-eMod}
+      \end{figure}
+
+    \column{0.33\textwidth}
+
+      \begin{figure}
+        \includegraphics[width=0.99\textwidth]{figures/ECC/fig8.eps}
+        \caption{Weight norms of NAC-CO}
+      \end{figure}
+    
+  \end{columns}
+
+  The weight norms of the proposed method (NAC-CO) are bounded, while ...
+
+\end{frame}
+
+\begin{frame}{Parameter Dependencies}
+
+  \begin{columns}
+
+    \column{0.33\textwidth}
+      \begin{figure}      
+        \includegraphics[width=0.99\textwidth]{figures/ECC/fig6.eps}
+        \caption{Tracking error of NAC-L2}
+      \end{figure}
+      
+    \column{0.33\textwidth}
+
+      \begin{figure}
+        \includegraphics[width=0.99\textwidth]{figures/ECC/fig7.eps}
+        \caption{Tracking error of NAC-eMod}
+      \end{figure}
+
+    \column{0.33\textwidth}
+
+      \begin{figure}
+        \includegraphics[width=0.99\textwidth]{figures/ECC/fig5.eps}
+        \caption{Tracking error of NAC-CO}
+      \end{figure}
+    
+  \end{columns}
+
+  The Tracking error ...
+
+\end{frame}
+
+\section{Conclusion}
+
+\subsection{Conclusion and Future Work}
+
+\begin{frame}{Conclusion}
+    
   Flux theme comes with three pre-defined block style collections.\\
   % Native style (default) available as \verb+\setblockstyle{native}+\\[0.5cm]
   
@@ -161,132 +402,6 @@
       \end{exampleblock}      
       
 	\end{minipage}
-\end{frame}
-
-\begin{frame}{Literature Review}
-  
-\end{frame}
-
-\subsection{Research Objectives}
-
-\begin{frame}{Research Objectives}
-  
-\end{frame}
-
-\section{Proposed Method}
-
-\subsection{Constrained Optimization Problem Formulation}
-
-\begin{frame}{Original Problem Formulation}
-  \large\textbf{Objectives}:
-  \begin{itemize}
-    \item Minimize the tracking error by adapting the NN weights $\estwth$.
-    \item Guarantee the stability of the system and the NN weights $\estwth$.
-  \end{itemize}
-  
-  \begin{figure}
-    \includegraphics[width=0.5\textwidth]{figures/problem.drawio.pdf}
-    \caption{Architecture of the constrained optimization-based neuro-adaptive controller (CONAC).}
-  \end{figure}
-
-  \small{
-    \textit{Notations}: 
-    $\mm{M}$: Inertia matrix, $\mm{C}$: Coriolis matrix, $\mm{G}$: Gravity vector, $\mv{\tau}$: Control input, $\mv{q}$: Joint position, $\estwth$: Estimated NN weights.
-  }
-
-\end{frame}
-
-\subsection{Adaptation Law Derivation}
-
-\subsection{Stability Analysis}
-
-\section{Numerical Validation}
-
-\subsection{Simulation Setup}
-\begin{frame}{2-Link Robotic Manipulator}
-    
-\end{frame}
-
-\subsection{Simulation Results}
-
-\begin{frame}{Flux}{plots}
-	\begin{minipage}{0.56\textwidth}
-		\begin{figure}
-			\includegraphics[width=\textwidth]{assets/plot.png}
-		\end{figure}
-	\end{minipage}
-	\hfill
-	\begin{minipage}{0.38\textwidth}
-		\begin{block}{Binary Softmax classifier}
-			\centering
-			$\sigma(\sum_i w_ix_i + b)$
-		\end{block}
-		\begin{exampleblock}{Loss function}
-			\centering\vspace*{0.1cm}
-			$L_i = -log(\frac{e^{f_{y_i}}}{\sum_j e^{f_j}})$\\[0.1cm]
-			cross entropy
-		\end{exampleblock}
-	\end{minipage}
-\end{frame}
-
-\begin{frame}{Flux}{tables}
-    \begin{table}
-      \caption{Largest cities in the world (source: Wikipedia)}
-      \begin{tabular}{@{} lr @{}}
-        \toprule
-        City & Population\\
-        \midrule
-        Mexico City & 20,116,842\\
-        Shanghai & 19,210,000\\
-        Peking & 15,796,450\\
-        Istanbul & 14,160,467\\
-        \bottomrule
-      \end{tabular}
-      \hspace*{1cm}
-          \setlength\extrarowheight{3pt}
-      \begin{tabular}{|lr|}
-        \hline
-        \rowcolor{primaryLight}\color{background}City & \color{background}Population\\
-        \hline
-        Mexico City & 20,116,842\\
-        Shanghai & 19,210,000\\
-        Peking & 15,796,450\\
-        Istanbul & 14,160,467\\
-        \hline
-      \end{tabular}
-  \end{table}
-\end{frame}
-
-\begin{frame}{Weight Norm Constraint}
-  \begin{columns}[T,onlytextwidth]
-    \column{0.33\textwidth}
-      \textbf{Items}
-      \begin{itemize}
-        \item Cats \item Dogs \item Birds
-      \end{itemize}
-
-    \column{0.33\textwidth}
-      \textbf{Enumerations}
-      \begin{enumerate}
-        \item First \item Second \item Last
-      \end{enumerate}
-
-    \column{0.33\textwidth}
-      \textbf{Descriptions}
-      \begin{description}
-        \item[Apples] Yes \item[Oranges] No \item[Grappes] No
-      \end{description}
-  \end{columns}
-  \let\thefootnote\relax\footnote{Note the following demo slides are directly taken from metropolis theme. Copyright 2014 Matthias Vogelgesang.\\
-Give a look at https://github.com/matze/mtheme/tree/master/demo}
-\end{frame}
-
-\section{Conclusion}
-
-\subsection{Conclusion and Future Work}
-
-\begin{frame}{Conclusion}
-    
 \end{frame}
 
 \section{}
