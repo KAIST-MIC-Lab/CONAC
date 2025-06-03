@@ -58,7 +58,7 @@ In this study, the following notation is used:
         }\allowbreak\in\R^{n\times m}
         $, respectively.
     \item $\myrow_i(\mm A)$ denotes the $i\textsuperscript{th}$ row of the matrix $\mm A\in\R^{n\times m}$. 
-    \item For $\mm{A}\in\R^{n\times m}$, denotes the vectorization of $\mm A$, $\myvec(\mm A):=(\myrow_1(\mm A^\top),\cdots,\myrow_m(\mm A^\top)  )^\top\in\R^{nm}$.
+    \item For $\mm{A}\in\R^{n\times m}$, $\myvec(\mm A):=(\myrow_1(\mm A^\top),\cdots,\myrow_m(\mm A^\top)  )^\top\in\R^{nm}$ denotes the vectorization of $\mm A$.
     % \item $\mycol_i(A)$ and $\myrow_j(A)$ denote the $i\textsuperscript{th}$ column and $j\textsuperscript{th}$ row of $A\in\R^{n\times m}$, respectively.
     % \item $\myvec(A):= [\mycol_1(A)^\top  ,\cdots,\mycol_m(A)^\top  ]^\top   $ for $A\in\R^{n\times m}$.
     \item $\lambda_{\min}(\mm A)$ denotes the minimum eigenvalue of the matrix $\mm A\in\R^{n\times n}$.
@@ -82,7 +82,7 @@ Various types of NNs have been utilized in neuro-adaptive control, including sim
 SHL and RBF NNs are often employed to approximate uncertain system dynamics or controllers due to their simplicity \cite{Esfandiari:2014aa,Esfandiari:2015aa,Yesildirek:1995aa,Gao:2006aa}.
 However, since DNNs offer greater expressive power, making them more effective for complex system approximations \cite{Rolnick:2018aa}, variations of DNNs, such as long short-term memory (LSTM) networks for time-varying dynamics \cite{Griffis:2023aa} and physics-informed NNs (PINNs) for leveraging physical system knowledge \cite{Hart:2024aa}, have further extended the capabilities of neuro-adaptive control systems.
 
-A critical aspect of neuro-adaptive control is the weight adaptation law, which governs how NN werights are updated. 
+A critical aspect of neuro-adaptive control is the weight adaptation law, which governs how NN weights are updated. 
 Most studies derived these laws using Lyapunov-based methods, ensuring the boundedness of the tracking error and weight estimation error, thus maintaining system stability under uncertainty.
 
 However, two significant challenges persist in using NNs for adaptive control. 
@@ -146,13 +146,11 @@ This gap suggests that constrained optimization could be key to addressing both 
 
 \subsection{Contributions}
 
-\MSRY{일단 제가 생각하는 기여를 모두 적었습니다.}
-
 The main contributions of this study are listed as follows:
 \begin{itemize}
     \item A constrained optimization-based neuro-adaptive controller (CONAC) is proposed, where the design of a deep neural network (DNN) is formulated as a constrained optimization problem. In this formulation, weight and convex input constraints are incorporated as inequality constraints, while minimizing a given objective function.
-    \item Any convex input constraints can be applied to the proposed CONAC, including input bound constraints, and norm constraints. Moreover, the proposed CONAC can handle any combination of these constraints, which can be useful in practical applications where multiple constraints need to be satisfied simultaneously.
-    \item Since the proposed CONAC approximate the entire ideal control law with no prior knowledge of the system dynamics, the system identification process can be avoided, which is often difficult and time-consuming to implement in practice. 
+    % \item Any convex input constraints can be applied to the proposed CONAC, including input bound constraints, and norm constraints. Moreover, the proposed CONAC can handle any combination of these constraints, which can be useful in practical applications where multiple constraints need to be satisfied simultaneously.
+    % \item Since the proposed CONAC approximate the entire ideal control law with no prior knowledge of the system dynamics, the system identification process can be avoided, which is often difficult and time-consuming to implement in practice. 
     \item The adaptation laws for DNN weights in proposed CONAC are systematically derived to solve the defined problem, using constrained optimization theory. These laws guarantee convergence to the first-order optimality conditions, specifically the Karush–Kuhn–Tucker (KKT) conditions, as described in \cite[Chap. 12 Thm. 12.1]{Nocedal:2006aa}.
     \item The proposed CONAC's stability is rigorously analyzed using Lyapunov theory, ensuring that the tracking error and DNN weights remain bounded. This analysis guarantees that the proposed CONAC can achieve stable adaptation online.
     \item The proposed CONAC is implemented in real-time on a 2-DOF robotic manipulator, demonstrating its effectiveness in achieving accurate trajectory tracking while satisfying all imposed constraints. The experimental results validate the theoretical findings and show the practical applicability of the proposed controller.
@@ -186,7 +184,6 @@ We consider an uncertain Euler-Lagrange system modeled as
 where $\q\in \R^n$ denotes the generalized coordinate, $\rbd$ represents the disturbance and $\rbu\in\R^n$ denotes the generalized control input. 
 The terms $\rbM:=\rbM(\q)\in\R^{n\times n}$, $\rbVm:=\rbVm(\q,\dq)\in\R^{n\times n}$, $\rbF:=\rbF(\dq)\in\R^{n}$, and $\rbG:=\rbG(\q)$ represent the unknown inertia matrix, Coriolis/centripetal matrix, friction vector, and gravity vector, respectively.
 The function $\mysat(\cdot):\R^n\to\R^n$ represents the inherent physical limitations of the actuators such that $\norm{\mysat(\rbu)}\le \overline\tau$, where $\overline\tau$ denotes the maximum norm of control input.
-\MSRY{포화가 컨벡스하다는 가정을 추가했습니다.}
 In this study, the saturation function $\mysat(\cdot)$ is assumed to be convex, which is practically common in many engineering systems, since the actuator limits are naturally convex, such as min/max torque limits, and bounds look like a box or ball in the input space.
 To account for these limitations, it is essential to incorporate physically motivated constraints into the controller design.
 Appendix \ref{sec:appen:cstr} introduces candidate constraints that can be applied to ensure compliance with these physical limitations.
@@ -1275,7 +1272,6 @@ The effectiveness of the proposed CONAC to handle the combination of the convex 
 \end{subequations}
 These sets, \eqref{eq:sat:norm} and \eqref{eq:sat:tau2}, can be physically interpreted as the current limitation imposed by the power source and the torque limitation of the second joint actuator, respectively.
 The corresponding control input constraints of \eqref{eq:sat:norm} and \eqref{eq:sat:tau2}, are mathematically defined in Appendix \ref{sec:appen:cstr} as input bound constraint \eqref{eq:cstr:input:norm} and nonlinear input norm constraint \eqref{eq:cstr:input:bound}, respectively.
-\MSRY{sets들과 제약조건을 이어주기 위하여 추가}
     
 % ------------------------------------
 % Comparative Study
@@ -1812,13 +1808,13 @@ It should be noted that constraints \eqref{eq:cstr:input:bound} and \eqref{eq:cs
 
 \begin{IEEEbiography}[{
     \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/dhHong.jpg}}]{Donghwa Hong}
-    Donghwa Hong received his B.S. degree in Physics and Engineering Physics from Yonsei University, Wonju, South Korea, in 2023. He is currently pursuing the M.S. degree in Mechanical Engineering from GIST, Gwangju, South Korea.  
+    received his B.S. degree in Physics and Engineering Physics from Yonsei University, Wonju, South Korea, in 2023. He is currently pursuing the M.S. degree in Mechanical Engineering from GIST, Gwangju, South Korea.  
 His research interests include robot control, neural-networks, and model identification. 
 \end{IEEEbiography}
 
 \begin{IEEEbiography}[{
     \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/khChoi.jpg}}]{Kyunghwan Choi}
-    Kyunghwan Choi received his B.S., M.S., and Ph.D. degrees in Mechanical Engineering from KAIST, Daejeon, South Korea, in 2014, 2016, and 2020, respectively. Following his Ph.D., he worked at the Center for Eco-Friendly \& Smart Vehicles at KAIST as a Postdoctoral Fellow and later as a Research Assistant Professor. In 2022, he joined GIST as an Assistant Professor in the Department of Mechanical and Robotics Engineering. Currently, he serves as an Assistant Professor at the Cho Chun Shik Graduate School of Mobility at KAIST, where he is also the Director of the Mobility Intelligence and Control Laboratory. His research focuses on optimal and learning-based control for connected, automated, and electrified vehicles (CAEVs).
+    received his B.S., M.S., and Ph.D. degrees in Mechanical Engineering from KAIST, Daejeon, South Korea, in 2014, 2016, and 2020, respectively. Following his Ph.D., he worked at the Center for Eco-Friendly \& Smart Vehicles at KAIST as a Postdoctoral Fellow and later as a Research Assistant Professor. In 2022, he joined GIST as an Assistant Professor in the Department of Mechanical and Robotics Engineering. Currently, he serves as an Assistant Professor at the Cho Chun Shik Graduate School of Mobility at KAIST, where he is also the Director of the Mobility Intelligence and Control Laboratory. His research focuses on optimal and learning-based control for connected, automated, and electrified vehicles (CAEVs).
 \end{IEEEbiography}
 
 
