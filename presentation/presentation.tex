@@ -48,12 +48,14 @@
 
 % Title page details: 
 \title{
-    Imposing a Weight Norm Constraint for Neuro–Adaptive Control 
+    Imposing a Weight Norm Constraint for Neuro-Adaptive Control 
 } 
 \subtitle{
     \textit{IEEE European Control Conference (ECC) 2025}\\
 }
-\author{Myeongseok Ryu\inst{1}, Jiyun Kim\inst{2}, and Kyunghwan Choi\inst{1}}
+\author{
+  \textbf{Myeongseok Ryu}\inst{1}, Jiyun Kim\inst{2}, and Kyunghwan Choi\inst{1}
+  }
 \date{\today}
 % \institute[short]{\inst{1} First \samelineand \inst{2} Second \samelineand \inst{3} Third}
 \newcommand{\samelineand}{\\}
@@ -74,8 +76,8 @@
 
 \logo{
   \vspace{-.7cm}%
-  \includegraphics[height=0.3cm]{assets/MIC_Lab_logo.jpg}
   \includegraphics[height=0.3cm]{assets/kaist_logo.png}
+  \includegraphics[height=0.3cm]{assets/MIC_Lab_logo.jpg}
   \hspace{.6cm}%
   }
 
@@ -114,34 +116,34 @@
 % Lists frame
 \section{Background and Contributions}
 
-\subsection{Introduction to Neuro–Adaptive Control}
+\subsection{Introduction to Neuro-Adaptive Control}
 
-\begin{frame}{\insertsubsectionhead}{What is Neuro–Adaptive Control?}
+\begin{frame}{\insertsubsectionhead}{What is Neuro-Adaptive Control?}
 
-  \textbf{Neuro–Adaptive Control}
+  \textbf{Neuro-Adaptive Control}
   \small{
     \begin{itemize}
-      \item \textbf{Neuro–adaptive control} (NAC) is a control strategy that combines \textbf{neural networks (NNs)} with \textbf{adaptive control techniques} \cite{Farrell:2006aa}.
-      \item It is used to handle \textbf{uncertainties} and \textbf{nonlinearity} in dynamic systems. 
+      \item \textbf{Neuro-adaptive control} (NAC) is a control strategy that combines \textbf{neural networks (NNs)} with \textbf{adaptive control} \cite{Farrell:2006aa}.
+      \item Features of both \textbf{NNs} and \textbf{adaptive control} can be found in NAC.
     \end{itemize}
   }
 
   \begin{figure}
-    \includegraphics[width=0.55\textwidth]{figures/NAC.drawio.pdf}
+    \includegraphics[width=0.65\textwidth]{figures/NAC.drawio.pdf}
   \end{figure}
 
 \end{frame} 
 
 
-\begin{frame}{\insertsubsectionhead}{What is Neuro–Adaptive Control?}
+\begin{frame}{\insertsubsectionhead}{What is Neuro-Adaptive Control?}
 
   \textbf{Advantages of Neuro-Adaptive Control}
   \small{
     \begin{itemize}
       \item \textbf{Adaptability}: NAC adapts to changing environments and system dynamics.
-      \item \textbf{Stability Guarantee}: The closed-loop stability is ensured using \textbf{Lyapunov stability theory}.
-      \item \textbf{Online Learning Capability}: NAC adapts in \textbf{real-time} to new data with stability guarantees.
-      \item \textbf{Robustness}: NAC handles \textbf{uncertainties and disturbances} effectively with adaptive control techniques.
+      \item \textbf{Stability Guarantee}: The closed-loop stability is ensured using \textit{Lyapunov stability theory}.
+      \item \textbf{Online Learning Capability}: NAC adapts in \textit{real-time} to new data with stability guarantees.
+      \item \textbf{Robustness}: NAC handles \textit{uncertainties and disturbances} effectively with adaptive control techniques.
     \end{itemize}
   }
   
@@ -153,12 +155,15 @@
   \small{
     \begin{itemize}
       \item \textbf{Optimality}: In general, the adaptation laws are driven with respect to the tracking error, which may not guarantee optimal performance.
-      \item \textbf{Unpredictable Amplitude of NN Weights}: 
+      \item \textbf{Unpredictable Amplitude of Control input}: 
         \begin{itemize}
-          \item NN weights may diverge, leading to instability.
-          \item This can result in unpredictable behavior of the controller.
+          \item The maximum amplitude of the NN weights is not predictable.
+          \item This can result in unpredictable amplitude of the control input, which may lead to control saturation.
         \end{itemize}
       \item \textbf{Parameter Dependency}: 
+      \begin{itemize}
+        \item The performance of the NAC is highly dependent on the choice of parameters, such as learning rate and NN architecture.
+      \end{itemize}
     \end{itemize}
   }
 
@@ -283,6 +288,18 @@
 \subsection{Simulation Setup}
 \begin{frame}{\insertsubsectionhead}{2-Link Robotic Manipulator}
     
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/exp_set.drawio.png}
+    \caption{2-Link Robotic Manipulator}
+  \end{figure}
+
+  \let\thefootnote\relax\footnote{
+    \textit{Notations}: 
+      $\mv{q}$: Joint position, $\mv{\dot{q}}$: Joint velocity, $\mv{\tau}$: Control input, $\mm{M}$: Inertia matrix, $\mm{C}$: Coriolis matrix, $\mm{G}$: Gravity vector.
+  }
+
+
 \end{frame}
 
 \subsection{Simulation Results}
