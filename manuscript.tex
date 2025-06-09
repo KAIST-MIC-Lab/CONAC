@@ -177,13 +177,13 @@ The candidates of convex input constraints are presented in Appendix \ref{sec:ap
 
 We consider an uncertain Euler-Lagrange system modeled as
 \begin{equation}
-    \rbM\ddq + \rbVm + \rbF + \rbG + \rbd
+    \rbM\ddq + \DHHO{\rbVm \dq}+ \rbF + \rbG + \rbd
     =
     \mysat(\rbu)
     \label{eq:sys1}
 \end{equation}
 where $\q\in \R^n$ denotes the generalized coordinate, $\rbd$ represents the disturbance and $\rbu\in\R^n$ denotes the generalized control input. 
-The terms $\rbM:=\rbM(\q)\in\R^{n\times n}$, $\rbVm:=\rbVm(\q,\dq)\in\R^{n\times n}$, $\rbF:=\rbF(\dq)\in\R^{n}$, and $\rbG:=\rbG(\q)\in\R^{n}$ represent the unknown inertia matrix, Coriolis/centripetal matrix, friction vector, and gravity vector, respectively.
+The terms $\rbM:=\rbM(\q)\in\R^{n\times n}$, $\rbVm:=\rbVm(\q,\dq)\in\R^{n\times n}$, $\rbF:=\rbF(\dq)\in\R^{n}$, and $\rbG:=\rbG(\q)\in\R^{n}$ represent the unknown inertia matrix, \DHHO{Coriolis/centrifugal matrix}, friction vector, and gravity vector, respectively.
 The function $\mysat(\cdot):\R^n\to\R^n$ represents the inherent physical limitations of the actuators such that $\norm{\mysat(\rbu)}\le \overline\tau$, where $\overline\tau$ denotes the maximum norm of control input.
 In this study, the saturation function $\mysat(\cdot)$ is assumed to be convex, which is practically common in many engineering systems, since the actuator limits are naturally convex, such as min/max torque limits, and bounds look like a box or ball in the input space.
 To account for these limitations, it is essential to incorporate physically motivated constraints into the controller design.
@@ -197,7 +197,7 @@ The key properties are introduced below:
 \end{prop}
 
 \begin{prop} 
-    The Coriolis/centripetal matrix $\rbVm$ can always be selected, so that the matrix $\ddtt{\rbM}-2\rbVm$ is skew-symmetric, \ie $\mv{x}^\top(\ddtt{\rbM}-2\rbVm)\mv{x}=0,\ \forall \mv{x}\in\R^n$.
+    The \DHHO{Coriolis/centrifugal matrix} $\rbVm$ can always be selected, so that the matrix $\ddtt{\rbM}-2\rbVm$ is skew-symmetric, \ie $\mv{x}^\top(\ddtt{\rbM}-2\rbVm)\mv{x}=0,\ \forall \mv{x}\in\R^n$.
     \label{prop:skew}
 \end{prop}
 
@@ -277,7 +277,7 @@ The following proposition and lemma will be used in subsequent sections:
 
 First, a filtered tracking error $\fe\in\R^n$ is defined as 
 \begin{equation}
-    \fe := \ddtt{\mv e}-\mm\Lambda \mv e
+    \DHHO{\fe := \ddtt{\mv e}+\mm\Lambda \mv e}
     ,
     \label{eq:err:filtered}
 \end{equation}
@@ -286,13 +286,14 @@ Since \eqref{eq:err:filtered} is stable system, it implies that $\mv e$ is bound
 
 Using $\fe$, the system dynamics \eqref{eq:sys1} can be rewritten as
 \begin{equation}
-    \rbM \ddtt\fe
+    \DHHO{ check:
+   \rbM \ddtt\fe
     =
     -\rbVm \fe
     -\mm K \fe
     + \mv f
     -\rbd + \mysat(\rbu)
-    ,
+    ,}
     \label{eq:sys:filtered}
 \end{equation}
 where $\mm{K}=\mm{K}^\top\in\R^{n\times n}_{>0}$ denotes an arbitrary unknown matrix and $
@@ -325,6 +326,7 @@ Consider the Lyapunov function $V_1:= \tfrac{1}{2}\fe^\top \rbM\fe$.
 Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
 \begin{equation}
     \begin{aligned}
+        \DHHO{ check}
         \ddtt{V}_1
         =&
         \fe^\top \rbM \ddtt \fe
@@ -364,7 +366,7 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
         +
         \overline\tau_d\norm{\fe}
         +
-        \fe^\top (\mv f+\mysat(\rbu))
+        \fe^\top (\mv f+\mysat(\rbu))\\
         % \\
         % \le&
         % -\lambda_{\min}(\mm K)\norm{\fe}^2
@@ -372,7 +374,6 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
         % \overline\tau_d\norm{\fe}
         % +
         % \fe^\top (\mysat(\rbu)-\rbu^*)
-        .
     \end{aligned}
     \label{eq:lya1:dot1}
 \end{equation} 
@@ -1161,7 +1162,7 @@ The measured and/or estimated system parameters are provided in Table~\ref{table
     \hline
     ${l_c}_1,{l_c}_2$ & Center of mass & 0.139 m \\
     \hline
-    $I_1,I_2$  & Inertia & 0.069 kgm\textsuperscript{2} \\
+    $I_1,I_2$  & Inertia & 0.069 \DHHO{kg$\cdot$m\textsuperscript{2}} \\
     \hline
     \end{tabular}
     \label{table:system:params}
@@ -1668,11 +1669,11 @@ In addition, it is worth noting that the control input constraints were repeated
 This occurred because the controllers were implemented in discrete time with a relatively low sampling rate of $250$ Hz.
 
 % ------------------------------------
-% Karsh-Kuhn-Tucker (KKT) conditions}
+% Karush-Kuhn-Tucker (KKT) conditions}
 % ------------------------------------
 \hfill
 
-\subsubsection{Satisfaction of Karush-Kuhn-Tucker (KKT) conditions}
+\subsubsection{Satisfaction of \DHHO{Karush}-Kuhn-Tucker (KKT) conditions}
 
 Since the proposed CONAC was implemented in discrete time, a direct demonstration of the KKT conditions at steady state is not straightforward. 
 However, the near-constant values of the weights and Lagrange multipliers during constraint violation suggest an implicit satisfaction of the KKT conditions. 
