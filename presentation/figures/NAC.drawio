@@ -1,23 +1,41 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.5 Chrome/134.0.6998.205 Electron/35.3.0 Safari/537.36" version="27.0.5">
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
   <diagram name="Page-1" id="c0MG-RBC0vRgcLwglr-d">
     <mxGraphModel dx="570" dy="344" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="1" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="iG4seeKozecyQ6-5CU2t-3" value="Adaptive Control" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Times New Roman;" vertex="1" parent="1">
-          <mxGeometry x="461" y="270" width="110" height="30" as="geometry" />
+        <mxCell id="iG4seeKozecyQ6-5CU2t-3" value="Adaptive Control" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Times New Roman;" parent="1" vertex="1">
+          <mxGeometry x="540" y="290" width="110" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="iG4seeKozecyQ6-5CU2t-5" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="290" y="300" width="220" height="160" as="geometry" />
+        <mxCell id="iG4seeKozecyQ6-5CU2t-6" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#330000;opacity=40;strokeWidth=1;" parent="1" vertex="1">
+          <mxGeometry x="360" y="300" width="238.5" height="180" as="geometry" />
         </mxCell>
-        <mxCell id="iG4seeKozecyQ6-5CU2t-6" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="400" y="300" width="220" height="160" as="geometry" />
+        <mxCell id="w0E36DQrHYyNoOT1IA7D-1" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#330000;opacity=40;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="300" width="230" height="180" as="geometry" />
         </mxCell>
         <mxCell id="UrFGi6wFs18K0bhvfEZ_-5" value="pics" style="" parent="0" />
         <mxCell id="UrFGi6wFs18K0bhvfEZ_-6" value="sigs" parent="0" />
         <mxCell id="UrFGi6wFs18K0bhvfEZ_-8" value="name" parent="0" />
         <mxCell id="UrFGi6wFs18K0bhvfEZ_-41" value="Neural Network" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Times New Roman;" parent="UrFGi6wFs18K0bhvfEZ_-8" vertex="1">
-          <mxGeometry x="340" y="270" width="100" height="30" as="geometry" />
+          <mxGeometry x="270" y="290" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="w0E36DQrHYyNoOT1IA7D-3" value="Neuro-Adaptive&amp;nbsp;&lt;div&gt;Control&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Times New Roman;" vertex="1" parent="UrFGi6wFs18K0bhvfEZ_-8">
+          <mxGeometry x="400" y="260" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="w0E36DQrHYyNoOT1IA7D-4" value="Approximation&lt;div&gt;property&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Times New Roman;fontSize=10;" vertex="1" parent="UrFGi6wFs18K0bhvfEZ_-8">
+          <mxGeometry x="370" y="370" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="w0E36DQrHYyNoOT1IA7D-5" value="Rigorous&amp;nbsp;&lt;div&gt;stability&amp;nbsp;&lt;div&gt;analysis&lt;/div&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Times New Roman;fontSize=10;" vertex="1" parent="UrFGi6wFs18K0bhvfEZ_-8">
+          <mxGeometry x="460" y="370" width="60" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="w0E36DQrHYyNoOT1IA7D-6" value="Online-learning&amp;nbsp;&lt;div&gt;capability&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Times New Roman;fontSize=10;" vertex="1" parent="UrFGi6wFs18K0bhvfEZ_-8">
+          <mxGeometry x="400" y="415" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="w0E36DQrHYyNoOT1IA7D-7" value="Adaptivity" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Times New Roman;fontSize=10;" vertex="1" parent="UrFGi6wFs18K0bhvfEZ_-8">
+          <mxGeometry x="390" y="330" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="w0E36DQrHYyNoOT1IA7D-8" value="Robustness" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Times New Roman;fontSize=10;" vertex="1" parent="UrFGi6wFs18K0bhvfEZ_-8">
+          <mxGeometry x="460" y="340" width="70" height="30" as="geometry" />
         </mxCell>
         <mxCell id="UrFGi6wFs18K0bhvfEZ_-7" value="math" parent="0" />
       </root>

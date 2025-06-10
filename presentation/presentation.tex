@@ -39,6 +39,9 @@
 \usepackage{ragged2e}
 \usepackage{schemabloc}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+\usepackage{multirow}
+
 % \usepackage{calc}
 % \usepackage{svg}
 % \usepackage{media9}             %pdflatex, latex+dvips+ps2pdf, xelatex
@@ -72,12 +75,12 @@
 % make institute font size smaller
 \setbeamerfont{institute}{size=\normalsize}
 
-\logo{
-  \vspace{-.7cm}%
-  \includegraphics[height=0.3cm]{assets/kaist_logo.png}
-  \includegraphics[height=0.3cm]{assets/MIC_Lab_logo.png}
-  \hspace{.6cm}%
-  }
+% \logo{
+%   \vspace{-.7cm}%
+%   \includegraphics[height=0.3cm]{assets/kaist_logo.png}
+%   \includegraphics[height=0.3cm]{assets/MIC_Lab_logo.png}
+%   \hspace{.6cm}%
+%   }
 
 \AtBeginSection[]{%
   \frame<beamer>{ 
@@ -169,95 +172,87 @@
     \end{itemize}
   }
 
-  \begin{figure}
-    \includegraphics[width=0.25\textwidth]{figures/KAIST-hi.png}
-  \end{figure}
-
 \end{frame}
 
-\subsection{Literature Review}
+% \subsection{Literature Review}
 
-\begin{frame}{\insertsubsectionhead}{Boundedness of NN Weights}
+% \begin{frame}{\insertsubsectionhead}{Boundedness of NN Weights}
   
-  In general, the NN outputs are bounded by limiting the maximum amplitude of the NN weights.
+%   In general, the NN outputs are bounded by limiting the maximum amplitude of the NN weights.
 
-  \begin{enumerate}
-    \begin{columns}[T,onlytextwidth]
-        \column{0.49\textwidth}
-          \item \textbf{Projection Operator}
+%   \begin{enumerate}
+%     \begin{columns}[T,onlytextwidth]
+%         \column{0.49\textwidth}
+%           \item \textbf{Projection Operator}
 
-          \begin{itemize}
-            \item Cats 
-            \item Dogs 
-            \item Birds
-          \end{itemize}
+%           \begin{itemize}
+%             \item Cats 
+%             \item Dogs 
+%             \item Birds
+%           \end{itemize}
 
-        \column{0.49\textwidth}
-          \begin{figure}
-            \includegraphics[width=0.4\textwidth]{figures/KAIST-hi.png}
-          \end{figure}
-      \end{columns}
+%         \column{0.49\textwidth}
+%           \begin{figure}
+%             \includegraphics[width=0.4\textwidth]{figures/KAIST-hi.png}
+%           \end{figure}
+%       \end{columns}
 
-      \begin{columns}[T,onlytextwidth]
-        \column{0.49\textwidth}
-          \item \textbf{$\epsilon$-modification, and $\sigma$-modification}
+%       \begin{columns}[T,onlytextwidth]
+%         \column{0.49\textwidth}
+%           \item \textbf{$\epsilon$-modification, and $\sigma$-modification}
 
-          \begin{itemize}
-            \item Cats 
-            \item Dogs 
-            \item Birds
-          \end{itemize}
+%           \begin{itemize}
+%             \item Cats 
+%             \item Dogs 
+%             \item Birds
+%           \end{itemize}
 
-        \column{0.49\textwidth}
-          \begin{figure}
-            \includegraphics[width=0.4\textwidth]{figures/KAIST-hi.png}
-          \end{figure}
-      \end{columns}
-  \end{enumerate}
-\end{frame}
+%         \column{0.49\textwidth}
+%           \begin{figure}
+%             \includegraphics[width=0.4\textwidth]{figures/KAIST-hi.png}
+%           \end{figure}
+%       \end{columns}
+%   \end{enumerate}
+% \end{frame}
 
-
-\subsection{Literature Review}
-
-\begin{frame}{\insertsubsectionhead}{Input Saturation}
+% \begin{frame}{\insertsubsectionhead}{Input Saturation}
   
-  The input saturation is generally handled using an auxiliary system.
+%   The input saturation is generally handled using an auxiliary system.
 
-  \begin{enumerate}
-    \begin{columns}[T,onlytextwidth]
-        \column{0.49\textwidth}
-          \item \textbf{Auxiliary Systems}
+%   \begin{enumerate}
+%     \begin{columns}[T,onlytextwidth]
+%         \column{0.49\textwidth}
+%           \item \textbf{Auxiliary Systems}
 
-          \begin{itemize}
-            \item Cats 
-            \item Dogs 
-            \item Birds
-          \end{itemize}
+%           \begin{itemize}
+%             \item Cats 
+%             \item Dogs 
+%             \item Birds
+%           \end{itemize}
 
-        \column{0.49\textwidth}
-          \begin{figure}
-            \includegraphics[width=0.4\textwidth]{figures/KAIST-hi.png}
-          \end{figure}
-      \end{columns}
+%         \column{0.49\textwidth}
+%           \begin{figure}
+%             \includegraphics[width=0.4\textwidth]{figures/KAIST-hi.png}
+%           \end{figure}
+%       \end{columns}
 
-      \begin{columns}[T,onlytextwidth]
-        \column{0.49\textwidth}
-          \item \textbf{Second?}
+%       \begin{columns}[T,onlytextwidth]
+%         \column{0.49\textwidth}
+%           \item \textbf{Second?}
 
-          \begin{itemize}
-            \item Cats 
-            \item Dogs 
-            \item Birds
-          \end{itemize}
+%           \begin{itemize}
+%             \item Cats 
+%             \item Dogs 
+%             \item Birds
+%           \end{itemize}
 
-        \column{0.49\textwidth}
-          \begin{figure}
-            \includegraphics[width=0.4\textwidth]{figures/KAIST-hi.png}
-          \end{figure}
-      \end{columns}
-  \end{enumerate}
-\end{frame}
-
+%         \column{0.49\textwidth}
+%           \begin{figure}
+%             \includegraphics[width=0.4\textwidth]{figures/KAIST-hi.png}
+%           \end{figure}
+%       \end{columns}
+%   \end{enumerate}
+% \end{frame}
 
 \subsection{Research Objectives}
 
@@ -293,12 +288,12 @@
     
     \column{0.5\textwidth}
       
-      \textbf{Target 2-link Robotic Manipulator System}:
+      \textbf{Target Two-link Robotic Manipulator System}:
       \begin{itemize}
         \item Control input saturation function $\mysat(\cdot)$.
         \item Desired trajectory $\mv{q}_d$ is given.
       \end{itemize}
-        \begin{equation}
+        \begin{equation}\label{eq:sys}
           \mm{M}\ddq + \mm{V}_m\dq + \mv{F} + \mv{G} + \mv{\tau}_d
           =
           \mysat(\mv{\tau})
@@ -309,7 +304,7 @@
         \item NN's output $\mv{\Phi}$ is used as the control input.
         \item Consists of the estimated NN weights $\estwth$.
       \end{itemize}
-      \begin{equation}
+      \begin{equation}\label{eq:input}
         \mv{\tau} := \mv{\Phi}(\mv{q}_n; \estwth)
       \end{equation}
 
@@ -317,7 +312,7 @@
       \begin{itemize}
         \item $k$ layers with $\estwth_i:=\myvec(\estwV_i)$.
         \item Activation function: $\phi(\cdot):=tanh(\cdot)$.
-        \begin{equation}
+        \begin{equation}\label{eq:NN}
           \mv{\Phi}(\mv{q}_n; \estwth)
           :=
           \begin{cases}
@@ -368,8 +363,10 @@
     \begin{itemize}
       \item \textbf{Find} NN weights $\estwth$,
       \item That \textbf{minimize} objective function $J(\cdot)$,
-        \begin{equation}
-          J(\mv{r}) := \frac{1}{2} \mv{r}^\top \mv{r}.
+        \begin{equation}\label{eq:obj}
+          J(\mv{r};\estwth)
+          := 
+          \frac{1}{2} \mv{r}^\top \mv{r}.
         \end{equation}
         \begin{itemize}
           \item where $\mv{r} := \ddt\mv{e} + \Lambda\mv{e}$ is the filtered tracking error,
@@ -387,34 +384,35 @@
     \begin{block}{Considered Constraints}
 
       \begin{itemize}
-        \item \textbf{Weight Boundedness}: 
-          \begin{equation}
-            c_{\theta_i}
+        \item \textbf{Weight Boundedness for Each Layer}: 
+          \begin{equation}\label{eq:cstr:weight}
+            c_{\theta_i}(\estwth)
             :=
-            \norm{\estwth_i}^2 - \bar{\theta_i}^2 \le 0
+            \norm{\estwth_i}^2 - \overline{\theta_i}^2 \le 0
             , 
             \forall i\in\{0,\ldots,k\}
           \end{equation}
 
-        \item \textbf{Control Input Saturation}: 
+        \item \textbf{Convex control Input Saturation}: 
           \begin{itemize}
             \item Input bound constraint:
-            \begin{equation}
-              c_{\overline{\tau}_i}
+            \begin{equation}\label{eq:cstr:input_bound}
+              c_{\overline{\tau}_i}(\estwth)
               :=
               \tau_i - \overline{\tau_i}
               \le 
               0
               ,
-              c_{\underline{\tau}_i}
+              \quad
+              c_{\underline{\tau}_i}(\estwth)
               :=
               \underline{\tau_i} - \tau_i
               \le 
               0
             \end{equation}
             \item Input norm constraint:
-            \begin{equation}
-              c_{\mv{\tau}}
+            \begin{equation}\label{eq:cstr:input_norm}
+              c_{\mv{\tau}}(\estwth)
               :=
               \norm{\mv{\tau}}^2 - \overline{\tau}^2
               \le
@@ -436,172 +434,291 @@
 
 \begin{frame}{\insertsubsectionhead}{Optimization Problem}
 
-  \begin{columns}
+  \textbf{Original Optimization Problem}
 
-    \column{0.5\textwidth}
-      
-      \centering
-      \begin{minipage}{0.9\textwidth}%
-        \begin{block}{Optimization Problem}%
+  \begin{itemize}
+    \item Constrained optimization problem to minimize the tracking error.
+    \item Inequality constraints $c_j(\estwth) \le 0$ for $j\in\mathcal{I}$.
+  \end{itemize}
 
+    \begin{equation}\label{eq:opt_problem}
+      \begin{matrix}
+        \min_{\estwth} J(\mv{r};\estwth)
+        \\\ \\
+        \text{s.t. } c_{j}(\estwth) 
+        \le 
+        0
+        ,
+        \forall j\in\mathcal{I}
+      \end{matrix}
+    \end{equation}
 
-          \begin{equation}
-            \begin{matrix}
-              \min_{\estwth} J(\mv{r};\estwth)
-              \\\ \\
-              \text{s.t. } c_{j}(\estwth) 
-              \le 
-              0
-              ,
-              \forall j\in\mathcal{J}
-            \end{matrix}
-          \end{equation}
+  \textbf{Define Lagrangian Function}
 
-        \end{block}
-      \end{minipage}
+  \begin{equation}\label{eq:lagrangian}
+      L(\mv{r},\estwth,[\lambda_j]_{j\in\mathcal{I}})
+      :=
+      J(\mv{r};\estwth)
+      +
+      \sum_{j\in\mathcal{I}} \lambda_j c_j(\estwth)
+  \end{equation}
 
-    \column{0.5\textwidth}
+  \textbf{Dual Problem}
+  \begin{itemize}
+    \item The dual problem is to minimize the Lagrangian function with respect to the NN weights $\estwth$, while maximizing the Lagrange multipliers $\lambda_j$.
+    \item The Lagrange multipliers $\lambda_j$ are non-negative, \ie $\lambda_j \ge 0$.
+  \end{itemize}
 
-      \centering
-      \begin{minipage}{0.9\textwidth}%
-        \begin{block}{MinMax Problem}%
-          
-
-          \begin{equation}
-            \begin{matrix}
-              \min_{\estwth}\max_{[\lambda_j]_{j\in\mathcal{J}}} L(\cdot)
-              \\\ \\
-              \text{where }
-              L(\mv{r},\estwth,[\lambda_j]_{j\in\mathcal{J}})
-              :=
-              J(\mv{r};\estwth)
-              +
-              \sum_{j\in\mathcal{J}} \lambda_j c_j(\estwth)
-            \end{matrix}
-          \end{equation}
-
-        \end{block}
-      \end{minipage}
-
-  \end{columns}
+  \begin{equation}\label{eq:dual_problem}
+    \min_{\estwth}\max_{[\lambda_j]_{j\in\mathcal{I}}} 
+    L(\mv{r},\estwth,[\lambda_j]_{j\in\mathcal{I}})
+  \end{equation}
 
 \end{frame}
 
 \subsection{Adaptation Law Derivation}
 
-\begin{frame}{\insertsubsectionhead}{Steepest Descent/Ascent Method}
+\begin{frame}{\insertsubsectionhead}{Gradient Descent/Ascent Method}
+  
+  For the dual problem, 
+  \begin{equation}
+    \min_{\estwth}\max_{[\lambda_j]_{j\in\mathcal{I}}} 
+    L(\mv{r},\estwth,[\lambda_j]_{j\in\mathcal{I}})
+    ,
+  \end{equation}
+  the first-order gradient descent/ascent method is used to derive the adaptation law.
 
-  \begin{columns}
+  \centering
+  \begin{minipage}{0.6\textwidth}%
 
-    \column{0.5\textwidth}
+    \begin{block}{Adaptation Law}%
       
-      \begin{minipage}{0.9\textwidth}%
-        For the min/max problem, the steepest descent/ascent method is used to derive the adaptation law.
-      \end{minipage}
+    \textbf{Gradient Descent Method for $\estwth$}:
+    \begin{equation}\label{eq:adaptation_law:1}
+      \ddt {{\estwth}}
+      =
+      -\alpha 
+      \ppfrac{L}{{\estwth}}
+      =-\alpha 
+      \left(
+          \ppfrac{J}{{\estwth}}
+          +
+          \sum_{j\in\mathcal{I}}
+          \lambda_j 
+          \ppfrac{c_j}{\estwth}
+      \right),
+    \end{equation}
 
-      \vspace{0.5cm}
+    \textbf{Gradient Ascent Method for $\lambda_j, \forall j\in\mathcal I$}:
+    \begin{equation}\label{eq:adaptation_law:2}
+      \ddt\lambda_j
+      = 
+      \beta_j
+      \ppfrac{L}{\lambda_j} 
+      = 
+      \beta_j c_j ,
+    \end{equation}
 
-      \begin{minipage}{0.9\textwidth}%
-        \textbf{Steepest Descent Method for $\estwth$}:
-        \begin{equation}
-          \ddtt\estwth
-          =
-          -\alpha 
-          \pptfrac{L}{\estwth}
-        \end{equation}
+    For non-negativity of the Lagrange multipliers,
+    \begin{equation}\label{eq:adaptation_law:3}
+      \lambda_j
+      \leftarrow
+      \max(\lambda_j,0)
+      .
+    \end{equation}
 
-        \textbf{Steepest Ascent Method for $\lambda_j$}:
-        \begin{equation}
-          \ddtt\lambda_j = 
-        \end{equation}
-      \end{minipage}
+    % \begin{subequations}
+    %     \begin{align}
+    %       \ddt {{\estwth}}
+    %       &
+    %       =
+    %       -\alpha 
+    %       \ppfrac{L}{{\estwth}}
+    %       =-\alpha 
+    %       \left(
+    %           \ppfrac{J}{{\estwth}}
+    %           +
+    %           \sum_{j\in\mathcal{I}}
+    %           \lambda_j 
+    %           \ppfrac{c_j}{\estwth}
+    %       \right),
+    %       \\
+    %       \ddt\lambda_j
+    %       & 
+    %       = 
+    %       \beta_j
+    %       \ppfrac{L}{\lambda_j} 
+    %       = 
+    %       \beta_j c_j ,
+    %       \quad\quad\quad\quad      \      
+    %       \forall j\in\mathcal I,
+    %       \\
+    %       \lambda_j
+    %       &
+    %       \leftarrow
+    %       \max(\lambda_j,0)
+    %     \end{align}
+    % \end{subequations}
 
-    \column{0.5\textwidth}
-
-      \centering
-        \begin{block}{Adaptation Law}%
-
-        \begin{subequations}
-            \begin{align}
-                    \ddt {{\estwth}}
-                    &
-                    =
-                    -\alpha 
-                    \ppfrac{L}{{\estwth}}
-                    =-\alpha 
-                    \left(
-                        \ppfrac{J}{{\estwth}}
-                        +
-                        \sum_{j\in\mathcal{I}}
-                        \lambda_j 
-                        \ppfrac{c_j}{\estwth}
-                    \right),
-                    \\
-                    \ddt\lambda_j
-                    & 
-                    = 
-                    \beta_j
-                    \ppfrac{L}{\lambda_j} 
-                    = 
-                    \beta_j c_j ,
-                    \quad\quad\quad\quad      \      
-                    \forall j\in\mathcal I,
-                    \\
-                    \lambda_j 
-                    & 
-                    = 
-                    \max(\lambda_j,0) ,
-            \end{align}
-        \end{subequations}
-
-        \end{block}
-
-  \end{columns}
-
+    \end{block}
+  \end{minipage}
 \end{frame}
 
 \subsection{Stability Analysis}
 
 \begin{frame}{\insertsubsectionhead}{Lyapunov Stability Analysis}
 
-  \begin{block}{Theorem 1}
-    For the dynamical system described in (1), the neuro-adaptive controller in (2) with the weight adaptation laws in (12) ensure the boundedness of the filtered error $\mv{r}$ and the weight estimate $\estwth$, under the control input constraints satisfying Assumption 1 and 2. This holds under the weight norm constraint (5).
+  \begin{block}{Theorem 1 \cite{Ryu:2025aa}}
+    For the dynamical system described in \eqref{eq:sys}, the neuro-adaptive controller in \eqref{eq:input} with the weight adaptation laws in \eqref{eq:adaptation_law:1}, \eqref{eq:adaptation_law:2} and \eqref{eq:adaptation_law:3} ensure the boundedness of the filtered error $\mv{r}$ and the weight estimate $\estwth$, under the control input constraints satisfying Assumption 1 and 2. This holds under the weight norm constraint \eqref{eq:cstr:weight}.
   \end{block}
 
-  \begin{exampleblock}{Assumption 1}
+  \begin{exampleblock}{Assumption 1 (Convex Input Constraint)}
     The constraint functions $c_j(\estwth),\forall j\in\mathcal{I}$, are convex in the $\tau$-space and satisfy $c_j(\estwth)\le0$ and $c_j(\idealwth)\le0$.
   \end{exampleblock}
 
-  \begin{exampleblock}{Assumption 2}
+  \begin{exampleblock}{Assumption 2, Linear Independence Constraint Qualification (LICQ)}
     The selected constraints satisfy the Linear Independence Constraint Qualification (LICQ) \cite[Chap. 12 Def. 12.1]{Nocedal:2006aa}.
   \end{exampleblock}
 
-  Proof of Theorem 1 is omitted due to space limitations. The detailed proof can be found in \cite{}.
+  Proof of Theorem 1 is omitted due to space limitations. The detailed proof can be found in \cite{Ryu:2025aa}.
 
 \end{frame}
 
-\section{Numerical Validation}
+\section{Experimental Validation}
 
 \subsection{Simulation Setup}
-\begin{frame}{\insertsubsectionhead}{2-Link Robotic Manipulator}
-    
-  \begin{figure}
+
+\begin{frame}{\insertsubsectionhead}{Two-Link Robotic Manipulator}
+
+    \begin{columns}
+
+      \column{.45\textwidth}
+
+        \textbf{Target System}:
+
+        \begin{equation*}
+          \mm{M}\ddq + \mm{V}_m\dq + \mv{F} + \mv{G} + \mv{\tau}_d
+          =
+          \mv{\tau}
+        \end{equation*}
+
+        \begin{figure}
+          \centering
+          \includegraphics[width=.99\textwidth]{figures/RobotModel.drawio.png}
+          \caption{Two-link robotic manipulator model.}
+        \end{figure}
+
+      \column{.55\textwidth}
+      
+        \textbf{Desired Trajectory}:
+
+        \begin{equation}
+          \qd
+          =
+          \begin{bmatrix}
+              {q_d}_1\\
+              {q_d}_2
+          \end{bmatrix}
+          = 
+          \begin{bmatrix}
+              +\cos(
+                  \tfrac{\pi}{2}t
+              ) + 1 \\
+              -\cos(
+                  \tfrac{\pi}{2}t
+              ) - 1 
+          \end{bmatrix}
+          .
+      \end{equation}
+
+      \textbf{System Model Parameters}:
+
+      \begin{table}
+        \renewcommand{\arraystretch}{1.3}
+        \caption{System model parameters.}
+        \centering
+        \begin{tabular}{c m{5em} c c c }
+        \hline
+        \textbf{Symbol} & \textbf{Description} & \textbf{Link 1} & \textbf{Link 2} \\
+        \hline
+        \hline 
+        $m_p$ & Mass & 23.902 kg & 3.88 kg \\
+        \hline
+        $l_p$  & Length & 0.45 m & 0.45 m \\
+        \hline
+        ${l_c}_p$ & COM & 0.091 m & 0.048 m \\
+        \hline
+        $b_p$   & Viscous coef. &  2.288 Nms & 0.172 Nms \\
+        \hline
+        ${f_c}_p$  & Friction coef. & 7.17 Nm & 1.734 Nm \\
+        \hline
+        \end{tabular}
+        \label{table: system parameters}
+      \end{table}
+
+    \end{columns}
+
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Controllers for Comparative Study}
+  
+    \begin{itemize}
+      \item NAC-CO denotes the proposed controller based on constrained optimization.
+      \item For NAC-L2 and NAC-eMod, the stabilizing terms $-\lambda\estwth$ and $\rho\norm{\tilde{\mv{z}}}\estwth$ ensures the boundedness of the NN weights
+    \end{itemize}
+
+    \begin{table}
+      \renewcommand{\arraystretch}{1.5}
+      % \caption{Controller Properties.}
+      \centering
+      \begin{tabular}{c m{20em} c c c }
+      \hline
+      \textbf{Name} & \textbf{Description} & \textbf{Adaptation Law} \\
+      \hline
+      \hline 
+        \multirow{2}{*}{NAC-CO} & Constrained Optimization-based NAC & 
+      $
+        \ddt\estwth = -\alpha \left(\ppfrac{L}{\estwth}+\sum_{j\in\mathcal{I}}\lambda_j\ppfrac{c_j}{\estwth}\right)
+      $ 
+      \\
+        (proposed) & ($\beta_j$ determines $\lambda_j$ adaptation speed) &
+      $
+        \ddt\lambda_j = \beta_j c_j, \lambda_j \leftarrow \max(\lambda_j,0)
+      $
+      \\
+      \hline
+      \multirow{2}{*}{NAC-L2} & NAC with $L_2$-regularization & \multirow{2}{*}
+      {$
+        \ddt\estwth = -\alpha \left(\ppfrac{J}{\estwth}+\lambda\estwth\right)
+      $}
+      \\
+        & ($\lambda\in\R_{>0}$ stabilizes $\estwth$ towards origin) &
+      \\
+      \hline
+      \multirow{2}{*}{NAC-eMod} & NAC with $\epsilon$-modification & \multirow{2}{*}
+      {$
+        \ddt\estwth = -\alpha \left(\ppfrac{J}{\estwth}+\rho\norm{\tilde{\mv{z}}}\estwth\right)
+      $}
+      \\
+      & ($\rho$ stabilizes proportionally to the error $\tilde{\mv{z}}$) &
+      \\
+      \hline
+      \end{tabular}
+      \label{table:sys:param}
+    \end{table}
+
     \centering
-    \includegraphics[width=0.5\textwidth]{figures/exp_set.drawio.png}
-    \caption{2-Link Robotic Manipulator}
-  \end{figure}
-
-  \let\thefootnote\relax\footnote{
-    \textit{Notations}: 
-      $\mv{q}$: Joint position, $\mv{\dot{q}}$: Joint velocity, $\mv{\tau}$: Control input, $\mm{M}$: Inertia matrix, $\mm{C}$: Coriolis matrix, $\mm{G}$: Gravity vector.
-  }
-
+    \begin{minipage}{0.75\textwidth}
+      \begin{block}{Simulation Objective}
+        By varying the parameters, \ie $\beta_j$, $\lambda$, and $\rho$, the parameter dependencies will be investigated.
+      \end{block}
+    \end{minipage}
 
 \end{frame}
 
 \subsection{Simulation Results}
 
-\begin{frame}{Representative Simulation Results}
+% \begin{frame}{Representative Simulation Results}
 
   % % \movie[width=3cm,height=2cm,poster]{}{overall.mp4}
   % \begin{figure}
@@ -614,42 +731,69 @@
   % \animategraphics[loop,width=4cm]{gifs/overall-}
   % \animategraphics[loop,width=4cm]{10}{gifs/overall-}{0}{10}
 
+% \end{frame}
 
-\end{frame}
-
-\begin{frame}{Box-and-Whisker Plots}
+\begin{frame}{\insertsubsectionhead}{Box-and-Whisker Plots}
   
   \begin{columns}
+    \column{0.55\textwidth}
+    
+      \textbf{Parameter Dependencies Investigation}:
+
+      \begin{itemize}
+        \item The parameters ranged from 0.001 to 1 across 10 samples.
+        \item NAC-CO (proposed) shows the best performance and low variance.
+        \item NAC-L2 shows the worst performance with high variance.
+      \end{itemize}
+
     \column{0.5\textwidth}
+
       \begin{figure}
-        \includegraphics[width=\textwidth]{figures/BoxWhisker.drawio.png}
+        \includegraphics[width=.99\textwidth]{figures/BoxWhisker.drawio.png}
         \caption{Parameter dependencies of the proposed method.}
       \end{figure}
 
-    \column{0.5\textwidth}
-      \begin{table}
-        \caption{Largest cities in the world (source: Wikipedia)}
-        \begin{tabular}{@{} lr @{}}
-          \toprule
-          City & Population\\
-          \midrule
-          Mexico City & 20,116,842\\
-          Shanghai & 19,210,000\\
-          Peking & 15,796,450\\
-          Istanbul & 14,160,467\\
-          \bottomrule
-        \end{tabular}
-    \end{table}
-    
   \end{columns}
 
+    \begin{table}[!t]
+      \renewcommand{\arraystretch}{1.1}
+      % \caption{Quantitative comparison of square root of tracking ISE.}
+      \centering
+      \begin{tabular}{c c c c }
+      \hline
+      & \textbf{NAC-L2}\!&\!\textbf{NAC-eMod}\!&\!\textbf{NAC-CO} (proposed) 
+      \\
+      \hline
+      \hline 
+        Maximum\!&\!$11.1753\!\times\!10^{-3}$\!&\!$0.5603\!\times\!10^{-3}$\!&\!$0.3439\!\times\!10^{-3}$\!\\
+      \hline
+        Median\!&\!$0.5898\!\times\!10^{-3}$\!&\!$0.5519\!\times\!10^{-3}$\!&\!$0.3240\!\times\!10^{-3}$\!\\
+      \hline
+        Minimum\!&\!$0.5434\!\times\!10^{-3}$\!&\!$0.5434\!\times\!10^{-3}$\!&\!$0.3235\!\times\!10^{-3}$\!\\
+      \hline
+      \end{tabular}
+      \label{table: error norm}
+    \end{table}
+    
+    \let\thefootnote\relax\footnote{
+      Squared root of the tracking error ISE (Integral of Squared Error) is used, \ie $\sqrt{\int_0^T \norm{\mv{r}}^2\,\der t}$, where $T$ denotes a simulation termination time.
+    }
+    
 \end{frame}
 
-\begin{frame}{Parameter Dependencies}
+\begin{frame}{\insertsubsectionhead}{Weight Norms}
 
   \begin{columns}
 
     \column{0.33\textwidth}
+
+      \begin{figure}
+        \includegraphics[width=0.99\textwidth]{figures/ECC/fig8.eps}
+        \caption{Weight norms of NAC-CO}
+      \end{figure}
+
+    \column{0.33\textwidth}
+
       \begin{figure}      
         \includegraphics[width=0.99\textwidth]{figures/ECC/fig9.eps}
         \caption{Weight norms of NAC-L2}
@@ -661,25 +805,31 @@
         \includegraphics[width=0.99\textwidth]{figures/ECC/fig10.eps}
         \caption{Weight norms of NAC-eMod}
       \end{figure}
-
-    \column{0.33\textwidth}
-
-      \begin{figure}
-        \includegraphics[width=0.99\textwidth]{figures/ECC/fig8.eps}
-        \caption{Weight norms of NAC-CO}
-      \end{figure}
     
   \end{columns}
 
-  The weight norms of the proposed method (NAC-CO) are bounded, while ...
+  \begin{itemize}
+    \item NAC-CO (proposed) showed the weight norms are bounded under pre-defined constraint $\overline{\theta}=20$.
+    \item NAC-L2 and NAC-eMod showed the bounded weight norms, but they depended on the parameters $\lambda$ and $\rho$, respectively.
+    \item As the parameters $\lambda$ and $\rho$ increase, the weight norms of NAC-L2 and NAC-eMod biased towards the origin, which may lead to suboptimal performance.
+    \item In addition, NAC-CO tracked the desired trajectory with a smaller weight norm than NAC-L2 and NAC-eMod.
+  \end{itemize}
 
 \end{frame}
 
-\begin{frame}{Parameter Dependencies}
+\begin{frame}{\insertsubsectionhead}{Tracking Performance}
 
   \begin{columns}
 
     \column{0.33\textwidth}
+
+      \begin{figure}
+        \includegraphics[width=0.99\textwidth]{figures/ECC/fig5.eps}
+        \caption{Tracking error of NAC-CO}
+      \end{figure}
+    
+    \column{0.33\textwidth}
+
       \begin{figure}      
         \includegraphics[width=0.99\textwidth]{figures/ECC/fig6.eps}
         \caption{Tracking error of NAC-L2}
@@ -692,18 +842,55 @@
         \caption{Tracking error of NAC-eMod}
       \end{figure}
 
-    \column{0.33\textwidth}
-
-      \begin{figure}
-        \includegraphics[width=0.99\textwidth]{figures/ECC/fig5.eps}
-        \caption{Tracking error of NAC-CO}
-      \end{figure}
-    
   \end{columns}
 
-  The Tracking error ...
+  \begin{itemize}
+    \item NAC-CO (proposed) outperformed NAC-L2 and NAC-eMod in terms of tracking performance.
+    \item As the weights are biased towards the origin, the tracking performance of NAC-L2 and NAC-eMod deteriorated.
+  \end{itemize}
 
 \end{frame}
+
+
+% \subsection{Simulation Setup}
+
+% \begin{frame}{\insertsubsectionhead}{Two-Link Robotic Manipulator}
+
+%     \begin{columns}
+
+%       \column{.55\textwidth}
+%         \begin{figure}
+%           \centering
+%           \includegraphics[width=.85\textwidth]{figures/RobotModel.drawio.png}
+%           \caption{Two-Link Robotic Manipulator}
+%         \end{figure}
+
+%       \column{.5\textwidth}
+      
+%         \begin{table}[t]
+%             \renewcommand{\arraystretch}{1.3}
+%             \caption{Two-link robotic manipulator's parameters.}
+%             \centering
+%             \begin{tabular}{c m{9.5em} c c c }
+%             % \begin{tabular}{c c c c c}
+%             \hline
+%             \textbf{Symbol} & \textbf{Description} & \textbf{Value} \\
+%             \hline
+%             \hline 
+%             $m_1,m_2$ & Mass & 2.465 kg \\
+%             \hline
+%             $l_1,l_2$  & Length & 0.2 m \\  
+%             \hline
+%             ${l_c}_1,{l_c}_2$ & Center of mass & 0.139 m \\
+%             \hline
+%             $I_1,I_2$  & Inertia & 0.069 kgm\textsuperscript{2} \\
+%             \hline
+%             \end{tabular}
+%         \end{table}
+
+%     \end{columns}
+
+% \end{frame}
 
 \section{Conclusion}
 
@@ -735,8 +922,8 @@
 
 \begin{frame}[allowframebreaks]{References}
 
-  \bibliography{../template/refs}
-  \bibliographystyle{ieeetr}
+  \bibliography{localRefs}
+  \bibliographystyle{IEEEtran}
 
 \end{frame}
 
