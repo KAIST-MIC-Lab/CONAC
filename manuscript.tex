@@ -177,13 +177,13 @@ The candidates of convex input constraints are presented in Appendix \ref{sec:ap
 
 We consider an uncertain Euler-Lagrange system modeled as
 \begin{equation}
-    \rbM\ddq + \DHHO{\rbVm \dq}+ \rbF + \rbG + \rbd
+    \rbM\ddq +\rbVm \dq+ \rbF + \rbG + \rbd
     =
     \mysat(\rbu)
     \label{eq:sys1}
 \end{equation}
 where $\q\in \R^n$ denotes the generalized coordinate, $\rbd$ represents the disturbance and $\rbu\in\R^n$ denotes the generalized control input. 
-The terms $\rbM:=\rbM(\q)\in\R^{n\times n}$, $\rbVm:=\rbVm(\q,\dq)\in\R^{n\times n}$, $\rbF:=\rbF(\dq)\in\R^{n}$, and $\rbG:=\rbG(\q)\in\R^{n}$ represent the unknown inertia matrix, \DHHO{Coriolis/centrifugal matrix}, friction vector, and gravity vector, respectively.
+The terms $\rbM:=\rbM(\q)\in\R^{n\times n}$, $\rbVm:=\rbVm(\q,\dq)\in\R^{n\times n}$, $\rbF:=\rbF(\dq)\in\R^{n}$, and $\rbG:=\rbG(\q)\in\R^{n}$ represent the unknown inertia matrix, Coriolis/centripetal matrix, friction vector, and gravity vector, respectively.
 The function $\mysat(\cdot):\R^n\to\R^n$ represents the inherent physical limitations of the actuators such that $\norm{\mysat(\rbu)}\le \overline\tau$, where $\overline\tau$ denotes the maximum norm of control input.
 In this study, the saturation function $\mysat(\cdot)$ is assumed to be convex, which is practically common in many engineering systems, since the actuator limits are naturally convex, such as min/max torque limits, and bounds look like a box or ball in the input space.
 To account for these limitations, it is essential to incorporate physically motivated constraints into the controller design.
@@ -197,7 +197,7 @@ The key properties are introduced below:
 \end{prop}
 
 \begin{prop} 
-    The \DHHO{Coriolis/centrifugal matrix} $\rbVm$ can always be selected, so that the matrix $\ddtt{\rbM}-2\rbVm$ is skew-symmetric, \ie $\mv{x}^\top(\ddtt{\rbM}-2\rbVm)\mv{x}=0,\ \forall \mv{x}\in\R^n$.
+    The Coriolis/centripetal matrix $\rbVm$ can always be selected, so that the matrix $\ddtt{\rbM}-2\rbVm$ is skew-symmetric, \ie $\mv{x}^\top(\ddtt{\rbM}-2\rbVm)\mv{x}=0,\ \forall \mv{x}\in\R^n$.
     \label{prop:skew}
 \end{prop}
 
@@ -277,7 +277,7 @@ The following proposition and lemma will be used in subsequent sections:
 
 First, a filtered tracking error $\fe\in\R^n$ is defined as 
 \begin{equation}
-    \DHHO{\fe := \ddtt{\mv e}+\mm\Lambda \mv e}
+    \fe := \ddtt{\mv e}+\mm\Lambda \mv e
     ,
     \label{eq:err:filtered}
 \end{equation}
@@ -286,14 +286,13 @@ Since \eqref{eq:err:filtered} is stable system, it implies that $\mv e$ is bound
 
 Using $\fe$, the system dynamics \eqref{eq:sys1} can be rewritten as
 \begin{equation}
-    \DHHO{ check:
    \rbM \ddtt\fe
     =
     -\rbVm \fe
     -\mm K \fe
     + \mv f
     -\rbd + \mysat(\rbu)
-    ,}
+    ,
     \label{eq:sys:filtered}
 \end{equation}
 where $\mm{K}=\mm{K}^\top\in\R^{n\times n}_{>0}$ denotes an arbitrary unknown matrix and $
@@ -326,7 +325,6 @@ Consider the Lyapunov function $V_1:= \tfrac{1}{2}\fe^\top \rbM\fe$.
 Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
 \begin{equation}
     \begin{aligned}
-        \DHHO{ check}
         \ddtt{V}_1
         =&
         \fe^\top \rbM \ddtt \fe
@@ -1100,7 +1098,7 @@ In conclusion, the filtered tracking error $\fe$ and the entire set of estimated
 
 %  SECTION SIMULATION ======================================
 \section{Real-Time Implementation and Validation}\label{sec:sim}
-\DHHO{이게 은근히 신경쓰이는데, VI.REAL-TIME IMPLEMENTATION AND VALIDATION이 적힌 부분이 최하단부 좌측에 있어서 실험 구현파트가 시작된지도 몰랐음. 우측 상단부에 오도록 하는게 좋을듯 싶음.}
+
 \subsection{Validation Setup}
 
 % ------------------------------------
@@ -1156,13 +1154,13 @@ The measured and/or estimated system parameters are provided in Table~\ref{table
     \textbf{Symbol} & \textbf{Description} & \textbf{Value} \\
     \hline
     \hline 
-    $m_1,m_2$ & Mass & 2.465 kg \\
+    $m_1,m_2$ & Mass & 2.465 $\mathrm{kg}$ \\
     \hline
-    $l_1,l_2$  & Length & 0.2 m \\  
+    $l_1,l_2$  & Length & 0.2 $\mathrm{m}$ \\  
     \hline
-    ${l_c}_1,{l_c}_2$ & Center of mass & 0.139 m \\
+    ${l_c}_1,{l_c}_2$ & Center of mass & 0.139 $\mathrm{m}$ \\
     \hline
-    $I_1,I_2$  & Inertia & 0.069 \DHHO{kg$\cdot$m\textsuperscript{2}} \\
+    $I_1,I_2$  & Inertia & 0.069 $\mathrm{kg\cdot m^{2}}$ \\
     \hline
     \end{tabular}
     \label{table:system:params}
@@ -1527,7 +1525,7 @@ The tracking performance was quantitatively evaluated using the $L_2$-norm of th
     \end{tabular}
     \label{tab:sim:L2}
 \end{table}
-\DHHO{1. 여기까지 읽었을 때, controller가 4개나 되다보니 'setup'이 너무 길어짐. 가능할지는 모르겠지만, 도 subsection을 3개로 나눠서, A1.System or Harware Setup, A2. Reference Trajectory or Episode setup, A3. Controllers setup로 나누는게 좋을듯 싶음. Validation Setup이 너무 길다보니 한번에 읽기가 너무 힘듬. 2. TABLEII가 사실 controller setup을 요약해주는 부분인데, 아예 페이지를 넘어가 버려서 한눈에 보기 어려움. 개인적으로 TALBEII를 8page 상단 우측으로 옮겼으면 함. 그러면 TABLEIII가 균형이 안 맞을거라는 의견이 있을 수도 있긴 한데, 오히려 TALBE.III 구조를 좀 바꾸면 좀더 보기 편할듯. Fig.5처럼 아예 좌우로 늘리고, 1열에 C1,C2,C3,C4를 나열하고, 2열 1행 Episode1, 3열 1행 Episode2 하면 오히려 fig.5와 매칭이 되어서 보기가 더 쉬울듯.}
+
 \subsection{Validation Results}
 
 % ------------------------------------
@@ -1552,10 +1550,6 @@ However, since (C$_3$) did not handle the control input saturation, it generated
 In addition, the magnitude of saturation violations for (C$_3$) increased during each interval where input constraints were active.
 Such large violations may lead to actuator damage or failure, posing a significant risk to the physical system.
 Moreover, once the control saturation was released—typically due to a change in the reference trajectory—these large violations resulted in oscillatory behavior, as the controller's weights had been adapted to produce excessively high control inputs.
-\KHCH{
-        여기부터 문단 끝날때까지의 표현이 명료하지 않습니다. C3의 tracking performance가 좋은 것은 지표상으로 명확히 맞는 말이기 때문에 마치 tracking performance가 실제로 좋은 것은 아니다라는 뉘앙스의 논리 전개가 적절치 않습니다.
-    Tracking performanc는 더 좋지만 과도한 control input을 사용하고, saturation이 지난 이후에는 진동 문제가 있다는 것만 명료하게 표현해주세요.
-}
 
 % ------------------------------------
 % Control Input Saturation
@@ -1610,12 +1604,6 @@ In this section, the constraint handling capability of all controllers are inves
 As shown in Fig.~\ref{fig:ctrl:result:tau:1}, Fig.~\ref{fig:ctrl:result:tau:2}, and Fig.~\ref{fig:ctrl:result:tau:norm}, all controllers except (C$_3$) which did not consider the control input saturation, satisfied the control input saturation illustrated in Fig.~\ref{fig:robot:sat}.
 For (C$_1$) and (C$_2$), the control input saturation was handled using the Lagrange multipliers and, for (C$_4$), the auxiliary system was used to handle the control input saturation.
 
-\KHCH{
-    여기에 각 제어기의 constraint를 표현해주는게 좋겠습니다. FIg6a만 보고 아래의 설명을 이해하기에는 리뷰어들에게 어려움이 있을 겁니다.
-}
-\MSRY{
-    아래의 설명을 보완하여 각 제어기의 constraint를 표현해주었습니다.
-}
 Even though all controllers except (C$_3$) satisfied the input saturation, (C$_4$) was unable to fully utilize the actuator's capability.
 As shown in Fig.~\ref{fig:ctrl:result:scope:control}, which illustrates the control input locus during the time interval from $29.4$ s to $31.9$ s, the control inputs of (C$_1$) and (C$_2$) were constrained by the combined convex input constraints, which precisely matched the feasible domain $\Theta_{\mysat}$ depicted in Fig.~\ref{fig:robot:sat}
 In contrast, (C$_4$)'s control input was restricted independently by each component-wise constraint, limiting its ability to explore the full admissible input space, owing to the decoupled formulation of the auxiliary system.
@@ -1673,7 +1661,7 @@ This occurred because the controllers were implemented in discrete time with a r
 % ------------------------------------
 \hfill
 
-\subsubsection{Satisfaction of \DHHO{Karush}-Kuhn-Tucker (KKT) conditions}
+\subsubsection{Satisfaction of Karush-Kuhn-Tucker (KKT) conditions}
 
 Since the proposed CONAC was implemented in discrete time, a direct demonstration of the KKT conditions at steady state is not straightforward. 
 However, the near-constant values of the weights and Lagrange multipliers during constraint violation suggest an implicit satisfaction of the KKT conditions. 
