@@ -1100,7 +1100,7 @@ In conclusion, the filtered tracking error $\fe$ and the entire set of estimated
 
 %  SECTION SIMULATION ======================================
 \section{Real-Time Implementation and Validation}\label{sec:sim}
-
+\DHHO{이게 은근히 신경쓰이는데, VI.REAL-TIME IMPLEMENTATION AND VALIDATION이 적힌 부분이 최하단부 좌측에 있어서 실험 구현파트가 시작된지도 몰랐음. 우측 상단부에 오도록 하는게 좋을듯 싶음.}
 \subsection{Validation Setup}
 
 % ------------------------------------
@@ -1527,7 +1527,7 @@ The tracking performance was quantitatively evaluated using the $L_2$-norm of th
     \end{tabular}
     \label{tab:sim:L2}
 \end{table}
-
+\DHHO{1. 여기까지 읽었을 때, controller가 4개나 되다보니 'setup'이 너무 길어짐. 가능할지는 모르겠지만, 도 subsection을 3개로 나눠서, A1.System or Harware Setup, A2. Reference Trajectory or Episode setup, A3. Controllers setup로 나누는게 좋을듯 싶음. Validation Setup이 너무 길다보니 한번에 읽기가 너무 힘듬. 2. TABLEII가 사실 controller setup을 요약해주는 부분인데, 아예 페이지를 넘어가 버려서 한눈에 보기 어려움. 개인적으로 TALBEII를 8page 상단 우측으로 옮겼으면 함. 그러면 TABLEIII가 균형이 안 맞을거라는 의견이 있을 수도 있긴 한데, 오히려 TALBE.III 구조를 좀 바꾸면 좀더 보기 편할듯. Fig.5처럼 아예 좌우로 늘리고, 1열에 C1,C2,C3,C4를 나열하고, 2열 1행 Episode1, 3열 1행 Episode2 하면 오히려 fig.5와 매칭이 되어서 보기가 더 쉬울듯.}
 \subsection{Validation Results}
 
 % ------------------------------------
