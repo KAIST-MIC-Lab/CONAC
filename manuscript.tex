@@ -40,7 +40,7 @@
   The proposed controller is validated through a real-time implementation on a 2-DOF robotic manipulator, demonstrating its effectiveness in achieving accurate trajectory tracking while satisfying all imposed constraints.
 \end{abstract}
 
-\begin{IEEEkeywords}
+\begin{IEEEkeywords}DV26H-64YTR-C9WFH-7A33V
     Neuro-adaptive control, constrained optimization, deep neural network, input constraint.
 \end{IEEEkeywords}
 
@@ -180,6 +180,7 @@ We consider an uncertain Euler-Lagrange system modeled as
     \rbM\ddq +\rbVm \dq+ \rbF + \rbG + \rbd
     =
     \mysat(\rbu)
+    ,
     \label{eq:sys1}
 \end{equation}
 where $\q\in \R^n$ denotes the generalized coordinate, $\rbd$ represents the disturbance and $\rbu\in\R^n$ denotes the generalized control input. 
@@ -372,6 +373,7 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
         % \overline\tau_d\norm{\fe}
         % +
         % \fe^\top (\mysat(\rbu)-\rbu^*)
+        .
     \end{aligned}
     \label{eq:lya1:dot1}
 \end{equation} 
@@ -485,6 +487,7 @@ The gradient of $ \NN({\q}_n;\wth)$ with respect to $\wth$ can be obtained using
         \pptfrac{\NN}{\wth_0}
     \end{bmatrix}
     \in\R^{n \times \Xi}
+    ,
     \label{eq:gradient:phi}
 \end{equation}
 where
@@ -728,6 +731,7 @@ The weight norm constraints $\mv{c}_{\theta}(\estwth):= [c_{\theta_i}(\estwth)]_
         \overline\theta_i^2 
     \right)    
     % \le 0
+    ,
     \label{eq:cstr:weight:ball}
 \end{equation}
 with $\overline\theta_i<\infty$ denoting the maximum allowable norm for $\estwth_i$, and the arguments of $c_{\theta_i}(\cdot)$ are omitted for brevity.
@@ -831,6 +835,7 @@ The derivative of $c_j,\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in\{0,\c
     \pptfrac{c_j}{\rbu} 
     \pptfrac{\rbu}{\estNN} 
     \pptfrac{\estNN}{\estwth_i}
+    ,
 \end{equation}
 where $\pptfrac{\tau}{\estNN}=\mm I_n$, which is bounded. 
 From the linear mapping in \eqref{eq:linear:map}, $\rbu$ is bounded as long as $\estwth_k$ is bounded (by the condition of the lemma), and $\norm{\act_k(\cdot)}$ is bounded due to the properties of the activation functions. 
@@ -924,7 +929,7 @@ Taking the time derivative of $V_2$ yields:
         +
         \underbrace{
             \norm{(\mm I_{l_{k+1}}\otimes {\estact}_k^\top)}
-        }_{=:{\gamma}_1\in\R_{>0}}
+        }_{=:{\gamma}_1\in\R_{\ge0}}
         \norm{\fe}
         \norm{\estwth_k}
         \\
@@ -936,7 +941,7 @@ Taking the time derivative of $V_2$ yields:
             }
             \lambda_j 
             \estwth_k^\top \pptfrac{c_j}{\estwth_k}
-        }_{=:{\gamma}_2<0,\ \text{by Lemma \ref{lem:convex:angle} and Assumption \ref{assum:LICQ}}}
+        }_{=:{\gamma}_2\in\R_{\le0},\ \text{by Lemma \ref{lem:convex:angle} and Assumption \ref{assum:LICQ}}}
         \\
         \le&
         -
@@ -978,7 +983,7 @@ According to \eqref{eq:lya2:dot} and Lemma \ref{lem:stable:set}, the invariant s
 \end{equation}
 
 The satisfaction of the constraints can be verified through the boundedness of $\estwth_k$.
-For the weight norm constraint $c_{\theta_k}$, if the corresponding Lagrange multiplier $\lambda_{\theta_k}$ increases sufficiently large, due to the constraint violation, $\estwth_k$ approaches to the origin, as the invariant set $\Theta_{\estwth_k}^{1}$ shrinks to a point.
+For the weight norm constraint $c_{\theta_k}$, if the corresponding Lagrange multiplier $\lambda_{\theta_k}$ increases sufficiently large, due to the constraint violation, $\estwth_k$ approaches to the origin, as the invariant set $\Theta_{\theta_k}^{1}$ shrinks to a point.
 The remaining control input constraints can be validated implicitly through the term ${\gamma}_2$ in \eqref{eq:lya2:dot}.
 Similarly to $c_{\theta_k}$, when a control input constraint $c_j,\ \forall j\in\mathcal{I}\setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$ is violated, the corresponding Lagrange multiplier $\lambda_j$ increases sufficiently large, leading to increase in ${\gamma}_2$.
 It makes ${\gamma}_2$ dominates the right-hand side of \eqref{eq:lya2:dot}, which leads $\ddtt V_2$ negative definite.
@@ -1120,7 +1125,7 @@ To validate the effectiveness of the proposed CONAC, a real-time experiment was 
 The OpenCR1.0 board \cite{opencr} with a 32-bit ARM Cortex and a 216 MHz clock frequency was used for the real-time implementation.
 The two-link robotic manipulator actuated by two Cubemars AK10-90 servo motors. 
 The servos were controlled using the OpenCR1.0 board which transmits the reference angle to the corresponding servo via controller area network (CAN) communication.
-The system dynamics of the two-link robotic manipulator can follow the Euler-Lagrange equation \eqref{eq:sys1} and are illustrated in Fig.~\ref{fig:robot:model}. 
+The system dynamics of the two-link robotic manipulator can follow the Euler-Lagrange equation \eqref{eq:sys1} and is illustrated in Fig.~\ref{fig:robot:model}. 
 The measured and/or estimated system parameters are provided in Table~\ref{table:system:params}. 
 
 % ------------------------------------
@@ -1197,7 +1202,7 @@ The measured and/or estimated system parameters are provided in Table~\ref{table
 % ------------------------------------
 % Reference Trajectory
 % ------------------------------------
-The desired trajectory $\qd=\left({q_d}_1,{q_d}_2\right)^\top $ was generated using quintic (5$\textsuperscript{th}$-order) polynomial functions $\mathcal{P}^5(t;\mv{x}_1,\mv{x}_2,t_f)$, which satisfy the initial and final joint angles $\mv{x}_1$ and $\mv{x}_2$, as well as zero initial and final joint velocities. 
+The desired trajectory $\qd=\left({q_d}_1,{q_d}_2\right)^\top $ was generated using quintic (5$\textsuperscript{th}$-order) polynomial functions $\mathcal{P}^5(t;\mv{x}_1,\mv{x}_2,t_f)$, which satisfy the initial and final joint angles $\mv{x}_1\in\R^2$ and $\mv{x}_2\in\R^2$, as well as zero initial and final joint velocities. 
 Here, $t_f$ denotes the duration of each segment.
 The desired (reference) trajectory is defined as follows:
 \begin{equation}
