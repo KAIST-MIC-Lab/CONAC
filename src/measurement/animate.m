@@ -20,10 +20,10 @@ idleTime2 = 4;
 animation_end_t = T + idleTime1;
 
 PhaseList = {
-    "Idle 1",
+    "Warm-up",
     "Episode 1",
     "Episode 2",
-    "Idle 2"
+    "End"
 };
 
 %% 
