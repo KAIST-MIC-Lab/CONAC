@@ -30,8 +30,8 @@
 
 %% Abstract
 \begin{abstract}
-  This study presents a constrained optimization-based neuro-adaptive control (CONAC) for \color{red}unkown\color{black} Euler-Lagrange systems subject to weight and convex input constraints. 
-  A deep neural network (DNN) is employed to approximate the ideal stabilizing control law while simultaneously learning the unknown system dynamics and addressing both types of constraints within a constrained optimization framework.
+  This study presents a constrained optimization-based neuro-adaptive control (CONAC) for unknown Euler-Lagrange systems subject to weight and convex input constraints. 
+  A deep neural network (DNN) is employed to approximate the ideal stabilizing control law while simultaneously learning the unknown system dynamics and addressing both types of constraints within a unified constrained optimization framework.
   The adaptation law of DNN weights is formulated to solve the defined constrained optimization problem, ensuring satisfaction of first-order optimality conditions at steady state.
   The controller's stability is rigorously analyzed using Lyapunov theory, guaranteeing bounded tracking errors and bounded DNN weights. 
   The proposed controller is validated through a real-time implementation on a 2-DOF robotic manipulator, demonstrating its effectiveness in achieving accurate trajectory tracking while satisfying all imposed constraints.
@@ -46,9 +46,9 @@ In this study, the following notation is used:
 
 \begin{itemize}
     \item := denotes ``is defined as" or ``is equal to".
-    \item $\R$ and $\R^{n\times m}$ denote the set of real numbers and $n\times m$ dimensional matrices, respectively, and $\R_{\ge0}:=[0,\infty)$ and $\R_{>0}:=(0,\infty)$.
+    \item $\R$, $\R^n$ and $\R^{n\times m}$ denote the set of real numbers, $n\times 1$ dimensional vectors and $n\times m$ dimensional matrices, respectively, and $\R_{\ge0}:=[0,\infty)$ and $\R_{>0}:=(0,\infty)$.
     \item $(\cdot)^\top$ denotes the transpose of a vector or matrix.
-    \item $\norm{\cdot}$ and $\norm{\cdot}_F$ denote the Euclidean norm and Frobenius norm, respectively.
+    \item $\norm{\cdot}$ and $\norm{\cdot}_F$ denote the Euclidean and Frobenius norm, respectively.
     \item $\otimes$ denotes the Kronecker product \cite[Chap. 7, Def. 7.1.2]{Bernstein:2009aa}.
     \item A vector and a matrix are denoted by $\mv{x}=[x_i]_{i\in\{1,\cdots,n\}}\in\R^n$ and $
         \mm A
@@ -59,7 +59,7 @@ In this study, the following notation is used:
         }\allowbreak\in\R^{n\times m}
         $, respectively.
     \item $\myrow_i(\mm A)$ denotes the $i\textsuperscript{th}$ row of the matrix $\mm A\in\R^{n\times m}$. 
-    \item For the matrix $\mm{A}\in\R^{n\times m}$, $\myvec(\mm A):=\left(\myrow_1(\mm A^\top),\cdots,\myrow_m(\mm A^\top) \right)^\top\in\R^{nm}$ denotes the vectorization of $\mm A$.
+    \item For the matrix $\mm{A}\in\R^{n\times m}$, $\myvec(\mm A):=(\myrow_1(\mm A^\top),\cdots,\myrow_m(\mm A^\top) )^\top\in\R^{nm}$ denotes the vectorization of $\mm A$.
     % \item $\mycol_i(A)$ and $\myrow_j(A)$ denote the $i\textsuperscript{th}$ column and $j\textsuperscript{th}$ row of $A\in\R^{n\times m}$, respectively.
     % \item $\myvec(A):= [\mycol_1(A)^\top  ,\cdots,\mycol_m(A)^\top  ]^\top   $ for $A\in\R^{n\times m}$.
     \item $\lambda_{\min}(\mm A)$ denotes the minimum eigenvalue of the matrix $\mm A\in\R^{n\times n}$.
@@ -75,12 +75,14 @@ In this study, the following notation is used:
 These systems are governed by dynamic equations derived from energy principles and describe the motion of mechanical systems with constraints. 
 In practice, however, such systems often exhibit uncertainties due to unmodeled dynamics, parameter variations, or external disturbances. 
 These uncertainties can significantly degrade control performance and, in some cases, lead to instability. 
-To address these challenges, adaptive control methods have been widely employed to ensure robust performance in the presence of system uncertainties \cite{Ioannou:2006aa, Tao:2003aa}.
+In worst cases, any prior knowledge of the system dynamics may not be available, making it challenging to design effective controllers.
+% To address these challenges, adaptive control methods have been widely employed to ensure robust performance in the presence of system uncertainties \cite{Ioannou:2006aa, Tao:2003aa}.
+To address these challenges, adaptive control methods have been widely employed to ensure robust performance for uncertain (unknown) systems \cite{Ioannou:2006aa, Tao:2003aa}.
 
-More recently, neuro-adaptive control approaches have been introduced to approximate unknown system dynamics or entire control laws using neural networks (NNs) \cite{Lewis:1998aa,Farrell:2006aa}. 
+More recently, neuro-adaptive control approaches have been introduced to approximate uncertain (unknown) system dynamics or entire control laws using neural networks (NNs) \cite{Lewis:1998aa,Farrell:2006aa}. 
 NNs are well-known for their universal approximation property, which allows them to approximate any smooth function over a compact set with minimal error. 
 Various types of NNs have been utilized in neuro-adaptive control, including simpler architectures like single-hidden layer (SHL) NNs \cite{Lewis:1996aa,Ge:2010aa, Yesildirek:1995aa} and radial basis function (RBF) NNs \cite{Liu:2013ab,Ge:2002aa}, as well as more complex models like deep NNs (DNNs) \cite{Patil:2022aa} and their variations. 
-Conventionally, SHL and RBF NNs are often employed to approximate \color{red}unkown\color{black} system dynamics or controllers due to their simplicity \cite{Esfandiari:2014aa,Esfandiari:2015aa,Yesildirek:1995aa,Gao:2006aa}.
+Conventionally, SHL and RBF NNs are often employed to approximate uncertain (unknown) system dynamics or controllers due to their simplicity \cite{Esfandiari:2014aa,Esfandiari:2015aa,Yesildirek:1995aa,Gao:2006aa}.
 However, since DNNs offer greater expressive power, making them more effective for complex system approximations \cite{Rolnick:2018aa}, variations of DNNs, such as long short-term memory (LSTM) networks for time-varying dynamics \cite{Griffis:2023aa}, physics-informed NNs (PINNs) for leveraging physical system knowledge \cite{Hart:2024aa}, and convolutional NNs (CNNs) for learning historical sensor data \cite{Ryu:2024ac}, have further extended the capabilities of neuro-adaptive control systems.
 
 A critical aspect of neuro-adaptive control is the NN weight adaptation law, which governs how NN weights are updated. 
@@ -115,21 +117,23 @@ This leaves room for improvement in terms of performance optimization.
 \subsubsection{Satisfying Input Constraints}
 
 The second major issue is satisfying input constraints, particularly in systems where actuators are subject to physical limitations. 
-% The unpredictable outputs of NNs can sometimes lead to excessively large control inputs, violating these constraints. 
-This issue is exacerbated in neuro-adaptive controllers that utilize NNs as additional control inputs to cancel out uncertain (unknown) system dynamics while conventional model-based control methods, \eg feedback linearization and backstepping, are employed. 
-In the cases of feedback linearization and backstepping, controllers may produce overly aggressive control inputs, even when the system's natural dynamics are stabilizing, leading to unnecessary saturation of the control inputs \cite{Khalil:2002aa}.
-Moreover, if the control inputs are already saturated, the NNs are enforced to compensate for the saturated inputs.
-In other words, the conventional methods deteriorates the learning process by sabotaging the NN adaptation law, as the feedback error for learning is no longer directly related to the NNs' output.
-Hence, the input constraint should be handled in an unity adaptation framework \MSRY{Start from here!}
+This issue is exacerbated in neuro-adaptive controllers that utilize NNs as additional control inputs to compensate for uncertain system dynamics, while model-based control methods—such as feedback linearization or backstepping—are employed. 
+In such architectures, when the system model is inaccurate or the dynamics that the NN is intended to learn are already stabilizing, the model-based control inputs may produce excessively aggressive control inputs.
+This often lead to unnecessary saturation of the control inputs, as discussed in \cite{Khalil:2002aa}.
 
-To address this early discussed issue, many studies introduced auxiliary systems to handle input constraint in adaptation process. 
-These systems mitigated the effects of control input saturation by modifying the control strategy when saturation occurred. 
-For instance, in \cite{Esfandiari:2014aa,Karason:1994aa,Esfandiari:2015aa}, auxiliary states were generated whenever input saturation was detected, and these states were incorporated into the adaptation law to adjust the NN weights accordingly. 
-This approach helped the controller reduce input saturation by indirectly regulating the auxiliary states.
+To address the aforementioned issue, several approaches have been proposed in \cite{Gao:2006aa,Arefinia:2020aa,He:2016aa,Peng:2020aa,Esfandiari:2014aa,Karason:1994aa,Esfandiari:2015aa} to handle input constraints in neuro-adaptive control systems.
+Particularly, the auxiliary systems have been widely introduced.
+In \cite{Arefinia:2020aa,He:2016aa,Peng:2020aa}, the auxiliary states were generated whenever input saturation was detected, and these states were used as feedback terms in the control law to directly compensate for the effects of input saturation constraints.
+On the other hands, in \cite{Esfandiari:2014aa,Karason:1994aa,Esfandiari:2015aa}, the auxiliary systems incorporated into the adaptation law by adding the auxiliary states to the feedback error for learning.
+This approach helped the NN reduce input saturation by indirectly regulating the auxiliary states, during the adaptation process.
 
-Alternatively, auxiliary states can also be used as feedback terms in the control law to directly compensate for the effects of input saturation constraints, as demonstrated in \cite{Arefinia:2020aa,He:2016aa,Peng:2020aa}. 
-In \cite{Gao:2006aa}, the NN was used to approximate the desired control input, compensating for input saturation. 
 However, these approaches typically handle input bound constraints on a per-input basis, \ie applying bounds to each scalar control variable individually, and may not account for more complex, nonlinear constraints, like input norm constraints, which are commonly found in physical systems such as robotic actuators or motor systems.
+
+Moreover, from another perspective of learning, incorporating NNs with the conventional control methods by adding the NN output to the conventional control methods can disrupt the adaptation process of the NN.
+This is because the adaptation law relies on the feedback error, which becomes decoupled from the NN output due to the dominance of the conventional methods.
+In these cases, the NN is forced to counteract the conventional control inputs rather than learn the system dynamics directly.
+As a result, the NN's ability to learn and adapt is undermined.
+Therefore, it is recommended that input constraints be handled within a unified adaptation framework like \cite{Esfandiari:2014aa,Karason:1994aa,Esfandiari:2015aa}, where both adaptation and constraint satisfaction are addressed simultaneously, without relying on the conventional control inputs.
 
 \hfill
 
@@ -137,10 +141,11 @@ However, these approaches typically handle input bound constraints on a per-inpu
 
 Although both the existing methods for weight boundedness and input constraints have shown effectiveness, they come with significant limitations. 
 Projection operators and modification techniques do not guarantee the optimality of the adapted weights. 
-Moreover, auxiliary systems typically handle only simple forms of input constraints, such as individual input bound constraints, limiting their ability to address more complex, nonlinear constraints.
+Auxiliary systems typically handle only simple forms of input constraints, such as individual input bound constraints, limiting their ability to address more complex, nonlinear constraints.
+Moreover, using conventional control methods in conjunction with NNs can disrupt the adaptation process.
 
 To overcome these limitations, constrained optimization offers a promising approach. 
-By formulating the neuro-adaptive control problem as an optimization problem with constraints, it is possible to adapt the NN weights while minimizing an objective function, \eg tracking error, subject to both weight and input constraints. 
+By formulating the neuro-adaptive control problem as an unified optimization problem with constraints, it is possible to adapt the NN weights while minimizing an objective function, \eg tracking error, subject to both weight and input constraints, simultaneously.
 Constrained optimization provides a theoretical framework for defining optimality and presents numerical methods for finding solutions that satisfy the constraints \cite{Nocedal:2006aa}.
 
 In existing literature, constrained optimization techniques, such as the Augmented Lagrangian Method (ALM) \cite{Evens:2021aa} and the Alternating Direction Method of Multipliers (ADMM) \cite{Wang:2019aa,Taylor:2016aa}, have been used to train NNs offline. 
@@ -154,7 +159,7 @@ The main contributions of this study are listed as follows:
 \begin{itemize}
     \item A constrained optimization-based neuro-adaptive control (CONAC) is proposed, where the control problem is formulated as a constrained optimization problem. In this formulation, weight and convex input constraints are incorporated as inequality constraints, while minimizing a given objective function.
     % \item Any convex input constraints can be applied to the proposed CONAC, including input bound constraints, and norm constraints. Moreover, the proposed CONAC can handle any combination of these constraints, which can be useful in practical applications where multiple constraints need to be satisfied simultaneously.
-    % \item Since the proposed CONAC approximate the entire ideal control law with no prior knowledge of the system dynamics, the system identification process can be avoided, which is often difficult and time-consuming to implement in practice. 
+    \item Since the proposed CONAC approximate the entire ideal control law with no prior knowledge of the system dynamics, the system identification process for nominal conventional controller design can be avoided, which is often difficult and time-consuming to implement in practice. 
     \item The adaptation laws for DNN weights and Lagrange multipliers are systematically derived to solve the defined problem, using constrained optimization theory. These laws guarantee convergence to the first-order optimality conditions, specifically the Karush–Kuhn–Tucker (KKT) conditions, as described in \cite[Chap. 12, Thm. 12.1]{Nocedal:2006aa}.
     \item The proposed CONAC's stability is rigorously analyzed using Lyapunov theory, ensuring that the tracking error and DNN weights remain bounded. This analysis guarantees that the proposed CONAC can achieve stable adaptation online.
     \item The proposed CONAC is implemented in real-time on a 2-DOF robotic manipulator, demonstrating its effectiveness in achieving accurate trajectory tracking while satisfying all imposed constraints. The experimental results validate the theoretical findings and show the practical applicability of the proposed CONAC.
@@ -163,7 +168,7 @@ The main contributions of this study are listed as follows:
 \hfill
 
 This study is extended from our preliminary work presented in \cite{Ryu:2024aa} where the inequality constraint for weight norm was imposed on the neuro-adaptive control design to establish the weight boundedness using constrained optimization framework.
-Similar to weight constraints in \cite{Ryu:2024aa}, control input constraints are also incorporated into the CONAC framework to address the convex input saturation problem as well.
+Similar to weight constraints in \cite{Ryu:2024aa}, control input constraints are also incorporated into the constrained optimization framework to address the convex input saturation problem as well.
 Furthermore, the applicability of the proposed CONAC is investigated in a real-time implementation on a 2-DOF robotic manipulator; while the referenced work was limited to the numerical simulation.
 
 \subsection{Organization}
@@ -184,7 +189,7 @@ The candidates of convex input constraints are presented in Appendix \ref{sec:ap
 
 \subsection{Model Dynamics and Control Objective}
 
-We consider an \color{red}unkown\color{black} Euler-Lagrange system modeled as
+We consider an unknown Euler-Lagrange system modeled as
 \begin{equation}
     \rbM\ddq +\rbVm \dq+ \rbF + \rbG + \rbd
     =
@@ -344,7 +349,7 @@ where $\mm{K}=\mm{K}^\top\in\R^{n\times n}_{>0}$ denotes an arbitrary unknown ma
     -
     \rbG
     \in\R^n
-$ denotes the lumped system uncertainty.
+$ denotes the lumped unknown system.
 % \color{red}
 % The unknown matrix $\mm{K}$ is not available to design in practice, 
 % \color{black}
@@ -404,7 +409,7 @@ Invoking Property \ref{prop:skew}, the time derivative of $V_1$ is
     \end{aligned}
     \label{eq:lya1:dot1}
 \end{equation} 
-Therefore, invoking Lemma \ref{lem:stable:set}, it can be concluded that the filtered error $\fe$ is exponentially stable, with $\lim_{t\to\infty}\norm{\fe}\le\tfrac{\overline\tau_d}{\lambda_{\min}(\mm K)}$, provided that the lumped system uncertainty $\mv{f}$ can be perfectly cancelled by the control input $\rbu$, neglecting the effect of input saturation.
+Therefore, invoking Lemma \ref{lem:stable:set}, it can be concluded that the filtered error $\fe$ is exponentially stable, with $\lim_{t\to\infty}\norm{\fe}\le\tfrac{\overline\tau_d}{\lambda_{\min}(\mm K)}$, provided that the lumped unknown system $\mv{f}$ can be perfectly cancelled by the control input $\rbu$, neglecting the effect of input saturation.
 Hence, the ideal control input $\rbu^*$ can be designed as $-\mv f$.
 However, $\rbu^*$ is not available in practice, since system dynamics encapsulated in $\mv f$ are unknown.
 
@@ -1676,7 +1681,7 @@ As shown in Fig.~\ref{fig:ctrl:real:result:cmp:time}, the computational times of
 %  SECTION CONCLUSION ======================================
 \section{Conclusion}\label{sec:conclusion}
 
-This paper proposed a constrained optimization-based neuro-adaptive controller (CONAC) for \color{red}unkown\color{black} Euler-Lagrange systems, addressing both weight norm and input constraints through a rigorous optimization framework. 
+This paper proposed a constrained optimization-based neuro-adaptive controller (CONAC) for unknown Euler-Lagrange systems, addressing both weight norm and input constraints through a rigorous optimization framework. 
 The stability of the proposed CONAC was analyzed via Lyapunov theory, demonstrating bounded tracking and weight estimation errors under real-time adaptation.
 
 The proposed CONAC effectively incorporated both convex input constraints and weight norm constraints, ensuring that actuator limitations and neural network weights remained within predefined bounds. 
