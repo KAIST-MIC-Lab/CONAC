@@ -403,11 +403,264 @@ ylim([0, max(cstr.V_max) * 1.25])
 
 if POSITION_FLAG
     set(gcf, 'Position',  default_size)
+end
+
+figure(13); clf % control input norm CoNAC
+
+t = ctrl_results.ctrl5_1.t;
+u_norm_1 = sqrt(ctrl_results.ctrl5_1.u_hist(1, :).^2 + ctrl_results.ctrl5_1.u_hist(2, :).^2);
+u_norm_2 = sqrt(ctrl_results.ctrl5_2.u_hist(1, :).^2 + ctrl_results.ctrl5_2.u_hist(2, :).^2);
+u_norm_3 = sqrt(ctrl_results.ctrl5_3.u_hist(1, :).^2 + ctrl_results.ctrl5_3.u_hist(2, :).^2);
+
+plot(t, u_norm_1, "color", c_list(1,:), "LineWidth", line_width, "LineStyle", "-", ...
+    "DisplayName", "$\beta_j=0.001$"); hold on
+plot(t, u_norm_2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", ...
+    "DisplayName", "$\beta_j=0.45$"); hold on
+plot(t, u_norm_3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
+    "DisplayName", "$\beta_j=1$"); hold on
+
+xlabel("$t\ (\rm s)$", "Interpreter", "latex")
+ylabel("$\Vert u \Vert$", "Interpreter","latex")
+set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
+grid on
+ylim([0, 60])
+lgd = legend;
+lgd.Orientation = 'Vertical';
+lgd.Location = 'southwest';
+lgd.Interpreter = 'latex';
+lgd.FontSize = lgd_size;
+
+if POSITION_FLAG
+    set(gcf, 'Position',  default_size)
+end
+
+figure(14); clf % control input norm CM1
+t = ctrl_results.ctrl6_1.t;
+u_norm_1 = sqrt(ctrl_results.ctrl6_1.u_hist(1, :).^2 + ctrl_results.ctrl6_1.u_hist(2, :).^2);
+u_norm_2 = sqrt(ctrl_results.ctrl6_2.u_hist(1, :).^2 + ctrl_results.ctrl6_2.u_hist(2, :).^2);
+u_norm_3 = sqrt(ctrl_results.ctrl6_3.u_hist(1, :).^2 + ctrl_results.ctrl6_3.u_hist(2, :).^2);
+
+plot(t, u_norm_1, "color", c_list(1,:), "LineWidth", line_width, "LineStyle", "-", ...
+    "DisplayName", "$\lambda=0.001$"); hold on
+plot(t, u_norm_2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", ...
+    "DisplayName", "$\lambda=0.45$"); hold on
+plot(t, u_norm_3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
+    "DisplayName", "$\lambda=1$"); hold on
+
+xlabel("$t\ (\rm s)$", "Interpreter", "latex")
+ylabel("$\Vert u \Vert$", "Interpreter","latex")
+set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
+grid on
+ylim([0, 60])
+lgd = legend;
+lgd.Orientation = 'Vertical';
+lgd.Location = 'southwest';
+lgd.Interpreter = 'latex';
+lgd.FontSize = lgd_size;
+
+if POSITION_FLAG
+    set(gcf, 'Position',  default_size)
+end
+
+figure(15); clf % control input norm CM2
+t = ctrl_results.ctrl7_1.t;
+u_norm_1 = sqrt(ctrl_results.ctrl7_1.u_hist(1, :).^2 + ctrl_results.ctrl7_1.u_hist(2, :).^2);
+u_norm_2 = sqrt(ctrl_results.ctrl7_2.u_hist(1, :).^2 + ctrl_results.ctrl7_2.u_hist(2, :).^2);
+u_norm_3 = sqrt(ctrl_results.ctrl7_3.u_hist(1, :).^2 + ctrl_results.ctrl7_3.u_hist(2, :).^2);
+
+plot(t, u_norm_1, "color", c_list(1,:), "LineWidth", line_width, "LineStyle", "-", ...
+    "DisplayName", "$\rho=0.001$"); hold on
+plot(t, u_norm_2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", ...
+    "DisplayName", "$\rho=0.45$"); hold on
+plot(t, u_norm_3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
+    "DisplayName", "$\rho=1$"); hold on
+
+xlabel("$t\ (\rm s)$", "Interpreter", "latex")
+ylabel("$\Vert u \Vert$", "Interpreter","latex")
+set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
+grid on
+ylim([0, 60])
+lgd = legend;
+lgd.Orientation = 'Vertical';
+lgd.Location = 'southwest';
+lgd.Interpreter = 'latex';
+lgd.FontSize = lgd_size;
+
+if POSITION_FLAG
+    set(gcf, 'Position',  default_size)
 end    
+
+figure(16); clf % control input 1 CoNAC
+t = ctrl_results.ctrl5_1.t;
+u1_1 = ctrl_results.ctrl5_1.u_hist(1, :);
+u1_2 = ctrl_results.ctrl5_2.u_hist(1, :);
+u1_3 = ctrl_results.ctrl5_3.u_hist(1, :);
+
+plot(t, u1_1, "color", c_list(1,:), "LineWidth", line_width, "LineStyle", "-", ...
+    "DisplayName", "$\beta_j=0.001$"); hold on
+plot(t, u1_2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", ...
+    "DisplayName", "$\beta_j=0.45$"); hold on
+plot(t, u1_3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
+        "DisplayName", "$\beta_j=1$"); hold on
+
+xlabel("$t\ (\rm s)$", "Interpreter", "latex")
+ylabel("$u_1$", "Interpreter","latex")
+set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
+grid on
+ylim([-60, 60])
+lgd = legend;
+lgd.Orientation = 'Vertical';
+lgd.Location = 'southwest';
+lgd.Interpreter = 'latex';
+lgd.FontSize = lgd_size;
+
+if POSITION_FLAG
+    set(gcf, 'Position',  default_size)
+end
+
+figure(17); clf % control input 1 CM1
+t = ctrl_results.ctrl6_1.t;
+u1_1 = ctrl_results.ctrl6_1.u_hist(1, :);
+u1_2 = ctrl_results.ctrl6_2.u_hist(1, :);
+u1_3 = ctrl_results.ctrl6_3.u_hist(1, :);
+
+plot(t, u1_1, "color", c_list(1,:), "LineWidth", line_width, "LineStyle", "-", ...
+    "DisplayName", "$\lambda=0.001$"); hold on
+plot(t, u1_2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", ...
+    "DisplayName", "$\lambda=0.45$"); hold on
+plot(t, u1_3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
+    "DisplayName", "$\lambda=1$"); hold on
+
+xlabel("$t\ (\rm s)$", "Interpreter", "latex")
+ylabel("$u_1$", "Interpreter","latex")
+set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
+grid on
+ylim([-60, 60])
+lgd = legend;
+lgd.Orientation = 'Vertical';
+lgd.Location = 'southwest';
+lgd.Interpreter = 'latex';
+lgd.FontSize = lgd_size;
+
+if POSITION_FLAG
+    set(gcf, 'Position',  default_size)
+end
+
+figure(18); clf % control input 1 CM2
+t = ctrl_results.ctrl7_1.t;
+u1_1 = ctrl_results.ctrl7_1.u_hist(1, :);
+u1_2 = ctrl_results.ctrl7_2.u_hist(1, :);
+u1_3 = ctrl_results.ctrl7_3.u_hist(1, :);
+
+plot(t, u1_1, "color", c_list(1,:), "LineWidth", line_width, "LineStyle", "-", ...
+    "DisplayName", "$\rho=0.001$"); hold on
+plot(t, u1_2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", ...
+    "DisplayName", "$\rho=0.45$"); hold on
+plot(t, u1_3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
+    "DisplayName", "$\rho=1$"); hold on
+
+xlabel("$t\ (\rm s)$", "Interpreter", "latex")
+ylabel("$u_1$", "Interpreter","latex")
+set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
+grid on
+ylim([-60, 60])
+lgd = legend;
+lgd.Orientation = 'Vertical';
+lgd.Location = 'southwest';
+lgd.Interpreter = 'latex';
+lgd.FontSize = lgd_size;
+
+if POSITION_FLAG
+    set(gcf, 'Position',  default_size)
+end
+
+figure(19); clf % control input 2 CoNAC
+t = ctrl_results.ctrl5_1.t;
+u2_1 = ctrl_results.ctrl5_1.u_hist(2, :);
+u2_2 = ctrl_results.ctrl5_2.u_hist(2, :);
+u2_3 = ctrl_results.ctrl5_3.u_hist(2, :);
+
+plot(t, u2_1, "color", c_list(1,:), "LineWidth", line_width, "LineStyle", "-", ...
+    "DisplayName", "$\beta_j=0.001$"); hold on
+plot(t, u2_2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", ...
+    "DisplayName", "$\beta_j=0.45$"); hold on
+plot(t, u2_3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
+    "DisplayName", "$\beta_j=1$"); hold on
+
+xlabel("$t\ (\rm s)$", "Interpreter", "latex")
+ylabel("$u_2$", "Interpreter","latex")
+set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
+grid on
+ylim([-60, 60])
+lgd = legend;
+lgd.Orientation = 'Vertical';
+lgd.Location = 'southwest';
+lgd.Interpreter = 'latex';
+lgd.FontSize = lgd_size;
+
+if POSITION_FLAG
+    set(gcf, 'Position',  default_size)
+end
+
+figure(20); clf % control input 2 CM1
+t = ctrl_results.ctrl6_1.t;
+u2_1 = ctrl_results.ctrl6_1.u_hist(2, :);
+u2_2 = ctrl_results.ctrl6_2.u_hist(2, :);
+u2_3 = ctrl_results.ctrl6_3.u_hist(2, :);
+
+plot(t, u2_1, "color", c_list(1,:), "LineWidth", line_width, "LineStyle", "-", ...
+    "DisplayName", "$\lambda=0.001$"); hold on
+plot(t, u2_2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", ...
+    "DisplayName", "$\lambda=0.45$"); hold on
+plot(t, u2_3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
+    "DisplayName", "$\lambda=1$"); hold on
+
+xlabel("$t\ (\rm s)$", "Interpreter", "latex")
+ylabel("$u_2$", "Interpreter","latex")
+set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
+grid on
+ylim([-60, 60])
+lgd = legend;
+lgd.Orientation = 'Vertical';
+lgd.Location = 'southwest';
+lgd.Interpreter = 'latex';
+lgd.FontSize = lgd_size;
+
+if POSITION_FLAG
+    set(gcf, 'Position',  default_size)
+end
+
+figure(21); clf % control input 2 CM2
+t = ctrl_results.ctrl7_1.t;
+u2_1 = ctrl_results.ctrl7_1.u_hist(2, :);
+u2_2 = ctrl_results.ctrl7_2.u_hist(2, :);
+u2_3 = ctrl_results.ctrl7_3.u_hist(2, :);
+
+plot(t, u2_1, "color", c_list(1,:), "LineWidth", line_width, "LineStyle", "-", ...
+    "DisplayName", "$\rho=0.001$"); hold on
+plot(t, u2_2, "color", c_list(2,:), "LineWidth", line_width, "LineStyle", "-.", ...
+    "DisplayName", "$\rho=0.45$"); hold on
+plot(t, u2_3, "color", c_list(3,:), "LineWidth", line_width, "LineStyle", "--", ...
+    "DisplayName", "$\rho=1$"); hold on
+
+xlabel("$t\ (\rm s)$", "Interpreter", "latex")
+ylabel("$u_2$", "Interpreter","latex")
+set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
+grid on
+ylim([-60, 60])
+lgd = legend;
+lgd.Orientation = 'Vertical';
+lgd.Location = 'southwest';
+lgd.Interpreter = 'latex';
+lgd.FontSize = lgd_size;
+
+if POSITION_FLAG
+    set(gcf, 'Position',  default_size)
+end
 
 %% SAVE FIGURES
 if SAVE_FLAG
-    for idx = 3:12
+    for idx = 3:21
         % fig_name = fig_names(idx);
         fig_name = "fig"+string(idx);
         f_name = "figures/main_plot/ECC/" + fig_name;

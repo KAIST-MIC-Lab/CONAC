@@ -1,7 +1,8 @@
 % https://www.overleaf.com/learn/latex/Beamer#Using_a_colorthemev
 
 % Inbuilt themes in beamer
-\documentclass[8pt, aspectratio=169]{beamer}
+\documentclass[8pt, aspectratio=169, handout]{beamer}
+% \documentclass[8pt, aspectratio=169]{beamer}
 
 \input{../template/macros/macros_general.tex}
 \input{../template/macros/macros_math.tex}
@@ -41,12 +42,7 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 \usepackage{multirow}
-
-% \usepackage{calc}
-% \usepackage{svg}
-% \usepackage{media9}             %pdflatex, latex+dvips+ps2pdf, xelatex
-% \usepackage{multimedia}
-% \usepackage{animate}
+\usepackage{media9}
 
 % Title page details: 
 \title{
@@ -75,13 +71,6 @@
 % make institute font size smaller
 \setbeamerfont{institute}{size=\normalsize}
 
-% \logo{
-%   \vspace{-.7cm}%
-%   \includegraphics[height=0.3cm]{assets/kaist_logo.png}
-%   \includegraphics[height=0.3cm]{assets/MIC_Lab_logo.png}
-%   \hspace{.6cm}%
-%   }
-
 \AtBeginSection[]{%
   \frame<beamer>{ 
     \frametitle{Outline}   
@@ -103,16 +92,16 @@
 \begin{document}
 
 % Title page frame
-% \begin{frame}
 \titlepage 
-% \end{frame}
 
 % Outline frame
 \begin{frame}{Outline}
     \tableofcontents
 \end{frame}
 
-% Lists frame
+% ╔═══════════════════════════════════════════════╗
+% ║ Section: Background and Contributions         ║
+% ╚═══════════════════════════════════════════════╝
 \section{Background and Contributions}
 
 \subsection{Introduction to Neuro-Adaptive Control}
@@ -139,10 +128,10 @@
   \textbf{Advantages of Neuro-Adaptive Control}
   \small{
     \begin{itemize}
-      \item \textbf{Adaptability}: NAC adapts to changing environments and system dynamics.
-      \item \textbf{Stability Guarantee}: The closed-loop stability is ensured using \textit{Lyapunov stability theory}.
-      \item \textbf{Online Learning Capability}: NAC adapts in \textit{real-time} to new data with stability guarantees.
-      \item \textbf{Robustness}: NAC handles \textit{uncertainties and disturbances} effectively with adaptive control techniques.
+      \item <+-> \textbf{Adaptability}: NAC adapts to changing environments and system dynamics.
+      \item <+-> \textbf{Stability Guarantee}: The closed-loop stability is ensured using \textit{Lyapunov stability theory}.
+      \item <+-> \textbf{Online Learning Capability}: NAC adapts in \textit{real-time} to new data with stability guarantees.
+      \item <+-> \textbf{Robustness}: NAC handles \textit{uncertainties and disturbances} effectively with adaptive control techniques.
     \end{itemize}
   }
   
@@ -156,128 +145,157 @@
 
 \begin{frame}{\insertsubsectionhead}{Existing Challenges in NAC}
   
-  \textbf{Challenges}
-  \small{
-    \begin{itemize}
-      \item \textbf{Optimality}: In general, the adaptation laws are driven with respect to the tracking error, which may not guarantee optimal performance.
-      \item \textbf{Unpredictable Amplitude of Control input}: 
-        \begin{itemize}
-          \item The maximum amplitude of the NN weights is not predictable.
-          \item This can result in unpredictable amplitude of the control input, which may lead to control saturation.
-        \end{itemize}
-      \item \textbf{Parameter Dependency}: 
-      \begin{itemize}
-        \item The performance of the NAC is highly dependent on the choice of parameters, such as learning rate and NN architecture.
-      \end{itemize}
-    \end{itemize}
-  }
+  \begin{enumerate}
+    \begin{columns}[T,onlytextwidth]
+        \column{0.49\textwidth}
+          \item \textbf{Weight Boundedness:}
+
+          \begin{itemize}
+            \item The NN weights can grow unbounded, leading to instability.
+            \item Unbounded weights can cause the NN to produce large control inputs, which may lead to following challenges.
+          \end{itemize}
+          
+        \column{0.49\textwidth}
+          \centering
+          \begin{figure}
+            \includegraphics[width=0.4\textwidth]{figures/KAIST-hi.png}
+            \caption{Unbounded NN weights.}
+          \end{figure}
+      \end{columns}
+
+      \begin{columns}[T,onlytextwidth]
+        \column{0.49\textwidth}
+          \item \textbf{Unpredictable Amplitude of Control Input:}
+
+          \begin{itemize}
+            \item The NN outputs are unpredictable and not interpretable.
+            \item This feature and unbounded NN weights can lead to control input saturation.
+          \end{itemize}
+
+        \column{0.49\textwidth}
+          \centering
+          \begin{figure}
+            \includegraphics[width=0.8\textwidth]{figures/unpredictable.drawio.pdf}
+            \caption{Unpredictable amplitude of NN outputs.}
+          \end{figure}
+      \end{columns}
+  \end{enumerate}
 
 \end{frame}
 
-% \subsection{Literature Review}
+\subsection{Literature Review}
 
-% \begin{frame}{\insertsubsectionhead}{Boundedness of NN Weights}
+\begin{frame}{\insertsubsectionhead}
   
-%   In general, the NN outputs are bounded by limiting the maximum amplitude of the NN weights.
+  \begin{enumerate}
+    \begin{columns}[T,onlytextwidth]
+        \column{0.65\textwidth}
+          \item \textbf{Projection Operator} \small{\textit{for weight boundednss}}
 
-%   \begin{enumerate}
-%     \begin{columns}[T,onlytextwidth]
-%         \column{0.49\textwidth}
-%           \item \textbf{Projection Operator}
+          \begin{itemize}
+            \item Projects the NN weights onto a convex set.
+            \item Ensures that the weights remain within a predefined bound.
+          \end{itemize}
 
-%           \begin{itemize}
-%             \item Cats 
-%             \item Dogs 
-%             \item Birds
-%           \end{itemize}
+          \begin{equation}
+            \estwth \leftarrow \myproj_{\overline{\theta}}(\estwth)
+          \end{equation}
 
-%         \column{0.49\textwidth}
-%           \begin{figure}
-%             \includegraphics[width=0.4\textwidth]{figures/KAIST-hi.png}
-%           \end{figure}
-%       \end{columns}
+        \column{0.35\textwidth}
+          \begin{figure}
+            \includegraphics[width=0.3\textwidth]{figures/KAIST-hi.png}
+          \end{figure}
+      \end{columns}
 
-%       \begin{columns}[T,onlytextwidth]
-%         \column{0.49\textwidth}
-%           \item \textbf{$\epsilon$-modification, and $\sigma$-modification}
+      \vspace{0.2cm}
 
-%           \begin{itemize}
-%             \item Cats 
-%             \item Dogs 
-%             \item Birds
-%           \end{itemize}
+      \begin{columns}[T,onlytextwidth]
+        \column{0.65\textwidth}
+          \item \textbf{$\epsilon$-modification, and $\sigma$-modification} \small{\textit{for weight boundednss}}
 
-%         \column{0.49\textwidth}
-%           \begin{figure}
-%             \includegraphics[width=0.4\textwidth]{figures/KAIST-hi.png}
-%           \end{figure}
-%       \end{columns}
-%   \end{enumerate}
-% \end{frame}
+          \begin{itemize}
+            \item Add a stabilizing term to adaptation law.
+            \item Invariance set of the NN weights can be ensured.
+          \end{itemize}
 
-% \begin{frame}{\insertsubsectionhead}{Input Saturation}
-  
-%   The input saturation is generally handled using an auxiliary system.
+          \begin{equation}
+            \ddtt{\estwth} \leftarrow \ddtt{\estwth} - \rho \norm{\estwth}
+          \end{equation}
 
-%   \begin{enumerate}
-%     \begin{columns}[T,onlytextwidth]
-%         \column{0.49\textwidth}
-%           \item \textbf{Auxiliary Systems}
+        \column{0.35\textwidth}
+          \begin{figure}
+            \includegraphics[width=0.3\textwidth]{figures/KAIST-hi.png}
+          \end{figure}
 
-%           \begin{itemize}
-%             \item Cats 
-%             \item Dogs 
-%             \item Birds
-%           \end{itemize}
+      \end{columns}
 
-%         \column{0.49\textwidth}
-%           \begin{figure}
-%             \includegraphics[width=0.4\textwidth]{figures/KAIST-hi.png}
-%           \end{figure}
-%       \end{columns}
+      \vspace{0.2cm}
 
-%       \begin{columns}[T,onlytextwidth]
-%         \column{0.49\textwidth}
-%           \item \textbf{Second?}
+      \begin{columns}[T,onlytextwidth]
+        \column{0.65\textwidth}
+          \item \textbf{Additional Control Inputs} \small{\textit{for control saturation}}
 
-%           \begin{itemize}
-%             \item Cats 
-%             \item Dogs 
-%             \item Birds
-%           \end{itemize}
+          \begin{itemize}
+            \item Conventional controllers are used to address control input saturation. 
+                  \begin{itemize}
+                    \item Barrier Lyapunov function or auxiliary system-based control inputs.
+                  \end{itemize}
+            \item These methods do not guarantee the stability of the system.     
+          \end{itemize}
 
-%         \column{0.49\textwidth}
-%           \begin{figure}
-%             \includegraphics[width=0.4\textwidth]{figures/KAIST-hi.png}
-%           \end{figure}
-%       \end{columns}
-%   \end{enumerate}
-% \end{frame}
+        \column{0.35\textwidth}
 
-\subsection{Research Objectives}
+          \begin{figure}
+            \includegraphics[width=0.3\textwidth]{figures/KAIST-hi.png}
+          \end{figure}
+
+      \end{columns}
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Limitations of Existing Methods}
+
+  \textbf{Limitation 1: Lack of Optimality}
+  \begin{itemize}
+    \item The existing methods do not guarantee the optimality of the control input.
+    \item ...
+  \end{itemize}
+
+  \textbf{Limitation 2: Disruption of Learning Process by Additional Control Inputs}
+  \begin{itemize}
+    \item Feedback tracking error for learning is disrupted by additional control inputs.
+      \begin{itemize}
+        \item The feedback error does not reflect the error induced by the NN, directly.
+      \end{itemize}  
+    \item 
+  \end{itemize}
+
+\end{frame}
+
+\subsection{Contributions}
 
 \begin{frame}{\insertsubsectionhead}
 
-  \textbf{Objective 1: Optimality}
+  \textbf{Contribution 1: Unified Optimization Framework} 
   \begin{itemize}
-    \item Formulate a constrained optimization problem to minimize the tracking error.
-    \item Guarantee the stability of the system and the NN weights.
+    \item 
   \end{itemize}
 
-  \textbf{Objective 2: Stability}
+  \textbf{Contribution 2: Online Learning Capability (Stabiltiy Guarantees)}
   \begin{itemize}
-    \item Derive an adaptation law that guarantees the stability of the system.
-    \item Ensure that the NN weights remain bounded during operation.
+    \item 
   \end{itemize}
 
-  \textbf{Objective 3: Boundedness of }
+  \textbf{Contribution 3: Weight and Control Input Constraint Handling}
   \begin{itemize}
-    \item Ensure the controller is robust to uncertainties and disturbances.
-    \item Validate the proposed method through numerical simulations.
+    \item 
   \end{itemize}
 
 \end{frame}
 
+% ╔═══════════════════════════════════════════════╗
+% ║ Section: Proposed Method                      ║
+% ╚═══════════════════════════════════════════════╝
 \section{Proposed Method}
 
 \subsection{Architecture of the Proposed Method}
@@ -480,7 +498,7 @@
 
 \begin{frame}{\insertsubsectionhead}{Gradient Descent/Ascent Method}
   
-  For the dual problem, 
+  To solve the dual problem, 
   \begin{equation}
     \min_{\estwth}\max_{[\lambda_j]_{j\in\mathcal{I}}} 
     L(\mv{r},\estwth,[\lambda_j]_{j\in\mathcal{I}})
@@ -568,22 +586,32 @@
 
 \begin{frame}{\insertsubsectionhead}{Lyapunov Stability Analysis}
 
-  \begin{block}{Theorem 1 \cite{Ryu:2025aa}}
-    For the dynamical system described in \eqref{eq:sys}, the neuro-adaptive controller in \eqref{eq:input} with the weight adaptation laws in \eqref{eq:adaptation_law:1}, \eqref{eq:adaptation_law:2} and \eqref{eq:adaptation_law:3} ensure the boundedness of the filtered error $\mv{r}$ and the weight estimate $\estwth$, under the control input constraints satisfying Assumption 1 and 2. This holds under the weight norm constraint \eqref{eq:cstr:weight}.
-  \end{block}
+  \centering
+  \begin{minipage}{.9\textwidth}
 
-  \begin{exampleblock}{Assumption 1 (Convex Input Constraint)}
-    The constraint functions $c_j(\estwth),\forall j\in\mathcal{I}$, are convex in the $\tau$-space and satisfy $c_j(\estwth)\le0$ and $c_j(\idealwth)\le0$.
-  \end{exampleblock}
+    \begin{block}{Theorem 1 \cite{Ryu:2025aa}}
+      For the dynamical system described in \eqref{eq:sys}, the neuro-adaptive controller in \eqref{eq:input} with the weight adaptation laws in \eqref{eq:adaptation_law:1}, \eqref{eq:adaptation_law:2} and \eqref{eq:adaptation_law:3} ensure the boundedness of the filtered error $\mv{r}$ and the weight estimate $\estwth$, under the control input constraints satisfying Assumption 1 and 2. This holds under the weight norm constraint \eqref{eq:cstr:weight}.
+    \end{block}
 
-  \begin{exampleblock}{Assumption 2, Linear Independence Constraint Qualification (LICQ)}
-    The selected constraints satisfy the Linear Independence Constraint Qualification (LICQ) \cite[Chap. 12 Def. 12.1]{Nocedal:2006aa}.
-  \end{exampleblock}
+    \begin{exampleblock}{Assumption 1 (Convex Input Constraint)}
+      The constraint functions $c_j(\estwth),\forall j\in\mathcal{I}$, are convex in the $\tau$-space and satisfy $c_j(\estwth)\le0$ and $c_j(\idealwth)\le0$.
+    \end{exampleblock}
+
+    \begin{exampleblock}{Assumption 2, Linear Independence Constraint Qualification (LICQ)}
+      The selected constraints satisfy the Linear Independence Constraint Qualification (LICQ) \cite[Chap. 12 Def. 12.1]{Nocedal:2006aa}.
+    \end{exampleblock}
+
+  \end{minipage}
+
+  \vspace{.2cm}
 
   Proof of Theorem 1 is omitted due to space limitations. The detailed proof can be found in \cite{Ryu:2025aa}.
 
 \end{frame}
 
+% ╔═══════════════════════════════════════════════╗
+% ║ Section: Experimental Validation              ║
+% ╚═══════════════════════════════════════════════╝
 \section{Experimental Validation}
 
 \subsection{Simulation Setup}
@@ -615,19 +643,19 @@
         \begin{equation}
           \qd
           =
-          \begin{bmatrix}
+          \begin{pmatrix}
               {q_d}_1\\
               {q_d}_2
-          \end{bmatrix}
+          \end{pmatrix}
           = 
-          \begin{bmatrix}
+          \begin{pmatrix}
               +\cos(
                   \tfrac{\pi}{2}t
               ) + 1 \\
               -\cos(
                   \tfrac{\pi}{2}t
               ) - 1 
-          \end{bmatrix}
+          \end{pmatrix}
           .
       \end{equation}
 
@@ -717,21 +745,6 @@
 \end{frame}
 
 \subsection{Simulation Results}
-
-% \begin{frame}{Representative Simulation Results}
-
-  % % \movie[width=3cm,height=2cm,poster]{}{overall.mp4}
-  % \begin{figure}
-  %   \centering
-  %   \href{https://youtu.be/U5uDbJQkGY8}{
-  %     \includegraphics[width=.1\textwidth]{figures/KAIST-hi.png}
-  %   }
-  % \end{figure}
-
-  % \animategraphics[loop,width=4cm]{gifs/overall-}
-  % \animategraphics[loop,width=4cm]{10}{gifs/overall-}{0}{10}
-
-% \end{frame}
 
 \begin{frame}{\insertsubsectionhead}{Box-and-Whisker Plots}
   
@@ -851,6 +864,22 @@
 
 \end{frame}
 
+% \begin{frame}{Representative Simulation Results}
+
+%   \centering
+%   \includemedia[
+%       width=0.96\linewidth,
+%       height=0.54\linewidth,
+%       activate=onclick,
+%       addresource=demonstration.mp4,
+%       flashvars={
+%          source=demonstration.mp4
+%         &autoPlay=true
+%         &loop=true
+%       }
+%     ]{}{VPlayer.swf}
+
+% \end{frame}
 
 % \subsection{Simulation Setup}
 
@@ -892,6 +921,9 @@
 
 % \end{frame}
 
+% ╔═══════════════════════════════════════════════╗ 
+% ║ Section: Conclusion and Future Work           ║
+% ╚═══════════════════════════════════════════════╝
 \section{Conclusion}
 
 \subsection{Conclusion and Future Work}
