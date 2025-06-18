@@ -675,7 +675,7 @@ $
     ^\top \fe
 $. 
 Since the objective function depends on $\fe$ of a dynamic system, obtaining $\pptfrac{\fe}{\rbu}$ is not straightforward. 
-The recommended method to calculate the exact value of $\pptfrac{\fe}{\rbu}$ is to use the forward sensitivity method \cite{Sengupta:2014aa} by simulating the sensitivity equation as follows: 
+The recommended method to calculate the exact value of $\pptfrac{\fe}{\rbu}$ is to use the forward sensitivity method \cite{Sengupta:2014aa,Ryu:2024aa} by simulating the sensitivity equation as follows: 
 \begin{equation}
     \ddtt 
     \left(
@@ -1024,21 +1024,23 @@ Consider the Lyapunov function candidate $V_3:=V_1+V_2$, whose time derivative i
         +\fe^\top (\estNN - \idealNN - \mv\epsilon)
         \\
         &
-        -\estwth_k^\top (
+        -\estwth_k^\top 
+        \left(
             (\mm I_{l_{k+1}}\otimes \estact_k^\top)^\top
             \fe
             +
             \lambda_{\theta_k}\estwth_k
-        )
+        \right)
         \\
         \le&
         -\lambda_{\min}(\mm K)\norm{\fe}^2
         +\fe^\top \estNN
-        +(
+        +
+        \left(
             \overline\tau_d+\norm{
                 \idealNN+\mv\epsilon
             }
-        )
+        \right)
         \norm{\fe}
         \\
         &
@@ -1732,7 +1734,6 @@ The gradients of $\mv{c}_{\overline \tau}$ and $\mv{c}_{\underline\tau}$ with re
             +\pptfrac{\estNN}{\estwth}
             \\
         =&
-        =
         +
         \begin{bmatrix}
             (\mm{I}_{l_{k+1}}\otimes \estact_{k}^\top)&
@@ -1760,7 +1761,6 @@ The gradients of $\mv{c}_{\overline \tau}$ and $\mv{c}_{\underline\tau}$ with re
         -\pptfrac{\estNN}{\estwth}
         \\
         =&
-        =
         -\begin{bmatrix}
             (\mm{I}_{l_{k+1}}\otimes \estact_{k}^\top)&
             % V_k^\top \phi_{k}' (I_{l_{k}}\otimes  \phi_{k-1}^\top)&
