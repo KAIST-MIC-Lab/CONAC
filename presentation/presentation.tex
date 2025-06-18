@@ -1,8 +1,9 @@
 % https://www.overleaf.com/learn/latex/Beamer#Using_a_colorthemev
 
 % Inbuilt themes in beamer
-\documentclass[8pt, aspectratio=169, handout]{beamer}
-% \documentclass[8pt, aspectratio=169]{beamer}
+% \documentclass[8pt, aspectratio=169, handout]{beamer}
+\documentclass[8pt, aspectratio=169]{beamer}
+% \setbeamertemplate{caption}[numbered]
 
 \input{../template/macros/macros_general.tex}
 \input{../template/macros/macros_math.tex}
@@ -30,7 +31,7 @@
 \usefolder{styles}
 % Use Flux theme v0.1 beta
 % Available style: asphalt, blue, red, green, gray 
-\usetheme[style=blue]{flux}
+\usetheme[style=dding]{flux}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -44,6 +45,12 @@
 \usepackage{multirow}
 \usepackage{media9}
 
+% https://latexcolor.com % color list
+\definecolor{airforceblue}{rgb}{0.36, 0.54, 0.66}
+\definecolor{awesome}{rgb}{1.0, 0.13, 0.32}
+\newcommand{\ctxt}[2]{\color{#1}{#2}\color{black} }
+% \newcommand{\ctxt}[2]{\color{#1}\mathbf{#2}\color{black} }
+
 % Title page details: 
 \title{
     Imposing a Weight Norm Constraint for Neuro-Adaptive Control 
@@ -52,22 +59,28 @@
     \textit{IEEE European Control Conference (ECC) 2025}\\
 }
 \author{
-  \textbf{Myeongseok Ryu}\inst{1}, Jiyun Kim\inst{2}, and Kyunghwan Choi\inst{1}
+  \textbf{\ctxt{airforceblue}{Myeongseok Ryu}}\inst{1}, Jiyun Kim\inst{2}, and Kyunghwan Choi\inst{1}
   }
 \date{2025-06-25}
 \institute{%
     \begin{minipage}[c]{\linewidth}
         \centering
         \inst{1}%
-        Department of Mechanical and Robotics Engineering\\
-        Gwangju Institute of Science and Technology
+        Mobility Intelligence and Control Laboratory (MIC Lab) \\
+        % Department of Mechanical and Robotics Engineering\\
+        % Gwangju Institute of Science and Technology
+        CCS Graduate School of Mobility \\
+        Korea Advanced Institute of Science and Technology (KAIST)
         \and
         \inst{2}%
         AI Graduate School\\
-        Gwangju Institute of Science and Technology
+        Gwangju Institute of Science and Technology (GIST)
   \end{minipage}
 }
+
+% \titlegraphic{assets/MIC_Lab_logo.png}
 \titlegraphic{assets/MIC_Lab_logo_white.png}
+
 % make institute font size smaller
 \setbeamerfont{institute}{size=\normalsize}
 
@@ -111,8 +124,8 @@
   \textbf{Neuro-Adaptive Control}
   \small{
     \begin{itemize}
-      \item \textbf{Neuro-adaptive control} (NAC) is a control strategy that combines \textbf{neural networks (NNs)} with \textbf{adaptive control} \cite{Farrell:2006aa}.
-      \item Features of both \textbf{NNs} and \textbf{adaptive control} can be found in NAC.
+      \item \textbf{Neuro-adaptive control} (NAC) is a control strategy that combines \ctxt{airforceblue}{neural networks (NNs) } with \ctxt{awesome}{adaptive control } \cite{Farrell:2006aa}.
+      \item Features of both \ctxt{airforceblue}{NNs } and \ctxt{awesome}{adaptive control } can be found in NAC.
     \end{itemize}
   }
 
@@ -128,10 +141,10 @@
   \textbf{Advantages of Neuro-Adaptive Control}
   \small{
     \begin{itemize}
-      \item <+-> \textbf{Adaptability}: NAC adapts to changing environments and system dynamics.
-      \item <+-> \textbf{Stability Guarantee}: The closed-loop stability is ensured using \textit{Lyapunov stability theory}.
-      \item <+-> \textbf{Online Learning Capability}: NAC adapts in \textit{real-time} to new data with stability guarantees.
-      \item <+-> \textbf{Robustness}: NAC handles \textit{uncertainties and disturbances} effectively with adaptive control techniques.
+      \item <2-> \textbf{Adaptability}: NAC adapts \ctxt{airforceblue}{NN weights }to changing environments and system dynamics.
+      \item <3-> \textbf{Stability Guarantee}: The closed-loop stability is ensured using \ctxt{airforceblue}{Lyapunov stability theory}.
+      \item <4-> \textbf{Online Learning Capability}: NAC adapts in \ctxt{airforceblue}{real-time } to new data with stability guarantees.
+      \item <5-> \textbf{Robustness}: NAC handles \ctxt{airforceblue}{uncertainties and disturbances }effectively with adaptive control techniques.
     \end{itemize}
   }
   
@@ -143,42 +156,65 @@
 
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Existing Challenges in NAC}
-  
+\begin{frame}{\insertsubsectionhead}{What is Neuro-Adaptive Control?}
+
+  \textbf{Existing Challenges in NAC}
+
   \begin{enumerate}
-    \begin{columns}[T,onlytextwidth]
-        \column{0.49\textwidth}
-          \item \textbf{Weight Boundedness:}
-
-          \begin{itemize}
-            \item The NN weights can grow unbounded, leading to instability.
-            \item Unbounded weights can cause the NN to produce large control inputs, which may lead to following challenges.
-          \end{itemize}
-          
-        \column{0.49\textwidth}
-          \centering
-          \begin{figure}
-            \includegraphics[width=0.4\textwidth]{figures/KAIST-hi.png}
-            \caption{Unbounded NN weights.}
-          \end{figure}
-      \end{columns}
-
+    
+    \onslide<2->
+    {
       \begin{columns}[T,onlytextwidth]
-        \column{0.49\textwidth}
-          \item \textbf{Unpredictable Amplitude of Control Input:}
-
-          \begin{itemize}
-            \item The NN outputs are unpredictable and not interpretable.
-            \item This feature and unbounded NN weights can lead to control input saturation.
-          \end{itemize}
 
         \column{0.49\textwidth}
-          \centering
-          \begin{figure}
-            \includegraphics[width=0.8\textwidth]{figures/unpredictable.drawio.pdf}
-            \caption{Unpredictable amplitude of NN outputs.}
-          \end{figure}
-      \end{columns}
+
+          \small{
+            \item \textbf{Weight Boundedness:} 
+
+            \begin{itemize}
+              \item Generally, NN weights are adapted by \ctxt{airforceblue}{gradient descent method}.
+              \begin{itemize}
+                \item Objective function typically consists of the control error.
+              \end{itemize}
+              \item Hence, the NN weights can grow \ctxt{awesome}{unbounded}, leading to instability (also known as \textit{parameter drift}).
+              \item Unbounded weights can cause the NN to produce \ctxt{airforceblue}{large control inputs}, which may lead to following challenges.
+            \end{itemize}
+          }
+            
+          \column{0.49\textwidth}
+            \centering
+
+              \begin{figure}
+                \includegraphics[width=0.7\textwidth]{figures/unbounded.drawio.pdf}
+                \caption{Divergence of NN weights even with convergent control error.}
+              \end{figure}
+        \end{columns}
+      }
+
+      \onslide<3->
+      {
+        \begin{columns}[T,onlytextwidth]
+          \column{0.49\textwidth}
+
+          \small{
+            \item \textbf{Unpredictable Amplitude of Control Input:}
+
+            \begin{itemize}
+              \item Typical issue of control problem in physical systems.
+              \item The NN outputs are \ctxt{awesome}{unpredictable } and \ctxt{awesome}{not interpretable}.
+              \item These features—unbounded NN weights and unpredictable amplitudes—can lead to \ctxt{airforceblue}{input saturation}.
+            \end{itemize}
+          }
+
+          \column{0.49\textwidth}
+            \centering
+            \begin{figure}
+              \includegraphics[width=0.8\textwidth]{figures/unpredictable.drawio.pdf}
+              \caption{Unpredictable amplitude of NN outputs.}
+            \end{figure}
+        \end{columns}
+      }
+
   \end{enumerate}
 
 \end{frame}
@@ -188,86 +224,128 @@
 \begin{frame}{\insertsubsectionhead}
   
   \begin{enumerate}
-    \begin{columns}[T,onlytextwidth]
-        \column{0.65\textwidth}
+
+    \begin{columns}[T]
+
+        \column{0.33\textwidth}
           \item \textbf{Projection Operator} \small{\textit{for weight boundednss}}
 
-          \begin{itemize}
-            \item Projects the NN weights onto a convex set.
-            \item Ensures that the weights remain within a predefined bound.
-          \end{itemize}
+          \onslide<2->
+          {
+            \begin{itemize}
+              \item Projects the NN weights onto a convex set.
+              \item Ensures that the weights \ctxt{airforceblue}{remain }within a predefined bound.
+            \end{itemize}
 
-          \begin{equation}
-            \estwth \leftarrow \myproj_{\overline{\theta}}(\estwth)
-          \end{equation}
+            \begin{equation}
+              \estwth \leftarrow \myproj_{\overline{\theta}}(\estwth)
+            \end{equation}
+          }
 
-        \column{0.35\textwidth}
-          \begin{figure}
-            \includegraphics[width=0.3\textwidth]{figures/KAIST-hi.png}
-          \end{figure}
-      \end{columns}
+        \column{0.33\textwidth}
+          \item \textbf{$\sigma$-modification, and $\epsilon$-modification} \small{\textit{for weight boundednss}}
 
-      \vspace{0.2cm}
+          \onslide<3->
+          {
+            \begin{itemize}
+              \item Add a \ctxt{airforceblue}{stabilizing term }(\eg $ -\lambda \estwth $) to adaptation law.
+              \item Construct a \ctxt{airforceblue}{invariant set }of the NN weights.
+            \end{itemize}
 
-      \begin{columns}[T,onlytextwidth]
-        \column{0.65\textwidth}
-          \item \textbf{$\epsilon$-modification, and $\sigma$-modification} \small{\textit{for weight boundednss}}
+            \begin{equation}
+              \ddtt{\estwth} \leftarrow \ddtt{\estwth} - \ctxt{awesome}{\lambda \estwth}
+            \end{equation}
+          }
 
-          \begin{itemize}
-            \item Add a stabilizing term to adaptation law.
-            \item Invariance set of the NN weights can be ensured.
-          \end{itemize}
-
-          \begin{equation}
-            \ddtt{\estwth} \leftarrow \ddtt{\estwth} - \rho \norm{\estwth}
-          \end{equation}
-
-        \column{0.35\textwidth}
-          \begin{figure}
-            \includegraphics[width=0.3\textwidth]{figures/KAIST-hi.png}
-          \end{figure}
-
-      \end{columns}
-
-      \vspace{0.2cm}
-
-      \begin{columns}[T,onlytextwidth]
-        \column{0.65\textwidth}
+        \column{0.33\textwidth}
           \item \textbf{Additional Control Inputs} \small{\textit{for control saturation}}
 
-          \begin{itemize}
-            \item Conventional controllers are used to address control input saturation. 
-                  \begin{itemize}
-                    \item Barrier Lyapunov function or auxiliary system-based control inputs.
-                  \end{itemize}
-            \item These methods do not guarantee the stability of the system.     
-          \end{itemize}
-
-        \column{0.35\textwidth}
-
-          \begin{figure}
-            \includegraphics[width=0.3\textwidth]{figures/KAIST-hi.png}
-          \end{figure}
+          \onslide<4->
+          {
+            \begin{itemize}
+              \item \ctxt{airforceblue}{Conventional controllers }are used to address control input saturation. 
+                    \begin{itemize}
+                      \item Barrier Lyapunov function or auxiliary system-based control inputs.
+                    \end{itemize}
+              \item In general, \ctxt{awesome}{nominal models }are required.
+            \end{itemize}
+          }
 
       \end{columns}
+
   \end{enumerate}
+
+  \vspace{0.5cm}
+
+  \begin{columns}[T]
+
+      \column{0.33\textwidth}
+
+        \onslide<2->
+        {
+          \centering
+          \begin{figure}
+            \includegraphics[width=0.8\textwidth]{figures/existing_proj.drawio.pdf}
+            \caption{Projection of NN weights on a convex set.}
+          \end{figure}
+        }
+
+      \column{0.33\textwidth}
+          
+        \onslide<3->
+        {
+          \centering
+          \begin{figure}
+            \includegraphics[width=0.8\textwidth]{figures/existing_modi.drawio.pdf}
+            \caption{Adaptation result with stabilizing function (\eg $\sigma$-modification).}
+          \end{figure}
+        }
+      
+      \column{0.33\textwidth}
+      
+        \onslide<4->
+        {
+          \centering
+          \begin{figure}
+            \includegraphics[width=0.999\textwidth]{figures/existing_conv.drawio.pdf}
+            \caption{Control input saturation handling with additional control inputs.}
+          \end{figure}
+        }
+
+    \end{columns}
+
 \end{frame}
 
 \begin{frame}{\insertsubsectionhead}{Limitations of Existing Methods}
 
-  \textbf{Limitation 1: Lack of Optimality}
+  \onslide<1->
+  {
+    \textbf{Limitation 1: Lack of Optimality}
+  }
   \begin{itemize}
-    \item The existing methods do not guarantee the optimality of the control input.
-    \item ...
+    \item<2-> The existing methods do not guarantee the \ctxt{airforceblue}{optimality } of the control input.
+    \item<3-> Projection operator:
+    \begin{itemize}
+      \item The projection operator \ctxt{awesome}{simply projects } the NN weights onto a convex set, regardless of the imposed \ctxt{airforceblue}{constraints } (\eg weight boundedness or input saturation).
+      \item Moreover, if the convex set is conservatively defined, the weights may be limited to a \ctxt{awesome}{suboptimal region}.
+    \end{itemize}
+    \item<4-> $\sigma$- and $\epsilon$-modification:
+    \begin{itemize}
+      \item The stabilizing term \ctxt{awesome}{biases } the NN weights towards the origin.
+      \item Therefore, the weights converge toward a \ctxt{awesome}{suboptimal point}.
+    \end{itemize}
   \end{itemize}
 
-  \textbf{Limitation 2: Disruption of Learning Process by Additional Control Inputs}
+  \onslide<1->
+  {
+    \textbf{Limitation 2: Disruption of Learning Process by Additional Control Inputs}
+  }
   \begin{itemize}
-    \item Feedback tracking error for learning is disrupted by additional control inputs.
+    \item<5-> Feedback tracking error for learning is \ctxt{awesome}{disrupted } by additional control inputs.
       \begin{itemize}
-        \item The feedback error does not reflect the error induced by the NN, directly.
-      \end{itemize}  
-    \item 
+        \item The feedback error \ctxt{airforceblue}{does not reflect } the error induced by the NN, directly.
+        \item The additional control inputs may exceeds the \ctxt{awesome}{input saturation limits }, already.
+    \end{itemize}  
   \end{itemize}
 
 \end{frame}
@@ -277,19 +355,34 @@
 \begin{frame}{\insertsubsectionhead}
 
   \textbf{Contribution 1: Unified Optimization Framework} 
-  \begin{itemize}
-    \item 
-  \end{itemize}
+  \onslide<2->
+  {
+    \begin{itemize}
+      \item Trajectory tracking and constraint handling are formulated as a \ctxt{airforceblue}{unified constrained optimization } problem.
+      \item The \ctxt{awesome}{conventional controllers } does not required.
+      \begin{itemize}
+        \item Nominal model knowledge is not required for the conventional controllers.
+      \end{itemize}
+    \end{itemize}
+  }
 
-  \textbf{Contribution 2: Online Learning Capability (Stabiltiy Guarantees)}
-  \begin{itemize}
-    \item 
-  \end{itemize}
+  \textbf{Contribution 2: Online Learning Capability (Stability Guarantees)}
+  \onslide<3->
+  {
+    \begin{itemize}
+      \item Stability are rigorously proven using \ctxt{airforceblue}{Lyapunov stability theory}.
+      \item Hence, \ctxt{airforceblue}{online learning} with \ctxt{awesome}{no prior system knowledge } is possible.
+    \end{itemize}
+  }
 
   \textbf{Contribution 3: Weight and Control Input Constraint Handling}
-  \begin{itemize}
-    \item 
-  \end{itemize}
+  \onslide<4->
+  {
+    \begin{itemize}
+      \item Weight and control input \ctxt{awesome}{constraints } are \ctxt{airforceblue}{explicitly considered } in the optimization problem.
+      \item \ctxt{airforceblue}{Any combination } of convex input constraints can be handled.
+    \end{itemize}
+  }
 
 \end{frame}
 
@@ -306,45 +399,60 @@
     
     \column{0.5\textwidth}
       
+    \onslide<2->
+    {
       \textbf{Target Two-link Robotic Manipulator System}:
-      \begin{itemize}
-        \item Control input saturation function $\mysat(\cdot)$.
-        \item Desired trajectory $\mv{q}_d$ is given.
-      \end{itemize}
-        \begin{equation}\label{eq:sys}
-          \mm{M}\ddq + \mm{V}_m\dq + \mv{F} + \mv{G} + \mv{\tau}_d
-          =
-          \mysat(\mv{\tau})
-        \end{equation}
-      
+      \small{
+        \begin{itemize}
+          \item Control input \ctxt{awesome}{saturation function } $\mysat(\cdot)$.
+          \item Desired trajectory $\mv{q}_d$ is given.
+        \end{itemize}
+          \begin{equation}\label{eq:sys}
+            \mm{M}\ddq + \mm{V}_m\dq + \mv{F} + \mv{G} + \mv{\tau}_d
+            =
+            \mysat(\mv{\tau})
+          \end{equation}    
+      }
+    }
+    
+    \onslide<3->
+    {
       \textbf{Control Input}:
-      \begin{itemize}
-        \item NN's output $\mv{\Phi}$ is used as the control input.
-        \item Consists of the estimated NN weights $\estwth$.
-      \end{itemize}
-      \begin{equation}\label{eq:input}
-        \mv{\tau} := \mv{\Phi}(\mv{q}_n; \estwth)
-      \end{equation}
-
-      \textbf{Deep Neural Network (DNN)}:
-      \begin{itemize}
-        \item $k$ layers with $\estwth_i:=\myvec(\estwV_i)$.
-        \item Activation function: $\phi(\cdot):=tanh(\cdot)$.
-        \begin{equation}\label{eq:NN}
-          \mv{\Phi}(\mv{q}_n; \estwth)
-          :=
-          \begin{cases}
-              \estwV_i^\top \act_i(\estNN_{i-1}), 
-              &
-              i\in\{1,\dots ,k\},
-              \\
-              \estwV_0^\top {\q}_n,
-              &
-              i=0
-              ,
-          \end{cases}
+      \small{
+        \begin{itemize}
+          \item NN's \ctxt{airforceblue}{output } $\mv{\Phi}$ is used as the control input.
+          \item Consists of the \ctxt{awesome}{estimated NN weights } $\estwth$.
+        \end{itemize}
+        \begin{equation}\label{eq:input}
+          \mv{\tau} := \mv{\Phi}(\mv{q}_n; \estwth)
         \end{equation}
-      \end{itemize}
+      }
+    }
+
+    \onslide<4->
+    {
+      \textbf{Deep Neural Network (DNN)}:
+      \small{
+        \begin{itemize}
+          \item $k$ layers with weights $\estwth_i:=\myvec(\estwV_i)$.
+          \item Activation function: $\phi(\cdot):=tanh(\cdot)$.
+          \begin{equation}\label{eq:NN}
+            \mv{\Phi}(\mv{q}_n; \estwth)
+            :=
+            \begin{cases}
+                \estwV_i^\top \act_i(\estNN_{i-1}), 
+                &
+                i\in\{1,\dots ,k\},
+                \\
+                \estwV_0^\top {\q}_n,
+                &
+                i=0
+                ,
+            \end{cases}
+          \end{equation}
+        \end{itemize}
+      }
+    }
 
     \column{0.5\textwidth}  
 
@@ -353,17 +461,19 @@
         \caption{Architecture of the proposed method.}
       \end{figure}
 
+    \onslide<4->
+    {
       \begin{figure}
         \includegraphics[width=0.7\textwidth]{figures/DNN.drawio.pdf}
         \caption{Architecture of the DNN.}
       \end{figure}
+    }
 
   \end{columns}
 
     \let\thefootnote\relax\footnote{
       \textit{Notations}: 
-        $\mv{q}\in\R^n$: Joint position, $\mm{M}$: Inertia matrix, $\mm{C}$: Coriolis matrix, $\mm{G}$: Gravity vector, $\mv{\tau}$: Control input, $\estwth$: Estimated NN weights.
-        $\estwth$: Estimated NN weights, $\mv{e}$: Tracking error, $\mv{\tau}_d$: Disturbance, $\mysat(\cdot)$: Saturation function.
+        $\mv{q}\in\R^n$: Joint position, $\mm{M}$: Inertia matrix, $\mm{C}$: Coriolis matrix, $\mm{G}$: Gravity vector, $\mv{\tau}$: Control input, $\mv{\tau}_d$: Disturbance.
       }
 
 \end{frame}
@@ -379,26 +489,28 @@
     \textbf{Optimization Problem Statement}:
 
     \begin{itemize}
-      \item \textbf{Find} NN weights $\estwth$,
-      \item That \textbf{minimize} objective function $J(\cdot)$,
+      \item \ctxt{awesome}{Find } NN weights $\estwth$,
+      \item That \ctxt{airforceblue}{minimize } objective function $J(\cdot)$,
         \begin{equation}\label{eq:obj}
           J(\mv{r};\estwth)
           := 
           \frac{1}{2} \mv{r}^\top \mv{r}.
         \end{equation}
         \begin{itemize}
-          \item where $\mv{r} := \ddt\mv{e} + \Lambda\mv{e}$ is the filtered tracking error,
+          \item where $\mv{r} := \ddt\mv{e} + \Lambda\mv{e}$ is \ctxt{awesome}{filtered tracking error},
         \end{itemize}
-      \item while satisfying the following \textbf{constraints}:
+      \item while satisfying the following \ctxt{awesome}{constraints}:
         \begin{itemize}
-          \item Boundedness of the NN weights $\estwth$.
-          \item Saturation of the control input $\mv{\tau}$.
+          \item \ctxt{airforceblue}{Boundedness } of the NN weights $\estwth$.
+          \item \ctxt{airforceblue}{Saturation } of the control input $\mv{\tau}$.
         \end{itemize}
     \end{itemize}
 
   
   \column{0.5\textwidth}
 
+  \onslide<2->
+  {
     \begin{block}{Considered Constraints}
 
       \begin{itemize}
@@ -413,7 +525,7 @@
 
         \item \textbf{Convex control Input Saturation}: 
           \begin{itemize}
-            \item Input bound constraint:
+            \item Input bound constraint \textit{for each control input}:
             \begin{equation}\label{eq:cstr:input_bound}
               c_{\overline{\tau}_i}(\estwth)
               :=
@@ -440,6 +552,7 @@
       \end{itemize}
       
     \end{block}
+  }
 
   \end{columns}
 
@@ -471,26 +584,32 @@
       \end{matrix}
     \end{equation}
 
-  \textbf{Define Lagrangian Function}
+  \onslide<2->
+  {
+    \textbf{Define Lagrangian Function}
 
-  \begin{equation}\label{eq:lagrangian}
+    \begin{equation}\label{eq:lagrangian}
+        L(\mv{r},\estwth,[\lambda_j]_{j\in\mathcal{I}})
+        :=
+        J(\mv{r};\estwth)
+        +
+        \sum_{j\in\mathcal{I}} \lambda_j c_j(\estwth)
+    \end{equation}
+  }
+
+  \onslide<3->
+  {
+    \textbf{Dual Problem}
+    \begin{itemize}
+      \item The dual problem is to \ctxt{airforceblue}{minimize } the Lagrangian function with respect to the \ctxt{airforceblue}{NN weights } $\estwth$, while \ctxt{awesome}{maximizing } with respect to the \ctxt{awesome}{Lagrange multipliers } $\lambda_j$.
+      \item The Lagrange multipliers $\lambda_j$ are non-negative, \ie $\lambda_j \ge 0$.
+    \end{itemize}
+
+    \begin{equation}\label{eq:dual_problem}
+      \min_{\estwth}\max_{[\lambda_j]_{j\in\mathcal{I}}} 
       L(\mv{r},\estwth,[\lambda_j]_{j\in\mathcal{I}})
-      :=
-      J(\mv{r};\estwth)
-      +
-      \sum_{j\in\mathcal{I}} \lambda_j c_j(\estwth)
-  \end{equation}
-
-  \textbf{Dual Problem}
-  \begin{itemize}
-    \item The dual problem is to minimize the Lagrangian function with respect to the NN weights $\estwth$, while maximizing the Lagrange multipliers $\lambda_j$.
-    \item The Lagrange multipliers $\lambda_j$ are non-negative, \ie $\lambda_j \ge 0$.
-  \end{itemize}
-
-  \begin{equation}\label{eq:dual_problem}
-    \min_{\estwth}\max_{[\lambda_j]_{j\in\mathcal{I}}} 
-    L(\mv{r},\estwth,[\lambda_j]_{j\in\mathcal{I}})
-  \end{equation}
+    \end{equation}
+  }
 
 \end{frame}
 
@@ -511,72 +630,48 @@
 
     \begin{block}{Adaptation Law}%
       
-    \textbf{Gradient Descent Method for $\estwth$}:
-    \begin{equation}\label{eq:adaptation_law:1}
-      \ddt {{\estwth}}
-      =
-      -\alpha 
-      \ppfrac{L}{{\estwth}}
-      =-\alpha 
-      \left(
-          \ppfrac{J}{{\estwth}}
-          +
-          \sum_{j\in\mathcal{I}}
-          \lambda_j 
-          \ppfrac{c_j}{\estwth}
-      \right),
-    \end{equation}
+    \onslide<2->
+    {
+      \textbf{Gradient \ctxt{airforceblue}{Descent } Method for weights $\estwth$}:
+      \begin{equation}\label{eq:adaptation_law:1}
+        \ddt {{\estwth}}
+        =
+        -\alpha 
+        \ppfrac{L}{{\estwth}}
+        =-\alpha 
+        \left(
+            \ppfrac{J}{{\estwth}}
+            +
+            \sum_{j\in\mathcal{I}}
+            \lambda_j 
+            \ppfrac{c_j}{\estwth}
+        \right),
+      \end{equation}
+    }
 
-    \textbf{Gradient Ascent Method for $\lambda_j, \forall j\in\mathcal I$}:
-    \begin{equation}\label{eq:adaptation_law:2}
-      \ddt\lambda_j
-      = 
-      \beta_j
-      \ppfrac{L}{\lambda_j} 
-      = 
-      \beta_j c_j ,
-    \end{equation}
+    \onslide<3->
+    {
+      \textbf{Gradient \ctxt{awesome}{Ascent } Method for Lagrange multipliers $\lambda_j, \forall j\in\mathcal I$}:
+      \begin{equation}\label{eq:adaptation_law:2}
+        \ddt\lambda_j
+        = 
+        \beta_j
+        \ppfrac{L}{\lambda_j} 
+        = 
+        \beta_j c_j ,
+      \end{equation}
+    }
 
-    For non-negativity of the Lagrange multipliers,
-    \begin{equation}\label{eq:adaptation_law:3}
-      \lambda_j
-      \leftarrow
-      \max(\lambda_j,0)
-      .
-    \end{equation}
-
-    % \begin{subequations}
-    %     \begin{align}
-    %       \ddt {{\estwth}}
-    %       &
-    %       =
-    %       -\alpha 
-    %       \ppfrac{L}{{\estwth}}
-    %       =-\alpha 
-    %       \left(
-    %           \ppfrac{J}{{\estwth}}
-    %           +
-    %           \sum_{j\in\mathcal{I}}
-    %           \lambda_j 
-    %           \ppfrac{c_j}{\estwth}
-    %       \right),
-    %       \\
-    %       \ddt\lambda_j
-    %       & 
-    %       = 
-    %       \beta_j
-    %       \ppfrac{L}{\lambda_j} 
-    %       = 
-    %       \beta_j c_j ,
-    %       \quad\quad\quad\quad      \      
-    %       \forall j\in\mathcal I,
-    %       \\
-    %       \lambda_j
-    %       &
-    %       \leftarrow
-    %       \max(\lambda_j,0)
-    %     \end{align}
-    % \end{subequations}
+    \onslide<4->
+    {
+      For non-negativity of the Lagrange multipliers,
+      \begin{equation}\label{eq:adaptation_law:3}
+        \lambda_j
+        \leftarrow
+        \max(\lambda_j,0)
+        .
+      \end{equation}
+    }
 
     \end{block}
   \end{minipage}
@@ -590,7 +685,7 @@
   \begin{minipage}{.9\textwidth}
 
     \begin{block}{Theorem 1 \cite{Ryu:2025aa}}
-      For the dynamical system described in \eqref{eq:sys}, the neuro-adaptive controller in \eqref{eq:input} with the weight adaptation laws in \eqref{eq:adaptation_law:1}, \eqref{eq:adaptation_law:2} and \eqref{eq:adaptation_law:3} ensure the boundedness of the filtered error $\mv{r}$ and the weight estimate $\estwth$, under the control input constraints satisfying Assumption 1 and 2. This holds under the weight norm constraint \eqref{eq:cstr:weight}.
+      For the \ctxt{airforceblue}{dynamical system } described in \eqref{eq:sys}, the \ctxt{awesome}{neuro-adaptive controller } in \eqref{eq:input} with the \ctxt{airforceblue}{weight adaptation laws } in \eqref{eq:adaptation_law:1}, \eqref{eq:adaptation_law:2} and \eqref{eq:adaptation_law:3} ensure the \ctxt{airforceblue}{boundedness } of the \ctxt{awesome}{filtered error } $\mv{r}$ and the \ctxt{awesome}{weight estimate } $\estwth$, under the control input constraints satisfying Assumption 1 and 2. This holds under the \ctxt{awesome}{weight norm constraint } \eqref{eq:cstr:weight}.
     \end{block}
 
     \begin{exampleblock}{Assumption 1 (Convex Input Constraint)}
@@ -605,7 +700,7 @@
 
   \vspace{.2cm}
 
-  Proof of Theorem 1 is omitted due to space limitations. The detailed proof can be found in \cite{Ryu:2025aa}.
+  Proof of Theorem 1 is \textbf{omitted } due to space limitations. The detailed proof can be found in \cite{Ryu:2025aa}.
 
 \end{frame}
 
@@ -688,11 +783,27 @@
 
 \end{frame}
 
+\begin{frame}{\insertsubsectionhead}{Controllers Setting}
+  
+  \begin{itemize}
+    \item Only \ctxt{awesome}{weight norm constraint } is considered in this presentation (for \textbf{ECC}).
+    \item Input saturation constraints are not considered.
+  \end{itemize}
+
+  \centering
+  \begin{figure}
+    \includegraphics[width=0.8\textwidth]{figures/Controller.drawio.pdf}
+    \caption{Architecture of the controllers.}
+  \end{figure}
+
+\end{frame}
+
+
 \begin{frame}{\insertsubsectionhead}{Controllers for Comparative Study}
   
     \begin{itemize}
-      \item NAC-CO denotes the proposed controller based on constrained optimization.
-      \item For NAC-L2 and NAC-eMod, the stabilizing terms $-\lambda\estwth$ and $\rho\norm{\tilde{\mv{z}}}\estwth$ ensures the boundedness of the NN weights
+      \item NAC-CO denotes the proposed controller based on \ctxt{airforceblue}{constrained optimization }.
+      \item For NAC-L2 and NAC-eMod, the \ctxt{awesome}{stabilizing terms } $-\lambda\estwth$ and $\rho\norm{\mv{r}}\estwth$ ensures the weights boundedness, respectively.
     \end{itemize}
 
     \begin{table}
@@ -704,43 +815,46 @@
       \textbf{Name} & \textbf{Description} & \textbf{Adaptation Law} \\
       \hline
       \hline 
+        \multirow{2}{*}{NAC-L2} & NAC with $L_2$-regularization \tiny{(equal to $\sigma$-modification)} & \multirow{2}{*}
+        {$
+          \ddt\estwth = -\alpha \left(\ppfrac{J}{\estwth}+\ctxt{awesome}{\lambda}\estwth\right)
+        $}
+        \\
+          & ($\ctxt{awesome}{\lambda}$ stabilizes $\estwth$ towards origin) &
+        \\
+      \hline
+        \multirow{2}{*}{NAC-eMod} & NAC with $\epsilon$-modification & \multirow{2}{*}
+        {$
+          \ddt\estwth = -\alpha \left(\ppfrac{J}{\estwth}+\ctxt{awesome}{\rho}\norm{\tilde{\mv{z}}}\estwth\right)
+        $}
+        \\
+        & ($\ctxt{awesome}{\rho}$ stabilizes proportionally to filtered error $\mv{r}$) &
+        \\
+      \hline
         \multirow{2}{*}{NAC-CO} & Constrained Optimization-based NAC & 
-      $
-        \ddt\estwth = -\alpha \left(\ppfrac{L}{\estwth}+\sum_{j\in\mathcal{I}}\lambda_j\ppfrac{c_j}{\estwth}\right)
-      $ 
-      \\
-        (proposed) & ($\beta_j$ determines $\lambda_j$ adaptation speed) &
-      $
-        \ddt\lambda_j = \beta_j c_j, \lambda_j \leftarrow \max(\lambda_j,0)
-      $
-      \\
-      \hline
-      \multirow{2}{*}{NAC-L2} & NAC with $L_2$-regularization & \multirow{2}{*}
-      {$
-        \ddt\estwth = -\alpha \left(\ppfrac{J}{\estwth}+\lambda\estwth\right)
-      $}
-      \\
-        & ($\lambda\in\R_{>0}$ stabilizes $\estwth$ towards origin) &
-      \\
-      \hline
-      \multirow{2}{*}{NAC-eMod} & NAC with $\epsilon$-modification & \multirow{2}{*}
-      {$
-        \ddt\estwth = -\alpha \left(\ppfrac{J}{\estwth}+\rho\norm{\tilde{\mv{z}}}\estwth\right)
-      $}
-      \\
-      & ($\rho$ stabilizes proportionally to the error $\tilde{\mv{z}}$) &
-      \\
+        $
+          \ddt\estwth = -\alpha \left(\ppfrac{J}{\estwth}+\sum_{j\in\mathcal{I}}\lambda_j\ppfrac{c_j}{\estwth}\right)
+        $ 
+        \\
+          (proposed) & ($\ctxt{awesome}{\beta_j}$ determines $\lambda_j$ adaptation speed) &
+        $
+          \ddt\lambda_j = \ctxt{awesome}{\beta_j} c_j$, and $\lambda_j \leftarrow \max(\lambda_j,0)
+        $
+        \\
       \hline
       \end{tabular}
       \label{table:sys:param}
     \end{table}
 
-    \centering
-    \begin{minipage}{0.75\textwidth}
-      \begin{block}{Simulation Objective}
-        By varying the parameters, \ie $\beta_j$, $\lambda$, and $\rho$, the parameter dependencies will be investigated.
-      \end{block}
-    \end{minipage}
+    \onslide<2->
+    {
+      \centering
+      \begin{minipage}{0.75\textwidth}
+        \begin{block}{Simulation Objective}
+          By \ctxt{airforceblue}{varying the parameters }, \ie $\beta_j$, $\lambda$, and $\rho$, the parameter dependencies will be investigated.
+        \end{block}
+      \end{minipage}
+    }
 
 \end{frame}
 
@@ -749,21 +863,32 @@
 \begin{frame}{\insertsubsectionhead}{Box-and-Whisker Plots}
   
   \begin{columns}
-    \column{0.55\textwidth}
+    \column{0.6\textwidth}
     
       \textbf{Parameter Dependencies Investigation}:
+      
+      \small
+      {
+        \begin{itemize}
+          \item<+-> The parameters ranged from $0.001$ to $1$ across 10 samples.
+          \item<+-> NAC-L2 shows the \ctxt{awesome}{worst performance } with high variance.
+          \item<+-> NAC-CO (proposed) shows the \ctxt{airforceblue}{best performance } and \ctxt{airforceblue}{lowest variance}.
+          \item<+-> This result is because, 
+            \begin{itemize}
+              \item<+-> NAC-L2 and NAC-eMod are \ctxt{airforceblue}{biased towards the origin}. $\ddtt\estwth=-\alpha(\pptfrac{J}{\estwth}+\ctxt{awesome}{\lambda\estwth})$ (NAC-L2) or $+\ctxt{awesome}{\rho\norm{\mv{r}}\estwth}$ (NAC-eMod), proportionally to $\lambda$ and $\rho$, respectively.
+              % \item<+-> $\beta_j$ in NAC-CO (proposed) only determines the \ctxt{airforceblue}{update speed } of the Lagrange multipliers $\lambda_j$, \ie $\ddtt\lambda_j=\beta_j c_j$.
+              % \begin{itemize}
+                \item<+-> $\ctxt{awesome}{-\lambda_j\pptfrac{c_j}{\estwth}}$ in NAC-CO (proposed) (\ie $\ddtt\estwth=-\alpha(\pptfrac{J}{\estwth}+\ctxt{awesome}{\lambda_j\pptfrac{c_j}{\estwth}})$) \ctxt{airforceblue}{disappears } when constraints are inactive (\ie $c_j<0$, and $\lambda=\beta_jc_j$ and $\lambda_j\leftarrow\max(\lambda_j,0)$). %
+              % \end{itemize}
+            \end{itemize}
+        \end{itemize}
+      }
 
-      \begin{itemize}
-        \item The parameters ranged from 0.001 to 1 across 10 samples.
-        \item NAC-CO (proposed) shows the best performance and low variance.
-        \item NAC-L2 shows the worst performance with high variance.
-      \end{itemize}
-
-    \column{0.5\textwidth}
+    \column{0.4\textwidth}
 
       \begin{figure}
-        \includegraphics[width=.99\textwidth]{figures/BoxWhisker.drawio.png}
-        \caption{Parameter dependencies of the proposed method.}
+        \includegraphics[width=.89\textwidth]{figures/BoxWhisker.drawio.png}
+        \caption{Box-and-whisker plots of the tracking error ISE.}
       \end{figure}
 
   \end{columns}
@@ -778,18 +903,18 @@
       \\
       \hline
       \hline 
-        Maximum\!&\!$11.1753\!\times\!10^{-3}$\!&\!$0.5603\!\times\!10^{-3}$\!&\!$0.3439\!\times\!10^{-3}$\!\\
+        Maximum & \ctxt{awesome}{$11.1753 \times\!10^{-3}$} & $0.5603 \times 10^{-3}$ & \ctxt{airforceblue}{$0.3439 \times 10^{-3}$}  \\
       \hline
-        Median\!&\!$0.5898\!\times\!10^{-3}$\!&\!$0.5519\!\times\!10^{-3}$\!&\!$0.3240\!\times\!10^{-3}$\!\\
+        Median & \ctxt{awesome}{$0.5898\times\!10^{-3}$}  & $0.5519 \times 10^{-3}$ & \ctxt{airforceblue}{$0.3240 \times 10^{-3}$}  \\
       \hline
-        Minimum\!&\!$0.5434\!\times\!10^{-3}$\!&\!$0.5434\!\times\!10^{-3}$\!&\!$0.3235\!\times\!10^{-3}$\!\\
+        Minimum & \ctxt{awesome}{$0.5434\times\!10^{-3}$}  & $0.5434 \times 10^{-3}$ & \ctxt{airforceblue}{$0.3235 \times 10^{-3}$}  \\
       \hline
       \end{tabular}
       \label{table: error norm}
     \end{table}
     
     \let\thefootnote\relax\footnote{
-      Squared root of the tracking error ISE (Integral of Squared Error) is used, \ie $\sqrt{\int_0^T \norm{\mv{r}}^2\,\der t}$, where $T$ denotes a simulation termination time.
+      Squared root of the tracking error ISE (Integral of Squared Error), \ie $\sqrt{\int_0^T \norm{\mv{r}}^2\,\der t}$, where $T$ denotes a simulation time.
     }
     
 \end{frame}
@@ -797,13 +922,6 @@
 \begin{frame}{\insertsubsectionhead}{Weight Norms}
 
   \begin{columns}
-
-    \column{0.33\textwidth}
-
-      \begin{figure}
-        \includegraphics[width=0.99\textwidth]{figures/ECC/fig8.eps}
-        \caption{Weight norms of NAC-CO}
-      \end{figure}
 
     \column{0.33\textwidth}
 
@@ -818,14 +936,21 @@
         \includegraphics[width=0.99\textwidth]{figures/ECC/fig10.eps}
         \caption{Weight norms of NAC-eMod}
       \end{figure}
-    
+
+    \column{0.33\textwidth}
+
+      \begin{figure}
+        \includegraphics[width=0.99\textwidth]{figures/ECC/fig8.eps}
+        \caption{Weight norms of NAC-CO (proposed)}
+      \end{figure}
+      
   \end{columns}
 
   \begin{itemize}
-    \item NAC-CO (proposed) showed the weight norms are bounded under pre-defined constraint $\overline{\theta}=20$.
-    \item NAC-L2 and NAC-eMod showed the bounded weight norms, but they depended on the parameters $\lambda$ and $\rho$, respectively.
-    \item As the parameters $\lambda$ and $\rho$ increase, the weight norms of NAC-L2 and NAC-eMod biased towards the origin, which may lead to suboptimal performance.
-    \item In addition, NAC-CO tracked the desired trajectory with a smaller weight norm than NAC-L2 and NAC-eMod.
+    \item<+-> NAC-CO (proposed) showed the \ctxt{airforceblue}{weight norms } are bounded \ctxt{awesome}{under pre-defined constraint } $\overline{\theta}=20$.
+    \item<+-> NAC-L2 and NAC-eMod showed the bounded weight norms, but they \ctxt{awesome}{depended } on the parameters $\lambda$ and $\rho$, respectively.
+    % \item<+-> As the parameters $\lambda$ and $\rho$ increase, the weight norms of NAC-L2 and NAC-eMod biased towards the origin, which may lead to suboptimal performance.
+    \item<+-> In other words, NAC-CO tracked the desired trajectory with a \ctxt{airforceblue}{smaller weight } norm than NAC-L2 and NAC-eMod.
   \end{itemize}
 
 \end{frame}
@@ -833,13 +958,6 @@
 \begin{frame}{\insertsubsectionhead}{Tracking Performance}
 
   \begin{columns}
-
-    \column{0.33\textwidth}
-
-      \begin{figure}
-        \includegraphics[width=0.99\textwidth]{figures/ECC/fig5.eps}
-        \caption{Tracking error of NAC-CO}
-      \end{figure}
     
     \column{0.33\textwidth}
 
@@ -855,71 +973,46 @@
         \caption{Tracking error of NAC-eMod}
       \end{figure}
 
+    \column{0.33\textwidth}
+
+      \begin{figure}
+        \includegraphics[width=0.99\textwidth]{figures/ECC/fig5.eps}
+        \caption{Tracking error of NAC-CO (proposed)}
+      \end{figure}
+
   \end{columns}
 
   \begin{itemize}
-    \item NAC-CO (proposed) outperformed NAC-L2 and NAC-eMod in terms of tracking performance.
-    \item As the weights are biased towards the origin, the tracking performance of NAC-L2 and NAC-eMod deteriorated.
+    \item NAC-CO (proposed) \ctxt{airforceblue}{outperformed } NAC-L2 and NAC-eMod in terms of \ctxt{awesome}{tracking performance}.
+    \item As the weights are \ctxt{awesome}{biased }towards the origin proportionally to the parameters $\lambda$ and $\rho$ in NAC-L2 and NAC-eMod, respectively, the tracking performance of NAC-L2 and NAC-eMod deteriorated, as approaching toward \ctxt{airforceblue}{suboptimal points}.
   \end{itemize}
 
 \end{frame}
 
-% \begin{frame}{Representative Simulation Results}
+\begin{frame}{Real-time Implementation Result}
 
-%   \centering
-%   \includemedia[
-%       width=0.96\linewidth,
-%       height=0.54\linewidth,
-%       activate=onclick,
-%       addresource=demonstration.mp4,
-%       flashvars={
-%          source=demonstration.mp4
-%         &autoPlay=true
-%         &loop=true
-%       }
-%     ]{}{VPlayer.swf}
+  \begin{itemize}
+    \item This video demonstrates:
+    \begin{itemize}
+      \item \ctxt{airforceblue}{Applicability }of the proposed method to real-time control (under 4 ms sampling time).
+      \item \ctxt{awesome}{Convex input constraints } handling.
+    \end{itemize}
+  \end{itemize}
 
-% \end{frame}
+  \centering
+  \includemedia[
+      width=0.64\linewidth,
+      height=0.36\linewidth,
+      activate=onclick,
+      addresource=animation.mp4,
+      flashvars={
+        source=animation.mp4
+        &autoPlay=true
+        &loop=true
+      }
+    ]{}{VPlayer.swf}
 
-% \subsection{Simulation Setup}
-
-% \begin{frame}{\insertsubsectionhead}{Two-Link Robotic Manipulator}
-
-%     \begin{columns}
-
-%       \column{.55\textwidth}
-%         \begin{figure}
-%           \centering
-%           \includegraphics[width=.85\textwidth]{figures/RobotModel.drawio.png}
-%           \caption{Two-Link Robotic Manipulator}
-%         \end{figure}
-
-%       \column{.5\textwidth}
-      
-%         \begin{table}[t]
-%             \renewcommand{\arraystretch}{1.3}
-%             \caption{Two-link robotic manipulator's parameters.}
-%             \centering
-%             \begin{tabular}{c m{9.5em} c c c }
-%             % \begin{tabular}{c c c c c}
-%             \hline
-%             \textbf{Symbol} & \textbf{Description} & \textbf{Value} \\
-%             \hline
-%             \hline 
-%             $m_1,m_2$ & Mass & 2.465 kg \\
-%             \hline
-%             $l_1,l_2$  & Length & 0.2 m \\  
-%             \hline
-%             ${l_c}_1,{l_c}_2$ & Center of mass & 0.139 m \\
-%             \hline
-%             $I_1,I_2$  & Inertia & 0.069 kgm\textsuperscript{2} \\
-%             \hline
-%             \end{tabular}
-%         \end{table}
-
-%     \end{columns}
-
-% \end{frame}
+\end{frame}
 
 % ╔═══════════════════════════════════════════════╗ 
 % ║ Section: Conclusion and Future Work           ║
@@ -933,15 +1026,15 @@
   \textbf{Summary of Contributions}
   \begin{itemize}
     \item Proposed a novel constrained optimization-based neuro-adaptive control (CONAC) method.
-    \item Adaptation laws are derived using constrained optimization method.
-    \item The proposed method guarantees the stability of the system and the boundedness of the NN weights.
-    \item Feasibility of the proposed method is validated through numerical simulations and real-time experiments.
+    \item Adaptation laws are derived using \ctxt{airforceblue}{constrained optimization method}.
+    \item The proposed method guarantees the \ctxt{awesome}{stability }of the system and the boundedness of the NN weights.
+    \item Feasibility of the proposed method is validated through numerical simulations.
   \end{itemize}
 
   \textbf{Future Work}
   \begin{itemize}
-    \item Extend the proposed method to state constraints.
-    \item Enhance the robustness and flexibility of the proposed method for various systems.
+    \item Extend the proposed method to \ctxt{airforceblue}{state constraints}.
+    \item Enhance the \ctxt{awesome}{robustness }and \ctxt{awesome}{flexibility }of the proposed method for \ctxt{airforceblue}{various systems}.
   \end{itemize}
 
 \end{frame}

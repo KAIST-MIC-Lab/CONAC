@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
   <diagram name="Page-1" id="H3oKLqlX0tTp-uY2Kpaz">
-    <mxGraphModel dx="815" dy="491" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="1" shadow="0">
+    <mxGraphModel dx="679" dy="409" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="1" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="3jEwKh9Pe0ptTPQIIk5x-5" value="Area" style="locked=1;" parent="0" />
@@ -90,7 +90,7 @@
         </mxCell>
         <mxCell id="1" value="Blocks" style="locked=1;" parent="0" />
         <mxCell id="3jEwKh9Pe0ptTPQIIk5x-11" value="" style="rounded=1;whiteSpace=wrap;html=1;arcSize=19;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="448" y="327" width="108" height="69" as="geometry" />
+          <mxGeometry x="448" y="331" width="108" height="69" as="geometry" />
         </mxCell>
         <mxCell id="3jEwKh9Pe0ptTPQIIk5x-15" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#000000;rotation=-180;" parent="1" vertex="1">
           <mxGeometry x="310" y="380" width="3" height="40" as="geometry" />
@@ -143,7 +143,7 @@
           <mxGeometry x="273" y="320" width="70" height="40" as="geometry" />
         </mxCell>
         <mxCell id="3jEwKh9Pe0ptTPQIIk5x-72" value="Deep&amp;nbsp;&lt;div&gt;Neural&lt;div&gt;Network&lt;/div&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Times New Roman;" parent="3jEwKh9Pe0ptTPQIIk5x-6" vertex="1">
-          <mxGeometry x="363" y="325" width="70" height="60" as="geometry" />
+          <mxGeometry x="363" y="320" width="70" height="60" as="geometry" />
         </mxCell>
         <mxCell id="RQTAaq4a4_ipLARYYstB-5" value="&lt;div&gt;System&lt;/div&gt;&lt;div&gt;Model&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Times New Roman;" parent="3jEwKh9Pe0ptTPQIIk5x-6" vertex="1">
           <mxGeometry x="495" y="336" width="60" height="60" as="geometry" />
@@ -153,6 +153,12 @@
         </mxCell>
         <mxCell id="jXpnGiK7oi-8-GfHfyG--2" value="Constrained Optimization-Based Neuro-Adaptive Controller" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Times New Roman;" parent="3jEwKh9Pe0ptTPQIIk5x-6" vertex="1">
           <mxGeometry x="134" y="283" width="310" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="8JliXiu9Jx-dk9qfxCAc-1" value="$$(3)$$" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="3jEwKh9Pe0ptTPQIIk5x-6">
+          <mxGeometry x="470" y="373" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="8JliXiu9Jx-dk9qfxCAc-2" value="$$(4),(5)$$" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="3jEwKh9Pe0ptTPQIIk5x-6">
+          <mxGeometry x="360" y="369" width="80" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

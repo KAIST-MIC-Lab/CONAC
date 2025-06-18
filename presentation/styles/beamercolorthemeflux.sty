@@ -22,7 +22,8 @@
 % \definecolor{background}{HTML}{fafafa}
 \definecolor{background}{HTML}{ffffff}
 \definecolor{Gray}{HTML}{858b8f}
-\definecolor{text}{HTML}{4F5D66}
+% \definecolor{text}{HTML}{4F5D66}
+\definecolor{text}{HTML}{000000}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -36,6 +37,7 @@
 \def\beamer@mytheme@styleblue{blue}%
 \def\beamer@mytheme@stylered{red}%
 \def\beamer@mytheme@stylegray{gray}%
+\def\beamer@mytheme@styledding{dding}%
 
 \ifx\beamer@mytheme@style\beamer@mytheme@stylegreen%
 	% Green
@@ -61,6 +63,16 @@
 		\definecolor{primary}{HTML}{424242}
 		\definecolor{secondary}{HTML}{518071}
 		\definecolor{tertiary}{HTML}{8b7687}
+	\else\ifx\beamer@mytheme@style\beamer@mytheme@styledding%
+		% Dding
+		% d0d3ea % 29
+		% 7282ba % 60 
+		% 4160a4 % 80
+		% 004080 % 100
+	  	\definecolor{primaryLight}{HTML}{4160a4}
+	  	\definecolor{primary}{HTML}{004080}
+	  	\definecolor{secondary}{HTML}{004080}
+	  	\definecolor{tertiary}{HTML}{e76d55}
     \else% 
     	% Asphalt by default
       	\definecolor{primaryLight}{HTML}{34495e}
