@@ -1,23 +1,22 @@
-% https://www.overleaf.com/learn/latex/Beamer#Using_a_colorthemev
+\documentclass[8pt, aspectratio=169, handout]{beamer}
+% \documentclass[8pt, aspectratio=169]{beamer}
 
-% Inbuilt themes in beamer
-% \documentclass[8pt, aspectratio=169, handout]{beamer}
-\documentclass[8pt, aspectratio=169]{beamer}
+% For figure numbering
 % \setbeamertemplate{caption}[numbered]
 
+% Slide show note
+% \setbeameroption{hide notes}
+% \setbeameroption{show only notes}
+\setbeameroption{show notes on second screen}
+
+% MIC Lab template
 \input{../template/macros/macros_general.tex}
 \input{../template/macros/macros_math.tex}
 \input{../template/symbols/symbols_NN.tex}
 \input{../template/symbols/symbols_robot.tex}
 
-% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Block options: block, alertblock, exampleblock
-% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-% % Theme choice:
-% \usetheme{Antibes}
-% % \usecolortheme{beaver}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Use roboto Font (recommended)
 % \usepackage[sfdefault]{roboto}
@@ -30,7 +29,7 @@
 \usepackage{styles/fluxmacros}
 \usefolder{styles}
 % Use Flux theme v0.1 beta
-% Available style: asphalt, blue, red, green, gray 
+% Available style: asphalt, blue, red, green, gray, dding (custom)
 \usetheme[style=dding]{flux}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -40,17 +39,24 @@
 \usepackage{colortbl}
 \usepackage{ragged2e}
 \usepackage{schemabloc}
+\usepackage{multirow}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-\usepackage{multirow}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% for video
 \usepackage{media9}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% colors
 % https://latexcolor.com % color list
 \definecolor{airforceblue}{rgb}{0.36, 0.54, 0.66}
 \definecolor{awesome}{rgb}{1.0, 0.13, 0.32}
-\newcommand{\ctxt}[2]{\color{#1}{#2}\color{black} }
-% \newcommand{\ctxt}[2]{\color{#1}\mathbf{#2}\color{black} }
+\newcommand{\ctxt}[2]{\color{#1}{#2}\color{black}}
+% \newcommand{\mtxt}[2]{\color{#1}\mathbf{#2}\color{black} }
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Title page details: 
 \title{
     Imposing a Weight Norm Constraint for Neuro-Adaptive Control 
@@ -77,6 +83,10 @@
         Gwangju Institute of Science and Technology (GIST)
   \end{minipage}
 }
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Global settings
 
 % \titlegraphic{assets/MIC_Lab_logo.png}
 \titlegraphic{assets/MIC_Lab_logo_white.png}
@@ -101,16 +111,19 @@
 %   \vfill
 %   \end{frame}
 % }
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 \begin{document}
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Title page frame
 \titlepage 
 
 % Outline frame
 \begin{frame}{Outline}
-    \tableofcontents
+  \tableofcontents
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 % ╔═══════════════════════════════════════════════╗
 % ║ Section: Background and Contributions         ║
@@ -119,6 +132,7 @@
 
 \subsection{Introduction to Neuro-Adaptive Control}
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{What is Neuro-Adaptive Control?}
 
   \textbf{Neuro-Adaptive Control}
@@ -132,10 +146,21 @@
   \begin{figure}
     \includegraphics[width=0.65\textwidth]{figures/NAC.drawio.pdf}
   \end{figure}
-
+  
 \end{frame} 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+\note[enumerate]
+{
+  \item adaptive controls adapts their parameters in real-time to systems.
+  \begin{itemize}
+    \item Hence, they can handle uncertainties and disturbances.
+  \end{itemize}
+  \item Like adaptive control, NAC adapts its NN weights, as well.
+  \item Hence, it has both features of NN and adaptive control.
+}
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{What is Neuro-Adaptive Control?}
 
   \textbf{Advantages of Neuro-Adaptive Control}
@@ -155,7 +180,20 @@
 \end{figure}
 
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+\note[enumerate]
+{
+  \item The features are...
+  \begin{itemize}
+    \item It can adapts its weights to change environments.
+    \item And the stability is ensured in the sense of Lyapunov.
+    \item So, it has online learning capability.
+    \item In addition, with various methods from adaptive control, NAC can be more robust than naive NN-based control methods.
+  \end{itemize}
+}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{What is Neuro-Adaptive Control?}
 
   \textbf{Existing Challenges in NAC}
@@ -218,9 +256,31 @@
   \end{enumerate}
 
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+\note[enumerate]
+{
+  \item However, there are some challenges in NAC.
+  \item The first challenge is weight boundedness.
+  \begin{itemize}
+    \item If the NNs are used for control naively, the boundedness of NN weights is not ensured.
+    \item Despite the convergence of the control error, the NN weights can diverge like parameter drift.
+    \item This divergence leads to the following issue.
+  \end{itemize}
+  \item Second one is the NN's output can be excessively large control inputs.
+  \begin{itemize}
+    \item This is because, the output of NN is not interpretable and unpredictable.
+    \item So, the input saturation problem can occur by them.
+  \end{itemize}
+}
+
+% ╔═══════════════════════════════════════════════╗
+% ║ Section: Background and Contributions         ║
+% ║   - Subsection: Literature Review             ║
+% ╚═══════════════════════════════════════════════╝
 \subsection{Literature Review}
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}
   
   \begin{enumerate}
@@ -275,7 +335,7 @@
 
   \end{enumerate}
 
-  \vspace{0.5cm}
+  % \vspace{0.5cm}
 
   \begin{columns}[T]
 
@@ -315,7 +375,25 @@
     \end{columns}
 
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+\note[enumerate]
+{
+  \item To address these issues, several methods have been introduced.
+  \item For weight boundedness, the projection operator and modification methods are used.
+  \begin{itemize}
+    \item they ensures the weight boundedness by projects onto a convex set or adding a stabilizing term.
+    \item Hence, the the boundedness of NN weights can 
+  \end{itemize}
+  \item For control input saturation, additional control inputs are used.
+  \begin{itemize}
+    \item Conventionally, auxiliary system-based control inputs or, more recently, barrier Lyapunov function-based control inputs are used.
+    \item For this, the nominal model knowledge is required.
+    \item These makes the control design more complicated, but, have shown the effectiveness of the control input saturation handling.
+  \end{itemize}
+}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{Limitations of Existing Methods}
 
   \onslide<1->
@@ -349,9 +427,22 @@
   \end{itemize}
 
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+\note[enumerate]
+{
+  \item the limitations of the existing methods can be summarized as follows.
+  \item Most of methods does not consider the optimality when the constraints are active.
+  \item 
+}
+
+% ╔═══════════════════════════════════════════════╗
+% ║ Section: Background and Contributions         ║
+% ║   - Subsection: Contributions                 ║
+% ╚═══════════════════════════════════════════════╝
 \subsection{Contributions}
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}
 
   \textbf{Contribution 1: Unified Optimization Framework} 
@@ -385,14 +476,17 @@
   }
 
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 % ╔═══════════════════════════════════════════════╗
 % ║ Section: Proposed Method                      ║
 % ╚═══════════════════════════════════════════════╝
+
 \section{Proposed Method}
 
 \subsection{Architecture of the Proposed Method}
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}
   
   \begin{columns}
@@ -477,9 +571,11 @@
       }
 
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 \subsection{Problem Formulation}
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{Optimization Problem}
 
 \begin{columns}
@@ -612,9 +708,11 @@
   }
 
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 \subsection{Adaptation Law Derivation}
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{Gradient Descent/Ascent Method}
   
   To solve the dual problem, 
@@ -676,9 +774,11 @@
     \end{block}
   \end{minipage}
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 \subsection{Stability Analysis}
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{Lyapunov Stability Analysis}
 
   \centering
@@ -703,6 +803,7 @@
   Proof of Theorem 1 is \textbf{omitted } due to space limitations. The detailed proof can be found in \cite{Ryu:2025aa}.
 
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 % ╔═══════════════════════════════════════════════╗
 % ║ Section: Experimental Validation              ║
@@ -711,6 +812,7 @@
 
 \subsection{Simulation Setup}
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{Two-Link Robotic Manipulator}
 
     \begin{columns}
@@ -782,7 +884,9 @@
     \end{columns}
 
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{Controllers Setting}
   
   \begin{itemize}
@@ -797,8 +901,9 @@
   \end{figure}
 
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{Controllers for Comparative Study}
   
     \begin{itemize}
@@ -857,9 +962,11 @@
     }
 
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 \subsection{Simulation Results}
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{Box-and-Whisker Plots}
   
   \begin{columns}
@@ -918,7 +1025,9 @@
     }
     
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{Weight Norms}
 
   \begin{columns}
@@ -954,7 +1063,9 @@
   \end{itemize}
 
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{Tracking Performance}
 
   \begin{columns}
@@ -988,7 +1099,9 @@
   \end{itemize}
 
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{Real-time Implementation Result}
 
   \begin{itemize}
@@ -1013,6 +1126,7 @@
     ]{}{VPlayer.swf}
 
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 % ╔═══════════════════════════════════════════════╗ 
 % ║ Section: Conclusion and Future Work           ║
@@ -1021,6 +1135,7 @@
 
 \subsection{Conclusion and Future Work}
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{Conclusion}
     
   \textbf{Summary of Contributions}
@@ -1038,18 +1153,23 @@
   \end{itemize}
 
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \section{}
 \begin{frame}{}
     \centering \Large
     \emph{Thank you for your attention!}
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}[allowframebreaks]{References}
 
   \bibliography{localRefs}
   \bibliographystyle{IEEEtran}
 
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 \end{document}
