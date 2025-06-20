@@ -1,13 +1,6 @@
-\documentclass[8pt, aspectratio=169, handout]{beamer}
-% \documentclass[8pt, aspectratio=169]{beamer}
-
-% For figure numbering
-% \setbeamertemplate{caption}[numbered]
-
-% Slide show note
-% \setbeameroption{hide notes}
-% \setbeameroption{show only notes}
-\setbeameroption{show notes on second screen}
+% \documentclass[8pt, aspectratio=169, handout]{beamer} \setbeameroption{show notes on second screen}
+% \documentclass[8pt, aspectratio=169, handout]{beamer} \setbeameroption{show only notes}
+\documentclass[8pt, aspectratio=169]{beamer}
 
 % MIC Lab template
 \input{../template/macros/macros_general.tex}
@@ -128,6 +121,7 @@
 % ╔═══════════════════════════════════════════════╗
 % ║ Section: Background and Contributions         ║
 % ╚═══════════════════════════════════════════════╝
+
 \section{Background and Contributions}
 
 \subsection{Introduction to Neuro-Adaptive Control}
@@ -235,7 +229,7 @@
           \column{0.49\textwidth}
 
           \small{
-            \item \textbf{Unpredictable Amplitude of Control Input:}
+            \item \textbf{Control Saturation} \textit{(unpredictable amplitude of NN outputs)}: 
 
             \begin{itemize}
               \item Typical issue of control problem in physical systems.
@@ -264,7 +258,7 @@
   \item The first challenge is weight boundedness.
   \begin{itemize}
     \item If the NNs are used for control naively, the boundedness of NN weights is not ensured.
-    \item Despite the convergence of the control error, the NN weights can diverge like parameter drift.
+    \item For instance, despite the convergence of the control error, the NN weights can diverge like parameter drift.
     \item This divergence leads to the following issue.
   \end{itemize}
   \item Second one is the NN's output can be excessively large control inputs.
@@ -383,7 +377,7 @@
   \item For weight boundedness, the projection operator and modification methods are used.
   \begin{itemize}
     \item they ensures the weight boundedness by projects onto a convex set or adding a stabilizing term.
-    \item Hence, the the boundedness of NN weights can 
+    \item Hence, the the boundedness of NN weights can be easily ensured.
   \end{itemize}
   \item For control input saturation, additional control inputs are used.
   \begin{itemize}
@@ -433,7 +427,13 @@
 {
   \item the limitations of the existing methods can be summarized as follows.
   \item Most of methods does not consider the optimality when the constraints are active.
-  \item 
+  \begin{itemize}
+    \item Because, they only consider the boundedness of the weights or the control input saturation using additional operators or terms.
+  \end{itemize}
+  \item Using additional terms can lead to disruption of learning process.
+  \item It is, because, as the NN learns with respect to the feedback error, once the additional control inputs are applied, the feedback error does not reflect the error induced by the NN, directly.
+  \item Moreover, the additional control inputs may exceed the input limits, already.
+  \item Therefore, in the worst case, the NN may be forced to compensate for the additional terms.
 }
 
 % ╔═══════════════════════════════════════════════╗
@@ -478,12 +478,26 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+\note[enumerate]
+{
+  \item So, here are the contributions of this work.
+  \item We, first, formulated a unified optimization framework for trajectory tracking and constraint handling.
+  \item Hence, we do not need the additional operators or conventional controllers, which may need the nominal model knowledge.
+  \item Second, we rigorously proved the stability of the proposed method using Lyapunov stability theory.
+  \item It means, that the proposed method can learn online without any prior system knowledge with stability guarantees.
+  \item Finally, as we explicitly consider the weight and control input constraints in the optimization problem, we can handle any combination of convex input constraints and weight constraint.
+}
+
 % ╔═══════════════════════════════════════════════╗
 % ║ Section: Proposed Method                      ║
 % ╚═══════════════════════════════════════════════╝
 
 \section{Proposed Method}
 
+% ╔═══════════════════════════════════════════════╗
+% ║ Section: Proposed Method                      ║
+% ║   - Subsection: Architecture of the Proposed Method
+% ╚═══════════════════════════════════════════════╝
 \subsection{Architecture of the Proposed Method}
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -573,6 +587,22 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+\note[enumerate]{
+  \item The proposed method consists of a DNN and weight optimizer, inside.
+  \item Let's start with the system.
+  \begin{itemize}
+    \item The system is a two-link robotic manipulator system, which is controlled by the control input $\mv{\tau}$.
+    \item The control input is saturated by the saturation function $\mysat(\cdot)$.
+    \item The desired trajectory $\mv{q}_d$ is given.
+  \end{itemize}
+  \item The control input is purely decided by the DNN, so the output of the DNN is the control input.
+  \item And, the DNN is defined like \eqref{eq:NN}, with $k$ layers and weights, and $\tanh(\cdot)$ as the activation function.
+}
+
+% ╔═══════════════════════════════════════════════╗
+% ║ Section: Proposed Method                      ║
+% ║   - Subsection: Problem Formulation           ║
+% ╚═══════════════════════════════════════════════╝
 \subsection{Problem Formulation}
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -658,7 +688,18 @@
   }
 
 \end{frame}
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\note[enumerate]
+{
+  \item The control problem can be represented as a constrained optimization problem.
+  \begin{itemize}
+    \item That is, 
+    \item We need to find NN weights ...
+  \end{itemize}
+  \item To explicitly consider the constraints, we define the constraint functions as follows, for weight boundedness and convex control input saturation of each control input and norm of the control input.
+}
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{Optimization Problem}
 
   \textbf{Original Optimization Problem}
@@ -710,6 +751,18 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+\note[enumerate]
+{
+  \item Then using the constraint functions, we can formulate the constrained optimization problem as in \eqref{eq:opt_problem}.
+  \item And, we can define the Lagrangian function as in \eqref{eq:lagrangian}.
+  \item So, the dual problem can be formulated as in \eqref{eq:dual_problem}.
+  \item It means, that we can find the optimal solution by minimizing the Lagrangian function with respect to the NN weights, while maximizing it with respect to the Lagrange multipliers.
+}
+
+% ╔═══════════════════════════════════════════════╗
+% ║ Section: Proposed Method                      ║
+% ║   - Subsection: Adaptation Law Derivation     ║
+% ╚═══════════════════════════════════════════════╝
 \subsection{Adaptation Law Derivation}
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -732,17 +785,19 @@
     {
       \textbf{Gradient \ctxt{airforceblue}{Descent } Method for weights $\estwth$}:
       \begin{equation}\label{eq:adaptation_law:1}
-        \ddt {{\estwth}}
+        \ddtt {
+          \ctxt{airforceblue}{\estwth}
+          }
         =
         -\alpha 
-        \ppfrac{L}{{\estwth}}
+        \pptfrac{L}{\ctxt{airforceblue}{\estwth}}
         =-\alpha 
         \left(
-            \ppfrac{J}{{\estwth}}
+            \pptfrac{J}{\ctxt{airforceblue}{\estwth}}
             +
-            \sum_{j\in\mathcal{I}}
-            \lambda_j 
-            \ppfrac{c_j}{\estwth}
+            \textstyle\sum_{j\in\mathcal{I}}
+            \ctxt{awesome}{\lambda_j}
+            \pptfrac{c_j}{\ctxt{airforceblue}{\estwth}}
         \right),
       \end{equation}
     }
@@ -751,10 +806,10 @@
     {
       \textbf{Gradient \ctxt{awesome}{Ascent } Method for Lagrange multipliers $\lambda_j, \forall j\in\mathcal I$}:
       \begin{equation}\label{eq:adaptation_law:2}
-        \ddt\lambda_j
+        \ddtt\ctxt{awesome}{\lambda_j}
         = 
         \beta_j
-        \ppfrac{L}{\lambda_j} 
+        \pptfrac{L}{\ctxt{awesome}{\lambda_j}} 
         = 
         \beta_j c_j ,
       \end{equation}
@@ -764,18 +819,44 @@
     {
       For non-negativity of the Lagrange multipliers,
       \begin{equation}\label{eq:adaptation_law:3}
-        \lambda_j
+        \ctxt{awesome}{\lambda_j}
         \leftarrow
-        \max(\lambda_j,0)
+        \max(\ctxt{awesome}{\lambda_j},0)
         .
       \end{equation}
     }
 
     \end{block}
   \end{minipage}
+  
+  \let\thefootnote\relax\footnote{
+    $\alpha$: adaptation gain (learning rate), $\beta_j$: update rate of the Lagrange multipliers.
+  }
+
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+\note[enumerate]
+{
+  \item To solve this problem, we employed the first-order gradient descent/ascent method.
+  \item For minimizing the Lagrangian function with respect to the NN weights, the gradient descent method is used.
+  \begin{itemize}
+    \item We have a adaptation gain $\alpha$ to control the learning rate.
+  \end{itemize}
+  \item For maximizing the Lagrangian function with respect to the Lagrange multipliers, the gradient ascent method is used.
+  \begin{itemize}
+    \item We have an update rate $\beta_j$ for each Lagrange multiplier.
+  \end{itemize}
+  \item Finally, the max operator is used to ensure the non-negativity of the Lagrange multipliers.
+  \item Therefore, according to the adaptation law, when the constraints are active, the Lagrange multipliers are updated to be positive.
+  \item And, the NN weights are updated to minimize the constraint violation while minimizing the tracking error.
+  \item After the constraints are satisfied, \it negative, the Lagrange multipliers are updated to zero, and the NN weights are updated to minimize the tracking error only.
+}
+
+% ╔═══════════════════════════════════════════════╗
+% ║ Section: Proposed Method                      ║
+% ║   - Subsection: Stability Analysis            ║
+% ╚═══════════════════════════════════════════════╝
 \subsection{Stability Analysis}
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -805,11 +886,25 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+\note[enumerate]
+{
+  \item The stability of the proposed methods is proven using Lyapunov stability theory.
+  \item The requirements for the stability are as follows.
+  \item First, the weight norm constraints should be imposed.
+  \item And, two assumptions for convex input constraints and LICQ conditions should be satisfied.
+  \item The proof is omitted, but the detailed proof can be found in the reference \cite{Ryu:2025aa}.
+}
+
 % ╔═══════════════════════════════════════════════╗
 % ║ Section: Experimental Validation              ║
 % ╚═══════════════════════════════════════════════╝
+
 \section{Experimental Validation}
 
+% ╔═══════════════════════════════════════════════╗
+% ║ Section: Experimental Validation              ║
+% ║   - Subsection: Simulation Setup              ║
+% ╚═══════════════════════════════════════════════╝
 \subsection{Simulation Setup}
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -886,12 +981,19 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+\note[enumerate]
+{
+  \item For validation, we simulated a two-link robotic manipulator system.
+  \item A simple cosine trajectory is given as the desired trajectory.
+}
+
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{Controllers Setting}
   
   \begin{itemize}
     \item Only \ctxt{awesome}{weight norm constraint } is considered in this presentation (for \textbf{ECC}).
     \item Input saturation constraints are not considered.
+    \item For simplicity, \ctxt{airforceblue}{single hidden layer NN} is used.
   \end{itemize}
 
   \centering
@@ -902,6 +1004,12 @@
 
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+\note[enumerate]
+{
+  \item For this conference paper, we only considered the weight norm constraint.
+  \item So, please ignore the input saturation.
+}
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{Controllers for Comparative Study}
@@ -930,7 +1038,7 @@
       \hline
         \multirow{2}{*}{NAC-eMod} & NAC with $\epsilon$-modification & \multirow{2}{*}
         {$
-          \ddt\estwth = -\alpha \left(\ppfrac{J}{\estwth}+\ctxt{awesome}{\rho}\norm{\tilde{\mv{z}}}\estwth\right)
+          \ddt\estwth = -\alpha \left(\ppfrac{J}{\estwth}+\ctxt{awesome}{\rho}\norm{\tilde{\mv{r}}}\estwth\right)
         $}
         \\
         & ($\ctxt{awesome}{\rho}$ stabilizes proportionally to filtered error $\mv{r}$) &
@@ -964,6 +1072,19 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+\note[enumerate]
+{
+  \item For comparative study, we used two existing methods: L2-regularization (NAC-L2) and $\epsilon$-modification (NAC-eMod).
+  \item Please, note that the L2-regularization is equal to the $\sigma$-modification.
+  \item In summary, the NAC-L2 and NAC-eMod use the stabilizing terms $-\lambda\estwth$ and $\rho\norm{\mv{r}}\estwth$, respectively, to ensure the boundedness of the weights.
+  \item While the NAC-CO is the proposed method, which uses the Lagrange multipliers $\lambda_j$ to ensure the boundedness of the weights.
+  \item The simulation is mainly conducted to investigate dependencies of the crucial parameters, \ie $\beta_j$, $\lambda$, and $\rho$.
+}
+
+% ╔═══════════════════════════════════════════════╗
+% ║ Section: Experimental Validation              ║
+% ║   - Subsection: Simulation Results            ║
+% ╚═══════════════════════════════════════════════╝
 \subsection{Simulation Results}
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1027,6 +1148,16 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+\note[enumerate]
+{
+  \item The parameters were varied from $0.001$ to $1$ across 10 samples.
+  \item The box-and-whisker plots show the distribution of the tracking error ISE (Integral of Squared Error).
+  \item The NAC-L2 shows the worst performance with high variance, while the NAC-CO (proposed) shows the best performance with the lowest variance.
+  \item The reason is that the NAC-L2 and NAC-eMod are biased towards the origin, especially, proportionally to the parameters $\lambda$ and $\rho$, respectively.
+  \item On the other hand, the term that biases the weights towards the origin in NAC-CO, is removed when the constraints are inactive, \ie $c_j<0$.
+  \item Therefore, the NAC-CO can track the desired trajectory without being biased, when the constraints are inactive.
+}
+
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{Weight Norms}
 
@@ -1065,6 +1196,14 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+\note[enumerate]
+{
+  \item In this slide, the weight norms are shown.
+  \item We can see that the NAC-CO's weights are bounded under the pre-defined constraint $\overline{\theta}=20$.
+  \item The other two methods shows larger weight norms, and biased weights towards the origin, which may lead to suboptimal performance.
+  \item Moreover, the dependencies also can be seen, as the distribution of the weight norms of NAC-L2 and NAC-eMod are wider than that of NAC-CO.
+}
+
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{Tracking Performance}
 
@@ -1101,6 +1240,13 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+\note[enumerate]
+{
+  \item The tracking performance of the three methods are shown.
+  \item The NAC-CO (proposed) outperformed the other two methods in terms of tracking performance.
+  \item As the weights are biased towards the origin proportionally to the parameters $\lambda$ and $\rho$ in NAC-L2 and NAC-eMod, respectively, the tracking performance of NAC-L2 and NAC-eMod deteriorated, as approaching toward suboptimal points.
+}
+
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{Real-time Implementation Result}
 
@@ -1128,9 +1274,18 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+\note[enumerate]
+{
+  \item And, until the last slice, we have shown the conference paper's results.
+  \item In this slide, we show the recent result with real-time implementation.
+  \item The video demonstrates the applicability of the proposed method to real-time control, under 4 ms sampling time.
+  \item And, the convex input constraints are handled, here.
+}
+
 % ╔═══════════════════════════════════════════════╗ 
 % ║ Section: Conclusion and Future Work           ║
 % ╚═══════════════════════════════════════════════╝
+
 \section{Conclusion}
 
 \subsection{Conclusion and Future Work}
@@ -1156,6 +1311,7 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 \section{}
 \begin{frame}{}
     \centering \Large
