@@ -1,6 +1,7 @@
-% \documentclass[8pt, aspectratio=169, handout]{beamer} \setbeameroption{show notes on second screen}
+\documentclass[8pt, aspectratio=169, handout]{beamer} 
+% \documentclass[8pt, aspectratio=169, handout, draft]{beamer} 
 % \documentclass[8pt, aspectratio=169, handout]{beamer} \setbeameroption{show only notes}
-\documentclass[8pt, aspectratio=169]{beamer}
+% \documentclass[8pt, aspectratio=169]{beamer}
 
 % MIC Lab template
 \input{../template/macros/macros_general.tex}
@@ -302,12 +303,12 @@
           \onslide<3->
           {
             \begin{itemize}
-              \item Add a \ctxt{airforceblue}{stabilizing term }(\eg $ -\lambda \estwth $) to adaptation law.
+              \item Add a \ctxt{airforceblue}{stabilizing term }(\eg $ -\sigma \estwth $) to adaptation law.
               \item Construct a \ctxt{airforceblue}{invariant set }of the NN weights.
             \end{itemize}
 
             \begin{equation}
-              \ddtt{\estwth} \leftarrow \ddtt{\estwth} - \ctxt{awesome}{\lambda \estwth}
+              \ddtt{\estwth} \leftarrow \ddtt{\estwth} - \ctxt{awesome}{\sigma \estwth}
             \end{equation}
           }
 
@@ -445,7 +446,7 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}
 
-  \textbf{Contribution 1: Unified Optimization Framework} 
+  \textbf{Contribution 1: Constrained Unified Optimization Framework} 
   \onslide<2->
   {
     \begin{itemize}
@@ -623,7 +624,7 @@
           \frac{1}{2} \mv{r}^\top \mv{r}.
         \end{equation}
         \begin{itemize}
-          \item where $\mv{r} := \ddt\mv{e} + \Lambda\mv{e}$ is \ctxt{awesome}{filtered tracking error},
+          \item where $\mv{r} := \ddt\mv{e} + \sigma\mv{e}$ is \ctxt{awesome}{filtered tracking error},
         \end{itemize}
       \item while satisfying the following \ctxt{awesome}{constraints}:
         \begin{itemize}
@@ -866,7 +867,7 @@
   \begin{minipage}{.9\textwidth}
 
     \begin{block}{Theorem 1 \cite{Ryu:2025aa}}
-      For the \ctxt{airforceblue}{dynamical system } described in \eqref{eq:sys}, the \ctxt{awesome}{neuro-adaptive controller } in \eqref{eq:input} with the \ctxt{airforceblue}{weight adaptation laws } in \eqref{eq:adaptation_law:1}, \eqref{eq:adaptation_law:2} and \eqref{eq:adaptation_law:3} ensure the \ctxt{airforceblue}{boundedness } of the \ctxt{awesome}{filtered error } $\mv{r}$ and the \ctxt{awesome}{weight estimate } $\estwth$, under the control input constraints satisfying Assumption 1 and 2. This holds under the \ctxt{awesome}{weight norm constraint } \eqref{eq:cstr:weight}.
+      For the \ctxt{airforceblue}{dynamical system } described in \eqref{eq:sys}, the \ctxt{awesome}{neuro-adaptive controller } in \eqref{eq:input} with the \ctxt{airforceblue}{weight adaptation laws } in \eqref{eq:adaptation_law:1}, \eqref{eq:adaptation_law:2} and \eqref{eq:adaptation_law:3} ensure the \ctxt{airforceblue}{boundedness } of the \ctxt{awesome}{filtered error } $\mv{r}$ and the \ctxt{awesome}{weight estimate } $\estwth$, under the \ctxt{airforceblue}{control input constraints} satisfying Assumption 1 and 2. This holds under the \ctxt{awesome}{weight norm constraint } \eqref{eq:cstr:weight}.
     \end{block}
 
     \begin{exampleblock}{Assumption 1 (Convex Input Constraint)}
@@ -991,7 +992,7 @@
 \begin{frame}{\insertsubsectionhead}{Controllers Setting}
   
   \begin{itemize}
-    \item Only \ctxt{awesome}{weight norm constraint } is considered in this presentation (for \textbf{ECC}).
+    \item Only \ctxt{awesome}{weight norm constraint } is considered in this presentation (for \textbf{†his Conference paper}).
     \item Input saturation constraints are not considered.
     \item For simplicity, \ctxt{airforceblue}{single hidden layer NN} is used.
   \end{itemize}
@@ -1016,7 +1017,7 @@
   
     \begin{itemize}
       \item NAC-CO denotes the proposed controller based on \ctxt{airforceblue}{constrained optimization }.
-      \item For NAC-L2 and NAC-eMod, the \ctxt{awesome}{stabilizing terms } $-\lambda\estwth$ and $\rho\norm{\mv{r}}\estwth$ ensures the weights boundedness, respectively.
+      \item For NAC-L2 and NAC-eMod, the \ctxt{awesome}{stabilizing terms } $-\sigma\estwth$ and $\rho\norm{\mv{r}}\estwth$ ensures the weights boundedness, respectively.
     \end{itemize}
 
     \begin{table}
@@ -1030,10 +1031,10 @@
       \hline 
         \multirow{2}{*}{NAC-L2} & NAC with $L_2$-regularization \tiny{(equal to $\sigma$-modification)} & \multirow{2}{*}
         {$
-          \ddt\estwth = -\alpha \left(\ppfrac{J}{\estwth}+\ctxt{awesome}{\lambda}\estwth\right)
+          \ddt\estwth = -\alpha \left(\ppfrac{J}{\estwth}+\ctxt{awesome}{\sigma}\estwth\right)
         $}
         \\
-          & ($\ctxt{awesome}{\lambda}$ stabilizes $\estwth$ towards origin) &
+          & ($\ctxt{awesome}{\sigma}$ stabilizes $\estwth$ towards origin) &
         \\
       \hline
         \multirow{2}{*}{NAC-eMod} & NAC with $\epsilon$-modification & \multirow{2}{*}
@@ -1064,7 +1065,7 @@
       \centering
       \begin{minipage}{0.75\textwidth}
         \begin{block}{Simulation Objective}
-          By \ctxt{airforceblue}{varying the parameters }, \ie $\beta_j$, $\lambda$, and $\rho$, the parameter dependencies will be investigated.
+          By \ctxt{airforceblue}{varying the parameters }, \ie $\beta_j$, $\sigma$, and $\rho$, the parameter dependencies will be investigated.
         \end{block}
       \end{minipage}
     }
@@ -1076,9 +1077,9 @@
 {
   \item For comparative study, we used two existing methods: L2-regularization (NAC-L2) and $\epsilon$-modification (NAC-eMod).
   \item Please, note that the L2-regularization is equal to the $\sigma$-modification.
-  \item In summary, the NAC-L2 and NAC-eMod use the stabilizing terms $-\lambda\estwth$ and $\rho\norm{\mv{r}}\estwth$, respectively, to ensure the boundedness of the weights.
+  \item In summary, the NAC-L2 and NAC-eMod use the stabilizing terms $-\sigma\estwth$ and $\rho\norm{\mv{r}}\estwth$, respectively, to ensure the boundedness of the weights.
   \item While the NAC-CO is the proposed method, which uses the Lagrange multipliers $\lambda_j$ to ensure the boundedness of the weights.
-  \item The simulation is mainly conducted to investigate dependencies of the crucial parameters, \ie $\beta_j$, $\lambda$, and $\rho$.
+  \item The simulation is mainly conducted to investigate dependencies of the crucial parameters, \ie $\beta_j$, $\sigma$, and $\rho$.
 }
 
 % ╔═══════════════════════════════════════════════╗
@@ -1103,7 +1104,7 @@
           \item<+-> NAC-CO (proposed) shows the \ctxt{airforceblue}{best performance } and \ctxt{airforceblue}{lowest variance}.
           \item<+-> This result is because, 
             \begin{itemize}
-              \item<+-> NAC-L2 and NAC-eMod are \ctxt{airforceblue}{biased towards the origin}. $\ddtt\estwth=-\alpha(\pptfrac{J}{\estwth}+\ctxt{awesome}{\lambda\estwth})$ (NAC-L2) or $+\ctxt{awesome}{\rho\norm{\mv{r}}\estwth}$ (NAC-eMod), proportionally to $\lambda$ and $\rho$, respectively.
+              \item<+-> NAC-L2 and NAC-eMod are \ctxt{airforceblue}{biased towards the origin}. $\ddtt\estwth=-\alpha(\pptfrac{J}{\estwth}+\ctxt{awesome}{\sigma\estwth})$ (NAC-L2) or $+\ctxt{awesome}{\rho\norm{\mv{r}}\estwth}$ (NAC-eMod), proportionally to $\sigma$ and $\rho$, respectively.
               % \item<+-> $\beta_j$ in NAC-CO (proposed) only determines the \ctxt{airforceblue}{update speed } of the Lagrange multipliers $\lambda_j$, \ie $\ddtt\lambda_j=\beta_j c_j$.
               % \begin{itemize}
                 \item<+-> $\ctxt{awesome}{-\lambda_j\pptfrac{c_j}{\estwth}}$ in NAC-CO (proposed) (\ie $\ddtt\estwth=-\alpha(\pptfrac{J}{\estwth}+\ctxt{awesome}{\lambda_j\pptfrac{c_j}{\estwth}})$) \ctxt{airforceblue}{disappears } when constraints are inactive (\ie $c_j<0$, and $\lambda=\beta_jc_j$ and $\lambda_j\leftarrow\max(\lambda_j,0)$). %
@@ -1153,7 +1154,7 @@
   \item The parameters were varied from $0.001$ to $1$ across 10 samples.
   \item The box-and-whisker plots show the distribution of the tracking error ISE (Integral of Squared Error).
   \item The NAC-L2 shows the worst performance with high variance, while the NAC-CO (proposed) shows the best performance with the lowest variance.
-  \item The reason is that the NAC-L2 and NAC-eMod are biased towards the origin, especially, proportionally to the parameters $\lambda$ and $\rho$, respectively.
+  \item The reason is that the NAC-L2 and NAC-eMod are biased towards the origin, especially, proportionally to the parameters $\sigma$ and $\rho$, respectively.
   \item On the other hand, the term that biases the weights towards the origin in NAC-CO, is removed when the constraints are inactive, \ie $c_j<0$.
   \item Therefore, the NAC-CO can track the desired trajectory without being biased, when the constraints are inactive.
 }
@@ -1188,8 +1189,8 @@
 
   \begin{itemize}
     \item<+-> NAC-CO (proposed) showed the \ctxt{airforceblue}{weight norms } are bounded \ctxt{awesome}{under pre-defined constraint } $\overline{\theta}=20$.
-    \item<+-> NAC-L2 and NAC-eMod showed the bounded weight norms, but they \ctxt{awesome}{depended } on the parameters $\lambda$ and $\rho$, respectively.
-    % \item<+-> As the parameters $\lambda$ and $\rho$ increase, the weight norms of NAC-L2 and NAC-eMod biased towards the origin, which may lead to suboptimal performance.
+    \item<+-> NAC-L2 and NAC-eMod showed the bounded weight norms, but they \ctxt{awesome}{depended } on the parameters $\sigma$ and $\rho$, respectively.
+    % \item<+-> As the parameters $\sigma$ and $\rho$ increase, the weight norms of NAC-L2 and NAC-eMod biased towards the origin, which may lead to suboptimal performance.
     \item<+-> In other words, NAC-CO tracked the desired trajectory with a \ctxt{airforceblue}{smaller weight } norm than NAC-L2 and NAC-eMod.
   \end{itemize}
 
@@ -1234,7 +1235,7 @@
 
   \begin{itemize}
     \item NAC-CO (proposed) \ctxt{airforceblue}{outperformed } NAC-L2 and NAC-eMod in terms of \ctxt{awesome}{tracking performance}.
-    \item As the weights are \ctxt{awesome}{biased }towards the origin proportionally to the parameters $\lambda$ and $\rho$ in NAC-L2 and NAC-eMod, respectively, the tracking performance of NAC-L2 and NAC-eMod deteriorated, as approaching toward \ctxt{airforceblue}{suboptimal points}.
+    \item As the weights are \ctxt{awesome}{biased }towards the origin proportionally to the parameters $\sigma$ and $\rho$ in NAC-L2 and NAC-eMod, respectively, the tracking performance of NAC-L2 and NAC-eMod deteriorated, as approaching toward \ctxt{airforceblue}{suboptimal points}.
   \end{itemize}
 
 \end{frame}
@@ -1244,7 +1245,7 @@
 {
   \item The tracking performance of the three methods are shown.
   \item The NAC-CO (proposed) outperformed the other two methods in terms of tracking performance.
-  \item As the weights are biased towards the origin proportionally to the parameters $\lambda$ and $\rho$ in NAC-L2 and NAC-eMod, respectively, the tracking performance of NAC-L2 and NAC-eMod deteriorated, as approaching toward suboptimal points.
+  \item As the weights are biased towards the origin proportionally to the parameters $\sigma$ and $\rho$ in NAC-L2 and NAC-eMod, respectively, the tracking performance of NAC-L2 and NAC-eMod deteriorated, as approaching toward suboptimal points.
 }
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1263,9 +1264,9 @@
       width=0.64\linewidth,
       height=0.36\linewidth,
       activate=onclick,
-      addresource=animation.mp4,
+      addresource=assets/animation.mp4,
       flashvars={
-        source=animation.mp4
+        source=assets/animation.mp4
         &autoPlay=true
         &loop=true
       }
@@ -1295,7 +1296,7 @@
     
   \textbf{Summary of Contributions}
   \begin{itemize}
-    \item Proposed a novel constrained optimization-based neuro-adaptive control (CONAC) method.
+    \item Proposed a constrained optimization-based neuro-adaptive control method.
     \item Adaptation laws are derived using \ctxt{airforceblue}{constrained optimization method}.
     \item The proposed method guarantees the \ctxt{awesome}{stability }of the system and the boundedness of the NN weights.
     \item Feasibility of the proposed method is validated through numerical simulations.
