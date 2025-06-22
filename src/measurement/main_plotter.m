@@ -217,7 +217,7 @@ text(idleTime1+ep_time+.2, 2, "Episode 2", "FontSize", font_size, "FontName", 'T
 
 grid on; grid minor;
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
-ylabel('$\Vert {\tau} \Vert$ / Nm', 'FontSize', font_size, 'Interpreter', 'latex');
+ylabel('$\Vert {\mbox{\boldmath $\tau$}} \Vert$ / Nm', 'FontSize', font_size, 'Interpreter', 'latex');
 % maxVal = u_ball; minVal = 0; 
 maxVal = 13; minVal = 2;
 len = maxVal-minVal; ratio = .1;
@@ -266,28 +266,28 @@ hF.Position(3:4) = [fig_width, fig_height];
 % plot([-10 T+100], +1*[th_max(2) th_max(2)], "Color", "black", "LineWidth", line_width, "LineStyle", "-.", 'HandleVisibility','off'); hold on
 plot([-10 T+100], +1*[th_max(3) th_max(3)], "Color", "black", "LineWidth", line_width, "LineStyle", "--",  'HandleVisibility','off'); hold on
 
-plot(data1.th0.Time, data1.th0.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\hat\theta_0$"); hold on
-plot(data1.th1.Time, data1.th1.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\hat\theta_1$"); hold on
-plot(data1.th2.Time, data1.th2.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-",  "DisplayName", "$\hat\theta_2$"); hold on
+plot(data1.th0.Time, data1.th0.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\widehat{\mbox{\boldmath $\theta$}}_0$"); hold on
+plot(data1.th1.Time, data1.th1.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\widehat{\mbox{\boldmath $\theta$}}_1$"); hold on
+plot(data1.th2.Time, data1.th2.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-",  "DisplayName", "$\widehat{\mbox{\boldmath $\theta$}}_2$"); hold on
 
-plot(data2.th0.Time, data2.th0.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\hat\theta_0$"); hold on
-plot(data2.th1.Time, data2.th1.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\hat\theta_1$"); hold on
-plot(data2.th2.Time, data2.th2.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "-",  "DisplayName", "$\hat\theta_2$"); hold on
+plot(data2.th0.Time, data2.th0.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\widehat{\mbox{\boldmath $\theta$}}_0$"); hold on
+plot(data2.th1.Time, data2.th1.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\widehat{\mbox{\boldmath $\theta$}}_1$"); hold on
+plot(data2.th2.Time, data2.th2.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "-",  "DisplayName", "$\widehat{\mbox{\boldmath $\theta$}}_2$"); hold on
 
-plot(data3.th0.Time, data3.th0.Data, "Color", c3, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\hat\theta_0$"); hold on
-plot(data3.th1.Time, data3.th1.Data, "Color", c3, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\hat\theta_1$"); hold on
-plot(data3.th2.Time, data3.th2.Data, "Color", c3, "LineWidth", line_width, "LineStyle", "-",  "DisplayName", "$\hat\theta_2$"); hold on
+plot(data3.th0.Time, data3.th0.Data, "Color", c3, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\widehat{\mbox{\boldmath $\theta$}}_0$"); hold on
+plot(data3.th1.Time, data3.th1.Data, "Color", c3, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\widehat{\mbox{\boldmath $\theta$}}_1$"); hold on
+plot(data3.th2.Time, data3.th2.Data, "Color", c3, "LineWidth", line_width, "LineStyle", "-",  "DisplayName", "$\widehat{\mbox{\boldmath $\theta$}}_2$"); hold on
 
-plot(data4.th0.Time, data4.th0.Data, "Color", c4, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\hat\theta_0$"); hold on
-plot(data4.th1.Time, data4.th1.Data, "Color", c4, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\hat\theta_1$"); hold on
-plot(data4.th2.Time, data4.th2.Data, "Color", c4, "LineWidth", line_width, "LineStyle", "-",  "DisplayName", "$\hat\theta_2$"); hold on
+plot(data4.th0.Time, data4.th0.Data, "Color", c4, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\widehat{\mbox{\boldmath $\theta$}}_0$"); hold on
+plot(data4.th1.Time, data4.th1.Data, "Color", c4, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\widehat{\mbox{\boldmath $\theta$}}_1$"); hold on
+plot(data4.th2.Time, data4.th2.Data, "Color", c4, "LineWidth", line_width, "LineStyle", "-",  "DisplayName", "$\widehat{\mbox{\boldmath $\theta$}}_2$"); hold on
 
 plot(idleTime1+[ep_time ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-.", "HandleVisibility", "off"); hold on
 text(idleTime1+.2,         1.6, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman', "HandleVisibility", "off") 
 text(idleTime1+ep_time+.2, 1.6, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman', "HandleVisibility", "off")
 
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
-ylabel('$\Vert \hat\theta_i\Vert$', 'FontSize', font_size, 'Interpreter', 'latex');
+ylabel('$\Vert \widehat{\mbox{\boldmath $\theta$}}_i \Vert$', 'FontSize', font_size, 'Interpreter', 'latex');
     lgd = legend;
     % lgd.Orientation = 'Vertical';
     % lgd.Orientation = 'Horizontal';
@@ -313,15 +313,15 @@ hF = gcf;
 hF.Units = fig_unit;
 hF.Position(3:4) = [fig_width, fig_height];
 
-semilogy(    data1.lbdu.Time,     data1.lbdu.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\lambda_{u}$"); hold on
-semilogy(data1.lbdu2Max.Time, data1.lbdu2Max.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\lambda_{\bar{u}_2}$"); hold on
-semilogy(data1.lbdu2Min.Time, data1.lbdu2Min.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\lambda_{\bar{u}_2}$"); hold on
+semilogy(    data1.lbdu.Time,     data1.lbdu.Data, "Color", c1, "LineWidth", line_width, "LineStyle",  "-", "DisplayName", "$\lambda_{{\mbox{\boldmath $\tau$}}}$"); hold on
+semilogy(data1.lbdu2Max.Time, data1.lbdu2Max.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\lambda_{\overline{\tau}_2}$"); hold on
+semilogy(data1.lbdu2Min.Time, data1.lbdu2Min.Data, "Color", c1, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\lambda_{\underline{\tau}_2}$"); hold on
 
-semilogy(    data2.lbdu.Time,     data2.lbdu.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\lambda_{u}$"); hold on
-semilogy(data2.lbdu2Max.Time, data2.lbdu2Max.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\lambda_{\bar{u}_2}$"); hold on
-semilogy(data2.lbdu2Min.Time, data2.lbdu2Min.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\lambda_{\bar{u}_2}$"); hold on
+semilogy(    data2.lbdu.Time,     data2.lbdu.Data, "Color", c2, "LineWidth", line_width, "LineStyle",  "-", "DisplayName", "$\lambda_{{\mbox{\boldmath $\tau$}}}$"); hold on
+semilogy(data2.lbdu2Max.Time, data2.lbdu2Max.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\lambda_{\overline{\tau}_2}$"); hold on
+semilogy(data2.lbdu2Min.Time, data2.lbdu2Min.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\lambda_{\underline{\tau}_2}$"); hold on
 
-semilogy(data3.lbdth2.Time,   data3.lbdth2.Data,   "Color", c3, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\lambda_{\theta_2}$"); hold on
+semilogy(data3.lbdth2.Time,   data3.lbdth2.Data,   "Color", c3, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\widehat{\mbox{\boldmath $\theta$}}_2$"); hold on
 
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
 ylabel('$\lambda_j$ (Log scale)', 'FontSize', font_size, 'Interpreter', 'latex');
