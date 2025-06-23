@@ -1,7 +1,7 @@
 \documentclass[letterpaper, journal]{IEEEtran}
 %DIF LATEXDIFF DIFFERENCE FILE
-%DIF DEL tmp2.tex   Mon Jun 23 00:18:32 2025
-%DIF ADD tmp1.tex   Mon Jun 23 00:18:32 2025
+%DIF DEL tmp2.tex   Mon Jun 23 21:23:48 2025
+%DIF ADD tmp1.tex   Mon Jun 23 21:23:48 2025
 
 %DIF 3a3
 \def\cmt{true} % true for comments, false for no comments %DIF > 
@@ -142,13 +142,13 @@ In worst cases, any prior knowledge of the system dynamics may not be available,
 % To address these challenges, adaptive control methods have been widely employed to ensure robust performance in the presence of system uncertainties \cite{Ioannou:2006aa, Tao:2003aa}.
 To address these challenges, adaptive control methods have been widely employed to ensure robust performance for uncertain or unknown systems \cite{Ioannou:2006aa, Tao:2003aa}.
 
-More recently, neuro-adaptive control approaches have been introduced to approximate uncertain or unknown system dynamics or entire control laws using neural networks (NNs) \cite{Lewis:1998aa,Farrell:2006aa}. 
+More recently, neuro-adaptive control \DIFaddbegin \DIFadd{(NAC) }\DIFaddend approaches have been introduced to approximate uncertain or unknown system dynamics or entire control laws using neural networks (NNs) \cite{Lewis:1998aa,Farrell:2006aa}. 
 NNs are well-known for their universal approximation property, which allows them to approximate any smooth function over a compact set with minimal error. 
-Various types of NNs have been utilized in neuro-adaptive control, including simpler architectures like single-hidden layer (SHL) NNs \cite{Lewis:1996aa,Ge:2010aa, Yesildirek:1995aa} and radial basis function (RBF) NNs \cite{Liu:2013ab,Ge:2002aa}, as well as more complex models like deep NNs (DNNs) \cite{Patil:2022aa} and their variations. 
+Various types of NNs have been utilized in \DIFdelbegin \DIFdel{neuro-adaptive control}\DIFdelend \DIFaddbegin \DIFadd{NAC}\DIFaddend , including simpler architectures like single-hidden layer (SHL) NNs \cite{Lewis:1996aa,Ge:2010aa, Yesildirek:1995aa} and radial basis function (RBF) NNs \cite{Liu:2013ab,Ge:2002aa}, as well as more complex models like deep NNs (DNNs) \cite{Patil:2022aa} and their variations. 
 Conventionally, SHL and RBF NNs are often employed to approximate uncertain or unknown system dynamics or controllers due to their simplicity \cite{Esfandiari:2014aa,Esfandiari:2015aa,Yesildirek:1995aa,Gao:2006aa}.
-However, since DNNs offer greater expressive power, making them more effective for complex system approximations \cite{Rolnick:2018aa}, variations of DNNs, such as long short-term memory (LSTM) networks for time-varying dynamics \cite{Griffis:2023aa}, physics-informed NNs (PINNs) for leveraging physical system knowledge \cite{Hart:2024aa}, and convolutional NNs (CNNs) for learning historical sensor data \cite{Ryu:2024ac}, have further extended the capabilities of neuro-adaptive control systems.
+However, since DNNs offer greater expressive power, making them more effective for complex system approximations \cite{Rolnick:2018aa}, variations of DNNs, such as long short-term memory (LSTM) networks for time-varying dynamics \cite{Griffis:2023aa}, physics-informed NNs (PINNs) for leveraging physical system knowledge \cite{Hart:2024aa}, and convolutional NNs (CNNs) for learning historical sensor data \cite{Ryu:2024ac}, have further extended the capabilities of \DIFdelbegin \DIFdel{neuro-adaptive control }\DIFdelend \DIFaddbegin \DIFadd{NAC }\DIFaddend systems.
 
-A critical aspect of neuro-adaptive control is the NN weight adaptation law, which governs how NN weights are updated. 
+A critical aspect of \DIFdelbegin \DIFdel{neuro-adaptive control }\DIFdelend \DIFaddbegin \DIFadd{NAC }\DIFaddend is the NN weight adaptation law, which governs how NN weights are updated. 
 Most studies derived these laws using Lyapunov-based methods, ensuring the boundedness of the tracking error and weight estimation error, thus maintaining system stability under uncertainty.
 
 However, two significant challenges persist in using NNs for adaptive control. 
@@ -157,14 +157,14 @@ When NN outputs are used directly in the control law, this may lead to excessive
 Such constraints are commonly encountered in industrial systems, where actuators are limited by physical and safety requirements in terms of amplitude, rate, or energy \cite{Esfandiari:2021aa}. 
 Failing to address these constraints can degrade control performance or even destabilize the system.
 
-Therefore, addressing these two key issues—ensuring weight boundedness and satisfying input constraints—is essential for the reliable design of neuro-adaptive controllers. 
+Therefore, addressing these two key issues—ensuring weight boundedness and satisfying input constraints—is essential for the reliable design of \DIFdelbegin \DIFdel{neuro-adaptive controllers}\DIFdelend \DIFaddbegin \DIFadd{NAC}\DIFaddend . 
 The following section provides a detailed review of existing solutions to these challenges.
 
 \subsection{Literature Review}
 
 \subsubsection{Ensuring Weight Norm Boundedness}
 
-A common challenge in neuro-adaptive control is maintaining the boundedness of the NN weights to ensure stability. 
+A common challenge in \DIFdelbegin \DIFdel{neuro-adaptive control }\DIFdelend \DIFaddbegin \DIFadd{NAC }\DIFaddend is maintaining the boundedness of the NN weights to ensure stability. 
 In many studies, projection operators were employed to enforce upper bounds on the weight norms, ensuring that the weights do not grow unboundedly. 
 For example, in \cite{Zhou:2023aa,Griffis:2023aa,Patil:2022aa}, projection operators were used to constrain the weight norms to remain below predetermined constants. 
 However, these constants were often selected as large as possible due to the lack of theoretical guarantees regarding the global optimality of the weight values. 
@@ -172,7 +172,7 @@ While this approach ensured that the NN remained stable, it did not necessarily 
 
 In addition to projection operators, some studies utilized modification techniques like $\sigma$-modification \cite{Ge:2002aa} and $\epsilon$-modification \cite{Esfandiari:2015aa,Gao:2006aa}. 
 These methods ensured that the NN weights remained within an invariant set by incorporating stabilizing functions into the adaptation law. 
-Although these techniques were effective in ensuring boundedness and avoiding weight divergence, they similarly lacked a formal analysis of the optimality of the adapted weights by biasing the adaptation law toward the origin \cite{Ryu:2024aa}.
+Although these techniques were effective in ensuring boundedness and avoiding weight divergence, they similarly lacked a formal analysis of the optimality of the adapted weights by biasing the \DIFdelbegin \DIFdel{adaptation law }\DIFdelend \DIFaddbegin \DIFadd{weights }\DIFaddend toward the origin \cite{Ryu:2024aa}.
 This leaves room for improvement in terms of performance optimization.
 
 \hfill
@@ -180,13 +180,13 @@ This leaves room for improvement in terms of performance optimization.
 \subsubsection{Satisfying Input Constraints}
 
 The second major issue is satisfying input constraints, particularly in systems where actuators are subject to physical limitations. 
-This issue becomes more pronounced in neuro-adaptive control architectures where NNs are used to augment conventional model-based controllers—such as feedback linearization or backstepping—rather than acting as the sole control input. 
+This issue becomes more pronounced in \DIFdelbegin \DIFdel{neuro-adaptive control }\DIFdelend \DIFaddbegin \DIFadd{NAC }\DIFaddend architectures where NNs are used to augment conventional model-based controllers—such as feedback linearization or backstepping—rather than acting as the sole control input. 
 In such cases, if the system model is inaccurate or the dynamics targeted by the NN are already contributing to stability, the combined control effort may result in overly aggressive inputs, increasing the risk of input saturation \cite{Khalil:2002aa}.
 
-To address the aforementioned issue, several approaches have been proposed in \cite{Gao:2006aa,Arefinia:2020aa,He:2016aa,Peng:2020aa,Esfandiari:2014aa,Karason:1994aa,Esfandiari:2015aa} to handle input constraints in neuro-adaptive control systems.
+To address the aforementioned issue, several approaches have been proposed in \cite{Gao:2006aa,Arefinia:2020aa,He:2016aa,Peng:2020aa,Esfandiari:2014aa,Karason:1994aa,Esfandiari:2015aa} to handle input constraints in \DIFdelbegin \DIFdel{neuro-adaptive control }\DIFdelend \DIFaddbegin \DIFadd{NAC }\DIFaddend systems.
 Particularly, the auxiliary systems have been widely introduced.
 In \cite{Arefinia:2020aa,He:2016aa,Peng:2020aa}, the auxiliary states were generated whenever input saturation was detected, and these states were used as feedback terms in the control law to directly compensate for the effects of input saturation constraints.
-On the other hands, in \cite{Esfandiari:2014aa,Karason:1994aa,Esfandiari:2015aa}, the auxiliary systems incorporated into the adaptation law by adding the auxiliary states to the feedback error for learning.
+On the other hands, in \cite{Esfandiari:2014aa,Karason:1994aa,Esfandiari:2015aa}, the auxiliary systems \DIFaddbegin \DIFadd{were }\DIFaddend incorporated into the adaptation law by adding the auxiliary states to the feedback error for learning.
 This approach helped the NN reduce input saturation by indirectly regulating the auxiliary states, during the adaptation process.
 
 However, these approaches typically handle input bound constraints on a per-input basis, \ie applying bounds to each scalar control variable individually, and may not account for more complex, nonlinear constraints, like input norm constraints, which are commonly found in physical systems such as robotic actuators or motor systems.
@@ -198,27 +198,31 @@ To address this, input constraints should be handled within a unified adaptive f
 
 \hfill
 
-\subsubsection{Limitations of Existing Approaches and Potential of Constrained Optimization}
+\subsubsection{\DIFdelbegin \DIFdel{Limitations of Existing Approaches and }\DIFdelend Potential of Constrained Optimization}
+%DIF >  \subsubsection{Limitations of Existing Approaches and Potential of Constrained Optimization}
 
-\DIFaddbegin \MSRY{각 문단에 이미 문제점을 지적해서 요약을 안해도 괜찮을 것 같습니다.}
-\ctxt{red}
-{
-    \DIFaddend Although both the existing methods for weight boundedness and input constraints have shown effectiveness, they come with significant limitations. 
-    Projection operators and modification techniques do not guarantee the optimality of the adapted weights. 
-    Auxiliary systems typically handle only simple forms of input constraints, such as individual input bound constraints, limiting their ability to address more complex, nonlinear constraints.
-    Moreover, using conventional control methods in conjunction with NNs can disrupt the adaptation process.
-\DIFaddbegin }
-\DIFaddend 
+\DIFdelbegin \DIFdel{Although both the existing methods for weight boundedness and input constraints have shown effectiveness, they come with significant limitations. 
+Projection operators and modification techniques do not guarantee the optimality of the adapted weights. 
+Auxiliary systems typically handle only simple forms of input constraints, such as individual input bound constraints, limiting their ability to address more complex, nonlinear constraints.
+Moreover, using conventional control methods in conjunction with NNs can disrupt the adaptation process.
+}\DIFdelend %DIF >  \MSRY{각 문단에 이미 문제점을 지적해서 요약을 안해도 괜찮을 것 같습니다.}
+%DIF >  \ctxt{red}
+%DIF >  {
+%DIF >      Although both the existing methods for weight boundedness and input constraints have shown effectiveness, they come with significant limitations. 
+%DIF >      Projection operators and modification techniques do not guarantee the optimality of the adapted weights. 
+%DIF >      Auxiliary systems typically handle only simple forms of input constraints, such as individual input bound constraints, limiting their ability to address more complex, nonlinear constraints.
+%DIF >      Moreover, using conventional control methods in conjunction with NNs can disrupt the adaptation process.
+%DIF >  }
 
-A promising approach to overcoming these limitations lies in constrained optimization.
-By formulating the neuro-adaptive control problem as an unified optimization problem with constraints, it is possible to adapt the NN weights while minimizing an objective function, \eg tracking error, subject to both weight and input constraints, simultaneously.
+A promising approach to overcoming \DIFdelbegin \DIFdel{these limitations }\DIFdelend \DIFaddbegin \DIFadd{the limitations of the existing methods }\DIFaddend lies in constrained optimization.
+By formulating the \DIFdelbegin \DIFdel{neuro-adaptive control }\DIFdelend \DIFaddbegin \DIFadd{NAC }\DIFaddend problem as an unified optimization problem with constraints, it is possible to adapt the NN weights while minimizing an objective function, \eg tracking error, subject to both weight and input constraints, simultaneously.
 Constrained optimization provides a theoretical framework for defining optimality and presents numerical methods for finding solutions that satisfy the constraints \cite{Nocedal:2006aa}.
 
 In existing literature, constrained optimization techniques, such as the Augmented Lagrangian Method (ALM) \cite{Evens:2021aa} and the Alternating Direction Method of Multipliers (ADMM) \cite{Wang:2019aa,Taylor:2016aa}, have been used to train NNs offline. 
 \DIFdelbegin \DIFdel{These methods impose constraints to address issues like gradient vanishing in backpropagation. 
 }\DIFdelend %DIF >  These methods impose constraints to address issues like gradient vanishing in backpropagation. 
-However, to the best of the authors' knowledge, no prior work has applied constrained optimization to \DIFdelbegin \DIFdel{adaptive }\DIFdelend \DIFaddbegin \DIFadd{neuro-adaptive }\DIFaddend control systems with real-time weight adaptation. 
-This gap suggests that constrained optimization could be key to addressing both weight boundedness and input constraints in a unified, theoretically grounded framework, particularly in real-time neuro-adaptive control.
+However, to the best of the authors' knowledge, no prior work has applied constrained optimization to \DIFdelbegin \DIFdel{adaptive control }\DIFdelend \DIFaddbegin \DIFadd{NAC }\DIFaddend systems with real-time weight adaptation. 
+This gap suggests that constrained optimization could be key to addressing both weight boundedness and input constraints in a unified, theoretically grounded framework, particularly in real-time \DIFdelbegin \DIFdel{neuro-adaptive control}\DIFdelend \DIFaddbegin \DIFadd{NAC}\DIFaddend .
 
 \subsection{Contributions}
 
@@ -226,7 +230,7 @@ The main contributions of this study are listed as follows:
 \begin{itemize}
     \item A constrained optimization-based neuro-adaptive control (CONAC) is proposed, where the control problem is formulated as a constrained optimization problem. In this formulation, weight and convex input constraints are incorporated as inequality constraints, while minimizing a given objective function.
     % \item Any convex input constraints can be applied to the proposed CONAC, including input bound constraints, and norm constraints. Moreover, the proposed CONAC can handle any combination of these constraints, which can be useful in practical applications where multiple constraints need to be satisfied simultaneously.
-    \item Since the proposed CONAC approximates the entire ideal control law \DIFdelbegin \DIFdel{with no }\DIFdelend \DIFaddbegin \DIFadd{without }\DIFaddend prior knowledge of the system dynamics, the system identification process for nominal conventional controller design can be avoided, which is often difficult and time-consuming to implement in practice. 
+    \item Since the proposed CONAC approximates the entire ideal control law \DIFdelbegin \DIFdel{with no }\DIFdelend \DIFaddbegin \DIFadd{without any conventional controller, }\DIFaddend prior knowledge of the system dynamics \DIFdelbegin \DIFdel{, }\DIFdelend \DIFaddbegin \DIFadd{or }\DIFaddend the system identification process for nominal conventional controller design can be avoided, which is often difficult and time-consuming to implement in practice. 
     \item The adaptation laws for DNN weights and Lagrange multipliers are systematically derived to solve the defined problem, using constrained optimization theory. These laws guarantee convergence to the first-order optimality conditions \DIFaddbegin \DIFadd{at steady state}\DIFaddend , specifically the Karush–Kuhn–Tucker (KKT) conditions, as described in \cite[Chap. 12, Thm. 12.1]{Nocedal:2006aa}.
     \item The proposed CONAC's stability is rigorously analyzed using Lyapunov theory, ensuring that the tracking error and DNN weights remain bounded. This analysis guarantees that the proposed CONAC can achieve stable online adaptation.
     \item The proposed CONAC is implemented in real-time on a 2-DOF robotic manipulator, demonstrating its effectiveness in achieving accurate trajectory tracking while satisfying all imposed constraints. The experimental results validate the theoretical findings and confirm the practical applicability of the proposed CONAC.
@@ -290,7 +294,7 @@ The key properties are introduced below:
     \label{prop:dis_bound}
 \end{prop}
 
-The control objective is to develop a neuro-adaptive controller that enables $\q$ to track a continuously differentiable desired trajectory $\qd:=\qd(t): \R_{\ge0} \to \R^n$, compensating for the unknown system dynamics while addressing the imposed constraints.
+The control objective is to develop a \DIFdelbegin \DIFdel{neuro-adaptive controller }\DIFdelend \DIFaddbegin \DIFadd{NAC }\DIFaddend that enables $\q$ to track a continuously differentiable desired trajectory $\qd:=\qd(t): \R_{\ge0} \to \R^n$, compensating for the unknown system dynamics while addressing the imposed constraints.
 The desired trajectory $\qd(t)$ is supposed to satisfy the following assumption:
 \begin{assum}
     The desired trajectory $\qd(t)$ is assumed to be bounded, \ie $\norm{\qd(t)}\le \overline{q}_d\in\R_{>0}$, and available for designing a bounded control input.
@@ -300,17 +304,17 @@ The desired trajectory $\qd(t)$ is supposed to satisfy the following assumption:
 %  SECTION CONTROLLER DESIGN ==============================
 \section{Control Law Development}\label{sec:ctrl design}
 
-The architecture of the proposed CONAC consists of a DNN that functions as a neuro-adaptive controller, and a weight optimizer for the DNN, as illustrated in Fig. \ref{fig:ctrl:diagram}.
+The architecture of the proposed CONAC consists of a DNN that functions as a \DIFdelbegin \DIFdel{neuro-adaptive controller}\DIFdelend \DIFaddbegin \DIFadd{NAC}\DIFaddend , and a weight optimizer for the DNN, as illustrated in Fig. \ref{fig:ctrl:diagram}.
 % The algorithm of the proposed CONAC is given by Algorithm \ref{alg:CONAC}. 
 Before proceeding to the controller design, some mathematical preliminaries are revisited in Section \ref{sec:sub:math preliminaries}. 
-Section \ref{sec:sub:NAC} introduces the neuro-adaptive controller, followed by the DNN model in Section \ref{sec:sub:NN definition}. 
+Section \ref{sec:sub:NAC} introduces the \DIFdelbegin \DIFdel{neuro-adaptive controller}\DIFdelend \DIFaddbegin \DIFadd{NAC}\DIFaddend , followed by the DNN model in Section \ref{sec:sub:NN definition}. 
 The constrained optimization-based weight adaptation law is presented in Section \ref{sec:adap_laws}.
 
 \begin{figure}[!t]
     \centering
     \DIFdelbeginFL %DIFDELCMD < \includegraphics[width=.8\linewidth]{src/figures/Controller.drawio.pdf}
 %DIFDELCMD <     %%%
-\DIFdelendFL \DIFaddbeginFL \includegraphics[width=.9\linewidth]{src/figures/Controller.drawio.pdf}
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=.99\linewidth]{src/figures/Controller.drawio.pdf}
     \DIFaddendFL \caption{Architecture of the proposed constrained optimization-based neuro-adaptive controller (CONAC).}
     \label{fig:ctrl:diagram}
 \end{figure}
@@ -529,7 +533,7 @@ Note that the control input saturation has not yet been considered in the deriva
     \centering
     \DIFdelbeginFL %DIFDELCMD < \includegraphics[width=0.8\linewidth]{src/figures/DNN.drawio.pdf}
 %DIFDELCMD <     %%%
-\DIFdelendFL \DIFaddbeginFL \includegraphics[width=0.9\linewidth]{src/figures/DNN.drawio.pdf}
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=0.99\linewidth]{src/figures/DNN.drawio.pdf}
     \DIFaddendFL \caption{
         Architecture of the DNN $\NN({\q}_n;\wth)$ with $k=2,l_0=2,l_1=l_2=3$, and $l_3=2$.
     }
@@ -555,20 +559,25 @@ where $\wV_i=[w_{ij}]_{i\in\{1,\cdots,l_i+1\},j\in\{1,\cdots,l_{i+1}\}}\in\R^{(l
 The DNN $\NN({\q}_n;\wth)$ has $k+1$ layers, where the input layer is indexed by $i=0$, and the output layer is indexed by $i=k$.
 For instance, in Fig.~\ref{fig:DNN}, the DNN $\NN({\q}_n;\wth)$ with $k=2,l_0=2,l_1=l_2=3$, and $l_3=2$ is illustrated.
 Notice that the output size of $\NN(\cdot)$ is the same as that of the control input $\rbu$, \ie $l_{k+1}=n$. 
-The weights \DIFdelbegin \DIFdel{$\wV_i,\forall i\in\{0,\cdots,k\}$ }\DIFdelend \DIFaddbegin \DIFadd{$\wV_i,\ \forall i\in\{0,\cdots,k\}$ }\DIFaddend are initialized randomly using uniform distribution at the beginning of the control process.
+The weights \DIFdelbegin \DIFdel{$\wV_i,\forall i\in\{0,\cdots,k\}$ }\DIFdelend \DIFaddbegin \DIFadd{$\wV_i,\ \forall i\in\{0,\cdots,k\}$, }\DIFaddend are initialized randomly using uniform distribution at the beginning of the control process.
 
 The activation function is defined as $\act_i(\mv x):=\left(\sigma(x_1),\sigma(x_2),\cdots, \sigma(x_{l_{i}}), 1\right)^\top,\ \forall\mv x\in\R^{l_i}$, where $\sigma: \R\to\R$ is a nonlinear function, and the augmentation of $1$ is used to account for bias terms in the weight matrices. 
-\DIFaddbegin \MSRY{생략 가능할 것 같습니다.}
-\ctxt{red}
-{
-    \DIFaddend In selecting the nonlinear function $\sigma(\cdot)$, the ReLU function \cite{Maas:2013aa} is one of most widely used choices for large DNNs, since it effectively mitigates the gradient vanishing problem during error backpropagation. 
-    However, for control applications, where relatively shallow DNNs are typically sufficient and the gradient vanishing issue is less severe, the sigmoid function or the hyperbolic tangent function is commonly used as the nonlinear function $\sigma(\cdot)$. 
-    These functions simplify stability analysis, since they are continuously differentiable and their outputs and gradients are bounded. 
-\DIFaddbegin }
-\DIFaddend In this study, the hyperbolic tangent function $\tanh(\cdot)$ was selected as the nonlinear function, \ie $\sigma(x) = \tanh(x),\ \forall x\in\R$, which provides desirable boundedness with $\norm{\sigma(x)}<1$ and \DIFdelbegin \DIFdel{$\norm{\ddtfrac{\sigma(x)}{x}}\le 1$}\DIFdelend \DIFaddbegin \DIFadd{$0<\norm{\ddtfrac{\sigma(x)}{x}}\le 1$}\DIFaddend .
+\DIFdelbegin \DIFdel{In selecting the nonlinear function $\sigma(\cdot)$, the ReLU function \mbox{%DIFAUXCMD
+\cite{Maas:2013aa} }\hskip0pt%DIFAUXCMD
+is one of most widely used choices for large DNNs, since it effectively mitigates the gradient vanishing problem during error backpropagation. 
+However, for control applications, where relatively shallow DNNs are typically sufficient and the gradient vanishing issue is less severe, the sigmoid function or the hyperbolic tangent function is commonly used as the nonlinear function $\sigma(\cdot)$. 
+These functions simplify stability analysis, since they are continuously differentiable and their outputs and gradients are bounded. 
+In }\DIFdelend %DIF >  \MSRY{생략 가능할 것 같습니다.}
+%DIF >  \ctxt{red}
+%DIF >  {
+%DIF >      In selecting the nonlinear function $\sigma(\cdot)$, the ReLU function \cite{Maas:2013aa} is one of most widely used choices for large DNNs, since it effectively mitigates the gradient vanishing problem during error backpropagation. 
+%DIF >      However, for control applications, where relatively shallow DNNs are typically sufficient and the gradient vanishing issue is less severe, the sigmoid function or the hyperbolic tangent function is commonly used as the nonlinear function $\sigma(\cdot)$. 
+%DIF >      These functions simplify stability analysis, since they are continuously differentiable and their outputs and gradients are bounded. 
+%DIF >  }
+\DIFaddbegin \DIFadd{In }\DIFaddend this study, the hyperbolic tangent function $\tanh(\cdot)$ was selected as the nonlinear function, \ie $\sigma(x) = \tanh(x),\ \forall x\in\R$, which provides desirable boundedness with $\norm{\sigma(x)}<1$ and \DIFdelbegin \DIFdel{$\norm{\ddtfrac{\sigma(x)}{x}}\le 1$}\DIFdelend \DIFaddbegin \DIFadd{$0<\norm{\ddtfrac{\sigma(x)}{x}}\le 1$}\DIFaddend .
 
 For simplicity, each layer's weights are vectorized as \DIFdelbegin \DIFdel{$\wth_i:=\myvec(\wV_i)\in\R^{\Xi_i},\forall i\in\{0,\cdots,k\}$}\DIFdelend \DIFaddbegin \DIFadd{$\wth_i:=\myvec(\wV_i)\in\R^{\Xi_i},\ \forall i\in\{0,\cdots,k\}$}\DIFaddend , where $\Xi_i:= (l_i+1)l_{i+1}$ is the number of weights in the $i$th layer. 
-The total weight vector $\wth\in\R^{\Xi}$ is defined by augmenting $\wth_i, \forall i\in \{0,\cdots,k\}$ as 
+The total weight vector $\wth\in\R^{\Xi}$ is defined by augmenting $\wth_i, \forall i\in \{0,\cdots,k\}$\DIFaddbegin \DIFadd{, }\DIFaddend as 
 \begin{equation}
     \wth := 
     \begin{pmatrix}
@@ -585,7 +594,7 @@ The total weight vector $\wth\in\R^{\Xi}$ is defined by augmenting $\wth_i, \for
         \myvec(\wV_0)
     \end{pmatrix},
 \end{equation}
-where $\Xi={\sum_{i=0}^{k} \Xi_i}$ represents the total number of weights in the DNN.
+where \DIFdelbegin \DIFdel{$\Xi={\sum_{i=0}^{k} \Xi_i}$ }\DIFdelend \DIFaddbegin \DIFadd{$\Xi:={\sum_{i=0}^{k} \Xi_i}$ }\DIFaddend represents the total number of weights in the DNN.
 
 The gradient of $ \NN({\q}_n;\wth)$ with respect to $\wth$ can be obtained using Proposition \ref{propsit:kron} and the chain rule as follows:
 \begin{equation}
@@ -603,7 +612,45 @@ The gradient of $ \NN({\q}_n;\wth)$ with respect to $\wth$ can be obtained using
 where
 \begin{equation}
     \pptfrac{\NN}{\wth_i} = 
-    \begin{cases}
+    \DIFdelbegin %DIFDELCMD < \begin{cases}
+%DIFDELCMD <         (
+%DIFDELCMD <             \mm I_{l_{k+1}}
+%DIFDELCMD <             \otimes 
+%DIFDELCMD <             \act_{k}^\top  
+%DIFDELCMD <         )
+%DIFDELCMD <         , 
+%DIFDELCMD <         &
+%DIFDELCMD <         i=k
+%DIFDELCMD <         ,
+%DIFDELCMD <         \\
+%DIFDELCMD <         \wV_k^\top\act_{k}' 
+%DIFDELCMD <         (
+%DIFDELCMD <             \mm I_{l_{k}}
+%DIFDELCMD <             \otimes  
+%DIFDELCMD <             \act_{k-1}^\top  
+%DIFDELCMD <         )
+%DIFDELCMD <         , 
+%DIFDELCMD <         & 
+%DIFDELCMD <         i=k-1
+%DIFDELCMD <         ,
+%DIFDELCMD <         \\
+%DIFDELCMD <         &
+%DIFDELCMD <         \vdots 
+%DIFDELCMD <         \\
+%DIFDELCMD <         \wV_k^\top\act'_{k} 
+%DIFDELCMD <         \cdots 
+%DIFDELCMD <         \wV_1^\top\act_1' 
+%DIFDELCMD <         (
+%DIFDELCMD <             \mm I_{l_1}
+%DIFDELCMD <             \otimes 
+%DIFDELCMD <             {\q}_n^\top  
+%DIFDELCMD <         )
+%DIFDELCMD <         , 
+%DIFDELCMD <         &
+%DIFDELCMD <         i = 0
+%DIFDELCMD <         ,
+%DIFDELCMD <     \end{cases}%%%
+\DIFdelend \DIFaddbegin \begin{cases}
         (
             \mm I_{l_{k+1}}
             \otimes 
@@ -625,6 +672,7 @@ where
         i=k-1
         ,
         \\
+        \vdots 
         &
         \vdots 
         \\
@@ -640,7 +688,7 @@ where
         &
         i = 0
         ,
-    \end{cases}
+    \end{cases}\DIFaddend 
     \label{eq:NN:grad}
 \end{equation}
 and $\act_i:= \act_i(\NN_{i-1})$ and $\act_i':= \ddtfrac{\act_i}{\NN_{i-1}}$.
@@ -657,20 +705,31 @@ Similarly, let $\estNN_i$ denotes the output of the $i$th layer with the estimat
 
 The control objective can be represented as follows:
 \begin{equation}
-    \begin{matrix}
+    \DIFdelbegin %DIFDELCMD < \begin{matrix}
+%DIFDELCMD <         \min_{\estwth} \ J(\fe;\estwth):= 
+%DIFDELCMD <         \tfrac{1}{2} \fe^\top \fe
+%DIFDELCMD <         ,
+%DIFDELCMD <         \\ \\
+%DIFDELCMD <         \begin{aligned}
+%DIFDELCMD <         \text{subject to }&c_{j}(\estwth) 
+%DIFDELCMD <         \le0, \quad \forall j\in\mathcal{I},
+%DIFDELCMD <         \end{aligned}
+%DIFDELCMD <     \end{matrix}%%%
+\DIFdelend \DIFaddbegin \begin{matrix}
         \min_{\estwth} \ J(\fe;\estwth):= 
         \tfrac{1}{2} \fe^\top \fe
         ,
-        \\ \\
+        \vspace{.5em}
+        \\
         \begin{aligned}
         \text{subject to }&c_{j}(\estwth) 
         \le0, \quad \forall j\in\mathcal{I},
         \end{aligned}
-    \end{matrix}
+    \end{matrix}\DIFaddend 
     \label{eq:opt:problem1}
 \end{equation}
 where $J(\fe;\estwth)$ is the objective function.
-Inequality constraints $c_j:=c_j(\estwth),\ \forall j\in\mathcal{I}$, are imposed during the weight adaptation process to minimize the objective function, where $\mathcal I$ denotes the set of the imposed inequality constraints. 
+Inequality constraints $c_j:=c_j(\estwth),\ \forall j\in\mathcal{I}$, are imposed during the weight adaptation process\DIFdelbegin \DIFdel{to minimize the objective function}\DIFdelend , where $\mathcal I$ denotes the set of the imposed inequality constraints. 
 % Here, $\fe$ is considered a pre-defined data or static parameter for this optimization problem, so that the adaptation process does not consider the dynamics of $\fe$.
 The Lagrangian function \DIFaddbegin \DIFadd{$L(\cdot)$ }\DIFaddend is defined as
 \begin{equation}
@@ -686,7 +745,7 @@ The Lagrangian function \DIFaddbegin \DIFadd{$L(\cdot)$ }\DIFaddend is defined a
     ,
     \label{eq:lagrangian}
 \end{equation}
-where \DIFdelbegin \DIFdel{$\lambda_j,\forall j\in\mathcal{I}$ }\DIFdelend \DIFaddbegin \DIFadd{$\lambda_j,\ \forall j\in\mathcal{I}$ }\DIFaddend denotes the Lagrange multiplier for each constraint.
+where \DIFdelbegin \DIFdel{$\lambda_j,\forall j\in\mathcal{I}$ }\DIFdelend \DIFaddbegin \DIFadd{$\lambda_j,\ \forall j\in\mathcal{I}$, }\DIFaddend denotes the Lagrange multiplier for each constraint.
 
 The adaptation laws for $\estwth$ and $[\lambda_j]_{j\in\mathcal I}$ are derived to solve the dual problem of \eqref{eq:opt:problem1}, \ie $\min_{\estwth} \max_{[\lambda_j]_{j\in\mathcal I}}L(\fe,\estwth,[\lambda_j]_{j\in\mathcal I})$, as follows:
 \begin{subequations}
@@ -722,15 +781,19 @@ The adaptation laws for $\estwth$ and $[\lambda_j]_{j\in\mathcal I}$ are derived
 \end{subequations}
 where $\alpha\in\R_{>0}$ denotes the adaptation gain (learning rate) and $\beta_j\in\R_{>0}$ denotes the update rate of the Lagrange multipliers in $\mathcal I$, and the arguments of $L(\cdot)$ and $J(\cdot)$ are suppressed for brevity. 
 The Lagrange multipliers associated with inequality constraints are non-negative, \ie $\lambda_j\ge 0$, due to \eqref{eq:adap:lbd:max}. 
-When a constraint $c_j$ becomes active, \ie $c_j > 0$, the corresponding Lagrange multiplier $\lambda_j$ increases to address the violation, \DIFdelbegin %DIFDELCMD < \ie %%%
-\DIFdelend see \eqref{eq:adap:lbd}.
-Once the violation is resolved and the constraint is no longer active, \ie $c_j \le 0$, the Lagrange multiplier $\lambda_j$ decreases gradually until it returns to zero.
-\DIFaddbegin \MSRY{생략 가능할 것 같습니다.}
-\ctxt{red}
-{
-    \DIFaddend Note that this adaption law is similar to the ALM in \cite{Nocedal:2006aa}, where the adaptation law for Lagrange multipliers is given by $\lambda_j\leftarrow \max\left(\lambda_j+\tfrac{c_j}{\mu},0\right)$, with $\mu\in\R_{>0}$ being the penalty parameter. 
-\DIFaddbegin }
-\DIFaddend 
+When a constraint $c_j$ becomes active, \ie $c_j > 0$, the corresponding Lagrange multiplier $\lambda_j$ increases\DIFaddbegin \DIFadd{, see \eqref{eq:adap:lbd}, }\DIFaddend to address the violation, \DIFdelbegin %DIFDELCMD < \ie %%%
+\DIFdel{see \eqref{eq:adap:lbd}}\DIFdelend \DIFaddbegin \DIFadd{see \eqref{eq:adap:th}}\DIFaddend .
+Once the violation is resolved and the constraint is no longer active, \ie $c_j \le 0$, the Lagrange multiplier $\lambda_j$ decreases gradually until it returns to zero\DIFdelbegin \DIFdel{.
+Note that this adaption law is similar to the ALM in \mbox{%DIFAUXCMD
+\cite{Nocedal:2006aa}}\hskip0pt%DIFAUXCMD
+, where the adaptation law for Lagrange multipliers is given by $\lambda_j\leftarrow \max\left(\lambda_j+\tfrac{c_j}{\mu},0\right)$, with $\mu\in\R_{>0}$ being the penalty parameter.
+}\DIFdelend \DIFaddbegin \DIFadd{, see \eqref{eq:adap:lbd:max}.
+%DIF >  \MSRY{생략 가능할 것 같습니다.}
+%DIF >  \ctxt{red}
+%DIF >  {
+%DIF >      Note that this adaption law is similar to the ALM in \cite{Nocedal:2006aa}, where the adaptation law for Lagrange multipliers is given by $\lambda_j\leftarrow \max\left(\lambda_j+\tfrac{c_j}{\mu},0\right)$, with $\mu\in\R_{>0}$ being the penalty parameter. 
+%DIF >  }
+}\DIFaddend 
 
 At steady state, where $\ddtt{\estwth}=0$ and $\ddtt\lambda_j=0$, the KKT conditions are satisfied, \ie $\pptfrac{L}{\estwth}=0$, $c_j \le 0$, $\lambda_j \ge 0$, and $\lambda_j c_j=0$.
 In other words, the proposed weight optimizer updates $\estwth$ and $\lambda_j$ in a way that satisfies the KKT conditions. 
@@ -786,8 +849,8 @@ $
     \left[
         \mysign(\pptfrac{r_i}{\tau_j})
     \right]_{i,j\in\{1,\cdots,m\}}
-$ 
-assuming known control directions.
+$\DIFaddbegin \DIFadd{, 
+}\DIFaddend assuming known control directions.
 However, this approach is not applicable to \eqref{eq:sys:filtered}, where control directions are unknown.
 Instead, since the sign of the control input matrix is known—owing to the positive definiteness of $\rbM^{-1}$, see Property \ref{prop:M}—we approximate $\pptfrac{\fe}{\rbu}\approx \mm I_n$.
 Consequently, the adaptation law in \eqref{eq:adap:th} becomes:
@@ -812,8 +875,9 @@ Consequently, the adaptation law in \eqref{eq:adap:th} becomes:
 
 This section introduces essential constraints required to ensure the stability of the proposed CONAC, as well as conditions for potential \DIFdelbegin \DIFdel{control }\DIFdelend input constraints.
 
-First, weight norm constraints \DIFdelbegin \DIFdel{$\mv{c}_{\theta}(\estwth):= [c_{\theta_i}(\estwth)]_{i\in\{0,\cdots ,k\}}\in\mathbb R^{k+1}$ }\DIFdelend \DIFaddbegin \DIFadd{$[c_{\theta_i}(\estwth)]_{i\in\{0,\cdots ,k\}}\in\mathbb R^{k+1}$ }\DIFaddend defined in \eqref{eq:cstr:weight:ball}, are essential to prevent the weights from diverging during the adaptation process.
-\begin{equation}
+First, weight norm constraints \DIFdelbegin \DIFdel{$\mv{c}_{\theta}(\estwth):= [c_{\theta_i}(\estwth)]_{i\in\{0,\cdots ,k\}}\in\mathbb R^{k+1}$ }\DIFdelend \DIFaddbegin \DIFadd{$c_{\theta_i}(\estwth),\ \forall i\in\{0,\cdots ,k\}$, }\DIFaddend defined in \eqref{eq:cstr:weight:ball}, are essential to prevent the weights from diverging during the adaptation process\DIFdelbegin \DIFdel{.
+}\DIFdelend \DIFaddbegin \DIFadd{:
+}\DIFaddend \begin{equation}
     c_{\theta_i}
     =
     \tfrac{1}{2}
@@ -847,7 +911,7 @@ The gradient of \DIFdelbegin \DIFdel{$\mv{c}_\theta:=\mv c_{\theta}(\estwth)$ }\
 Next, we present the following assumptions, which specify the conditions for the potential \DIFdelbegin \DIFdel{control }\DIFdelend input constraints introduced in Appendix \ref{sec:appen:cstr}:
 
 \begin{assum}
-    The constraint function $c_j(\estwth)$ is convex in the $\tau$-space and satisfies $c_j(0) \le 0$ and $c_j(\idealwth)\le 0$.
+    The constraint function $c_j(\estwth)$ is convex in the \DIFaddbegin \DIFadd{(input-) }\DIFaddend $\tau$-space and satisfies $c_j(0) \le 0$ and $c_j(\idealwth)\le 0$.
     \label{assum:convex}
 \end{assum}
 
@@ -927,45 +991,59 @@ The \DIFdelbegin \DIFdel{derivative of $c_j,\ \forall j\in\mathcal I \setminus \
     \pptfrac{c_j}{\estwth_i} 
     = 
     \pptfrac{c_j}{\rbu} 
-    \underbrace{
-        \pptfrac{\rbu}{\estNN} 
-    }_{=\mm{I}_n}
-    \pptfrac{\estNN}{\estwth_i}
+    \DIFdelbegin %DIFDELCMD < \underbrace{
+%DIFDELCMD <         \pptfrac{\rbu}{\estNN} 
+%DIFDELCMD <     }%%%
+\DIFdel{_{=\mm{I}_n}
+    }\DIFdelend \DIFaddbegin \pptfrac{\rbu}{\estNN} 
+    \DIFaddend \pptfrac{\estNN}{\estwth_i}
     = 
     \pptfrac{c_j}{\rbu} 
-    \pptfrac{\estNN}{\estwth_i}
+    \DIFaddbegin \mm{I}\DIFadd{_n
+    }\DIFaddend \pptfrac{\estNN}{\estwth_i}
     .
 \end{equation}
 The boundedness of the first term $\pptfrac{c_j}{\rbu}$ is guaranteed, if the input argument $\rbu$ is bounded owing to the convexity of $c_j$ by Assumption \ref{assum:convex}.
 In addition, the boundedness of $\rbu$ can be ensured by the boundedness of $\estwth_k$, since $\rbu=\estNN=(\mm I_{l_{k+1}}\otimes \estact_k^\top)\estwth_k$ and $\norm{\estact_k}$ is bounded due to the properties of the activation functions.
-The second term, $\pptfrac{\estNN}{\estwth_i}$ is bounded, provided that the norms of $\estwth_i,\ \forall i \in\{k,\cdots,i+1\}$, are bounded. 
+The \DIFdelbegin \DIFdel{second }\DIFdelend \DIFaddbegin \DIFadd{third }\DIFaddend term, $\pptfrac{\estNN}{\estwth_i}$ is bounded, provided that the norms of $\estwth_i,\ \forall i \in\{k,\cdots,i+1\}$, are bounded. 
 This can be verified by using the definition of $\pptfrac{\estNN}{\estwth_i}$ given in \eqref{eq:NN:grad}.
-Consequently, the boundedness of \DIFdelbegin \DIFdel{$\norm{\pptfrac{c_j}{\estwth_i}},\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$ }\DIFdelend \DIFaddbegin \DIFadd{$\norm{\pptfrac{c_j}{\estwth_i}},\ \forall j\in\mathcal I \setminus \{\theta_i\}_{i\in\{0,\cdots,k\}}$ }\DIFaddend depends on the boundedness of $\estwth_i,\ \forall i\in \{k,\cdots,i+1\}$.
+Consequently, the boundedness of \DIFdelbegin \DIFdel{$\norm{\pptfrac{c_j}{\estwth_i}},\ \forall j\in\mathcal I \setminus \{\wth_i\}_{i\in\{0,\cdots,k\}}$ }\DIFdelend \DIFaddbegin \DIFadd{$\norm{\pptfrac{c_j}{\estwth_i}},\ \forall j\in\mathcal I \setminus \{\theta_i\}_{i\in\{0,\cdots,k\}}$, }\DIFaddend depends on the boundedness of $\estwth_i,\ \forall i\in \{k,\cdots,i+1\}$.
 
 \end{proof}
 
 The following theorem states that $\fe$ and $\estwth$ are bounded.
 
 \begin{theorem}
-    For the dynamical system described in \eqref{eq:sys1}, the neuro-adaptive controller in \eqref{eq:control:est} with the weight adaptation laws in \eqref{eq:adaptation law} ensure the boundedness of the filtered error $\fe$ and the weight estimate $\estwth$, under the \DIFdelbegin \DIFdel{control }\DIFdelend input constraints satisfying Assumption \ref{assum:convex} and \ref{assum:LICQ}.
-    \ctxt{red}{
-        This holds under the weight norm constraints \eqref{eq:cstr:weight:ball}.
-    }
-    \KHCH{
-        이렇게 표현하면 마치 이 constraints만 있다고 받아들일 수도 있습니다. 꼭 이 표현을 써야할 이유가 있을까요? 없으면 빼주시고 있으면 constraint input constraints도 추가하면 좋겠습니다.
-    }
-    \MSRY{
-        필요조건으로서 weight norm constraint가 필요하여서 this holds ...로 표했습니다. 만일 교수님이 말씀하신데로 혼동이 될 수 있다면, ..., provided that the weight norm constraints \eqref{eq:cstr:weight:ball} are imposed. 로 바꿀 필요가 있을 것으로 보입니다.
-    }
-\end{theorem}
+    For the dynamical system described in \eqref{eq:sys1}, the \DIFdelbegin \DIFdel{neuro-adaptive controller }\DIFdelend \DIFaddbegin \DIFadd{NAC }\DIFaddend in \eqref{eq:control:est} with the weight adaptation laws in \eqref{eq:adaptation law} ensure the boundedness of the filtered error $\fe$ and the weight estimate $\estwth$, under the \DIFdelbegin \DIFdel{control }\DIFdelend input constraints satisfying Assumption \ref{assum:convex} and \ref{assum:LICQ}\DIFdelbegin \DIFdel{.
+    }%DIFDELCMD < \ctxt{red}{
+%DIFDELCMD <         This holds under the weight norm constraints \eqref{eq:cstr:weight:ball}.
+%DIFDELCMD <     }
+%DIFDELCMD <     \KHCH{
+%DIFDELCMD <         이렇게 표현하면 마치 이 constraints만 있다고 받아들일 수도 있습니다. 꼭 이 표현을 써야할 이유가 있을까요? 없으면 빼주시고 있으면 constraint input constraints도 추가하면 좋겠습니다.
+%DIFDELCMD <     }
+%DIFDELCMD <     \MSRY{
+%DIFDELCMD <         필요조건으로서 weight norm constraint가 필요하여서 this holds ...로 표했습니다. 만일 교수님이 말씀하신데로 혼동이 될 수 있다면, ..., provided that the weight norm constraints \eqref{eq:cstr:weight:ball} are imposed. 로 바꿀 필요가 있을 것으로 보입니다.
+%DIFDELCMD <     }
+%DIFDELCMD < %%%
+\DIFdelend \DIFaddbegin \DIFadd{, provided that the weight norm constraints \eqref{eq:cstr:weight:ball} are imposed.
+    %DIF >  \ctxt{red}{
+    %DIF >      This holds under the weight norm constraints \eqref{eq:cstr:weight:ball}.
+    %DIF >  }
+    %DIF >  \KHCH{
+    %DIF >      이렇게 표현하면 마치 이 constraints만 있다고 받아들일 수도 있습니다. 꼭 이 표현을 써야할 이유가 있을까요? 없으면 빼주시고 있으면 constraint input constraints도 추가하면 좋겠습니다.
+    %DIF >  }
+    %DIF >  \MSRY{
+    %DIF >      필요조건으로서 weight norm constraint가 필요하여서 this holds ...로 표했습니다. 만일 교수님이 말씀하신데로 혼동이 될 수 있다면, ..., provided that the weight norm constraints \eqref{eq:cstr:weight:ball} are imposed. 로 바꿀 필요가 있을 것으로 보입니다.
+    %DIF >  }
+}\DIFaddend \end{theorem}
 
 \begin{proof}
 
 % The boundednesses of $\estwth$ and $\fe$ are analyzed recursively from the last $k$th layer to the first layer of $\estNN$. 
-Invoking the fact that the amplitude of the control input depends only on $\estwth_k$, \ie see \eqref{eq:control:est}, and \eqref{eq:DNN:architecture} and $\norm{\estact_k}<\infty$, 
+Invoking the fact that the amplitude of the control input depends only on $\estwth_k$, \ie \DIFdelbegin \DIFdel{see \eqref{eq:control:est}, and \eqref{eq:DNN:architecture} and $\norm{\estact_k}<\infty$}\DIFdelend \DIFaddbegin \DIFadd{$\rbu=\estNN=(\mm I_{l_{k+1}}\otimes \estact_k^\top)\estwth_k$ and $\norm{\estact_k}$ is bounded}\DIFaddend , 
 the boundedness of inner layers' weights will be established after proving the boundedness of $\fe$ and $\estwth_k$.
-In addition, without loss of generality, weight norm constraints $c_{\theta_i},\ \forall i\in\{0,\cdots,k\}$ are supposed to be active.
-This assumption is justified because, even if $c_{\theta_i}$ is inactive, $\estwth$ is adapted to minimize the objective function $J$ as long as the constraint is not violated.
+In addition, without loss of generality, weight norm constraints $c_{\theta_i},\ \forall i\in\{0,\cdots,k\}$\DIFaddbegin \DIFadd{, }\DIFaddend are supposed to be active.
+This assumption is justified because, even if $c_{\theta_i}$ is inactive, $\estwth$ is adapted to minimize the objective function $J$ as long as the constraint is \DIFdelbegin \DIFdel{not violated}\DIFdelend \DIFaddbegin \DIFadd{inactive}\DIFaddend .
 We consider two cases: (1) the control input is saturated, and (2) the control input is not saturated.
 
 \subsection*{Case 1: Control input is saturated.}
@@ -1158,7 +1236,7 @@ This drives $\estwth_k$ toward the origin until the constraint is satisfied.
 %DIF <  By Assumption \ref{assum:convex} and Lemma \ref{lem:convex:angle}, the control input constraints can be considered as convex constraint in the $\estwth_k$-space.
 %DIF >  By Assumption \ref{assum:convex} and Lemma \ref{lem:convex:angle}, the input constraints can be considered as convex constraint in the $\estwth_k$-space.
 
-Therefore, the boundedness of $\fe$ and $\estwth_k$ is guaranteed by the invariant sets $\Theta_{\fe}^{1}$ and $\Theta_{\theta_k}^{1}$, and the satisfactions of $c_j,\ \forall j\in\mathcal{I}$, is ensured.
+Therefore, the boundedness of $\fe$ and $\estwth_k$ is guaranteed by the invariant sets $\Theta_{\fe}^{1}$ and $\Theta_{\theta_k}^{1}$, and the satisfactions of \DIFdelbegin \DIFdel{$c_j,\ \forall j\in\mathcal{I}$}\DIFdelend \DIFaddbegin \DIFadd{$c_j,\ \forall j\in\mathcal{I}\setminus \{\theta_i\}_{i\in\{0,\cdots,k-1\}}$}\DIFaddend , is ensured.
 
 \subsection*{Case 2: Control input is not saturated.}
 
@@ -1238,7 +1316,7 @@ Based on the same reasoning as in Case 1, the boundedness of $\fe$ is ensured by
     \right\}
     .
 \end{equation}
-The boundedness of $\estwth_k$ also can be ensured by the invariant set $\Theta_{\theta_k}^{2}=\{ \estwth_k \in \R^{\Xi_{k}} \mid \norm{\estwth_k} \le \overline\theta^*_k \}$, as $\lambda_{\theta_k}$ remains positive unless the weight norm constraint $c_{\theta_k}$ is satisfied.
+The boundedness of $\estwth_k$ also can be ensured by the invariant set \DIFdelbegin \DIFdel{$\Theta_{\theta_k}^{2}=\{ \estwth_k \in \R^{\Xi_{k}} \mid \norm{\estwth_k} \le \overline\theta^*_k \}$}\DIFdelend \DIFaddbegin \DIFadd{$\Theta_{\theta_k}^{2}=\{ \estwth_k \in \R^{\Xi_{k}} \mid \norm{\estwth_k} \le \overline\theta_k \}$}\DIFaddend , as $\lambda_{\theta_k}$ remains positive unless the weight norm constraint $c_{\theta_k}$ is satisfied.
 
 \hfill 
 
@@ -1268,7 +1346,7 @@ The dynamics of $\estwth_i,\ \forall i\in\{k-1,\cdots,0\}$, are represented as
 \end{equation}
 By Lemma \ref{lem:cstr:grad:bound}, $\estwth_i$ is bounded, provided that $\estwth_i,\ \forall i\in\{k,\cdots,i+1\}$, are bounded. 
 This holds because the system matrix $-\lambda_{\theta_i} \mm I_{\Xi_i}$ is stable, and the residual terms—such as $\pptfrac{\estNN}{\estwth_i}, \fe$, and $\pptfrac{c_j}{\estwth_i}$ —are bounded.
-Moreover, the Lagrange multiplier $\lambda_j$ does not diverge since the \DIFdelbegin \DIFdel{control }\DIFdelend input constraints are satisfied before divergence can occur.
+Moreover, the Lagrange multiplier $\lambda_j$ does not diverge since the \DIFdelbegin \DIFdel{control input constraints }\DIFdelend \DIFaddbegin \DIFadd{input constraints $c_j,\ \forall j\in\mathcal{I}\setminus \{\theta_i\}_{i\in\{0,\cdots,k\}}$ }\DIFaddend are satisfied before divergence can occur.
 Therefore, starting from the $(k-1)$th layer, the boundedness of $\estwth_i$ can be established recursively down to the input layer ($i=0$).
 Moreover the satisfaction of the weight norm constraints for the inner layers can be verified, as the Lagrange multipliers $\lambda_{\theta_i}$, $\forall i\in\{k-1,\cdots,0\}$, increase sufficiently large to stabilize the $\estwth_i$ dynamics in \eqref{eq:estwth:dyn}, leading to its convergence toward the origin.
 
@@ -1290,11 +1368,12 @@ In conclusion, the filtered tracking error $\fe$ and the weight estimate $\estwt
     \centering
         \DIFdelbeginFL %DIFDELCMD < \includegraphics[width=.8\linewidth]
 %DIFDELCMD <         %%%
-\DIFdelendFL \DIFaddbeginFL \includegraphics[width=.9\linewidth]
-        \DIFaddendFL % \includegraphics[width=\figSizeOneCol\linewidth]
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=.99\linewidth]
+        % \includegraphics[width=\figSizeOneCol\linewidth]
         {
             src/figures/exp_set.drawio.png
         }%
+        \DIFaddendFL 
     \caption{
         Experimental setup of the two-link robotic manipulator used for real-time validation.
     }
@@ -1494,8 +1573,8 @@ The corresponding \DIFdelbegin \DIFdel{control }\DIFdelend input constraints are
 \DIFdelendFL input constraints.& \DIFaddbeginFL \multirow{2}{*}{ \shortstack[l]{No input constraints\\are imposed.} } \DIFaddendFL \\
         & ($\beta_{\overline{\tau}_2}=\beta_{\underline{\tau}_2}=\beta_{\rbu}=0$) & \\
     \hline
-        \multirow{2}{*}{(C$_4$)}& NAC with & $\overline{\tau}_1=-\underline{\tau}_1=10.428$ \\
-        & auxiliary system. & $\overline{\tau_2}=-\underline{\tau_2}=3.5$. \\    
+        \multirow{2}{*}{(C$_4$)}& NAC with \DIFaddbeginFL \DIFaddFL{auxiliary system. }\DIFaddendFL & $\overline{\tau}_1=-\underline{\tau}_1=10.428$ \\
+        & \DIFdelbeginFL \DIFdelFL{auxiliary system. }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{(conventional method) }\DIFaddendFL & $\overline{\tau_2}=-\underline{\tau_2}=3.5$. \\    
     \hline
     \end{tabular}
     \label{table:controllers}
@@ -1545,12 +1624,12 @@ To handle input saturation, the proposed CONAC was implemented with the input bo
     \label{eq:sim:cstr:CONAC}
 \end{equation}
 where $\overline\tau_2=-\underline{\tau}_2=3.5$, and $\overline\tau=11$.
-Therefore, controller (C$1$) utilizes the full capability of the actuator.
-The weight norm constraints $c_{\theta_i}(\cdot),\ \forall i\in\{0,\cdots,k\}$ defined in \eqref{eq:cstr:weight:ball}, were also incorporated into CONAC framework with $\overline\theta_0=\overline\theta_1=\overline\theta_2=6$.
+Therefore, controller (C$1$) utilizes the full capability of the actuator\DIFaddbegin \DIFadd{, see \eqref{eq:sat:tau2} and \eqref{eq:sat:norm}}\DIFaddend .
+The weight norm constraints $c_{\theta_i}(\cdot),\ \forall i\in\{0,\cdots,k\}$\DIFaddbegin \DIFadd{, }\DIFaddend defined in \eqref{eq:cstr:weight:ball}, were also incorporated into CONAC framework with $\overline\theta_0=\overline\theta_1=\overline\theta_2=6$.
 As described in \eqref{eq:control:est}, the control input (torque) corresponds to the output of the DNN, and the adaptation law is defined in \eqref{eq:adaptation law}.
 
 The update rates of the Lagrange multipliers for the weight norm constraints were set to $\beta_{\theta_i}=1,\ \forall i\in\{0,\cdots,k\}$.
-For the \DIFdelbegin \DIFdel{control }\DIFdelend input constraints, large update rates were used to examine their effect: \DIFdelbegin \DIFdel{$\beta_{\overline{\tau}2} = \beta{\underline{\tau}_2} = 10^2$ }\DIFdelend \DIFaddbegin \DIFadd{$\beta_{\overline{\tau}2} = \beta{\underline{\tau}_2} = 100$ }\DIFaddend and $\beta_{\rbu} = 10$, in order to investigate the effect of large update rates.
+For the \DIFdelbegin \DIFdel{control }\DIFdelend input constraints, large update rates were used\DIFdelbegin \DIFdel{to examine their effect: $\beta_{\overline{\tau}2} = \beta{\underline{\tau}_2} = 10^2$ }\DIFdelend \DIFaddbegin \DIFadd{: $\beta_{\overline{\tau}2} = \beta{\underline{\tau}_2} = 100$ }\DIFaddend and $\beta_{\rbu} = 10$, in order to investigate the effect of large update rates.
 
 % ------------------------------------
 % Controllers: CONAC with small beta
@@ -1570,10 +1649,15 @@ All other properties and parameters were kept identical to those of (C$_1$).
 The third controller was identical to (C$1$) and (C$2$), except that the \DIFdelbegin \DIFdel{control }\DIFdelend input constraints were removed to highlight the constraint handling capability of the proposed CONAC.
 In this case, the update rates of the Lagrange multipliers associated with the \DIFdelbegin \DIFdel{control }\DIFdelend input constraints, \ie \DIFdelbegin \DIFdel{$\beta_{\overline{\tau}_2},\beta_{\underline{\tau}_2},\beta_{\rbu}$}\DIFdelend \DIFaddbegin \DIFadd{$\beta_{\overline{\tau}_2},\beta_{\underline{\tau}_2}$ and $\beta_{\rbu}$}\DIFaddend , were set to zero, such that the corresponding Lagrange multipliers $[\lambda_j]_{j\in\{\overline{\tau}_2,\underline{\tau}_2,\rbu\}}$ were not updated, see \eqref{eq:adap:lbd}.
 All other properties and parameters were kept the same as in (C$_1$) and (C$_2$).
-\MSRY{
-    weight constraint관련된 파라미터는 C1-3까지 모두 같습니다.
-    C2의 control input 관련 beta만 100배 작아졌다는 말 보충하였습니다.
-}
+\DIFdelbegin %DIFDELCMD < \MSRY{
+%DIFDELCMD <     weight constraint관련된 파라미터는 C1-3까지 모두 같습니다.
+%DIFDELCMD <     C2의 control input 관련 beta만 100배 작아졌다는 말 보충하였습니다.
+%DIFDELCMD < }
+%DIFDELCMD < %%%
+\DIFdelend %DIF >  \MSRY{
+%DIF >      weight constraint관련된 파라미터는 C1-3까지 모두 같습니다.
+%DIF >      C2의 control input 관련 beta만 100배 작아졌다는 말 보충하였습니다.
+%DIF >  }
 
 % ------------------------------------
 % Controllers: Aux. system in CONAC-AUX
@@ -1660,7 +1744,8 @@ The tracking performance was quantitatively evaluated using the $L_2$-norm of th
         }%
         \label{fig:ctrl:result:weight}}        
     \caption{
-    Real-time implementation results of (C$_1$) \protect\colorLine{blue}{solid}, (C$_2$) \protect\colorLine{cyan}{solid}, (C$_3$) \protect\colorLine{gray}{solid}, (C$_4$) \protect\colorLine{magenta}{solid}, and desired trajectory $\qd$ \protect\colorLine{red}{dashed}.
+        Real-time implementation results of (C$_1$) \protect\colorLine{blue}{solid}, (C$_2$) \protect\colorLine{cyan}{solid}, (C$_3$) \protect\colorLine{gray}{solid}, (C$_4$) \protect\colorLine{magenta}{solid}, and desired trajectory $\qd$ \protect\colorLine{red}{dashed}.
+        %DIF >  \vspace{-5mm}
     }
 \label{fig:ctrl:result}
 \end{figure*}
@@ -1752,7 +1837,7 @@ In addition, the severity of saturation violations in (C$_3$) increased during p
 These large violations pose a significant risk to the physical system, potentially causing actuator damage or failure. 
 Furthermore, once the control saturation was lifted—typically due to changes in the desired trajectory—this resulted in oscillatory behavior, as CONAC's weights had been adapted to generate excessively high control inputs, \DIFdelbegin %DIFDELCMD < \ctxt{red}{ as illustrated in Fig.~\ref{fig:ctrl:result:tau:1}–\ref{fig:ctrl:result:tau:norm}.}
 %DIFDELCMD < %%%
-\DIFdelend \DIFaddbegin \DIFadd{see Fig.~\ref{fig:ctrl:result:tau:1}–\ref{fig:ctrl:result:tau:norm}, where the input constraints were lifted at $25.9$ s and $31.9$ s.
+\DIFdelend \DIFaddbegin \DIFadd{see Fig.~\ref{fig:ctrl:result:tau:norm}, where the input constraints were lifted at $25.9$ s and $31.9$ s.
 }\DIFaddend 
 
 % ------------------------------------
@@ -1782,21 +1867,27 @@ Furthermore, once the control saturation was lifted—typically due to changes i
         }%
         \label{fig:ctrl:result:scope:aux}}
     \caption{
-    Constraint handling behavior of (C$_1$) \protect\colorLine{blue}{solid}, (C$_2$) \protect\colorLine{cyan}{solid}, (C$_3$) \protect\colorLine{gray}{solid}, and (C$_4$) \protect\colorLine{magenta}{solid} during the time interval from $29.4$ s to $31.9$ s.
+        Constraint handling behavior of (C$_1$) \protect\colorLine{blue}{solid}, (C$_2$) \protect\colorLine{cyan}{solid}, (C$_3$) \protect\colorLine{gray}{solid}, and (C$_4$) \protect\colorLine{magenta}{solid} during the time interval from $29.4$ s to $31.9$ s.
+        %DIF >  \vspace{-5mm}
     }
 \label{fig:ctrl:result:scope}
 \end{figure}
 
 \begin{figure}[!t]
 	\centering
-	\includegraphics[width=0.6\linewidth]{
+	\DIFdelbeginFL %DIFDELCMD < \includegraphics[width=0.6\linewidth]{
+%DIFDELCMD < 		src/figures/lambda_effect.drawio.pdf
+%DIFDELCMD < 		}
+%DIFDELCMD < 	%%%
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=0.55\linewidth]{
 		src/figures/lambda_effect.drawio.pdf
 		}
-	\caption{
+	\DIFaddendFL \caption{
         The effect of the Lagrange multiplier $\lambda_{j}$ on the adaptation direction of $\widehat{\mv{\theta}}_2$ is illustrated. 
         The notations $(\cdot)'$ and $(\cdot)''$ denote two distinct cases corresponding to large and small values of the Lagrange multiplier, respectively, \ie $\lambda_{j}' > \lambda_{j}''$.
-	}
-	% \vspace{1mm}
+        %DIF >  \vspace{-5mm}
+    }
+	%DIF <  \vspace{1mm}
 	\label{fig:lambda_effect}
 \end{figure}
 
@@ -1819,17 +1910,15 @@ These multipliers guided the adaptation of the weights $\estwth_i,\ \forall i\in
 
 % comparison; big, small beta
 To further illustrate this effect, Fig.~\ref{fig:lambda_effect} compares the adaptation direction of \DIFaddbegin \DIFadd{the output layer's weight }\DIFaddend $\estwth_2$ under two different magnitudes of $\lambda_j$. 
-\DIFaddbegin \MSRY{여기?}
-\DIFaddend This highlights the influence of the update rate $\beta_j$: a larger $\beta_j$ (as in (C$_1$)) yields a larger $\lambda_j$, resulting in a more aggressive adjustment of $\estwth_2$ via the term $-\lambda_j\pptfrac{c_j}{\estwth_2}$ in \eqref{eq:adap:th}, thereby accelerating constraint satisfaction—though at the cost of oscillatory learning behavior. 
+\DIFdelbegin \DIFdel{This }\DIFdelend \DIFaddbegin \DIFadd{Under Assumptions \ref{assum:convex} and \ref{assum:LICQ}, the convexity of $c_j$ in the $\estwth_2$-space (see Lemma~\ref{lem:convex:angle}) is illustrated in Fig.~\ref{fig:lambda_effect}.
+The figure }\DIFaddend highlights the influence of the update rate $\beta_j$: a larger $\beta_j$ (as in (C$_1$)) yields a larger $\lambda_j$, resulting in a more aggressive adjustment of $\estwth_2$ via the term $-\lambda_j\pptfrac{c_j}{\estwth_2}$ in \eqref{eq:adap:th}, thereby accelerating constraint satisfaction—though at the cost of oscillatory learning behavior. 
 In contrast, the smaller update rate in (C$_2$) leads to more conservative weight updates and smoother, but slower, convergence.
+\DIFdelbegin %DIFDELCMD < 
 
-These behaviors are clearly observed in Fig.~\ref{fig:ctrl:result:scope:control} and Fig.~\ref{fig:ctrl:result:scope:beta}, where (C$_1$) satisfies the input constraint $c_{\rbu}$ more quickly than (C$_2$), which shows repeated growth and reset of $\lambda_{\rbu}$. 
-\DIFaddbegin \ctxt{red}
-{
-    \DIFaddend Under Assumptions \ref{assum:convex} and \ref{assum:LICQ}, the convexity of $c_j$ in the $\estwth_2$-space (see Lemma~\ref{lem:convex:angle}) further supports this adaptive behavior.
-\DIFaddbegin }
-\MSRY{이거 위로 올라가야 할까요?}
-\DIFaddend 
+%DIFDELCMD < %%%
+\DIFdelend These behaviors are clearly observed in Fig.~\ref{fig:ctrl:result:scope:control} and Fig.~\ref{fig:ctrl:result:scope:beta}, where (C$_1$) satisfies the input constraint $c_{\rbu}$ more quickly than (C$_2$), which shows repeated growth and reset of $\lambda_{\rbu}$. 
+\DIFdelbegin \DIFdel{Under Assumptions \ref{assum:convex} and \ref{assum:LICQ}, the convexity of $c_j$ in the $\estwth_2$-space (see Lemma~\ref{lem:convex:angle}) further supports this adaptive behavior.
+}\DIFdelend 
 
 % zeta
 For (C$_4$), the auxiliary state $\zeta_1$ was generated in response to the control input saturation of the first link actuator $\tau_1$, as shown in Fig.~\ref{fig:ctrl:result:scope:aux}.
@@ -1839,12 +1928,12 @@ Once the saturation was resolved at around \DIFdelbegin \DIFdel{$31$ }\DIFdelend
 \hfill 
 
 Finally, the handling of the weight norm constraints $c_{\theta_i},\ \forall i\in\{0,1,2\}$, is investigated. 
-Among all controllers, the weight norm constraint was only activated for the output layer weights $c_{\theta_2}$ in (C$_3$), as shown in Fig.~\ref{fig:ctrl:result:weight}. 
+Among all controllers, the weight norm constraint was only activated for the output layer weights \DIFdelbegin \DIFdel{$c_{\theta_2}$ }\DIFdelend \DIFaddbegin \DIFadd{$\estwth_2$ }\DIFaddend in (C$_3$), as shown in Fig.~\ref{fig:ctrl:result:weight}. 
 This is because the weights in (C$_1$), (C$_2$), and (C$_4$) were implicitly suppressed by the \DIFdelbegin \DIFdel{control }\DIFdelend input constraints, which were not applied in (C3).
 % , \ie by limiting the control input, the weight norms were also limited.
 % \MSRY{필요하다면 왜 제어입력 제약하는게 가중치 제약도 되는지 추가 가능}
 Furthermore, the constraints on the inner and hidden layer weights were never violated; that is, both $\norm{\estwth_0}$ and $\norm{\estwth_1}$ consistently remained below their limits.
-This \DIFdelbegin \DIFdel{is }\DIFdelend \DIFaddbegin \DIFadd{was }\DIFaddend attributed to the fact that the backpropagated error being scaled by the activation function's gradient, which is bounded \DIFdelbegin \DIFdel{between $-1$ and $1$ }\DIFdelend \DIFaddbegin \DIFadd{in $(0,1]$ }\DIFaddend (see \eqref{eq:NN:grad}).
+This \DIFdelbegin \DIFdel{is }\DIFdelend \DIFaddbegin \DIFadd{was }\DIFaddend attributed to the fact that the backpropagated error being scaled by the \DIFdelbegin \DIFdel{activation function's gradient}\DIFdelend \DIFaddbegin \DIFadd{elements' gradients of the activation function}\DIFaddend , which is bounded \DIFdelbegin \DIFdel{between $-1$ and $1$ (see \eqref{eq:NN:grad})}\DIFdelend \DIFaddbegin \DIFadd{in $(0,1]$, }\ie \DIFadd{$\sigma(\cdot)=\tanh(\cdot)$}\DIFaddend .
 
 Additional details on the constraint handling process are provided in Fig.~\ref{fig:ctrl:result:scope:beta}. 
 Similar to the case of the \DIFdelbegin \DIFdel{control }\DIFdelend input constraints, the Lagrange multipliers $\lambda_{\theta_2}$ increased \DIFaddbegin \DIFadd{at around $30.4$ s, as shown in Fig.~\ref{fig:ctrl:result:scope:beta}, }\DIFaddend when $\estwth_2$ exceeded the prescribed norm constraint $\overline\theta_2$ \DIFdelbegin \DIFdel{at around $30.4$ s, }\DIFdelend (see Fig.~\ref{fig:ctrl:result:weight}), thereby adjusting the adaptation direction of $\estwth_2$ to mitigate the violation of the constraint $c_{\theta_2}$\DIFdelbegin \DIFdel{, as shown in Fig.
@@ -1859,26 +1948,32 @@ Similar to the case of the \DIFdelbegin \DIFdel{control }\DIFdelend input constr
 % ------------------------------------
 % Karush-Kuhn-Tucker (KKT) conditions}
 % ------------------------------------
-\hfill
+\DIFdelbegin %DIFDELCMD < \hfill
+%DIFDELCMD < %%%
+\DIFdelend %DIF >  \hfill
 
-\subsubsection{Satisfaction of Karush-Kuhn-Tucker (KKT) conditions}
+\DIFdelbegin \subsubsection{\DIFdel{Satisfaction of Karush-Kuhn-Tucker (KKT) conditions}}
+%DIFAUXCMD
+\addtocounter{subsubsection}{-1}%DIFAUXCMD
+\DIFdelend %DIF >  \subsubsection{Satisfaction of Karush-Kuhn-Tucker (KKT) conditions}
 
-Since the proposed CONAC was implemented in discrete time, a direct demonstration of the KKT conditions at steady state is not straightforward. 
-\DIFaddbegin \MSRY{
-    그림을 잘 확인해보니 제약조건이 위반되는 구간동안 정상상태에 도달하지 못하더라구요... 이전 논문 결과에서와 마찬가지로 그러할것으로 생각했는데 다른 요인이 있는 것 같습니다. 삭제하던지 아니면 보여질수없는 이유를 더 설명해야할 것으로 보입니다.
-}
-\ctxt{red}
-{
-    \DIFaddend However, the near-constant values of the weights and Lagrange multipliers during constraint violation suggest an implicit satisfaction of the KKT conditions, as shown in Fig.~\ref{fig:ctrl:result:weight} and Fig.~\ref{fig:ctrl:result:scope:beta}
-    \DIFdelbegin \DIFdel{.
-}\DIFdelend Specifically, the Lagrange multipliers corresponding to active constraints were positive, while those associated with inactive constraints remained zero.
-\DIFaddbegin }
-\ctxt{blue}
-{
-    \DIFadd{This is because, the KKT conditions are typically defined for continuous-time systems, and their direct application to discrete-time systems requires careful consideration of the sampling rate and the dynamics of the system.
-    Although exact satisfaction of the KKT conditions was not observed—due to the lack of a clear steady state in the discrete-time implementation—the control results remain sufficiently close to the optimal behavior implied by the KKT conditions.
-}}
-\DIFaddend 
+\DIFdelbegin \DIFdel{Since the proposed CONAC was implemented in discrete time, a direct demonstration of the KKT conditions at steady state is not straightforward. 
+However, the near-constant values of the weights and Lagrange multipliers during constraint violation suggest an implicit satisfaction of the KKT conditions, as shown in Fig.~\ref{fig:ctrl:result:weight} and Fig.~\ref{fig:ctrl:result:scope:beta}.
+Specifically, the Lagrange multipliers corresponding to active constraints were positive, while those associated with inactive constraints remained zero.
+}\DIFdelend %DIF >  Since the proposed CONAC was implemented in discrete time, a direct demonstration of the KKT conditions at steady state is not straightforward. 
+%DIF >  % \MSRY{
+%DIF >  %     그림을 잘 확인해보니 제약조건이 위반되는 구간동안 정상상태에 도달하지 못하더라구요... 이전 논문 결과에서와 마찬가지로 그러할것으로 생각했는데 다른 요인이 있는 것 같습니다. 삭제하던지 아니면 보여질수없는 이유를 더 설명해야할 것으로 보입니다.
+%DIF >  % }
+%DIF >  % \ctxt{red}
+%DIF >  % {
+%DIF >  %     However, the near-constant values of the weights and Lagrange multipliers during constraint violation suggest an implicit satisfaction of the KKT conditions, as shown in Fig.~\ref{fig:ctrl:result:weight} and Fig.~\ref{fig:ctrl:result:scope:beta}
+%DIF >  %     Specifically, the Lagrange multipliers corresponding to active constraints were positive, while those associated with inactive constraints remained zero.
+%DIF >  % }
+%DIF >  % \ctxt{blue}
+%DIF >  % {
+%DIF >      This is because, the KKT conditions are typically defined for continuous-time systems, and their direct application to discrete-time systems requires careful consideration of the sampling rate and the dynamics of the system.
+%DIF >      Although exact satisfaction of the KKT conditions was not observed—due to the lack of a clear steady state in the discrete-time implementation—the control results remain sufficiently close to the optimal behavior implied by the KKT conditions.
+%DIF >  % }
 
 %DIF <  reference 자체가 계속 움직이니까 엄밀하게는 steady state를 보장할 수 없습니다. rough 하게는 theta norm이 어느정도 수렴하므로 이 것을 기반으로 주장해볼 수도 있습니다. theta_dot이 평균적으로는 0에 가까운 것 같서요
 \DIFdelbegin %DIFDELCMD < 
@@ -1901,7 +1996,8 @@ As shown in Fig.~\ref{fig:ctrl:real:result:cmp:time}, the computational times of
             src/measurement/figures/compare/Fig10.eps
         }%
     \caption{
-        Computational time of (C$_1$) \protect\colorLine{blue}{solid}, (C$_2$) \protect\colorLine{cyan}{solid}, (C$_3$) \protect\colorLine{gray}{solid}, and (C$_4$) \protect\colorLine{magenta}{solid}.
+        Computational time \DIFaddbeginFL \DIFaddFL{$T_{\rm{comp}}$ }\DIFaddendFL of (C$_1$) \protect\colorLine{blue}{solid}, (C$_2$) \protect\colorLine{cyan}{solid}, (C$_3$) \protect\colorLine{gray}{solid}, and (C$_4$) \protect\colorLine{magenta}{solid}.
+        %DIF >  \vspace{-5mm}
     }
     \label{fig:ctrl:real:result:cmp:time}
 \end{figure}
@@ -1909,8 +2005,8 @@ As shown in Fig.~\ref{fig:ctrl:real:result:cmp:time}, the computational times of
 %  SECTION CONCLUSION ======================================
 \section{Conclusion}\label{sec:conclusion}
 
-This paper proposed a constrained optimization-based neuro-adaptive controller (CONAC) for unknown Euler-Lagrange systems, addressing both weight norm and input constraints within a rigorous optimization framework. 
-The stability of CONAC was analyzed using Lyapunov theory, demonstrating bounded tracking and weight estimation errors under real-time adaptation.
+This paper proposed a constrained optimization-based neuro-adaptive controller (CONAC) for unknown Euler-Lagrange systems, addressing both weight norm and \DIFaddbegin \DIFadd{convex }\DIFaddend input constraints within a \DIFdelbegin \DIFdel{rigorous }\DIFdelend \DIFaddbegin \DIFadd{unified }\DIFaddend optimization framework. 
+The stability of CONAC was analyzed using Lyapunov theory, demonstrating bounded tracking \DIFaddbegin \DIFadd{errors }\DIFaddend and weight estimation \DIFdelbegin \DIFdel{errors }\DIFdelend under real-time adaptation.
 
 CONAC effectively incorporated both convex input constraints and weight norm constraints, ensuring that actuator limitations and neural network weights remained within predefined bounds. 
 By embedding these constraints into the optimization process, CONAC ensured weight convergence in accordance with the Karush-Kuhn-Tucker (KKT) conditions, thereby ensuring both stability and optimality.
@@ -2007,7 +2103,8 @@ The gradients of $\mv{c}_{\overline \tau}$ and $\mv{c}_{\underline\tau}$ with re
 \subsubsection{Input Norm Constraint}\label{sec:appen:cstr:input:norm}
 
 Consider the control input $\rbu$ as the torque corresponding to its generalized coordinate. 
-Since torque is typically linearly proportional to current, actuators that share a common power source are often subject to total current limitations. This can be captured by the following inequality constraint: 
+Since torque is typically linearly proportional to current, actuators that share a common power source are often subject to total current limitations. 
+This can be captured by the following inequality constraint: 
 \begin{equation}
     c_{\rbu}
     =
@@ -2022,7 +2119,10 @@ Since torque is typically linearly proportional to current, actuators that share
     ,
     \label{eq:cstr:input:norm}
 \end{equation}
-with $\overline\tau\in\R_{>0}$ denoting the maximum allowable control input magnitude. This input norm constraint is also commonly applied in current and torque control problems for electric motors \cite{Choi:2024aa}.
+with \DIFdelbegin \DIFdel{$\overline\tau\in\R_{>0}$ denoting }\DIFdelend the maximum allowable control input magnitude \DIFaddbegin \DIFadd{$\overline\tau\in\R_{>0}$}\DIFaddend . This input norm constraint is also commonly applied in current and torque control problems for electric motors\DIFdelbegin \DIFdel{\mbox{%DIFAUXCMD
+\cite{Choi:2024aa}}\hskip0pt%DIFAUXCMD
+.
+}\DIFdelend %DIF >  \cite{Choi:2024aa}.
 % The corresponding Lagrangian multiplier is $\lambda_{u_b}$. 
 The \DIFdelbegin \DIFdel{gradients }\DIFdelend \DIFaddbegin \DIFadd{gradient }\DIFaddend of $c_{\rbu}$ with respect to $\estwth$ are given by
 \begin{equation}
@@ -2057,18 +2157,21 @@ It should be noted that constraints \eqref{eq:cstr:input:bound} and \eqref{eq:cs
 % ------------------------------------
 % Biography
 % ------------------------------------
-\begin{IEEEbiography}[{
+\DIFaddbegin \vspace{-10mm}
+\DIFaddend \begin{IEEEbiography}[{
     \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/msRyu.jpg}}]{Myeongseok Ryu}
     received the B.S. degree in Mechanical Engineering from Incheon National University, South Korea, in 2023, and the M.S. degree in Mechanical Engineering from GIST, South Korea, in 2025. 
     He is currently serving as a researcher at the Cho Chun Shik Graduate School of Mobility at KAIST, South Korea.
     His research interests include adaptive control, neural-networks, and constrained optimization.
-\end{IEEEbiography}
+    \DIFaddbegin \vspace{-10mm}
+\DIFaddend \end{IEEEbiography}
 
 \begin{IEEEbiography}[{
     \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/dhHong.jpg}}]{Donghwa Hong}
     received his B.S. degree in Physics and Engineering Physics from Yonsei University, Wonju, South Korea, in 2023. He is currently pursuing the M.S. degree in Mechanical Engineering from GIST, Gwangju, South Korea.  
 His research interests include robot control, neural-networks, and model identification. 
-\end{IEEEbiography}
+    \DIFaddbegin \vspace{-10mm}
+\DIFaddend \end{IEEEbiography}
 
 \begin{IEEEbiography}[{
     \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/khChoi.jpg}}]{Kyunghwan Choi}
