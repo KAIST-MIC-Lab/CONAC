@@ -1,7 +1,7 @@
-\documentclass[8pt, aspectratio=169, handout]{beamer} 
+% \documentclass[8pt, aspectratio=169, handout]{beamer} 
 % \documentclass[8pt, aspectratio=169, handout, draft]{beamer} 
 % \documentclass[8pt, aspectratio=169, handout]{beamer} \setbeameroption{show only notes}
-% \documentclass[8pt, aspectratio=169]{beamer}
+\documentclass[8pt, aspectratio=169]{beamer}
 
 % MIC Lab template
 \input{../template/macros/macros_general.tex}
@@ -446,7 +446,7 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}
 
-  \textbf{Contribution 1: Constrained Unified Optimization Framework} 
+  \textbf{Contribution 1: Unified Constrained Optimization Framework} 
   \onslide<2->
   {
     \begin{itemize}
@@ -624,7 +624,7 @@
           \frac{1}{2} \mv{r}^\top \mv{r}.
         \end{equation}
         \begin{itemize}
-          \item where $\mv{r} := \ddt\mv{e} + \sigma\mv{e}$ is \ctxt{awesome}{filtered tracking error},
+          \item where $\mv{r} := \ddt\mv{e} + \Lambda\mv{e}$ is \ctxt{awesome}{filtered tracking error},
         \end{itemize}
       \item while satisfying the following \ctxt{awesome}{constraints}:
         \begin{itemize}
@@ -902,11 +902,34 @@
 
 \section{Experimental Validation}
 
+\subsection{Validation Setup}
+
+\begin{frame}{Validation Setup}
+
+  \textbf{Validation 1:} \ctxt{awesome}{Simulation } of a Two-link Robotic Manipulator System
+
+  \begin{itemize}
+    \item \ctxt{awesome}{Weight norm } constraint is considered.
+    \item Single-hidden layer NN is used.
+    \item Parameter dependencies are investigated, by varying crucial parameters.
+  \end{itemize}
+
+  \textbf{Validation 2:} \ctxt{airforceblue}{Real-time Implementation } on a Two-link Robotic Manipulator System
+
+  \begin{itemize}
+    \item \ctxt{awesome}{Weight norm } constraint and \ctxt{airforceblue}{input saturation } constraints are considered.
+    \item 2 hidden layer NN is used.
+    \item Constraint handling process is compared.
+  \end{itemize}
+
+\end{frame}
+
+
 % ╔═══════════════════════════════════════════════╗
 % ║ Section: Experimental Validation              ║
 % ║   - Subsection: Simulation Setup              ║
 % ╚═══════════════════════════════════════════════╝
-\subsection{Simulation Setup}
+\subsection{Validation 1: Simulation Setup}
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{Two-Link Robotic Manipulator}
@@ -988,29 +1011,29 @@
   \item A simple cosine trajectory is given as the desired trajectory.
 }
 
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{frame}{\insertsubsectionhead}{Controllers Setting}
+% %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% \begin{frame}{\insertsubsectionhead}{Controllers Setting}
   
-  \begin{itemize}
-    \item Only \ctxt{awesome}{weight norm constraint } is considered in this presentation (for \textbf{†his Conference paper}).
-    \item Input saturation constraints are not considered.
-    \item For simplicity, \ctxt{airforceblue}{single hidden layer NN} is used.
-  \end{itemize}
+%   \begin{itemize}
+%     \item Only \ctxt{awesome}{weight norm constraint } is considered in this presentation (for \textbf{†his Conference paper}).
+%     \item Input saturation constraints are not considered.
+%     \item For simplicity, \ctxt{airforceblue}{single hidden layer NN} is used.
+%   \end{itemize}
 
-  \centering
-  \begin{figure}
-    \includegraphics[width=0.8\textwidth]{figures/Controller.drawio.pdf}
-    \caption{Architecture of the controllers.}
-  \end{figure}
+%   \centering
+%   \begin{figure}
+%     \includegraphics[width=0.8\textwidth]{figures/Controller.drawio.pdf}
+%     \caption{Architecture of the controllers.}
+%   \end{figure}
 
-\end{frame}
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% \end{frame}
+% %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-\note[enumerate]
-{
-  \item For this conference paper, we only considered the weight norm constraint.
-  \item So, please ignore the input saturation.
-}
+% \note[enumerate]
+% {
+%   \item For this conference paper, we only considered the weight norm constraint.
+%   \item So, please ignore the input saturation.
+% }
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{Controllers for Comparative Study}
@@ -1086,7 +1109,7 @@
 % ║ Section: Experimental Validation              ║
 % ║   - Subsection: Simulation Results            ║
 % ╚═══════════════════════════════════════════════╝
-\subsection{Simulation Results}
+\subsection{Validation 1: Simulation Results}
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{frame}{\insertsubsectionhead}{Box-and-Whisker Plots}
@@ -1248,8 +1271,47 @@
   \item As the weights are biased towards the origin proportionally to the parameters $\sigma$ and $\rho$ in NAC-L2 and NAC-eMod, respectively, the tracking performance of NAC-L2 and NAC-eMod deteriorated, as approaching toward suboptimal points.
 }
 
+\subsection{Validation 2: Real-Time Implementation Setup}
+
+\begin{frame}{\insertsubsectionhead}{}
+
+  \begin{columns}
+    
+    \column{.45\textwidth}
+
+      \textbf{Controller}:
+      
+        \begin{itemize}
+          \item OpenCR 1.0 Board
+          \item Control loop at 250 Hz (4 ms sampling time)
+        \end{itemize}
+
+      \vspace{.2cm}
+
+      \textbf{Input Saturation Constraints}:
+
+        \begin{figure}
+          \includegraphics[width=0.69\textwidth]{figures/saturation.drawio.pdf}
+          \caption{Input Saturation Function.}
+        \end{figure}
+      
+    \column{.55\textwidth}
+
+      \textbf{Experimental Setup}:
+
+        \begin{figure}
+          \includegraphics[width=0.99\textwidth]{figures/exp_set.drawio.png}
+          \caption{Experimental setup for real-time implementation.}
+        \end{figure}
+      
+  \end{columns}
+
+\end{frame}
+
+\subsection{Validation 2: Real-Time Implementation Results}
+
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{frame}{Real-time Implementation Result}
+\begin{frame}{\insertsubsectionhead}{Demonstration Video}
 
   \begin{itemize}
     \item This video demonstrates:
@@ -1264,9 +1326,9 @@
       width=0.64\linewidth,
       height=0.36\linewidth,
       activate=onclick,
-      addresource=assets/animation.mp4,
+      addresource=assets/animationECC.mp4,
       flashvars={
-        source=assets/animation.mp4
+        source=assets/animationECC.mp4
         &autoPlay=true
         &loop=true
       }
@@ -1299,7 +1361,7 @@
     \item Proposed a constrained optimization-based neuro-adaptive control method.
     \item Adaptation laws are derived using \ctxt{airforceblue}{constrained optimization method}.
     \item The proposed method guarantees the \ctxt{awesome}{stability }of the system and the boundedness of the NN weights.
-    \item Feasibility of the proposed method is validated through numerical simulations.
+    \item Feasibility of the proposed method is validated through numerical simulation and real-time implementation.
   \end{itemize}
 
   \textbf{Future Work}
