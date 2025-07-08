@@ -21,13 +21,13 @@ if TEX_CONVERT_FLAG
 
     fig_unit = 'centimeters';
 else
-    % font_size = 18;
-    font_size = 17;
+    font_size = 18;
+    % font_size = 17;
     line_width = 1.5;
     lgd_size = 16;
         
-    % fig_height = 200;
-    fig_height = 150;
+    fig_height = 200;
+    % fig_height = 150;
     fig_width = 800;
 
     fig_unit = 'pixels';
