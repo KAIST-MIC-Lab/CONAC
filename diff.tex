@@ -1,4 +1,7 @@
 \documentclass[letterpaper, journal]{IEEEtran}
+%DIF LATEXDIFF DIFFERENCE FILE
+%DIF DEL tmp2.tex   Thu Jul 17 22:46:13 2025
+%DIF ADD tmp1.tex   Thu Jul 17 22:46:13 2025
 
 \def\cmt{true} % true for comments, false for no comments
 \def\pub{false} % true for publication, false for draft
@@ -9,6 +12,45 @@
 \newcommand*{\figSizeOneCol}{0.98}
 
 \newcommand{\ctxt}[2]{\color{#1}#2\color{black}}
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdel}[1]{{\protect\color{red}\sout{#1}}} %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+\providecommand{\DIFmodbegin}{} %DIF PREAMBLE
+\providecommand{\DIFmodend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF COLORLISTINGS PREAMBLE %DIF PREAMBLE
+\RequirePackage{listings} %DIF PREAMBLE
+\RequirePackage{color} %DIF PREAMBLE
+\lstdefinelanguage{DIFcode}{ %DIF PREAMBLE
+%DIF DIFCODE_UNDERLINE %DIF PREAMBLE
+  moredelim=[il][\color{red}\sout]{\%DIF\ <\ }, %DIF PREAMBLE
+  moredelim=[il][\color{blue}\uwave]{\%DIF\ >\ } %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstdefinestyle{DIFverbatimstyle}{ %DIF PREAMBLE
+	language=DIFcode, %DIF PREAMBLE
+	basicstyle=\ttfamily, %DIF PREAMBLE
+	columns=fullflexible, %DIF PREAMBLE
+	keepspaces=true %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim}{\lstset{style=DIFverbatimstyle}}{} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim*}{\lstset{style=DIFverbatimstyle,showspaces=true}}{} %DIF PREAMBLE
+\lstset{extendedchars=\true,inputencoding=utf8}
+
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
 
 \begin{document}
 \bstctlcite{IEEEexample:BSTcontrol}
@@ -50,10 +92,14 @@
 % In this study, the following notation is used:
 
 % \begin{itemize}
-%     \item := denotes ``is defined as" or ``is equal to".
-%     \item $\R$, $\R^n$ and $\R^{n\times m}$ denote the set of real numbers, $n\times 1$ dimensional vectors and $n\times m$ dimensional matrices, respectively, and $\R_{\ge0}:=[0,\infty)$ and $\R_{>0}:=(0,\infty)$.
-%     \item $(\cdot)^\top$ denotes the transpose of a vector or matrix.
-%     \item $\norm{\cdot}$ and $\norm{\cdot}_F$ denote the Euclidean and Frobenius norm, respectively.
+%DIF <      % \item := denotes ``is defined as" or ``is equal to".
+%DIF <      % \item $\R$, $\R^n$ and $\R^{n\times m}$ denote the set of real numbers, $n\times 1$ dimensional vectors and $n\times m$ dimensional matrices, respectively, and $\R_{\ge0}:=[0,\infty)$ and $\R_{>0}:=(0,\infty)$.
+%DIF <      % \item $(\cdot)^\top$ denotes the transpose of a vector or matrix.
+%DIF <      % \item $\norm{\cdot}$ and $\norm{\cdot}_F$ denote the Euclidean and Frobenius norm, respectively.
+%DIF >      \item := denotes ``is defined as" or ``is equal to".
+%DIF >      \item $\R$, $\R^n$ and $\R^{n\times m}$ denote the set of real numbers, $n\times 1$ dimensional vectors and $n\times m$ dimensional matrices, respectively, and $\R_{\ge0}:=[0,\infty)$ and $\R_{>0}:=(0,\infty)$.
+%DIF >      \item $(\cdot)^\top$ denotes the transpose of a vector or matrix.
+%DIF >      \item $\norm{\cdot}$ and $\norm{\cdot}_F$ denote the Euclidean and Frobenius norm, respectively.
 %     \item $\otimes$ denotes the Kronecker product \cite[Chap. 7, Def. 7.1.2]{Bernstein:2009aa}.
 %     \item A vector and a matrix are denoted by $\mv{x}=[x_i]_{i\in\{1,\cdots,n\}}\in\R^n$ and $
 %         \mm A
@@ -180,8 +226,9 @@ This gap suggests that constrained optimization could be key to addressing both 
 The main contributions of this study are listed as follows:
 \begin{itemize}
     \item A constrained optimization-based neuro-adaptive control (CONAC) is proposed, where the control problem is formulated as a constrained optimization problem. In this formulation, weight and convex input constraints are incorporated as inequality constraints, while minimizing a given objective function.
-    \item Convex input constraints can be applied to the proposed CONAC, including input bound constraints, and norm constraints. Moreover, the proposed CONAC can handle any combination of these constraints, which can be useful in practical applications where multiple constraints need to be satisfied simultaneously.
-    \item Since the proposed CONAC approximates the entire ideal control law without any conventional controller, prior knowledge of the system dynamics or the system identification process for nominal conventional controller design can be avoided, which is often difficult and time-consuming to implement in practice. 
+    %DIF <  \item Any convex input constraints can be applied to the proposed CONAC, including input bound constraints, and norm constraints. Moreover, the proposed CONAC can handle any combination of these constraints, which can be useful in practical applications where multiple constraints need to be satisfied simultaneously.
+    \item \DIFaddbegin \DIFadd{Convex input constraints can be applied to the proposed CONAC, including input bound constraints, and norm constraints. Moreover, the proposed CONAC can handle any combination of these constraints, which can be useful in practical applications where multiple constraints need to be satisfied simultaneously.
+    }\item \DIFaddend Since the proposed CONAC approximates the entire ideal control law without any conventional controller, prior knowledge of the system dynamics or the system identification process for nominal conventional controller design can be avoided, which is often difficult and time-consuming to implement in practice. 
     \item The adaptation laws for DNN weights and Lagrange multipliers are systematically derived to solve the defined problem, using constrained optimization theory. These laws guarantee convergence to the first-order optimality conditions at steady state, specifically the Karush–Kuhn–Tucker (KKT) conditions, as described in \cite[Chap. 12, Thm. 12.1]{Nocedal:2006aa}.
     \item The proposed CONAC's stability is rigorously analyzed using Lyapunov theory, ensuring that the tracking error and DNN weights remain bounded. This analysis guarantees that the proposed CONAC can achieve stable online adaptation.
     \item The proposed CONAC is implemented in real-time on a 2-DOF robotic manipulator, demonstrating its effectiveness in achieving accurate trajectory tracking while satisfying all imposed constraints. The experimental results validate the theoretical findings and confirm the practical applicability of the proposed CONAC.
@@ -256,6 +303,7 @@ The desired trajectory $\qd(t)$ is supposed to satisfy the following assumption:
 \section{Control Law Development}\label{sec:ctrl design}
 
 The architecture of the proposed CONAC consists of a DNN that functions as a NAC, and a weight optimizer for the DNN, as illustrated in Fig. \ref{fig:ctrl:diagram}.
+%DIF <  The algorithm of the proposed CONAC is given by Algorithm \ref{alg:CONAC}. 
 Before proceeding to the controller design, some mathematical preliminaries are revisited in Section \ref{sec:sub:math preliminaries}. 
 Section \ref{sec:sub:NAC} introduces the NAC, followed by the DNN model in Section \ref{sec:sub:NN definition}. 
 The constrained optimization-based weight adaptation law is presented in Section \ref{sec:adap_laws}.
@@ -267,7 +315,24 @@ The constrained optimization-based weight adaptation law is presented in Section
     \label{fig:ctrl:diagram}
 \end{figure}
 
-\subsection{Mathematical Preliminaries}\label{sec:sub:math preliminaries}
+%DIF <  \begin{algorithm}[!t]
+%DIF <      \caption{Proposed CONAC Algorithm}\label{alg:CONAC}
+%DIF <      \begin{algorithmic}[1]
+%DIF <          \STATE \textbf{Initialize:} DNN weights $\estwth$ and Lagrange multipliers $\lambda_j$
+%DIF <          \FOR{each sampling time}
+%DIF <              \STATE Measure current state $\q,\dq$
+%DIF <              \STATE Compute filtered error $\fe$ \eqref{eq:err:filtered}
+%DIF <              \STATE Update DNN weights $\estwth$ using $\fe$ \eqref{eq:adap:th}
+%DIF <              \STATE Update Lagrange multipliers $\lambda_j$ based on constraint function $c_j$ \eqref{eq:adap:lbd} and \eqref{eq:adap:lbd:max}
+%DIF <              \STATE Compute control input $\rbu$ (DNN output) \eqref{eq:control:est} and \eqref{eq:DNN:architecture}
+%DIF <              \STATE Apply control input $\rbu$ to the system \eqref{eq:sys1}
+%DIF <          \ENDFOR
+%DIF <      \end{algorithmic}
+%DIF <  \end{algorithm}
+\DIFdelbegin %DIFDELCMD < 
+
+%DIFDELCMD < %%%
+\DIFdelend \subsection{Mathematical Preliminaries}\label{sec:sub:math preliminaries}
 
 The following proposition and lemma will be used in subsequent sections:
 
@@ -422,8 +487,8 @@ To overcome this issue, a DNN is employed to approximate $\rbu^*$.
 Let $\NN:=\NN({\q}_n;\wth): \R^{l_0+1}\times\R^{\Xi}\to\R^{n}$ represent the DNN, where ${\q}_n\in\R^{l_0+1}$ is the DNN input vector, and $\wth\in\R^{\Xi}$ is the vector of trainable weights.
 The architecture of DNN $\NN({\q}_n;\wth)$ will be presented in Section \ref{sec:sub:NN definition}, later.
 According to the universal approximation theorem for DNNs \cite{Kidger:2020aa}, $\NN({\q}_n;\wth)$ can approximate a nonlinear function, denoted as $\mv g(\cdot)$, with an ideal weight vector $\idealwth\in\R^\Xi$ over a compact subset $\Omega_{n}\in\R^{l_0+1}$ to within $\epsilon$-accuracy, such that $\sup_{{\q}_n\in\Omega_{n}}\norm{ \NN({\q}_n;\idealwth) - \mv g(\cdot)} = \epsilon < \infty$.
-The compact set $\Omega_{n}$ is defined as the set of all feasible states $\q,\dq$ and filtered errors $\fe$.
-% Furthermore, the theorem states that the norm of $\idealwth$ is bounded such that $\norm{\idealwth}\le \overline\wth<\infty$.
+\DIFaddbegin \DIFadd{The compact set $\Omega_{n}$ is defined as the set of all feasible states $\q,\dq$ and filtered errors $\fe$.
+}\DIFaddend % Furthermore, the theorem states that the norm of $\idealwth$ is bounded such that $\norm{\idealwth}\le \overline\wth<\infty$.
 In this study, the ideal weight vector $\idealwth$ is assumed to be bounded by Assumption \ref{assum:feasible} and \cite[Assum. 1]{Lewis:1996aa}, and considered a locally optimal solution, rather than a global one.
 
 Accordingly, the ideal control input $\rbu^*$ can be approximated by the DNN with the ideal weight vector $\idealNN:=\NN({\q}_n;\idealwth)$ as follows:
@@ -490,18 +555,29 @@ where $\wV_i=[w_{ij}]_{i\in\{1,\cdots,l_i+1\},j\in\{1,\cdots,l_{i+1}\}}\in\R^{(l
 The DNN $\NN({\q}_n;\wth)$ has $k+1$ layers, where the input layer is indexed by $i=0$, and the output layer is indexed by $i=k$.
 For instance, in Fig.~\ref{fig:DNN}, the DNN $\NN({\q}_n;\wth)$ with $k=2,l_0=2,l_1=l_2=3$, and $l_3=2$ is illustrated.
 Notice that the output size of $\NN(\cdot)$ is the same as that of the control input $\rbu$, \ie $l_{k+1}=n$. 
+\DIFdelbegin \DIFdel{The }\DIFdelend \DIFaddbegin 
 
-The DNN input vector ${\q}_n$ is defined as ${\q}_n:=(\q^\top,\dq^\top,\fe^\top,1)^\top\in\R^{3n+1}$ to include the current state of the system, the filtered error, and the augmentation term $1$ to account for bias term in the input weight matrix $\wV_0$.
-The weights $\wV_i,\ \forall i\in\{0,\cdots,k\}$, are initialized randomly using uniform distribution at the beginning of the control process.
-The activation function is defined as $\act_i(\mv x):=\left(\sigma(x_1),\sigma(x_2),\cdots, \sigma(x_{l_{i}}), 1\right)^\top,\ \forall\mv x\in\R^{l_i}$, where $\sigma: \R\to\R$ is a nonlinear function, and the augmentation of $1$ is used to account for bias terms in the weight matrices, similar to the input vector ${\q}_n$.
+\DIFadd{The DNN input vector ${\q}_n$ is defined as ${\q}_n:=(\q^\top,\dq^\top,\fe^\top,1)^\top\in\R^{3n+1}$ to include the current state of the system, the filtered error, and the augmentation term $1$ to account for bias term in the input weight matrix $\wV_0$.
+The }\DIFaddend weights $\wV_i,\ \forall i\in\{0,\cdots,k\}$, are initialized randomly using uniform distribution at the beginning of the control process.
+\DIFdelbegin %DIFDELCMD < 
 
-% \MSRY{생략 가능할 것 같습니다.}
+%DIFDELCMD < %%%
+\DIFdelend The activation function is defined as $\act_i(\mv x):=\left(\sigma(x_1),\sigma(x_2),\cdots, \sigma(x_{l_{i}}), 1\right)^\top,\ \forall\mv x\in\R^{l_i}$, where $\sigma: \R\to\R$ is a nonlinear function, and the augmentation of $1$ is used to account for bias terms in the weight matrices\DIFdelbegin \DIFdel{. 
+}\DIFdelend \DIFaddbegin \DIFadd{, similar to the input vector ${\q}_n$.
+}
+
+\DIFaddend % \MSRY{생략 가능할 것 같습니다.}
 % \ctxt{red}
 % {
-    In selecting the nonlinear function $\sigma(\cdot)$, the ReLU function \cite{Maas:2013aa} is one of most widely used choices for large DNNs, since it effectively mitigates the gradient vanishing problem during error backpropagation. 
+    %DIF <      In selecting the nonlinear function $\sigma(\cdot)$, the ReLU function \cite{Maas:2013aa} is one of most widely used choices for large DNNs, since it effectively mitigates the gradient vanishing problem during error backpropagation. 
+%DIF <      However, for control applications, where relatively shallow DNNs are typically sufficient and the gradient vanishing issue is less severe, the sigmoid function or the hyperbolic tangent function is commonly used as the nonlinear function $\sigma(\cdot)$. 
+%DIF <      These functions simplify stability analysis, since they are continuously differentiable and their outputs and gradients are bounded. 
+\DIFaddbegin \DIFadd{In selecting the nonlinear function $\sigma(\cdot)$, the ReLU function \mbox{%DIFAUXCMD
+\cite{Maas:2013aa} }\hskip0pt%DIFAUXCMD
+is one of most widely used choices for large DNNs, since it effectively mitigates the gradient vanishing problem during error backpropagation. 
     However, for control applications, where relatively shallow DNNs are typically sufficient and the gradient vanishing issue is less severe, the sigmoid function or the hyperbolic tangent function is commonly used as the nonlinear function $\sigma(\cdot)$. 
     These functions simplify stability analysis, since they are continuously differentiable and their outputs and gradients are bounded. 
-% }
+}\DIFaddend % }
 In this study, the hyperbolic tangent function $\tanh(\cdot)$ was selected as the nonlinear function, \ie $\sigma(x) = \tanh(x),\ \forall x\in\R$, which provides desirable boundedness with $\norm{\sigma(x)}<1$ and $0<\norm{\ddtfrac{\sigma(x)}{x}}\le 1$.
 
 For simplicity, each layer's weights are vectorized as $\wth_i:=\myvec(\wV_i)\in\R^{\Xi_i},\ \forall i\in\{0,\cdots,k\}$, where $\Xi_i:= (l_i+1)l_{i+1}$ is the number of weights in the $i$th layer. 
@@ -733,8 +809,8 @@ Consequently, the adaptation law in \eqref{eq:adap:th} becomes:
     \approx
     -\alpha 
     \left(
-        {\pptfrac{\estNN}
-        {\estwth}}^\top
+        \DIFaddbegin {\DIFaddend \pptfrac{\estNN}
+        {\estwth}\DIFaddbegin }\DIFaddend ^\top
         \fe
         +
         \textstyle\sum_{j\in\mathcal{I}}
@@ -799,33 +875,38 @@ Next, we present the following assumptions, which specify the conditions for the
     This assumption will be used in the stability analysis (see Lemma \ref{lem:convex:angle}).
 \end{remark}
 
-The algorithm of the proposed CONAC is presented by Algorithm \ref{alg:CONAC}, implemented in a discrete-time controller with a sampling time of~$T_s$, where $(\cdot)^{(k)}$ denotes the value at the $k$th time step.
+\DIFaddbegin \DIFadd{The algorithm of the proposed CONAC is presented by Algorithm \ref{alg:CONAC}, implemented in a discrete-time controller with a sampling time of~$T_s$, where $(\cdot)^{(k)}$ denotes the value at the $k$th time step.
+}
 
 \begin{algorithm}[!t]
-    \caption{Proposed CONAC Algorithm}\label{alg:CONAC}
+    \caption{\DIFadd{Proposed CONAC Algorithm}}\label{alg:CONAC}
     \begin{algorithmic}[1]
-        \STATE \textbf{Initialize:} DNN weights $\estwth^{(0)}$, Lagrange multipliers $\lambda_j^{(0)}$
-        \FOR{$k = 0 $ to $\infty$}
-            \STATE Measure $\q^{(k)},\dq^{(k)}$
-            \STATE Obtain $\qd^{(k)},\dqd^{(k)}$ from given $\qd(t)$
-            \STATE $\mv{e}^{(k)}\leftarrow\q^{(k)}-\qd^{(k)}$ and $\ddtt\mv{e}^{(k)}\leftarrow\ddtt\q^{(k)}-\dqd^{(k)}$
-            \STATE $\fe^{(k)} \leftarrow \ddtt{\mv e^{(k)}}+\mm\Lambda \mv e^{(k)}$ \eqref{eq:err:filtered}
+        \STATE \textbf{\DIFadd{Initialize:}} \DIFadd{DNN weights $\estwth^{(0)}$, Lagrange multipliers $\lambda_j^{(0)}$
+        }\FOR{$k = 0 $ to $\infty$}
+            \STATE \DIFadd{Measure $\q^{(k)},\dq^{(k)}$
+            }\STATE \DIFadd{Obtain $\qd^{(k)},\dqd^{(k)}$ from given $\qd(t)$
+            }\STATE \DIFadd{$\mv{e}^{(k)}\leftarrow\q^{(k)}-\qd^{(k)}$ and $\ddtt\mv{e}^{(k)}\leftarrow\ddtt\q^{(k)}-\dqd^{(k)}$
+            }\STATE \DIFadd{$\fe^{(k)} \leftarrow \ddtt{\mv e^{(k)}}+\mm\Lambda \mv e^{(k)}$ \eqref{eq:err:filtered}
+}
 
-            \STATE \textit{// Neuro-adaptive control law (Section \ref{sec:ctrl design})}
+            \STATE \textit{\DIFadd{// Neuro-adaptive control law (Section \ref{sec:ctrl design})}}
 
-                \STATE ${\q}_n^{(k)}\leftarrow
+                \STATE \DIFadd{${\q}_n^{(k)}\leftarrow
                     \left(
                         {\q^{(k)}}^\top,{\dq^{(k)}}^\top,{\fe^{(k)}}^\top,1
                     \right)^\top$
-                
-                \STATE $\rbu^{(k)}\leftarrow\NN({\q}_n^{(k)};\estwth^{(k)}) $ \eqref{eq:control:est}
-                \STATE Apply $\rbu^{(k)}$ to the system \eqref{eq:sys1}
+                }
 
-            \STATE \textit{// Train DNN (Section \ref{sec:adap_laws})}
+                \STATE \DIFadd{$\rbu^{(k)}\leftarrow\NN({\q}_n^{(k)};\estwth^{(k)}) $ \eqref{eq:control:est}
+                }\STATE \DIFadd{Apply $\rbu^{(k)}$ to the system \eqref{eq:sys1}
+}
 
-            \STATE Compute $\pptfrac{\NN}{\estwth^{(k)}}$ \eqref{eq:gradient:phi}, $c_j$ and $\pptfrac{c_j}{\estwth^{(k)}}$ for all $j\in\mathcal{I}$          
-            
-            \STATE $\estwth^{(k+1)}
+            \STATE \textit{\DIFadd{// Train DNN (Section \ref{sec:adap_laws})}}
+
+            \STATE \DIFadd{Compute $\pptfrac{\NN}{\estwth^{(k)}}$ \eqref{eq:gradient:phi}, $c_j$ and $\pptfrac{c_j}{\estwth^{(k)}}$ for all $j\in\mathcal{I}$          
+            }
+
+            \STATE \DIFadd{$\estwth^{(k+1)}
                     \leftarrow
                     \estwth^{(k)}
                     -\alpha 
@@ -838,20 +919,22 @@ The algorithm of the proposed CONAC is presented by Algorithm \ref{alg:CONAC}, i
                         \lambda_j^{(k)} 
                         \pptfrac{c_j}{\estwth^{(k)}}
                     \right)\cdot T_s$ \eqref{eq:adap:th}
+}
 
-            \STATE $\lambda_j^{(k+1)}
+            \STATE \DIFadd{$\lambda_j^{(k+1)}
             \leftarrow
             \lambda_j^{(k)}
             +
             \beta_j c_j\cdot T_s$ for all $j\in\mathcal{I}$ \eqref{eq:adap:lbd} 
-            \STATE $\lambda_j^{(k+1)} \leftarrow \max(\lambda_j^{(k+1)},0)$ for all $j\in\mathcal{I}$ \eqref{eq:adap:lbd:max} 
+            }\STATE \DIFadd{$\lambda_j^{(k+1)} \leftarrow \max(\lambda_j^{(k+1)},0)$ for all $j\in\mathcal{I}$ \eqref{eq:adap:lbd:max} 
+}
 
         \ENDFOR
     \end{algorithmic}
 \end{algorithm}
 
 
-%  SECTION STABILITY ANALYSIS ==============================
+\DIFaddend %  SECTION STABILITY ANALYSIS ==============================
 \section{Stability Analysis}\label{sec:stability}
 
 Before conducting the stability analysis, let us define the weight estimation error as $\tilde\wth:= [\tilde\wth_i]_{i\in\{0,\cdots,k\}}$, where $\tilde\wth_i:=\estwth_i-\idealwth_i, \forall i\in\{0,\cdots,k\}$.
@@ -936,6 +1019,15 @@ The following theorem states that $\fe$ and $\estwth$ are bounded.
 
 \begin{theorem}
     For the dynamical system described in \eqref{eq:sys1}, the NAC in \eqref{eq:control:est} with the weight adaptation laws in \eqref{eq:adaptation law} ensure the boundedness of the filtered error $\fe$ and the weight estimate $\estwth$, under the input constraints satisfying Assumption \ref{assum:convex} and \ref{assum:LICQ}, provided that the weight norm constraints \eqref{eq:cstr:weight:ball} are imposed.
+%DIF <  \ctxt{red}{
+    %DIF <      This holds under the weight norm constraints \eqref{eq:cstr:weight:ball}.
+    %DIF <  }
+    %DIF <  \KHCH{
+    %DIF <      이렇게 표현하면 마치 이 constraints만 있다고 받아들일 수도 있습니다. 꼭 이 표현을 써야할 이유가 있을까요? 없으면 빼주시고 있으면 constraint input constraints도 추가하면 좋겠습니다.
+    %DIF <  }
+    %DIF <  \MSRY{
+    %DIF <      필요조건으로서 weight norm constraint가 필요하여서 this holds ...로 표했습니다. 만일 교수님이 말씀하신데로 혼동이 될 수 있다면, ..., provided that the weight norm constraints \eqref{eq:cstr:weight:ball} are imposed. 로 바꿀 필요가 있을 것으로 보입니다.
+    %DIF <  }
 \end{theorem}
 
 \begin{proof}
@@ -1168,7 +1260,7 @@ The dynamics of $\estwth_i,\ \forall i\in\{k-1,\cdots,0\}$, are represented as
     =
     -\alpha
     \left(
-        {\pptfrac{\estNN}{\estwth_i}}^\top
+        \DIFaddbegin {\DIFaddend \pptfrac{\estNN}{\estwth_i}\DIFaddbegin }\DIFaddend ^\top
         \fe
         +
         \lambda_{\theta_i}\estwth_i
@@ -1484,9 +1576,10 @@ All other properties and parameters were kept the same as in (C$_1$), (C$_2$) an
 % ------------------------------------
 % Controller Parameters
 % ------------------------------------
-For all controllers, \ie (C$_1$), (C$_2$), (C$_3$), and (C$_4$), the DNNs shared the same architecture, consisting of two hidden layers with four nodes each, \ie $k=2$, and $l_0=6, l_1=4, l_2=4$, and $l_3=2$ in \eqref{eq:DNN:architecture}.
-The input vector to the DNNs was defined as ${\q}_n=\left(\q^\top,\dq^\top,\fe^\top,1\right)^\top\in\R^{7}$, where the scalar $1$ was included to account for the bias term in the weight matrix.
-The adaptation gain was set to $\alpha = 0.2$, and the filtering matrix in \eqref{eq:err:filtered} was chosen as $\mm{\Lambda}=\mydiag(5,15)$.
+For all controllers, \ie (C$_1$), (C$_2$), (C$_3$), and (C$_4$), the \DIFdelbegin \DIFdel{input vector to the DNN was defined as ${\q}_n=\left(\q^\top,\dq^\top,\fe^\top,1\right)^\top\in\R^{7}$, where the scalar $1$ was included to account for the bias term in the weight matrix.
+All }\DIFdelend DNNs shared the same architecture, consisting of two hidden layers with four nodes each, \ie $k=2$, and $l_0=6, l_1=4, l_2=4$, and $l_3=2$ in \eqref{eq:DNN:architecture}.
+The \DIFaddbegin \DIFadd{input vector to the DNNs was defined as ${\q}_n=\left(\q^\top,\dq^\top,\fe^\top,1\right)^\top\in\R^{7}$, where the scalar $1$ was included to account for the bias term in the weight matrix.
+The }\DIFaddend adaptation gain was set to $\alpha = 0.2$, and the filtering matrix in \eqref{eq:err:filtered} was chosen as $\mm{\Lambda}=\mydiag(5,15)$.
 To support real-time implementation, the controller operated at a sampling rate of $250$ Hz, with control results collected via CAN communication using a PCAN-USB interface and recorded on a computer at the same rate.
 
 The tracking performance was quantitatively evaluated using the $L_2$-norm of the each joint angle's tracking error, defined as $\sqrt{\int_0^T\norm{e_i(t)}\,\der t},\ \forall i\in\{1,2\}$, where $T\in\R_{>0}$ denotes the duration of each episode.
@@ -1671,10 +1764,14 @@ Furthermore, once the control saturation was lifted—typically due to changes i
 
 \begin{figure}[!t]
 	\centering
-	\includegraphics[width=0.65\linewidth]{
+	\DIFdelbeginFL %DIFDELCMD < \includegraphics[width=0.55\linewidth]{
+%DIFDELCMD < 		src/figures/lambda_effect.drawio.pdf
+%DIFDELCMD < 		}
+%DIFDELCMD < 	%%%
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=0.65\linewidth]{
 		src/figures/lambda_effect.drawio.pdf
 		}
-	\caption{
+	\DIFaddendFL \caption{
         The effect of the Lagrange multiplier $\lambda_{j}$ on the adaptation direction of $\widehat{\mv{\theta}}_2$ is illustrated. 
         The notations $(\cdot)'$ and $(\cdot)''$ denote two distinct cases corresponding to large and small values of the Lagrange multiplier, respectively, \ie $\lambda_{j}' > \lambda_{j}''$.
         % \vspace{-5mm}
@@ -1730,12 +1827,17 @@ Similar to the case of the input constraints, the Lagrange multipliers $\lambda_
 % ------------------------------------
 % Karush-Kuhn-Tucker (KKT) conditions}
 % ------------------------------------
-\hfill
+%DIF <  \hfill
+\DIFaddbegin \hfill
+\DIFaddend 
 
-\subsubsection{Satisfaction of Karush-Kuhn-Tucker (KKT) conditions}
+%DIF <  \subsubsection{Satisfaction of Karush-Kuhn-Tucker (KKT) conditions}
+\DIFaddbegin \subsubsection{\DIFadd{Satisfaction of Karush-Kuhn-Tucker (KKT) conditions}}
+\DIFaddend 
 
-Since the proposed CONAC was implemented in discrete time, a direct demonstration of the KKT conditions at steady state is not straightforward. 
-% % \MSRY{
+%DIF <  Since the proposed CONAC was implemented in discrete time, a direct demonstration of the KKT conditions at steady state is not straightforward. 
+\DIFaddbegin \DIFadd{Since the proposed CONAC was implemented in discrete time, a direct demonstration of the KKT conditions at steady state is not straightforward. 
+}\DIFaddend % % \MSRY{
 % %     그림을 잘 확인해보니 제약조건이 위반되는 구간동안 정상상태에 도달하지 못하더라구요... 이전 논문 결과에서와 마찬가지로 그러할것으로 생각했는데 다른 요인이 있는 것 같습니다. 삭제하던지 아니면 보여질수없는 이유를 더 설명해야할 것으로 보입니다.
 % % }
 % % \ctxt{red}
@@ -1745,9 +1847,11 @@ Since the proposed CONAC was implemented in discrete time, a direct demonstratio
 % % }
 % % \ctxt{blue}
 % % {
-    This is because, the KKT conditions are typically defined for continuous-time systems, and their direct application to discrete-time systems requires careful consideration of the sampling rate and the dynamics of the system.
+    %DIF <      This is because, the KKT conditions are typically defined for continuous-time systems, and their direct application to discrete-time systems requires careful consideration of the sampling rate and the dynamics of the system.
+%DIF <      Although exact satisfaction of the KKT conditions was not observed—due to the lack of a clear steady state in the discrete-time implementation—the control results remain sufficiently close to the optimal behavior implied by the KKT conditions.
+\DIFaddbegin \DIFadd{This is because, the KKT conditions are typically defined for continuous-time systems, and their direct application to discrete-time systems requires careful consideration of the sampling rate and the dynamics of the system.
     Although exact satisfaction of the KKT conditions was not observed—due to the lack of a clear steady state in the discrete-time implementation—the control results remain sufficiently close to the optimal behavior implied by the KKT conditions.
-% % }
+}\DIFaddend % % }
 
 % ------------------------------------
 % Computational Time
@@ -1889,8 +1993,11 @@ This can be captured by the following inequality constraint:
     ,
     \label{eq:cstr:input:norm}
 \end{equation}
-with the maximum allowable control input magnitude $\overline\tau\in\R_{>0}$. This input norm constraint is also commonly applied in current and torque control problems for electric motors \cite{Choi:2024aa}.
-% The corresponding Lagrangian multiplier is $\lambda_{u_b}$. 
+with the maximum allowable control input magnitude $\overline\tau\in\R_{>0}$. This input norm constraint is also commonly applied in current and torque control problems for electric motors %DIF <  \cite{Choi:2024aa}.
+\DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\cite{Choi:2024aa}}\hskip0pt%DIFAUXCMD
+.
+}\DIFaddend % The corresponding Lagrangian multiplier is $\lambda_{u_b}$. 
 The gradient of $c_{\rbu}$ with respect to $\estwth$ are given by
 \begin{equation}
     \pptfrac{\mv c_{\rbu}}{\estwth}
@@ -1918,26 +2025,36 @@ It should be noted that constraints \eqref{eq:cstr:input:bound} and \eqref{eq:cs
 % Bibliography
 % ------------------------------------
 \bibliographystyle{IEEEtran}
-\bibliography{\template/refs}
-% \bibliography{\template/refs_abbr}
+%DIF <  \bibliography{\template/refs}
+\DIFdelbegin %DIFDELCMD < \bibliography{\template/refs_abbr}
+%DIFDELCMD < %%%
+\DIFdelend \DIFaddbegin \bibliography{\template/refs}
+%DIF >  \bibliography{\template/refs_abbr}
+\DIFaddend 
 
 % ------------------------------------
 % Biography
 % ------------------------------------
-% \vspace{-10mm}
+\DIFdelbegin %DIFDELCMD < \vspace{-10mm}
+%DIFDELCMD < %%%
+\DIFdelend %DIF >  \vspace{-10mm}
 \begin{IEEEbiography}[{
     \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/msRyu.jpg}}]{Myeongseok Ryu}
     received the B.S. degree in Mechanical Engineering from Incheon National University, South Korea, in 2023, and the M.S. degree in Mechanical Engineering from GIST, South Korea, in 2025. 
     He is currently serving as a researcher at the Cho Chun Shik Graduate School of Mobility at KAIST, South Korea.
     His research interests include adaptive control, neural-networks, and constrained optimization.
-    % \vspace{-10mm}
+    \DIFdelbegin %DIFDELCMD < \vspace{-10mm}
+%DIFDELCMD < %%%
+\DIFdelend %DIF >  \vspace{-10mm}
 \end{IEEEbiography}
 
 \begin{IEEEbiography}[{
     \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/dhHong.jpg}}]{Donghwa Hong}
     received his B.S. degree in Physics and Engineering Physics from Yonsei University, Wonju, South Korea, in 2023. He is currently pursuing the M.S. degree in Mechanical Engineering from GIST, Gwangju, South Korea.  
 His research interests include robot control, neural-networks, and model identification. 
-    % \vspace{-10mm}
+    \DIFdelbegin %DIFDELCMD < \vspace{-10mm}
+%DIFDELCMD < %%%
+\DIFdelend %DIF >  \vspace{-10mm}
 \end{IEEEbiography}
 
 \begin{IEEEbiography}[{

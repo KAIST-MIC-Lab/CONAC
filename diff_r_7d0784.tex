@@ -1,7 +1,7 @@
 \documentclass[letterpaper, journal]{IEEEtran}
 %DIF LATEXDIFF DIFFERENCE FILE
-%DIF DEL tmp2.tex   Wed Jul 16 14:25:08 2025
-%DIF ADD tmp1.tex   Wed Jul 16 14:25:08 2025
+%DIF DEL tmp2.tex   Thu Jul 17 22:45:01 2025
+%DIF ADD tmp1.tex   Thu Jul 17 22:45:01 2025
 
 \def\cmt{true} % true for comments, false for no comments
 \def\pub{false} % true for publication, false for draft
@@ -304,8 +304,7 @@ The desired trajectory $\qd(t)$ is supposed to satisfy the following assumption:
 
 The architecture of the proposed CONAC consists of a DNN that functions as a NAC, and a weight optimizer for the DNN, as illustrated in Fig. \ref{fig:ctrl:diagram}.
 %DIF <  The algorithm of the proposed CONAC is given by Algorithm \ref{alg:CONAC}. 
-\DIFaddbegin \DIFadd{The algorithm of the proposed CONAC is presented by Algorithm \ref{alg:CONAC}, implemented in a discrete-time controller with a sampling time of~$T_s$, where $(\cdot)^{(k)}$ denotes the value at the $k$th time step.
-}\DIFaddend Before proceeding to the controller design, some mathematical preliminaries are revisited in Section \ref{sec:sub:math preliminaries}. 
+Before proceeding to the controller design, some mathematical preliminaries are revisited in Section \ref{sec:sub:math preliminaries}. 
 Section \ref{sec:sub:NAC} introduces the NAC, followed by the DNN model in Section \ref{sec:sub:NN definition}. 
 The constrained optimization-based weight adaptation law is presented in Section \ref{sec:adap_laws}.
 
@@ -330,62 +329,10 @@ The constrained optimization-based weight adaptation law is presented in Section
 %DIF <          \ENDFOR
 %DIF <      \end{algorithmic}
 %DIF <  \end{algorithm}
-\DIFaddbegin \begin{algorithm}[!t]
-    \caption{\DIFadd{Proposed CONAC Algorithm}}\label{alg:CONAC}
-    \begin{algorithmic}[1]
-        \STATE \textbf{\DIFadd{Initialize:}} \DIFadd{DNN weights $\estwth^{(0)}$, Lagrange multipliers $\lambda_j^{(0)}$
-        }\FOR{$k = 0 $ to $\infty$}
-            \STATE \DIFadd{Measure $\q^{(k)},\dq^{(k)}$
-            }\STATE \DIFadd{Obtain $\qd^{(k)},\dqd^{(k)}$ from given $\qd(t)$
-            }\STATE \DIFadd{$\mv{e}^{(k)}\leftarrow\q^{(k)}-\qd^{(k)}$ and $\ddtt\mv{e}^{(k)}\leftarrow\ddtt\q^{(k)}-\dqd^{(k)}$
-            }\STATE \DIFadd{$\fe^{(k)} \leftarrow \ddtt{\mv e^{(k)}}+\mm\Lambda \mv e^{(k)}$ \eqref{eq:err:filtered}
-}\DIFaddend 
+\DIFdelbegin %DIFDELCMD < 
 
-            \DIFaddbegin \STATE \textit{\DIFadd{// Neuro-adaptive control law (Section \ref{sec:ctrl design})}}
-
-                \STATE \DIFadd{${\q}_n^{(k)}\leftarrow
-                    \left(
-                        {\q^{(k)}}^\top,{\dq^{(k)}}^\top,{\fe^{(k)}}^\top,1
-                    \right)^\top$
-                }
-
-                \STATE \DIFadd{$\rbu^{(k)}\leftarrow\NN({\q}_n^{(k)};\estwth^{(k)}) $ \eqref{eq:control:est}
-                }\STATE \DIFadd{Apply $\rbu^{(k)}$ to the system \eqref{eq:sys1}
-}
-
-            \STATE \textit{\DIFadd{// Train DNN (Section \ref{sec:adap_laws})}}
-
-            \STATE \DIFadd{Compute $\pptfrac{\NN}{\estwth^{(k)}}$ \eqref{eq:gradient:phi}, $c_j$ and $\pptfrac{c_j}{\estwth^{(k)}}$ for all $j\in\mathcal{I}$          
-            }
-
-            \STATE \DIFadd{$\estwth^{(k+1)}
-                    \leftarrow
-                    \estwth^{(k)}
-                    -\alpha 
-                    \left(
-                        {\pptfrac{\estNN}
-                        {\estwth^{(k)}}}^\top
-                        \fe^{(k)}
-                        +
-                        \textstyle\sum_{j\in\mathcal{I}}
-                        \lambda_j^{(k)} 
-                        \pptfrac{c_j}{\estwth^{(k)}}
-                    \right)\cdot T_s$ \eqref{eq:adap:th}
-}
-
-            \STATE \DIFadd{$\lambda_j^{(k+1)}
-            \leftarrow
-            \lambda_j^{(k)}
-            +
-            \beta_j c_j\cdot T_s$ for all $j\in\mathcal{I}$ \eqref{eq:adap:lbd} 
-            }\STATE \DIFadd{$\lambda_j^{(k+1)} \leftarrow \max(\lambda_j^{(k+1)},0)$ for all $j\in\mathcal{I}$ \eqref{eq:adap:lbd:max} 
-}
-
-        \ENDFOR
-    \end{algorithmic}
-\end{algorithm}
-
-\DIFaddend \subsection{Mathematical Preliminaries}\label{sec:sub:math preliminaries}
+%DIFDELCMD < %%%
+\DIFdelend \subsection{Mathematical Preliminaries}\label{sec:sub:math preliminaries}
 
 The following proposition and lemma will be used in subsequent sections:
 
@@ -540,10 +487,8 @@ To overcome this issue, a DNN is employed to approximate $\rbu^*$.
 Let $\NN:=\NN({\q}_n;\wth): \R^{l_0+1}\times\R^{\Xi}\to\R^{n}$ represent the DNN, where ${\q}_n\in\R^{l_0+1}$ is the DNN input vector, and $\wth\in\R^{\Xi}$ is the vector of trainable weights.
 The architecture of DNN $\NN({\q}_n;\wth)$ will be presented in Section \ref{sec:sub:NN definition}, later.
 According to the universal approximation theorem for DNNs \cite{Kidger:2020aa}, $\NN({\q}_n;\wth)$ can approximate a nonlinear function, denoted as $\mv g(\cdot)$, with an ideal weight vector $\idealwth\in\R^\Xi$ over a compact subset $\Omega_{n}\in\R^{l_0+1}$ to within $\epsilon$-accuracy, such that $\sup_{{\q}_n\in\Omega_{n}}\norm{ \NN({\q}_n;\idealwth) - \mv g(\cdot)} = \epsilon < \infty$.
-\DIFaddbegin \MSRY{
-    Explain about the compact set!
-}
-\DIFaddend % Furthermore, the theorem states that the norm of $\idealwth$ is bounded such that $\norm{\idealwth}\le \overline\wth<\infty$.
+\DIFaddbegin \DIFadd{The compact set $\Omega_{n}$ is defined as the set of all feasible states $\q,\dq$ and filtered errors $\fe$.
+}\DIFaddend % Furthermore, the theorem states that the norm of $\idealwth$ is bounded such that $\norm{\idealwth}\le \overline\wth<\infty$.
 In this study, the ideal weight vector $\idealwth$ is assumed to be bounded by Assumption \ref{assum:feasible} and \cite[Assum. 1]{Lewis:1996aa}, and considered a locally optimal solution, rather than a global one.
 
 Accordingly, the ideal control input $\rbu^*$ can be approximated by the DNN with the ideal weight vector $\idealNN:=\NN({\q}_n;\idealwth)$ as follows:
@@ -612,7 +557,7 @@ For instance, in Fig.~\ref{fig:DNN}, the DNN $\NN({\q}_n;\wth)$ with $k=2,l_0=2,
 Notice that the output size of $\NN(\cdot)$ is the same as that of the control input $\rbu$, \ie $l_{k+1}=n$. 
 \DIFdelbegin \DIFdel{The }\DIFdelend \DIFaddbegin 
 
-\DIFadd{The DNN input vector ${\q}_n$ is defined as ${\q}_n:=(\q^\top,\dq^\top,\fe^\top,1)^\top$ to include the current state of the system, the filtered error, and the augmentation term $1$ to account for bias term in the input weight matrix $\wV_0$.
+\DIFadd{The DNN input vector ${\q}_n$ is defined as ${\q}_n:=(\q^\top,\dq^\top,\fe^\top,1)^\top\in\R^{3n+1}$ to include the current state of the system, the filtered error, and the augmentation term $1$ to account for bias term in the input weight matrix $\wV_0$.
 The }\DIFaddend weights $\wV_i,\ \forall i\in\{0,\cdots,k\}$, are initialized randomly using uniform distribution at the beginning of the control process.
 \DIFdelbegin %DIFDELCMD < 
 
@@ -930,7 +875,66 @@ Next, we present the following assumptions, which specify the conditions for the
     This assumption will be used in the stability analysis (see Lemma \ref{lem:convex:angle}).
 \end{remark}
 
-%  SECTION STABILITY ANALYSIS ==============================
+\DIFaddbegin \DIFadd{The algorithm of the proposed CONAC is presented by Algorithm \ref{alg:CONAC}, implemented in a discrete-time controller with a sampling time of~$T_s$, where $(\cdot)^{(k)}$ denotes the value at the $k$th time step.
+}
+
+\begin{algorithm}[!t]
+    \caption{\DIFadd{Proposed CONAC Algorithm}}\label{alg:CONAC}
+    \begin{algorithmic}[1]
+        \STATE \textbf{\DIFadd{Initialize:}} \DIFadd{DNN weights $\estwth^{(0)}$, Lagrange multipliers $\lambda_j^{(0)}$
+        }\FOR{$k = 0 $ to $\infty$}
+            \STATE \DIFadd{Measure $\q^{(k)},\dq^{(k)}$
+            }\STATE \DIFadd{Obtain $\qd^{(k)},\dqd^{(k)}$ from given $\qd(t)$
+            }\STATE \DIFadd{$\mv{e}^{(k)}\leftarrow\q^{(k)}-\qd^{(k)}$ and $\ddtt\mv{e}^{(k)}\leftarrow\ddtt\q^{(k)}-\dqd^{(k)}$
+            }\STATE \DIFadd{$\fe^{(k)} \leftarrow \ddtt{\mv e^{(k)}}+\mm\Lambda \mv e^{(k)}$ \eqref{eq:err:filtered}
+}
+
+            \STATE \textit{\DIFadd{// Neuro-adaptive control law (Section \ref{sec:ctrl design})}}
+
+                \STATE \DIFadd{${\q}_n^{(k)}\leftarrow
+                    \left(
+                        {\q^{(k)}}^\top,{\dq^{(k)}}^\top,{\fe^{(k)}}^\top,1
+                    \right)^\top$
+                }
+
+                \STATE \DIFadd{$\rbu^{(k)}\leftarrow\NN({\q}_n^{(k)};\estwth^{(k)}) $ \eqref{eq:control:est}
+                }\STATE \DIFadd{Apply $\rbu^{(k)}$ to the system \eqref{eq:sys1}
+}
+
+            \STATE \textit{\DIFadd{// Train DNN (Section \ref{sec:adap_laws})}}
+
+            \STATE \DIFadd{Compute $\pptfrac{\NN}{\estwth^{(k)}}$ \eqref{eq:gradient:phi}, $c_j$ and $\pptfrac{c_j}{\estwth^{(k)}}$ for all $j\in\mathcal{I}$          
+            }
+
+            \STATE \DIFadd{$\estwth^{(k+1)}
+                    \leftarrow
+                    \estwth^{(k)}
+                    -\alpha 
+                    \left(
+                        {\pptfrac{\estNN}
+                        {\estwth^{(k)}}}^\top
+                        \fe^{(k)}
+                        +
+                        \textstyle\sum_{j\in\mathcal{I}}
+                        \lambda_j^{(k)} 
+                        \pptfrac{c_j}{\estwth^{(k)}}
+                    \right)\cdot T_s$ \eqref{eq:adap:th}
+}
+
+            \STATE \DIFadd{$\lambda_j^{(k+1)}
+            \leftarrow
+            \lambda_j^{(k)}
+            +
+            \beta_j c_j\cdot T_s$ for all $j\in\mathcal{I}$ \eqref{eq:adap:lbd} 
+            }\STATE \DIFadd{$\lambda_j^{(k+1)} \leftarrow \max(\lambda_j^{(k+1)},0)$ for all $j\in\mathcal{I}$ \eqref{eq:adap:lbd:max} 
+}
+
+        \ENDFOR
+    \end{algorithmic}
+\end{algorithm}
+
+
+\DIFaddend %  SECTION STABILITY ANALYSIS ==============================
 \section{Stability Analysis}\label{sec:stability}
 
 Before conducting the stability analysis, let us define the weight estimation error as $\tilde\wth:= [\tilde\wth_i]_{i\in\{0,\cdots,k\}}$, where $\tilde\wth_i:=\estwth_i-\idealwth_i, \forall i\in\{0,\cdots,k\}$.
@@ -1575,8 +1579,7 @@ All other properties and parameters were kept the same as in (C$_1$), (C$_2$) an
 For all controllers, \ie (C$_1$), (C$_2$), (C$_3$), and (C$_4$), the \DIFdelbegin \DIFdel{input vector to the DNN was defined as ${\q}_n=\left(\q^\top,\dq^\top,\fe^\top,1\right)^\top\in\R^{7}$, where the scalar $1$ was included to account for the bias term in the weight matrix.
 All }\DIFdelend DNNs shared the same architecture, consisting of two hidden layers with four nodes each, \ie $k=2$, and $l_0=6, l_1=4, l_2=4$, and $l_3=2$ in \eqref{eq:DNN:architecture}.
 The \DIFaddbegin \DIFadd{input vector to the DNNs was defined as ${\q}_n=\left(\q^\top,\dq^\top,\fe^\top,1\right)^\top\in\R^{7}$, where the scalar $1$ was included to account for the bias term in the weight matrix.
-}\MSRY{다시 설명}
-\DIFadd{The }\DIFaddend adaptation gain was set to $\alpha = 0.2$, and the filtering matrix in \eqref{eq:err:filtered} was chosen as $\mm{\Lambda}=\mydiag(5,15)$.
+The }\DIFaddend adaptation gain was set to $\alpha = 0.2$, and the filtering matrix in \eqref{eq:err:filtered} was chosen as $\mm{\Lambda}=\mydiag(5,15)$.
 To support real-time implementation, the controller operated at a sampling rate of $250$ Hz, with control results collected via CAN communication using a PCAN-USB interface and recorded on a computer at the same rate.
 
 The tracking performance was quantitatively evaluated using the $L_2$-norm of the each joint angle's tracking error, defined as $\sqrt{\int_0^T\norm{e_i(t)}\,\der t},\ \forall i\in\{1,2\}$, where $T\in\R_{>0}$ denotes the duration of each episode.
