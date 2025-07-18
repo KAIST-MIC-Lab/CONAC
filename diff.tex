@@ -1,7 +1,7 @@
 \documentclass[letterpaper, journal]{IEEEtran}
 %DIF LATEXDIFF DIFFERENCE FILE
-%DIF DEL tmp2.tex   Thu Jul 17 22:46:13 2025
-%DIF ADD tmp1.tex   Thu Jul 17 22:46:13 2025
+%DIF DEL tmp2.tex   Fri Jul 18 17:57:05 2025
+%DIF ADD tmp1.tex   Fri Jul 18 17:57:05 2025
 
 \def\cmt{true} % true for comments, false for no comments
 \def\pub{false} % true for publication, false for draft
@@ -146,7 +146,11 @@ To address these challenges, adaptive control methods have been widely employed 
 
 More recently, neuro-adaptive control (NAC) approaches have been introduced to approximate uncertain or unknown system dynamics or entire control laws using neural networks (NNs) \cite{Lewis:1998aa,Farrell:2006aa}. 
 NNs are well-known for their universal approximation property, which allows them to approximate any smooth function over a compact set with minimal error. 
-Various types of NNs have been utilized in NAC, including simpler architectures like single-hidden layer (SHL) NNs \cite{Lewis:1996aa,Ge:2010aa, Yesildirek:1995aa} and radial basis function (RBF) NNs \cite{Liu:2013ab,Ge:2002aa}, as well as more complex models like deep NNs (DNNs) \cite{Patil:2022aa} and their variations. 
+Various types of NNs have been utilized in NAC, including simpler architectures like single-hidden layer (SHL) NNs \DIFdelbegin \DIFdel{\mbox{%DIFAUXCMD
+\cite{Lewis:1996aa,Ge:2010aa, Yesildirek:1995aa} }\hskip0pt%DIFAUXCMD
+}\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\cite{Lewis:1996aa,Ge:2010aa, Yesildirek:1995aa,Ryu:2024aa,Ryu:2025aa} }\hskip0pt%DIFAUXCMD
+}\DIFaddend and radial basis function (RBF) NNs \cite{Liu:2013ab,Ge:2002aa}, as well as more complex models like deep NNs (DNNs) \cite{Patil:2022aa} and their variations. 
 Conventionally, SHL and RBF NNs are often employed to approximate uncertain or unknown system dynamics or controllers due to their simplicity \cite{Esfandiari:2014aa,Esfandiari:2015aa,Yesildirek:1995aa,Gao:2006aa}.
 However, since DNNs offer greater expressive power, making them more effective for complex system approximations \cite{Rolnick:2018aa}, variations of DNNs, such as long short-term memory (LSTM) networks for time-varying dynamics \cite{Griffis:2023aa}, physics-informed NNs (PINNs) for leveraging physical system knowledge \cite{Hart:2024aa}, and convolutional NNs (CNNs) for learning historical sensor data \cite{Ryu:2024ac}, have further extended the capabilities of NAC systems.
 
@@ -236,8 +240,16 @@ The main contributions of this study are listed as follows:
 
 \hfill
 
-This study extends our preliminary work in \cite{Ryu:2024aa}, where an inequality constraint on the weight norm was introduced within a constrained optimization framework to ensure boundedness of the NN weights. 
-In addition to the weight constraints considered in \cite{Ryu:2024aa}, the present work also incorporates input constraints into the same framework to address the convex input saturation problem. 
+This study extends our preliminary \DIFdelbegin \DIFdel{work in \mbox{%DIFAUXCMD
+\cite{Ryu:2024aa}}\hskip0pt%DIFAUXCMD
+, where an inequality constraint }\DIFdelend \DIFaddbegin \DIFadd{works in \mbox{%DIFAUXCMD
+\cite{Ryu:2024aa,Ryu:2025aa}}\hskip0pt%DIFAUXCMD
+, where inequality constraints }\DIFaddend on the weight \DIFdelbegin \DIFdel{norm was }\DIFdelend \DIFaddbegin \DIFadd{and input norm were }\DIFaddend introduced within a constrained optimization framework to ensure boundedness of the NN weights \DIFaddbegin \DIFadd{and satisfy input norm saturation, respectively}\DIFaddend . 
+In addition to the weight \DIFaddbegin \DIFadd{and input norm }\DIFaddend constraints considered in \DIFdelbegin \DIFdel{\mbox{%DIFAUXCMD
+\cite{Ryu:2024aa}}\hskip0pt%DIFAUXCMD
+}\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\cite{Ryu:2024aa,Ryu:2025aa}}\hskip0pt%DIFAUXCMD
+}\DIFaddend , the present work also incorporates \DIFaddbegin \DIFadd{any convex }\DIFaddend input constraints into the same framework to address the convex input saturation problem. 
 Moreover, while the previous study was limited to numerical simulations, the proposed CONAC is experimentally validated through real-time implementation on a 2-DOF robotic manipulator.
 
 \subsection{Organization}

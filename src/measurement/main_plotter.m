@@ -21,7 +21,7 @@ if TEX_CONVERT_FLAG
 
     fig_unit = 'centimeters';
 else
-    font_size = 18;
+    font_size = 17;
     % font_size = 17;
     line_width = 1.5;
     lgd_size = 16;
@@ -323,7 +323,7 @@ semilogy(    data2.lbdu.Time,     data2.lbdu.Data, "Color", c2, "LineWidth", lin
 semilogy(data2.lbdu2Max.Time, data2.lbdu2Max.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\lambda_{\overline{\tau}_2}$"); hold on
 semilogy(data2.lbdu2Min.Time, data2.lbdu2Min.Data, "Color", c2, "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\lambda_{\underline{\tau}_2}$"); hold on
 
-semilogy(data3.lbdth2.Time,   data3.lbdth2.Data,   "Color", c3, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\widehat{\mbox{\boldmath $\theta$}}_2$"); hold on
+semilogy(data3.lbdth2.Time,   data3.lbdth2.Data,   "Color", c3, "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\lambda_{\theta_2}$"); hold on
 
 xlabel('Time / s', 'FontSize', font_size, 'Interpreter', 'latex');
 ylabel('$\lambda_j$ (Log scale)', 'FontSize', font_size, 'Interpreter', 'latex');

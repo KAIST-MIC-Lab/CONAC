@@ -100,7 +100,7 @@ To address these challenges, adaptive control methods have been widely employed 
 
 More recently, neuro-adaptive control (NAC) approaches have been introduced to approximate uncertain or unknown system dynamics or entire control laws using neural networks (NNs) \cite{Lewis:1998aa,Farrell:2006aa}. 
 NNs are well-known for their universal approximation property, which allows them to approximate any smooth function over a compact set with minimal error. 
-Various types of NNs have been utilized in NAC, including simpler architectures like single-hidden layer (SHL) NNs \cite{Lewis:1996aa,Ge:2010aa, Yesildirek:1995aa} and radial basis function (RBF) NNs \cite{Liu:2013ab,Ge:2002aa}, as well as more complex models like deep NNs (DNNs) \cite{Patil:2022aa} and their variations. 
+Various types of NNs have been utilized in NAC, including simpler architectures like single-hidden layer (SHL) NNs \cite{Lewis:1996aa,Ge:2010aa, Yesildirek:1995aa,Ryu:2024aa,Ryu:2025aa} and radial basis function (RBF) NNs \cite{Liu:2013ab,Ge:2002aa}, as well as more complex models like deep NNs (DNNs) \cite{Patil:2022aa} and their variations. 
 Conventionally, SHL and RBF NNs are often employed to approximate uncertain or unknown system dynamics or controllers due to their simplicity \cite{Esfandiari:2014aa,Esfandiari:2015aa,Yesildirek:1995aa,Gao:2006aa}.
 However, since DNNs offer greater expressive power, making them more effective for complex system approximations \cite{Rolnick:2018aa}, variations of DNNs, such as long short-term memory (LSTM) networks for time-varying dynamics \cite{Griffis:2023aa}, physics-informed NNs (PINNs) for leveraging physical system knowledge \cite{Hart:2024aa}, and convolutional NNs (CNNs) for learning historical sensor data \cite{Ryu:2024ac}, have further extended the capabilities of NAC systems.
 
@@ -189,8 +189,8 @@ The main contributions of this study are listed as follows:
 
 \hfill
 
-This study extends our preliminary work in \cite{Ryu:2024aa}, where an inequality constraint on the weight norm was introduced within a constrained optimization framework to ensure boundedness of the NN weights. 
-In addition to the weight constraints considered in \cite{Ryu:2024aa}, the present work also incorporates input constraints into the same framework to address the convex input saturation problem. 
+This study extends our preliminary works in \cite{Ryu:2024aa,Ryu:2025aa}, where inequality constraints on the weight and input norm were introduced within a constrained optimization framework to ensure boundedness of the NN weights and satisfy input norm saturation, respectively. 
+In addition to the weight and input norm constraints considered in \cite{Ryu:2024aa,Ryu:2025aa}, the present work also incorporates any convex input constraints into the same framework to address the convex input saturation problem. 
 Moreover, while the previous study was limited to numerical simulations, the proposed CONAC is experimentally validated through real-time implementation on a 2-DOF robotic manipulator.
 
 \subsection{Organization}
