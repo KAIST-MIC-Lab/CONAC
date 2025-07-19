@@ -142,7 +142,7 @@ In such cases, if the system model is inaccurate or the dynamics targeted by the
 To address the aforementioned issue, several approaches have been proposed in \cite{Gao:2006aa,Arefinia:2020aa,He:2016aa,Peng:2020aa,Esfandiari:2014aa,Karason:1994aa,Esfandiari:2015aa} to handle input constraints in NAC systems.
 Particularly, the auxiliary systems have been widely introduced.
 In \cite{Arefinia:2020aa,He:2016aa,Peng:2020aa}, the auxiliary states were generated whenever input saturation was detected, and these states were used as feedback terms in the control law to directly compensate for the effects of input saturation constraints.
-On the other hands, in \cite{Esfandiari:2014aa,Karason:1994aa,Esfandiari:2015aa}, the auxiliary systems were incorporated into the adaptation law by adding the auxiliary states to the feedback error for learning.
+On the other hand, in \cite{Esfandiari:2014aa,Karason:1994aa,Esfandiari:2015aa}, the auxiliary systems were incorporated into the adaptation law by adding the auxiliary states to the feedback error for learning.
 This approach helped the NN reduce input saturation by indirectly regulating the auxiliary states, during the adaptation process.
 
 However, these approaches typically handle input bound constraints on a per-input basis, \ie applying bounds to each scalar control variable individually, and may not account for more complex, nonlinear constraints, like input norm constraints, which are commonly found in physical systems such as robotic actuators or motor systems.
@@ -167,7 +167,7 @@ To address this, input constraints should be handled within a unified adaptive f
 % }
 
 A promising approach to overcoming the limitations of the existing methods lies in constrained optimization.
-By formulating the NAC problem as an unified optimization problem with constraints, it is possible to adapt the NN weights while minimizing an objective function, \eg tracking error, subject to both weight and input constraints, simultaneously.
+By formulating the NAC problem as a unified optimization problem with constraints, it is possible to adapt the NN weights while minimizing an objective function, \eg tracking error, subject to both weight and input constraints, simultaneously.
 Constrained optimization provides a theoretical framework for defining optimality and presents numerical methods for finding solutions that satisfy the constraints \cite{Nocedal:2006aa}.
 
 In existing literature, constrained optimization techniques, such as the Augmented Lagrangian Method (ALM) \cite{Evens:2021aa} and the Alternating Direction Method of Multipliers (ADMM) \cite{Wang:2019aa,Taylor:2016aa}, have been used to train NNs offline. 
@@ -180,7 +180,7 @@ This gap suggests that constrained optimization could be key to addressing both 
 The main contributions of this study are listed as follows:
 \begin{itemize}
     \item A constrained optimization-based neuro-adaptive control (CONAC) is proposed, where the control problem is formulated as a constrained optimization problem. In this formulation, weight and convex input constraints are incorporated as inequality constraints, while minimizing a given objective function.
-    \item Convex input constraints can be applied to the proposed CONAC, including input bound constraints, and norm constraints. Moreover, the proposed CONAC can handle any combination of these constraints, which can be useful in practical applications where multiple constraints need to be satisfied simultaneously.
+    \item Convex input constraints can be applied to the proposed CONAC, including input bound constraints and norm constraints. Moreover, the proposed CONAC can handle any combination of these constraints, which can be useful in practical applications where multiple constraints need to be satisfied simultaneously.
     \item Since the proposed CONAC approximates the entire ideal control law without any conventional controller, prior knowledge of the system dynamics or the system identification process for nominal conventional controller design can be avoided, which is often difficult and time-consuming to implement in practice. 
     \item The adaptation laws for DNN weights and Lagrange multipliers are systematically derived to solve the defined problem, using constrained optimization theory. These laws guarantee convergence to the first-order optimality conditions at steady state, specifically the Karush–Kuhn–Tucker (KKT) conditions, as described in \cite[Chap. 12, Thm. 12.1]{Nocedal:2006aa}.
     \item The proposed CONAC's stability is rigorously analyzed using Lyapunov theory, ensuring that the tracking error and DNN weights remain bounded. This analysis guarantees that the proposed CONAC can achieve stable online adaptation.
@@ -199,7 +199,7 @@ The remainder of this paper is organized as follows.
 Section \ref{sec:Problem Formulation} presents the target system and control objective.
 Section \ref{sec:ctrl design} introduces the proposed CONAC and the architecture of DNN used in the controller. 
 In Section \ref{sec:adap_laws}, the adaptation law is developed.
-Section \ref{sec:stability} analyzes a stability of CONAC.
+Section \ref{sec:stability} analyzes the stability of CONAC.
 Section \ref{sec:sim} presents a real-time implementation of CONAC on a 2-DOF robotic manipulator.
 Finally, Section \ref{sec:conclusion} concludes the paper and discusses potential future work.
 Candidates for convex input constraints are provided in Appendix \ref{sec:appen:cstr}. 
@@ -713,7 +713,7 @@ The recommended method to calculate the exact value of $\pptfrac{\fe}{\rbu}$ is 
     \right)
     .
 \end{equation}
-However, this method cannot be realized, since we do not have the exact system dynamics, \ie $\rbM,\rbVm, \rbF$ and $ \rbG$.
+However, this method cannot be realized, since we do not have the exact system dynamics, \ie $\rbM,\rbVm, \rbF$, and $\rbG$.
 Additionally, the computational cost of the forward sensitivity method is high, as the number of DNN's weights is generally large.
 
 In \cite{Douratsos:2007aa,Saerens:1991aa}, the authors approximate $\pptfrac{\fe}{\rbu}$ by taking the sign of each entry, \ie
@@ -1072,12 +1072,12 @@ According to \eqref{eq:lya2:dot} and Lemma \ref{lem:stable:set}, the invariant s
 The satisfaction of the constraints, \ie $c_j,\ \forall j\in\mathcal{I}\setminus \{\theta_i\}_{i\in\{0,\cdots,k-1\}}$, can be verified through the boundedness of $\estwth_k$.
 For the output layer's weight norm constraint $c_{\theta_k}$, if the corresponding Lagrange multiplier $\lambda_{\theta_k}$ increases sufficiently large due to the constraint violation, $\estwth_k$ approaches toward the origin as the invariant set $\Theta_{\theta_k}^{1}$ shrinks to a point.
 The remaining input constraints can be validated implicitly through the term ${\gamma}_2$ in \eqref{eq:lya2:dot}.
-Similarly to $c_{\theta_k}$, when a input constraint $c_j,\ \forall j\in\mathcal{I}\setminus \{\theta_i\}_{i\in\{0,\cdots,k\}}$, is violated, the corresponding Lagrange multiplier $\lambda_j$ increases sufficiently large, leading to an increase in ${\gamma}_2$.
-It makes ${\gamma}_2$ dominates the right-hand side of \eqref{eq:lya2:dot}, which leads $\ddtt V_2$ negative definite.
+Similarly to $c_{\theta_k}$, when an input constraint $c_j,\ \forall j\in\mathcal{I}\setminus \{\theta_i\}_{i\in\{0,\cdots,k\}}$, is violated, the corresponding Lagrange multiplier $\lambda_j$ increases sufficiently large, leading to an increase in ${\gamma}_2$.
+It makes ${\gamma}_2$ dominate the right-hand side of \eqref{eq:lya2:dot}, which makes $\ddtt V_2$ negative definite.
 This drives $\estwth_k$ toward the origin until the constraint is satisfied.
 % By Assumption \ref{assum:convex} and Lemma \ref{lem:convex:angle}, the input constraints can be considered as convex constraint in the $\estwth_k$-space.
 
-Therefore, the boundedness of $\fe$ and $\estwth_k$ is guaranteed by the invariant sets $\Theta_{\fe}^{1}$ and $\Theta_{\theta_k}^{1}$, and the satisfactions of $c_j,\ \forall j\in\mathcal{I}\setminus \{\theta_i\}_{i\in\{0,\cdots,k-1\}}$, is ensured.
+Therefore, the boundedness of $\fe$ and $\estwth_k$ is guaranteed by the invariant sets $\Theta_{\fe}^{1}$ and $\Theta_{\theta_k}^{1}$, and the satisfaction of $c_j,\ \forall j\in\mathcal{I}\setminus \{\theta_i\}_{i\in\{0,\cdots,k-1\}}$, is ensured.
 
 \subsection*{Case 2: Control input is not saturated.}
 
@@ -1719,7 +1719,7 @@ This is because the weights in (C$_1$), (C$_2$), and (C$_4$) were implicitly sup
 % , \ie by limiting the control input, the weight norms were also limited.
 % \MSRY{필요하다면 왜 제어입력 제약하는게 가중치 제약도 되는지 추가 가능}
 Furthermore, the constraints on the inner and hidden layer weights were never violated; that is, both $\norm{\estwth_0}$ and $\norm{\estwth_1}$ consistently remained below their limits.
-This was attributed to the fact that the backpropagated error being scaled by the elements' gradients of the activation function, which is bounded in $(0,1]$, \ie $\sigma(\cdot)=\tanh(\cdot)$.
+This was attributed to the fact that the backpropagated error was scaled by the gradients of the activation function, which is bounded in $(0,1]$, \ie $\sigma(\cdot)=\tanh(\cdot)$.
 
 Additional details on the constraint handling process are provided in Fig.~\ref{fig:ctrl:result:scope:beta}. 
 Similar to the case of the input constraints, the Lagrange multipliers $\lambda_{\theta_2}$ increased at around $30.4$ s, as shown in Fig.~\ref{fig:ctrl:result:scope:beta}, when $\estwth_2$ exceeded the prescribed norm constraint $\overline\theta_2$ (see Fig.~\ref{fig:ctrl:result:weight}), thereby adjusting the adaptation direction of $\estwth_2$ to mitigate the violation of the constraint $c_{\theta_2}$.
@@ -1929,7 +1929,7 @@ It should be noted that constraints \eqref{eq:cstr:input:bound} and \eqref{eq:cs
     \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/msRyu.jpg}}]{Myeongseok Ryu}
     received the B.S. degree in Mechanical Engineering from Incheon National University, South Korea, in 2023, and the M.S. degree in Mechanical Engineering from GIST, South Korea, in 2025. 
     He is currently serving as a researcher at the Cho Chun Shik Graduate School of Mobility at KAIST, South Korea.
-    His research interests include adaptive control, neural-networks, and constrained optimization.
+    His research interests include neuro-adaptive control, online optimization, and contraction theory.
     % \vspace{-10mm}
 \end{IEEEbiography}
 
