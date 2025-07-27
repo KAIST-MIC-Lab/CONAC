@@ -172,7 +172,17 @@ Constrained optimization provides a theoretical framework for defining optimalit
 
 In existing literature, constrained optimization techniques, such as the Augmented Lagrangian Method (ALM) \cite{Evens:2021aa} and the Alternating Direction Method of Multipliers (ADMM) \cite{Wang:2019aa,Taylor:2016aa}, have been used to train NNs offline. 
 % These methods impose constraints to address issues like gradient vanishing in backpropagation. 
-However, to the best of the authors' knowledge, no prior work has applied constrained optimization to NAC systems with real-time weight adaptation. 
+\MSRY{
+    여기를 수정해야 하지 않나요? 저희의 사전 연구가 있기 때문입니다.
+}
+\ctxt{red}
+{
+    However, to the best of the authors' knowledge, no prior work has applied constrained optimization to NAC systems with real-time weight adaptation. 
+    }
+\ctxt{blue}
+{
+    However, there are few works that have applied constrained optimization to NAC systems with real-time weight adaptation \cite{Ryu:2024aa,Ryu:2025aa}.
+}
 This gap suggests that constrained optimization could be key to addressing both weight boundedness and input constraints in a unified, theoretically grounded framework, particularly in real-time NAC.
 
 \subsection{Contributions}
@@ -189,9 +199,9 @@ The main contributions of this study are listed as follows:
 
 \hfill
 
-This study extends our preliminary works in \cite{Ryu:2024aa,Ryu:2025aa}, where inequality constraints on the weight and input norm were introduced within a constrained optimization framework to ensure boundedness of the NN weights and satisfy input norm saturation, respectively. 
-In addition to the weight and input norm constraints considered in \cite{Ryu:2024aa,Ryu:2025aa}, the present work also incorporates any convex input constraints into the same framework to address the convex input saturation problem. 
-Moreover, while the previous study was limited to numerical simulations, the proposed CONAC is experimentally validated through real-time implementation on a 2-DOF robotic manipulator.
+This study extends our preliminary works in \cite{Ryu:2024aa,Ryu:2025aa}, where inequality constraints on the weight and input norm were introduced within a constrained optimization framework to ensure boundedness of the NN weights and satisfy input norm constraint, respectively. 
+In addition to the weight and input norm constraints considered in \cite{Ryu:2024aa,Ryu:2025aa}, the present work incorporates any convex input constraints into the same framework to address the convex input saturation problem. 
+Moreover, while the previous study was limited to numerical simulations, the proposed CONAC was experimentally validated through real-time implementation on a 2-DOF robotic manipulator.
 
 \subsection{Organization}
 
@@ -491,9 +501,9 @@ The DNN $\NN({\q}_n;\wth)$ has $k+1$ layers, where the input layer is indexed by
 For instance, in Fig.~\ref{fig:DNN}, the DNN $\NN({\q}_n;\wth)$ with $k=2,l_0=2,l_1=l_2=3$, and $l_3=2$ is illustrated.
 Notice that the output size of $\NN(\cdot)$ is the same as that of the control input $\rbu$, \ie $l_{k+1}=n$. 
 
-The DNN input vector ${\q}_n$ is defined as ${\q}_n:=(\q^\top,\dq^\top,\fe^\top,1)^\top\in\R^{3n+1}$ to include the current state of the system, the filtered error, and the augmentation term $1$ to account for bias term in the input weight matrix $\wV_0$.
+The DNN input vector ${\q}_n$ is defined as ${\q}_n=(\q^\top,\dq^\top,\fe^\top,1)^\top\in\R^{3n+1}$ to include the current state of the system, the filtered error, and the augmentation term $1$ to account for bias term in the input weight matrix $\wV_0$.
+The activation function is defined as $\act_i(\mv x)=\left(\sigma(x_1),\sigma(x_2),\cdots, \sigma(x_{l_{i}}), 1\right)^\top,\ \forall\mv x\in\R^{l_i}$, where $\sigma: \R\to\R$ is a nonlinear function, and the augmentation of $1$ is used to account for bias terms in the weight matrices, similar to the input vector ${\q}_n$.
 The weights $\wV_i,\ \forall i\in\{0,\cdots,k\}$, are initialized randomly using uniform distribution at the beginning of the control process.
-The activation function is defined as $\act_i(\mv x):=\left(\sigma(x_1),\sigma(x_2),\cdots, \sigma(x_{l_{i}}), 1\right)^\top,\ \forall\mv x\in\R^{l_i}$, where $\sigma: \R\to\R$ is a nonlinear function, and the augmentation of $1$ is used to account for bias terms in the weight matrices, similar to the input vector ${\q}_n$.
 
 % \MSRY{생략 가능할 것 같습니다.}
 % \ctxt{red}
@@ -502,7 +512,7 @@ The activation function is defined as $\act_i(\mv x):=\left(\sigma(x_1),\sigma(x
     However, for control applications, where relatively shallow DNNs are typically sufficient and the gradient vanishing issue is less severe, the sigmoid function or the hyperbolic tangent function is commonly used as the nonlinear function $\sigma(\cdot)$. 
     These functions simplify stability analysis, since they are continuously differentiable and their outputs and gradients are bounded. 
 % }
-In this study, the hyperbolic tangent function $\tanh(\cdot)$ was selected as the nonlinear function, \ie $\sigma(x) = \tanh(x),\ \forall x\in\R$, which provides desirable boundedness with $\norm{\sigma(x)}<1$ and $0<\norm{\ddtfrac{\sigma(x)}{x}}\le 1$.
+In this study, the hyperbolic tangent function $\tanh(\cdot)$ was selected as the nonlinear function, \ie $\sigma(\cdot) = \tanh(\cdot)$, which provides desirable boundedness with $\norm{\sigma(x)}<1$ and $0<\norm{\ddtfrac{\sigma(x)}{x}}\le 1$.
 
 For simplicity, each layer's weights are vectorized as $\wth_i:=\myvec(\wV_i)\in\R^{\Xi_i},\ \forall i\in\{0,\cdots,k\}$, where $\Xi_i:= (l_i+1)l_{i+1}$ is the number of weights in the $i$th layer. 
 The total weight vector $\wth\in\R^{\Xi}$ is defined by augmenting $\wth_i, \forall i\in \{0,\cdots,k\}$, as 
@@ -713,16 +723,19 @@ The recommended method to calculate the exact value of $\pptfrac{\fe}{\rbu}$ is 
     \right)
     .
 \end{equation}
-However, this method cannot be realized, since we do not have the exact system dynamics, \ie $\rbM,\rbVm, \rbF$, and $\rbG$.
-Additionally, the computational cost of the forward sensitivity method is high, as the number of DNN's weights is generally large.
+However, this cannot be realized, since we do not know the exact system dynamics, \ie $\rbM,\rbVm, \rbF$, and $\rbG$.
+Additionally, the computational cost of the forward sensitivity method is high, as the number of DNN weights is generally large.
 
 In \cite{Douratsos:2007aa,Saerens:1991aa}, the authors approximate $\pptfrac{\fe}{\rbu}$ by taking the sign of each entry, \ie
 $
     \pptfrac{\fe}{\rbu}
     \approx
     \left[
-        \mysign(\pptfrac{r_i}{\tau_j})
-    \right]_{i,j\in\{1,\cdots,m\}}
+        \mysign
+        \left(
+            \pptfrac{r_i}{\tau_j}
+        \right)
+    \right]_{i,j\in\{1,\cdots,n\}}
 $, 
 assuming known control directions.
 However, this approach is not applicable to \eqref{eq:sys:filtered}, where control directions are unknown.
@@ -799,7 +812,7 @@ Next, we present the following assumptions, which specify the conditions for the
     This assumption will be used in the stability analysis (see Lemma \ref{lem:convex:angle}).
 \end{remark}
 
-The algorithm of the proposed CONAC is presented by Algorithm \ref{alg:CONAC}, implemented in a discrete-time controller with a sampling time of~$T_s$, where $(\cdot)^{(k)}$ denotes the value at the $k$th time step.
+The algorithm of the proposed CONAC is presented by Algorithm \ref{alg:CONAC}, implemented in a discrete-time controller with a sampling time of~$T_s$, where $(\cdot^{(k)})$ denotes the value at the $k$th time step.
 
 \begin{algorithm}[!t]
     \caption{Proposed CONAC Algorithm}\label{alg:CONAC}
@@ -1676,7 +1689,7 @@ Furthermore, once the control saturation was lifted—typically due to changes i
 		}
 	\caption{
         The effect of the Lagrange multiplier $\lambda_{j}$ on the adaptation direction of $\widehat{\mv{\theta}}_2$ is illustrated. 
-        The notations $(\cdot)'$ and $(\cdot)''$ denote two distinct cases corresponding to large and small values of the Lagrange multiplier, respectively, \ie $\lambda_{j}' > \lambda_{j}''$.
+        The notations $(\cdot^{\prime})$ and $(\cdot^{\prime\prime})$ denote two distinct cases corresponding to large and small values of the Lagrange multiplier, respectively, \ie $\lambda_{j}^{\prime} > \lambda_{j}^{\prime\prime}$.
         % \vspace{-5mm}
     }
 	\label{fig:lambda_effect}
@@ -1745,8 +1758,8 @@ Since the proposed CONAC was implemented in discrete time, a direct demonstratio
 % % }
 % % \ctxt{blue}
 % % {
-    This is because, the KKT conditions are typically defined for continuous-time systems, and their direct application to discrete-time systems requires careful consideration of the sampling rate and the dynamics of the system.
-    Although exact satisfaction of the KKT conditions was not observed—due to the lack of a clear steady state in the discrete-time implementation—the control results remain sufficiently close to the optimal behavior implied by the KKT conditions.
+    This is because, the KKT conditions are typically defined for continuous-time systems, and their direct application to discrete-time systems requires careful consideration of the sampling rate.
+    Although exact satisfaction of the KKT conditions was not observed—due to the lack of a clear steady state in the discrete-time implementation—the control results remain sufficiently close to the optimal behavior implying that the KKT conditions were approximately satisfied.
 % % }
 
 % ------------------------------------
@@ -1928,7 +1941,7 @@ It should be noted that constraints \eqref{eq:cstr:input:bound} and \eqref{eq:cs
 \begin{IEEEbiography}[{
     \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/msRyu.jpg}}]{Myeongseok Ryu}
     received the B.S. degree in Mechanical Engineering from Incheon National University, South Korea, in 2023, and the M.S. degree in Mechanical Engineering from GIST, South Korea, in 2025. 
-    He is currently serving as a researcher at the Cho Chun Shik Graduate School of Mobility at KAIST, South Korea.
+    He is currently pursuing the Ph.D. degree in the Cho Chun Shik Graduate School of Mobility at Korea Advanced Institute of Science and Technology (KAIST), South Korea.
     His research interests include neuro-adaptive control, online optimization, and contraction theory.
     % \vspace{-10mm}
 \end{IEEEbiography}
