@@ -8,6 +8,10 @@ function [nn, opt] = nnBackward(nn, opt, e, u_NN)
         return;
     end
 
+    %% BLF??
+    % max_x = 2;
+    % e(1) = e(1)/(max_x^2 - e(1)^2);
+
     %% UPDATE
     % active set check
     [c, cd] = nnCstr(nn, opt, u_NN, nnGrad);

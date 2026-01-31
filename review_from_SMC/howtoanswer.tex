@@ -1,0 +1,64 @@
+\newpage
+\section*{Summary of Revisions Grouped by Priority}
+
+S.S.Ge 교수님 논문 많이 참조할 것
+1. input constraint
+2. ...
+
+BLF 
+1. 제약조건을 다룰때 BF 트렌드임
+2. CBF: QP를 기반으로 해서 최적화 문제 풀이가 필요함
+3. BLF: 보수적임; 
+3. 또한 입력제약에 대한 고려를 안함
+4. 또한 외란에 대한...
+
+S.S.Ge 후속 연구들이랑 비교?
+
+% \subsection*{Overview}
+
+% \begin{itemize}
+%     \item 추가 제어기 
+% \end{itemize}
+
+\subsection*{Priority 1: High Priority}
+
+\begin{itemize}
+    \item \cref{rev:r1c1}: 기존 제약 제어 방식(BLF, Projection) 대비 독창성 및 차별성 명확화.
+    \item \cref{rev:r1c2}: Lagrange multiplier의 유계성(boundedness) 및 수렴성 증명 보완.
+    \item \cref{rev:r1c4}: 표준 Neuro-adaptive 및 MPC 기법과의 실험적 비교 데이터 추가.
+    \item \cref{rev:r2c1}: 서론 부분의 기술적 도전 과제 및 연구 갭(Gap) 설명 강화.
+    \item \cref{rev:r2c2}: 제안한 알고리즘의 장단점 분석 및 가혹 조건에서의 검증 보완.
+    \item \cref{rev:r2c6}: 제약 조건 경계에서의 제어 신호 특성 및 제약 위반 방지 메커니즘 분석.
+    \item \cref{rev:r3c1}: Convex 입력 제약 설계에 대한 이론적 분석 및 상세 구현 방법 기술.
+    \item \cref{rev:r3c6}: 시뮬레이션 결과의 기여도 강조 및 결과의 목적성 명확화.
+    \item \cref{rev:r4c6}: 포화 함수의 비미분성 문제 해결을 통한 음함수 정리(IFT) 적용 타당성 확보.
+    \item \cref{rev:r4c7}: 최신 RL 및 Event-triggered 연구들과의 차별성 분석 추가.
+\end{itemize}
+
+\subsection*{Priority 2: Medium Priority}
+이론적 엄밀성 보완, 실험 검증 확대 및 기술적 분석 강화에 관한 수정 사항들입니다.
+\begin{itemize}
+    \item \cref{rev:r1c3}: DNN 그라디언트 유도 과정의 엄밀성 확보 및 제약 조건의 선형 독립성 검증.
+    \item \cref{rev:r2c3}: DNN 가중치 발산 방지를 위한 이상적 환경 및 기존 기법 한계점 분석.
+    \item \cref{rev:r2c4}: 제어 신호 설계에서의 singularity(특이점) 문제 발생 여부 검토.
+    \item \cref{rev:r2c5}: 에러 바운드(Error bound)에 대한 종합적인 이론적/실험적 평가.
+    \item \cref{rev:r2c7}: 파라미터 튜닝 방법론의 체계적 절차 기술 및 재현성 확보.
+    \item \cref{rev:r2c8}: 큰 초기 오차(Large initial conditions) 하에서의 수렴 성능 검증.
+    \item \cref{rev:r2c9}: 서스펜션 시스템 구현 상세 및 가혹한 환경에서의 제어 성능 평가.
+    \item \cref{rev:r2c10}: 상태 변수 오차가 과도 응답(Transient response)에 미치는 영향 분석.
+    \item \cref{rev:r3c2}: 가중치 적응 법칙(Weight adaptation laws)의 최적화 설계 과정 명확화.
+    \item \cref{rev:r4c2}: DNN 구조(층 수, 노드 수) 선정에 대한 정량적 근거 보완.
+    \item \cref{rev:r4c3}: 시스템 외란 및 파라미터 불확실성 하에서의 성능 검증 시나리오 추가.
+    \item \cref{rev:r4c4}: 저속, 고속 및 급격한 속도 변화 상황에서의 실험 검증 확대.
+    \item \cref{rev:r4c5}: 기준 전류 신호의 다양화(Step 신호 외)를 통한 분석 실험 추가.
+\end{itemize}
+
+\subsection*{Priority 3: Low Priority}
+논문의 가독성 향상, 구조 개선 및 편집상의 수정 사항들입니다.
+\begin{itemize}
+    \item \cref{rev:r1c5}: 전반적인 오타 수정 및 수식 표기법(Notation)의 통일성 확보.
+    \item \cref{rev:r3c3}: 가정(Assumptions)과 보조 정리(Lemmas)를 Preliminaries 섹션으로 통합 재배치.
+    \item \cref{rev:r3c4}: 기존 6개의 기여도를 3개의 핵심 항목으로 압축 및 재정립.
+    \item \cref{rev:r3c5}: 기호 정의(Symbol definitions)의 오류 제거 및 전반적인 문법 교정.
+    \item \cref{rev:r4c1}: 입력 그라디언트의 단위 행렬 근사에 대한 이론적 배경 기술 보완.
+\end{itemize}

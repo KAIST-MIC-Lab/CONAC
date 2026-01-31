@@ -1,0 +1,683 @@
+\documentclass[12pt,english]{reviewresponse}
+
+%% Language
+\usepackage{babel}
+\usepackage[babel]{microtype}
+\usepackage[babel]{csquotes}
+
+%% Fonts
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+%\usepackage{newcent} % different font
+%\usepackage[scaled]{beramono} % different monospace font
+
+\usepackage{kotex}
+
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+\crefformat{revcomment}{#2Comment #1#3}
+\Crefformat{revcomment}{#2Comment #1#3}
+
+\crefmultiformat{revcomment}{#2Comment #1#3}{ and #2Comment #1#3}{, #2Comment #1#3}{, #2Comment #1#3}
+
+\usepackage{tocloft} 
+\setlength{\cftbeforesecskip}{0.2em}
+
+%% Bibliography
+\usepackage[backend=biber,style=ieee,dashed=false,url=false,isbn=false,defernumbers=true,refsection=section]{biblatex}
+\bibliography{../template/refs.bib}
+
+\title{
+    Constrained Optimization-Based Neuro-Adaptive Control (CONAC) for Euler-Lagrange Systems Under Weight and Input Constraints
+}
+\author{
+    Myeongseok Ryu, Donghwa Hong, and Kyunghwan Choi
+}
+\journal{
+    IEEE Transactions on Systems, Man and Cybernetics: Systems
+}
+\manuscript{SMCA-25-08-3137}
+\editorname{Dr. Doom}
+
+\begin{document}
+\maketitle
+% \tableofcontents
+\newpage
+
+% Cover Letter
+\input{cover_letter.tex}
+
+% How to Answer (Summary of Revisions)
+\section*{Summary of Revisions Grouped by Priority}
+
+\subsection*{Priority 1: High Priority}
+\begin{itemize}
+    \item \cref{rev:r1c1}: Clarification of originality and distinctiveness compared to conventional constrained control methods (e.g., BLF, Projection).
+    \item \cref{rev:r1c2}: Supplementation of proofs regarding the boundedness and convergence of Lagrange multipliers.
+    \item \cref{rev:r1c4}: Addition of experimental comparison data with standard Neuro-adaptive and MPC techniques.
+    \item \cref{rev:r2c1}: Reinforcement of the explanation regarding technical challenges and the research gap in the Introduction.
+    \item \cref{rev:r2c2}: Analysis of the proposed algorithm's advantages/disadvantages and supplementary verification under harsh conditions.
+    \item \cref{rev:r2c6}: Analysis of control signal characteristics at constraint boundaries and the mechanism for preventing constraint violations.
+    \item \cref{rev:r3c1}: Theoretical analysis and detailed implementation description regarding convex input constraint design.
+    \item \cref{rev:r3c6}: Emphasis on the contributions of simulation results and clarification of their intended purpose.
+    \item \cref{rev:r4c6}: Justification for applying the Implicit Function Theorem (IFT) by addressing the non-differentiability issue of saturation functions.
+    \item \cref{rev:r4c7}: Addition of analysis differentiating this work from recent RL and Event-triggered research.
+\end{itemize}
+
+\subsection*{Priority 2: Medium Priority}
+These revisions focus on enhancing theoretical rigor, expanding experimental verification, and strengthening technical analysis.
+\begin{itemize}
+    \item \cref{rev:r1c3}: Ensuring rigor in the DNN gradient derivation process and verifying the linear independence of constraints.
+    \item \cref{rev:r2c3}: Analysis of ideal environments for preventing DNN weight divergence and the limitations of existing techniques.
+    \item \cref{rev:r2c4}: Examination of potential singularity issues in control signal design.
+    \item \cref{rev:r2c5}: Comprehensive theoretical/experimental evaluation of error bounds.
+    \item \cref{rev:r2c7}: Description of the systematic procedure for parameter tuning to ensure reproducibility.
+    \item \cref{rev:r2c8}: Verification of convergence performance under large initial conditions.
+    \item \cref{rev:r2c9}: Detailed implementation of the suspension system and evaluation of control performance in harsh environments.
+    \item \cref{rev:r2c10}: Analysis of the impact of state variable errors on transient response.
+    \item \cref{rev:r3c2}: Clarification of the optimization design process for weight adaptation laws.
+    \item \cref{rev:r4c2}: Supplementation of quantitative grounds for selecting the DNN structure (number of layers, nodes).
+    \item \cref{rev:r4c3}: Addition of performance verification scenarios under system disturbances and parameter uncertainties.
+    \item \cref{rev:r4c4}: Expanded experimental verification under low-speed, high-speed, and rapid velocity change conditions.
+    \item \cref{rev:r4c5}: Addition of analytical experiments using diverse reference current signals (beyond Step signals).
+\end{itemize}
+
+\subsection*{Priority 3: Low Priority}
+These revisions address readability, structural improvements, and editorial corrections.
+\begin{itemize}
+    \item \cref{rev:r1c5}: Correction of general typos and unification of mathematical notation.
+    \item \cref{rev:r3c3}: Relocation and integration of Assumptions and Lemmas into the Preliminaries section.
+    \item \cref{rev:r3c4}: Condensation and redefinition of the contributions from six items into three core points.
+    \item \cref{rev:r3c5}: Removal of errors in symbol definitions and overall grammatical correction.
+    \item \cref{rev:r4c1}: Supplementation of the theoretical background regarding the approximation of the input gradient as an identity matrix.
+\end{itemize}
+
+\newpage
+
+% Response to Editor
+\editor
+\begin{generalcomment}
+    The reviewer(s) have suggested some minor revisions to your manuscript. Therefore, I invite you to respond to the reviewer(s)' comments and revise your manuscript.
+\end{generalcomment}
+\begin{revresponse}[We appreciate your handling of the review process.]
+    According to the reviewers' comments, we have checked our manuscript and addressed them in the following way:
+    \begin{enumerate}
+        \item We added content.
+        \item We removed our wrong statements in Section~I.
+    \end{enumerate}
+\end{revresponse}
+\begin{concludingresponse}[to the Editor]
+    Thank you for your valuable comments on our manuscript. 
+    We have done our best to incorporate changes to reflect the suggestions, which allowed us to improve the quality of our work.
+\end{concludingresponse}
+
+% ***************************************
+% Reviewer 1
+% ***************************************
+\reviewer
+\begin{generalcomment}
+    This paper proposes a constrained optimization-based neuro-adaptive control (CONAC) method for Euler-Lagrange systems under weight and input constraints, with real-time experimental validation. The integration of DNN approximation within a constrained optimization framework is interesting. However, several critical issues must be addressed before the paper can be considered for publication.
+\end{generalcomment}
+\begin{revresponse}[Thank you for your feedback.]
+    We have carefully addressed all the issues item by item as follows.
+\end{revresponse}
+
+\begin{revcomment}[1]{rev:r1c1}
+    The main contribution lacks clarity. The paper claims to handle both weight and input constraints simultaneously, but it fails to explain why this is necessary or how it improves upon existing constrained adaptive control methods (e.g., barrier Lyapunov functions, projection algorithms). The novelty over the authors’ prior work [9], [10] is not sufficiently justified.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item It appears critical to more clearly demonstrate distinctiveness from existing methods.
+        \item Specifically explain the differences and advantages compared to BLF and Projection algorithms, including experimental comparisons.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[1]{rev:r1c2}
+    The adaptation law (16a) relies on Lagrange multipliers generated from constraints, yet the convergence analysis does not establish whether the multipliers remain bounded or converge to optimal values. Without such guarantees, the claim of "bounded DNN weights" is incomplete and potentially misleading.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item As previously considered, an analysis of the convergence or boundedness of the Lagrange multipliers is required.
+        \item If convergence analysis is difficult, verify if at least boundedness can be guaranteed.
+    \end{itemize}   
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[2]{rev:r1c3}
+    Equation (35) and the linear independence claim in the paragraph below require verification. The gradient expressions appear inconsistent with standard chain-rule derivation for DNNs. A rigorous derivation must be provided to ensure correctness.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item Add a rigorous proof regarding the linear independence of the suggested constraints.
+        \item In fact, since it is not strictly essential, removing it could also be considered.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[1]{rev:r1c4}
+    The simulation and experiment compare only four controllers, all designed by the authors. No comparison with established neuro-adaptive or model predictive control methods under the same constraints is included. This undermines the claimed superiority of CONAC.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item Select the Neuro-adaptive MPC suggested here, along with the BLF and Proj. alg. mentioned in \cref{rev:r1c4}, as additional comparison targets.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[3]{rev:r1c5}
+    The manuscript contains notation inconsistencies and grammatical errors that hinder readability. A thorough revision for technical accuracy and language quality is required.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item Correct overall typos and grammatical errors.
+        \item Unify mathematical notation.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{concludingresponse}[]
+    Thank you for your valuable comments on our manuscript. 
+\end{concludingresponse}
+
+% ***************************************
+% Reviewer 2
+% ***************************************
+\reviewer
+\begin{generalcomment}
+    This paper presents a constrained optimization based neuro-adaptive control (CONAC) for unknown Euler-Lagrange systems subject to weight and convex input constraint. Generally, this is a well written and organized article with interesting theoretical results proposed
+\end{generalcomment}
+\begin{revresponse}[Thank you for your feedback.]
+    We have carefully addressed all the issues item by item as follows.
+\end{revresponse}
+
+\begin{revcomment}[1]{rev:r2c1}
+    The introduction needs to be enhanced. Although the authors have incorporated much literature, the writing is superficial. It is important to demonstrate the challenge of the research investigated and the gap closed by the proposed work.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item Similar to Reviewer 1's comment, specifically explain the distinctiveness and advantages over existing research, BLF, Proj. alg., etc.
+        \item Clearly present the limitations and issues of existing research.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[1]{rev:r2c2}
+    The authors should survey more about the advantages and disadvantages of the proposed algorithm.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item Similar to Reviewer 1's comment, compare advantages and disadvantages by adding comparisons with existing studies.
+        \item Additionally, there is a need to make the experiments more rigorous.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[2]{rev:r2c3}
+    The authors must thoroughly examine the ideal circumstances for addressing the issue of DNN weights.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item It would be beneficial to show the process of DNN divergence.
+        \item Additionally, it is necessary to clearly demonstrate the limitations of existing methods.
+        \begin{itemize}
+            \item Show that Proj. fails to control from the moment of projection.
+            \item Show clearly that Modf. fails to control due to bias.
+        \end{itemize}
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[2]{rev:r2c4}
+    In the designed control signal, there is no occurrence of singularity problem in the control signal.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item It is unclear what this means. Additional explanation is needed.
+        \item There shouldn't be a null space...
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[2]{rev:r2c5}
+    The authors should perform a more comprehensive analysis concerning the evaluation of error bounds.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item Endeavor to derive the error bound theoretically and verify it experimentally.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[1]{rev:r2c6}
+    What will the control signal represent at the extremes of these bounds? It will correspond to the Lyapunov function. How does it prevent breaches of constraints?
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item Need to analyze the characteristics of the control signal generated when constraints (especially input constraints) are reached.
+        \item Verify whether it generates a feasible control signal rather than simply projecting it.
+        \item Consider using MPC for comparison.
+        \begin{itemize}
+            \item MPC assumes full system knowledge and generates optimal control signals satisfying constraints.
+        \end{itemize}
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[2]{rev:r2c7}
+    It is important to clarify whether these values were tuned experimentally, optimized based on system characteristics, or derived analytically. A brief subsection or table detailing the parameter tuning methodology would improve reproducibility and technical transparency.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item There is a need to explain the tuning sequence.
+        \item Optimization-based finding seems too extensive.
+        \item Roughly: 1. Select DNN structure, 2. Tune gain without considering constraints, 3. Retune gain while considering constraints.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[2]{rev:r2c8}
+    To showcase the effective functioning of the proposed controller, it is essential to evaluate large initial conditions for the system.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item Consider setting larger initial conditions by changing the experimental environment.
+        \item However, note that since this controller uses a neural network, it starts from zero initial error and learns by repeating scenarios with a small learning rate.
+        \item This needs to be taken into account when explaining.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[2]{rev:r2c9}
+    The authors ought to elaborate further on the execution of the suspension system and the associated challenges.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item Consider evaluating control performance in a harsher environment by adding elements to the experimental setup.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[2]{rev:r2c10}
+    The influence of state variable errors on the system's transient response is inadequately depicted.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item Since controlling without initial error is the baseline, additional explanation is needed.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{concludingresponse}[]
+    Thank you for your valuable comments on our manuscript. 
+\end{concludingresponse}
+
+% ***************************************
+% Reviewer 3
+% ***************************************
+\reviewer
+\begin{generalcomment}
+    This work addresses the constrained optimization control issue for unknown Euler-Lagrange systems subject to weight and convex input constraints, and proposes a constrained optimization-based neuro-adaptive control (CONAC) scheme by deep neural network. This is an interesting topic, but there is considerable room for improvement in the aspects of design analysis and operational implementation. 
+\end{generalcomment}
+\begin{revresponse}[Thank you for your feedback.]
+    We have carefully addressed all the issues item by item as follows.
+\end{revresponse}
+
+\begin{revcomment}[2]{rev:r3c1}
+    In the control design, the design and improvement of convex input constraint do not provide a clear explanation. It is suggested to elaborate in detail from the perspectives of theoretical analysis and control implementation.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item It was intentionally generalized as a convex saturation function; need to consider how to explain this more clearly.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[2]{rev:r3c2}
+    In the section of weight adaptation laws, the reviewer is unable to clearly understand the results of the optimization design process of this weight adaptive law.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item Need to consider ways to make the analysis clearer and simpler.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}   
+
+\begin{revcomment}[3]{rev:r3c3}
+    The organization and logic of the manuscript need to be further improved. For example, in the sections of II-IV, the assumptions and lemmas all exist. Such an organization really confuses me. This makes one feel that assumptions and preliminaries are readily available and can be applied at any time.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item Gather all Assumptions and Lemmas into the Preliminaries section.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[3]{rev:r3c4}
+    Authors identify six key contributions in this manuscript. However, for a scientific paper, how could there be such a significant innovation? If so, why would one submit their work to top-tier journals like nature or science?
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item Reduce the contributions and summarize them concisely.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[3]{rev:r3c5}
+    The manuscript has many issues with symbol definitions. The author should conduct a comprehensive review and eliminate these unnecessary flaws.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item Correct overall typos and grammatical errors.
+        \item Unify mathematical notation.
+        \item Similar to comment \cref{rev:r1c5}.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[1]{rev:r3c6}
+    The simulation section does not sufficiently highlight the key contributions of the manuscript. Furthermore, the motivations behind some of the simulation results are unclear. For example, what is the purpose of Figure 6?
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item Similar to comments from Reviewers 1 and 2, specifically explain the distinctiveness and advantages compared to existing research, BLF, Proj. alg., etc.
+        \item The explanation of Fig. 6's purpose seems sufficient, but need to consider ways to make it clearer.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+% ***************************************
+% Reviewer 4
+% ***************************************
+\reviewer
+\begin{generalcomment}
+    This document contains two papers focusing on "Constrained Optimization-Based Neuro-Adaptive Control (CONAC)", which conduct research on Euler-Lagrange systems (2-DOF robotic manipulators) and synchronous machine drive systems respectively. However, there are still many aspects that need improvement in terms of theoretical derivation, experimental verification and analysis, and the overall scheme.
+\end{generalcomment}
+\begin{revresponse}[Thank you for your feedback.]
+    We have carefully addressed all the issues item by item as follows.
+\end{revresponse}
+
+\begin{revcomment}[3]{rev:r4c1}
+    Both papers need to calculate the gradient of the tracking error with respect to the control input to derive the adaptation law. However, due to the unknown system dynamics, this gradient is approximated as an identity matrix. Only the first paper mentions that the approximation is based on the known positive definiteness of the inertia matrix M, while the second paper directly defaults to this approximation without providing any theoretical basis or error analysis.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item The second paper also used the positive definiteness of the L matrix, but it seems the reviewer missed it.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[2]{rev:r4c2}
+    The first paper lacks quantitative analysis for the selection of the DNN architecture: the paper uses a DNN with 2 hidden layers and 4 nodes in each hidden layer, but fails to explain why 4 nodes are the optimal choice.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item It was selected experimentally.
+        \item Similar to comment \cref{rev:r2c7}.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[2]{rev:r4c3}
+    The first paper mainly evaluates performance through the tracking error of the norm and the satisfaction of constraints, but it lacks analysis of key indicators in industrial scenarios and does not test the system's performance under system disturbances or parameter uncertainties.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item Consider adding scenarios.
+        \item Disturbances can certainly be added.
+        \item Uncertainties do not seem necessary to add since the system is already assumed to be unknown.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[2]{rev:r4c4}
+    The experimental scenario of the second paper is simplistic: the verification is only conducted at the rated speed (240.855 rad/s), and low-speed, high-speed, or sudden speed change scenarios are not tested.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item The second paper is a different paper.
+        \item Since it uses a different experimental environment, adding harsh conditions seems sufficient.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[2]{rev:r4c5}
+    The reference current waveform in the simulation scenario of the second paper is composed of step signals, and no other forms of signals are used for analytical experiments.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item Same as above.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[2]{rev:r4c6}
+    In the paper on synchronous machines, the "Implicit Function Theorem" is used to prove the existence of the ideal control input u*, but a key prerequisite is ignored: the Implicit Function Theorem requires that "the partial derivative is non-singular and continuously differentiable". However, the voltage saturation function is non-differentiable at the saturation point. When the control input is close to saturation, the existence of the partial derivative cannot be guaranteed, leading to the failure of the existence of u* near the saturation point, which directly undermines the theoretical foundation of the controller design.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item As above, this is about a different paper.
+        \item However, since this paper also uses IFT, it seems possible to respond by addressing the related critique.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{revcomment}[1]{rev:r4c7}
+    The paper focuses on the Constrained Optimization control, but what is the difference between it and the following latest achievements: "Adaptive critic design for safety-optimal FTC of unknown nonlinear systems with asymmetric constrained-input", "Reinforcement learning-based secure tracking control for nonlinear interconnected systems: An event-triggered solution approach", "A lightweight network enhanced by attention-guided cross-scale interaction for underwater object detection", and "Observer based fault tolerant control design for saturated nonlinear systems with full state constraints via a novel event-triggered mechanism "? The discussion and analysis between them may help improve the quality and persuasiveness of the paper's innovation.
+\end{revcomment}
+
+\begin{howtoanswer}
+    \begin{itemize}
+        \item The provided existing papers are as follows:
+        \begin{itemize}
+            \item Adaptive critic design for safety-optimal FTC of unknown nonlinear systems with asymmetric constrained-input
+            \item Reinforcement learning-based secure tracking control for nonlinear interconnected systems: An event-triggered solution approach
+            \item A lightweight network enhanced by attention-guided cross-scale interaction for underwater object detection
+            \item Observer based fault tolerant control design for saturated nonlinear systems with full state constraints via a novel event-triggered mechanism
+        \end{itemize}
+        \item Clearly explain the distinctiveness of this paper compared to the above papers.
+    \end{itemize}
+\end{howtoanswer}
+
+\begin{revresponse}
+    We ...
+    \begin{changes}
+        This really important sentence was added to the paper.
+    \end{changes}
+\end{revresponse}
+
+\begin{concludingresponse}[]
+    Thank you for your valuable comments on our manuscript. 
+\end{concludingresponse}
+
+\end{document}
