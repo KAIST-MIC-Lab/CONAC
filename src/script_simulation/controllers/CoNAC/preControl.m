@@ -1,8 +1,7 @@
 
-x_in = [x1;x2;r];
-
-[nn, u_NN] = nnForward(nn, opt, x_in);
-u = u_NN;
+x_in = [x1;x2;r];                           % NN input vector 
+[nn, u_NN] = nnForward(nn, opt, x_in);      % NN forward propagation
+u = u_NN;                           % control input (before saturation)   
 
 
 

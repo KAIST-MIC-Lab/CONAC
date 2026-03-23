@@ -1,4 +1,5 @@
 function Vn = nnWeightNorm(th, nnOpt)
+    % calc. L2 norm of NN weights for each layer
 
     Vn = zeros(nnOpt.l_size-1,1);
 

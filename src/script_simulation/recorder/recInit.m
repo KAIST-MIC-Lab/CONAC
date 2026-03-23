@@ -1,10 +1,14 @@
 
 fprintf("\n");
-fprintf(" FLAGs\n");
-fprintf("     animation      : "+string(ANIMATION_FLAG)+"\n");
-fprintf("     animation save : "+string(AINMATION_SAVE_FLAG)+"\n");
-fprintf("     figure save    : "+string(FIGURE_SAVE_FLAG)+"\n");
+fprintf(" Simulation Settings\n");
+fprintf("     figure plot    : "+string(FIGURE_PLOT_FLAG)+"\n");
 fprintf("     result save    : "+string(RESULT_SAVE_FLAG)+"\n");
+switch CONTROL_NUM
+    case 1
+        fprintf("     control method  : CoNAC\n");
+    case 2
+        fprintf("     control method  : Auxiliary Control\n");
+end
 fprintf("\n");
 
 %% RECORDER

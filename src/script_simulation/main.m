@@ -9,33 +9,30 @@ fprintf("***********************************\n");
 fprintf("*    Optimization based NN Ctrl   *\n");
 fprintf("***********************************\n");
 
-FIGURE_PLOT_FLAG    = 1;
-ANIMATION_FLAG      = 0;
-AINMATION_SAVE_FLAG = 0; 
-FIGURE_SAVE_FLAG    = 0;
+FIGURE_PLOT_FLAG    = 1;    
 RESULT_SAVE_FLAG    = 0;
 CONTROL_NUM         = 1;    % 1: CoNAC, 2: Aux.
 
 seed = 18; rng(seed);
 
 %% SIMULATION SETTING
-ctrl_dt = 1/250;
+ctrl_dt = 1/250;            % control sampling time
 % ctrl_dt = 1/1000;
-dt = 1/1000;
+dt = 1/1000;                % simulation time step
 % dt = ctrl_dt * 1/10;
-T = 12 * 2;
+T = 12 * 2;                 % total simulation time
+                            %   (ref. applied twice)
 t = 0:dt:T;
-rpt_dt = 4;
+rpt_dt = 4;                 % report time step (for printing simulation progress)
 
 %% SYSTEM DECLARE
-grad_x = model1_load();
-% [xd1_f, xd2_f] = ref1_load(); % sin func
-r_func = ref4_load(); 
+grad_x = model1_load();     % system dynamics (grad_x = f(x,u,t))
+r_func = ref4_load();       % ref. signal 
 
 % x1 = [0;0];  
-x1 = [deg2rad(-90);0];  
-x2 = [0;0];
-u = [0;0];
+x1 = [deg2rad(-90);0];      % initial state (link angle)
+x2 = [0;0];                 % initial state (link angular velocity)
+u = [0;0];                  % initial control input (torque)   
 
 %% CONTROLLER LOAD
 if CONTROL_NUM == 1    % CoNAC
@@ -59,7 +56,7 @@ recInit;
 
 %% MAIN SIMULATION
 % ********************************************************
-fprintf("[INFO] Simulation Start\n");
+fprintf("Simulation Start\n");
 
 for t_idx = 2:1:num_t
     [xd1,xd2] = r_func(t(t_idx));
@@ -67,7 +64,7 @@ for t_idx = 2:1:num_t
     e1 = x1 - xd1;
     e2 = x2 - xd2;
 
-    r = e2 + opt.Lambda * e1;
+    r = e2 + opt.Lambda * e1;       % filtered error
 
     if t_idx==2 || rem(t(t_idx)/dt, ctrl_dt/dt) == 0
         preControl
@@ -89,11 +86,11 @@ for t_idx = 2:1:num_t
 
     % simulation report
     if rem(t(t_idx)/dt, rpt_dt/dt) == 0
-        fprintf("[INFO] Time Step %.2f/%.2fs (%.2f%%)\r",t(t_idx), T, t(t_idx)/T*100);
+        fprintf("Time Step %.2f/%.2fs (%.2f%%)\r",t(t_idx), T, t(t_idx)/T*100);
     end
     
 end
-fprintf("[INFO] Simulation End\n");
+fprintf("Simulation End\n");
 fprintf("\n");
 
 if FIGURE_PLOT_FLAG

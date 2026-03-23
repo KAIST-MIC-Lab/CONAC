@@ -1,3 +1,7 @@
+% -------------------------------
+% not used, see loadGlobalOpts.m
+% -------------------------------
+
 function opt = loadOpts(dt)
     opt.dt = dt;
 
