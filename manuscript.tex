@@ -38,7 +38,7 @@
     A deep neural network (DNN) is employed to approximate the ideal stabilizing control law while simultaneously learning the unknown system dynamics and addressing convex input constraints within a unified constrained optimization framework.
     The adaptation law of DNN weights is formulated to solve the defined constrained optimization problem, ensuring satisfaction of first-order optimality conditions at steady state.
     The controller's stability is rigorously analyzed using Lyapunov theory, guaranteeing uniformly ultimately bounded tracking errors and DNN weights. 
-    The proposed controller is compared with existing methods in numerical simulations, demonstrating its superiority in terms of tracking performance and input constraint satisfaction.
+    The proposed controller is compared with existing methods in numerical simulations, demonstrating its superiority in terms of tracking performance and convex input constraint satisfaction.
     The feasibility and effectiveness of CONAC in real-world applications are validated through a real-time implementation on a 2-DOF robotic manipulator.
 \end{abstract}
 
@@ -68,20 +68,27 @@ In this study, the following notation is used:
     \item For the matrix $\mm{A}\in\R^{n\times m}$, $\myvec(\mm A):=(\myrow_1(\mm A^\top),\cdots,\myrow_m(\mm A^\top) )^\top\in\R^{nm}$ denotes the vectorization of $\mm A$.
     % \item $\mycol_i(A)$ and $\myrow_j(A)$ denote the $i$th column and $j$th row of $A\in\R^{n\times m}$, respectively.
     % \item $\myvec(A):= [\mycol_1(A)^\top  ,\cdots,\mycol_m(A)^\top  ]^\top   $ for $A\in\R^{n\times m}$.
-    \item $\lambda_{\min}(\mm A)$ denotes the minimum eigenvalue of the matrix $\mm A\in\R^{n\times n}$.
+    % \item $\lambda_{\min}(\mm A)$ denotes the minimum eigenvalue of the matrix $\mm A\in\R^{n\times n}$.
     \item $\mm I_n$ denotes the $n\times n$ identity matrix, and $\mm 0_{n\times m}$ denotes the $n\times m$ zero matrix.
 \end{itemize}
 
 % ------------------------------------
 %       SECTION INTRODUCTION 
 % ------------------------------------
-\vspace{100mm}
+% \vspace{100mm}                
 \section{Introduction}
 
 \subsection{Background}
 
+\MSRY{
+    \begin{itemize}
+        \item 제약조건들이 입력 제약조건으로 치환되며 실용적으로 중요함
+        \item 불확실성에 대한 고려가 필요하며 신경망이 사용되는 방법이 제시되어옴
+    \end{itemize}
+}
+
 \IEEEPARstart{F}{rom} a practical perspective, many engineering systems are constrained by safety requirements, actuator limitations, and physical restrictions \cite{Ji:2025aa}.
-These constraints often manifest as input constraints, which can be in the form of bounds on control inputs or more complex nonlinear constraints rather than simple box constraints which limit each input bound independently.
+These constraints often manifest as input constraints, which can be in the form of complex nonlinear constraints rather than simple box constraints which limit each input bound independently.
 For instance, due to power limitations for actuators, robotic manipulators may have constraints on the maximum bounds of norm of joint torques \cite{}.
 Moreover, in motor drive systems, constraints on each axis's current are often forms of polyhedral sets \cite{}.
 Significantly, input constraints induced by state constraints using control barrier functions (CBFs) \cite{Ames:2019aa} are inherently nonlinear and complex.
@@ -531,9 +538,12 @@ A desired control law $\mv{u}^*$ such that the tracking error $\mv{e}$ is stable
         - \mv{f} 
         + \ddtt\mv{x}_d
     \right)
+    % +
+    % h(\mv{x},\mv{x}_d)
     ,
 \end{equation}
 where $\mm{P}=\mm{P}^\top\in\R^{n\times n}$ is a symmetric positive definite matrix satisfying $\underline{p}\mm{I}_n \preceq \mm{P} \preceq \overline{p}\mm{I}_n$ for known positive constants $\underline{p},\overline{p}\in\R_{>0}$.
+% The function $h:\R^n\times\R^n\to\R^n$ is correction term to satisfy the ideal control law $\mv{u}^*$ within the input constraints, \ie $\mv{u}^*\in\Omega_u$.
 
 By substituting $\mv{u}^*$ \eqref{eq:ctrl:ideal} into \eqref{eq:V1:dot:1}, we obtain
 \begin{equation} \label{eq:V1:dot:2}
@@ -548,7 +558,11 @@ By substituting $\mv{u}^*$ \eqref{eq:ctrl:ideal} into \eqref{eq:V1:dot:1}, we ob
     \right)
     +
     \mv{e}^\top
-    \Delta\mv{u}
+    % \left(
+        \Delta\mv{u}
+    %     +
+    %     h(\mv{x},\mv{x}_d)
+    % \right)
     .
 \end{equation}
 % It is notable that \eqref{eq:V1:dot:2} can be rewritten as 
@@ -595,14 +609,14 @@ By substituting $\mv{u}^*$ \eqref{eq:ctrl:ideal} into \eqref{eq:V1:dot:1}, we ob
 
 \hfill
 
-Since the ideal control law \eqref{eq:ctrl:ideal} contains unknown functions $\beta(\mv{x})$, $\mv{f}$ and $\mm{B}$, we employ a DNN $\NN(\mv{x}_n;\wth)$ \eqref{eq:dnn:def} to approximate $\mv{u}^*$, where the NN input vector is defined as $\mv{x}_n := \left(\mv{x}^\top , \mv{x}_d^\top , \ddtt{\mv{x}}_d^\top, 1 \right)^\top\in\R^{3n+1}$.
+Since the ideal control law \eqref{eq:ctrl:ideal} contains unknown functions $\beta(\mv{x})$, $\mv{f}$ and $\mm{B}$, we employ a DNN $\NN(\mv{x}_n;\wth)$ \eqref{eq:dnn:def} to approximate $\mv{u}_d$, where the NN input vector is defined as $\mv{x}_n := \left(\mv{x}^\top , \mv{x}_d^\top , \ddtt{\mv{x}}_d^\top, 1 \right)^\top\in\R^{3n+1}$.
 Then, we have 
 \begin{equation} \label{eq:ctrl:NN:ideal}
-    \mv{u}^*
+    \mv{u}_d
     =
     \mm{P}
     \left(
-        \NN(\mv{x}_n;\wth^*)
+        \NN(\mv{x}_n;\wth)
         +
         \mv{\epsilon}
     \right)
@@ -810,6 +824,11 @@ Consequently, the adaptation law in \eqref{eq:adap:th} becomes:
     Furthermore, the approximated adaptation law \eqref{eq:adap:th:approx} coincides with the various existing adaptation laws in the literature when there are no constraints, \ie $\sigma_i=0,\ \forall i\in\mathcal{K}$ and $\lambda_j=0,\ \forall j\in\mathcal{I}$, derived using Lyapunov stability theory \cite{} and static approximation methods \cite{}.
 \end{remark}
 
+\begin{remark}[Locally Lipschitz Continuity of the Adaptation Law]
+    The approximated adaptation law \eqref{eq:adap:th:approx} is locally Lipschitz continuous with respect to $\estwth$, since $\pptfrac{\estNN}{\estwth}$ is locally Lipschitz continuous with respect to $\estwth$ due to the use of smooth activation functions, and $c_j$ is also locally Lipschitz continuous with respect to $\estwth$ by definition.
+    This property ensures the existence and uniqueness of the solution of the closed-loop system under the proposed CONAC.
+\end{remark}
+
 \hfill
 
 The algorithm of the proposed CONAC is presented by Algorithm \ref{alg:CONAC}, implemented in a discrete-time controller with a sampling time of~$T_s$, where $(\cdot^{(k)})$ denotes the value at the $k$th time step.
@@ -932,14 +951,14 @@ Taking time derivative of $V_2$, we have
     \Delta \mv{u}
     -
     \sigma_k \norm{\estwth_k}^2
-    \\ \nonumber
+    \\ \label{eq:V2:dot:1:1}
     \le&
     -
     \underline{p}
     \norm{\mv{e}}^2
     -
     \sigma_k \norm{\estwth_k}^2
-    \\
+    \\ \nonumber
     &
     +
     \norm{\mv{e}}
@@ -954,60 +973,9 @@ Taking time derivative of $V_2$, we have
         +
         \norm{\Delta \mv{u}}
     \right]
-    .
-\end{align}
-
-This result concludes that if input saturation is not occurred, \ie $\Delta \mv{u} = \mv{0}$, the tracking error $\mv{e}$ ultimately converges to a compact set 
-$
-    \Omega^{e}_1 
-    := 
-    \left\{ 
-        \mv{e} 
-        : 
-        \norm{\mv{e}} \le \tfrac{\overline{p}}{\underline{p}}
-        \left(
-            \overline{\theta}_k^*
-            \sqrt{l_{k}+1}
-            +
-            \overline{\epsilon}
-        \right)
-    \right\}
-    ,
-$
-while $\Omega^{e}_1$ is proportionally enlarged by $\norm{\Delta \mv{u}}$ when input saturation occurs, resulting in a larger compact set
-$
-    \Omega^{e}_2 
-    := 
-    \left\{ 
-        \mv{e} 
-        : 
-        \norm{\mv{e}} \le \tfrac{1}{\underline{p}}
-        \left[
-            \overline{p}
-            \left(
-                \overline{\theta}_k^*
-                \sqrt{l_{k}+1}
-                +
-                \overline{\epsilon}
-            \right)
-            +
-            \norm{\Delta \mv{u}}
-        \right]
-    \right\}
-    .
-$
-
-\hfill
-
-The boundedness of $\estwth_k$ when input saturation does not occur, $\Delta\mv{u}=\mv{0}$, is guaranteed by $\sigma_k>0$ due to the weight constraint $c_k^{\theta}(\estwth_k)$ in \eqref{eq:opt:prob:const1}, which implies that $\estwth_k$ ultimately converges to a compact set $\Omega_1^{\theta} := \left\{\estwth_k : \norm{\estwth_k} \le \overline{\theta}_k\right\}$.
-However, when input saturation occurs, the boundedness of $\estwth_k$ is not guaranteed, since $\Delta\mv{u}$ is dependent on $\estwth_k$, \ie $\norm{\Delta \mv{u}} \le \overline{p}\sqrt{l_k+1}\norm{\estwth_k} - \underline{u}$.
-The boundedness of $\estwth_k$ should be guaranteed to ensure the boundedness of $\Delta\mv{u}$, which is required to guarantee the UUB of $\mv{e}$.
-
-To evaluate the boundedness of $\estwth_k$, by substituting $\norm{\Delta \mv{u}} \le \overline{p}\sqrt{l_k+1}\norm{\estwth_k} - \underline{u}$ into \eqref{eq:V2:dot:1}, we have
-\begin{align} \label{eq:V2:dot:2}
-    \ddtt V_2
+    \\ \nonumber
     \le&
-    -\underline{p}
+-\underline{p}
     \norm{\mv{e}}^2
     -\sigma_k \norm{\estwth_k}^2
     \\ \nonumber
@@ -1028,13 +996,13 @@ To evaluate the boundedness of $\estwth_k$, by substituting $\norm{\Delta \mv{u}
         -
         \underline{u}
     \right]
-    \\ \nonumber
+    \\ \label{eq:V2:dot:1:2}
     \le&
     -\left(\underline{p}-1\right)
     \norm{\mv{e}}^2
     -\left(\sigma_k - \tfrac{\overline{p}^2(l_k+1)}{2} \right)
     \norm{\estwth_k}^2
-    \\
+    \\ \nonumber
     &
     +
     \left[
@@ -1048,42 +1016,52 @@ To evaluate the boundedness of $\estwth_k$, by substituting $\norm{\Delta \mv{u}
         -
         \underline{u}
     \right]^2
-    ,
+    .
 \end{align}
-which implies that $\mv{e}$ and $\estwth_k$ are UUB if $\underline{p} > 1$ and $\sigma_k > \tfrac{\overline{p}^2(l_k+1)}{2}$, respectively.
+This result from \eqref{eq:V2:dot:1:1} concludes that the tracking error $\mv{e}$ ultimately converges to a compact set 
+$
+    \Omega^{e}_1 
+    := 
+    \left\{ 
+        \mv{e} 
+        : 
+        \norm{\mv{e}} \le \tfrac{\overline{p}}{\underline{p}}
+        \left(
+            \overline{\theta}_k^*
+            \sqrt{l_{k}+1}
+            +
+            \overline{\epsilon}
+            +
+            \norm{\Delta \mv{u}}
+        \right)
+    \right\}
+    ,
+$
+which implies that, if input saturation does not occur, $\Delta\mv{u}=\mv{0}$, the tracking error $\mv{e}$ is ultimately bounded within a compact set with a radius of $\tfrac{\overline{p}}{\underline{p}}\left(\overline{\theta}_k^* \sqrt{l_{k}+1} + \overline{\epsilon}\right)$, otherwise, the radius of the compact set is proportionally enlarged by $\norm{\Delta \mv{u}}$.
+
+Besides, according to \eqref{eq:V2:dot:1:2}, the UBB of $\mv{e}$ and $\estwth_k$ is guaranteed only if $\underline{p} > 1$ and $\sigma_k > \tfrac{\overline{p}^2(l_k+1)}{2}$, respectively.
 In other words, when input saturation occurs, $\sigma_k$ should increase larger than $\tfrac{\overline{p}^2(l_k+1)}{2}$ by violation of weight constraint $c_{k}^{\theta}$, to guarantee the UUB of $\mv{e}$ and $\estwth_k$.
+The finiteness of the reaching time of $\sigma_k$ to $\tfrac{\overline{p}^2(l_k+1)}{2}$, and $\norm{\mv{e}}$ and $\norm{\estwth_k}$, can be ensured using Gronwall-Bellman inequality, see \cite[pp. 651-652, Lemma A.1]{Khalil:2002aa}, owing to locally Lipschitz continuity of the system dynamics \eqref{eq:sys} and the adaptation law \eqref{eq:adap}.
 
-The stability until $\sigma_k$ reaches $\tfrac{\overline{p}^2(l_k+1)}{2}$ is analyzed, as follows.
-We analyze by evaluating the finiteness of the reaching time of $\sigma_k$ to $\tfrac{\overline{p}^2(l_k+1)}{2}$, and ensuring $\norm{\mv{e}}$ and $\norm{\estwth_k}$ are bounded in the finite time.
 
-First, we only considers that $\estwth_k$ increased to violate the weight constraint $c_{k}^{\theta}$, since, if not, $\estwth_k$ is bounded under its limit $\overline{\theta}_k$, thus the ultimate boundedness of $\mv{e}$ is bounded by $\norm{\Delta\mv{u}}$.
-Let us assume that the average constraint violation is strictly positive, such that $\tfrac{1}{T} \int_{t_0}^{t_0+T} \beta^{\theta}_k c_k^{\theta}(\estwth_k) \, \der t \ge \beta^{\theta}_k \underline{c}^{\theta}_k > 0$.
-Then, the time taken for $\sigma_k$ to reach $\tfrac{\overline{p}^2 (l_k+1)}{2}$ is bounded by $\tfrac{\overline{p}^2 (l_k+1)}{\beta^{\theta}_k \underline{c}_k}$, \ie $\sigma_k(t_0+T)-\sigma_k(t_0) = \sigma_k(t_0+T) = \int_{t_0}^{t_0+T} \myproj_{\sigma_k\ge0}\left(\beta^{\theta}_k c_k^{\theta}(\estwth_k)\right) \, \der t \ge \int_{t_0}^{t_0+T} \beta^{\theta}_k c_k^{\theta}(\estwth_k)\, \der t \ge \beta^{\theta}_k \underline{c}^{\theta}_k T$.
-This implies that there exists a finite time $T$ such that $\sigma_k$ reaches $\tfrac{\overline{p}^2 (l_k+1)}{2}$, which guarantees the boundedness of $\estwth_k$ and thus the UUB of $\mv{e}$ after the finite time $T$.
-
-In addition, the boundedness of $\mv{e}$ and $\estwth_k$ in time interval $[t_0, t_0+T]$ are guaranteed, using locally Lipschitz continuity of the system dynamics and adaptation law of $\estwth_k$.
-According to the definitions of the system, and adaptation law, and assumptions of the desired trajectory, $\mv{e}$ and $\estwth_k$ are coupled, but locally Lipschitz continuous, such that $\norm{\mv{z}(t)} \le \norm{\mv{z}(t_0)} + L_z \int_{t_0}^t \norm{\mv{z}(\tau)} \, \der \tau$, where $\mv{z} := \left(\mv{e}^\top , \estwth_k^\top\right)^\top\in\R^{n+\Xi_k}$, and $L_z$ is the Lipschitz constant of $\mv{z}$.
-This implies that linear growth of $\norm{\mv{z}(t)}$ is guaranteed, which satisfies the condition of Gronwall-Bellman inequality, leading to $\norm{\mv{z}(t)} \le \norm{\mv{z}(t_0)} \exp(L_z (t-t_0))$, see \cite[pp. 651-652, Lemma A.1]{Khalil:2002aa}.
-Therefore, invoking $\norm{\estwth_k} \le \norm{\mv{z}}$, $\norm{\estwth_k}$ and $\norm{\mv{e}}$ are bounded in the finite time interval $[t_0, t_0+T]$, by choosing $t=t_0+T$,
 
 \hfill
 
-In conclusion, the tracking error $\mv{e}$ is ultimately bounded in $\Omega_1^{e}$ when input saturation does not occur, and ultimately bounded in $\Omega_2^{e}$ when input saturation occurs, which is proportionally enlarged by $\norm{\Delta\mv{u}}$.
-The weight $\estwth_k$ is also bounded in $\Omega_1^{\theta}$ by weight constraint without input saturation, and when input saturation occurs, $\estwth_k$ exceeds the time finitely, and then converges to $\Omega_1^{\theta}$ after $\sigma_k$ reaches $\tfrac{\overline{p}^2(l_k+1)}{2}$.
-We provide an example scenario of the variable ultimate bound of $\mv{e}$ and $\estwth_k$ in Fig. \ref{fig:stability:set}.
+In conclusion, the tracking error $\mv{e}$ is ultimately bounded in $\Omega_1^{e}$, which is proportionally enlarged by $\norm{\Delta\mv{u}}$.
+The weight $\estwth_k$ is also bounded by weight constraint without input saturation, and when input saturation occurs, $\estwth_k$ exceeds the time finitely, and then converges to $\Omega_1^{\theta}$ after $\sigma_k$ reaches $\tfrac{\overline{p}^2(l_k+1)}{2}$.
 
-\begin{figure}[!t]
-    \centering
-    \includegraphics[width=0.99\linewidth]{fig/stability_set.png}
-    \caption{
-        Illustration of example of the variable ultimate bound of the tracking error $\mv{e}$ and $\estwth_k$.
-        At $t=t_0$, input saturation occurs, leading to larger ultimate bound of $\mv{e}$, $\Omega_2^{e}$.
-        From $t_1$ to $t_2$, $\sigma_k$ increases to $\tfrac{\overline{p}^2(l_k+1)}{2}$, and thus $\estwth_k$ violates the weight constraint, $c_k^{\theta}(\estwth_k)$.
-        After $t_2$, $\sigma_k$ is larger than $\tfrac{\overline{p}^2(l_k+1)}{2}$, thus $\norm{\estwth_k}$ converges to $\Omega_1^{\theta}$.
-        Finally, the ultimate bound of $\mv{e}$ converges to $\Omega_1^{e}$, when input saturation is resolved at $t_4$.
-    }
-    \label{fig:stability:set}
-\end{figure}
+% \begin{figure}[!t]
+%     \centering
+%     \includegraphics[width=0.99\linewidth]{fig/stability_set.png}
+%     \caption{
+%         Illustration of example of the variable ultimate bound of the tracking error $\mv{e}$ and $\estwth_k$.
+%         At $t=t_0$, input saturation occurs, leading to larger ultimate bound of $\mv{e}$, $\Omega_2^{e}$.
+%         From $t_1$ to $t_2$, $\sigma_k$ increases to $\tfrac{\overline{p}^2(l_k+1)}{2}$, and thus $\estwth_k$ violates the weight constraint, $c_k^{\theta}(\estwth_k)$.
+%         After $t_2$, $\sigma_k$ is larger than $\tfrac{\overline{p}^2(l_k+1)}{2}$, thus $\norm{\estwth_k}$ converges to $\Omega_1^{\theta}$.
+%         Finally, the ultimate bound of $\mv{e}$ converges to $\Omega_1^{e}$, when input saturation is resolved at $t_4$.
+%     }
+%     \label{fig:stability:set}
+% \end{figure}
 
 \subsection{Stability Analysis of Lagrange Multipliers and Remaining Inner Layers' Weights}
 
@@ -1151,20 +1129,137 @@ From \eqref{eq:V3:dot}, if any constraint is violated leading positive Lagrange 
 The boundedness of the remaining inner layers' weights 
 
 
+\section{Tuning and Initialization of CONAC's Parameters}
 
-\begin{remark}[Selection of Controller's Parameters]
-    The adaptation law 
-\end{remark}
+In this section, we provide guidelines for tuning the parameters of the proposed CONAC, including the adaptation gain $\alpha$ and the update rates of Lagrange multipliers $\beta_i^{\theta}$ and $\beta_j^{u}$, as well as the initialization of NN weights.
 
-\begin{remark}[Initialization of States and Weights]
-    The adaptation law 
-\end{remark}
+\hfill
+
+The adaptation gain $\alpha$ dominates the adaptation speed of $\estwth$.
+Hence, $\alpha$ should not be too large to avoid instability induced by discrete implementation, and not be too small to avoid slow convergence of $\estwth$.
+
+
+\hfill
+
+The update rates of Lagrange multipliers, $\beta_i^{\theta}$ and $\beta_j^{u}$, determine the speed of addressing constraint violations.
+The effectiveness of the update rates can be evaluated by taking time derivative of the imposed constraints, as follows.
+\begin{align}
+    \ddtt \mv{c}
+    =&
+    \pptfrac{\mv{c}}{\estwth} \ddtt\estwth
+    +
+    \pptfrac{\mv{c}}{\mv{x}_n} \ddtt\mv{x}_n
+    \\ \nonumber
+    =&
+    -\alpha
+    \pptfrac{\mv{c}}{\estwth}
+    \left(
+        \pptfrac{\estNN}{\estwth}^\top
+        \mm{P}
+        \mv{e}
+        +
+        \pptfrac{\mv{c}}{\estwth}^\top
+        \mv{\Lambda}
+    \right)
+    +
+    \pptfrac{\mv{c}}{\mv{x}_n}
+    \ddtt\mv{x}_n
+    \\ \nonumber
+    \le &
+    -\alpha
+    \mm{G}
+    \mv{\Lambda}
+    +
+    \mv{b}
+    ,
+\end{align}
+where $\mv{c} := [c_i]_{i\in\mathcal{K}} \cup [c_j]_{j\in\mathcal{I}}$ and $\mm{\Lambda} :=  [\sigma_i]_{i\in\mathcal{K}} \cup [\lambda_j]_{j\in\mathcal{I}}$, and $\mm{G} := \pptfrac{\mv{c}}{\estwth} \pptfrac{\mv{c}}{\estwth}^\top \succeq 0$ and 
+$
+    \mv{b} 
+    \le
+    \left\Vert 
+        -\alpha\pptfrac{\mv{c}}{\estwth}\pptfrac{\estNN}{\estwth}^\top\mm{P}\mv{e} + \pptfrac{\mv{c}}{\mv{x}_n}\ddtt\mv{x}_n 
+    \right\Vert 
+$.
+The boundedness of $\mm{G}$ and $\mv{b}$ can be guaranteed by the boundedness of $\estwth$ and $\mv{e}$, which is analyzed in Section \ref{sec:stability:analysis}.
+Hence, to resolve the constraint violation, $\ddtt\mv{c}<\mv{0}$, the Lagrange multipliers should increase at least $\tfrac{\mv{b}}{\alpha}\mm{G}^{-1}$.
+
+
 
 \hfill
 
 % \cred{
 %     백업파일! ==========================
 % }
+
+
+
+% The bo1undedness of $\estwth_k$ when input saturation does not occur, $\Delta\mv{u}=\mv{0}$, is guaranteed by $\sigma_k>0$ due to the weight constraint $c_k^{\theta}(\estwth_k)$ in \eqref{eq:opt:prob:const1}, which implies that $\estwth_k$ ultimately converges to a compact set $\Omega_1^{\theta} := \left\{\estwth_k : \norm{\estwth_k} \le \overline{\theta}_k\right\}$.
+% However, when input saturation occurs, the boundedness of $\estwth_k$ is not guaranteed, since $\Delta\mv{u}$ is dependent on $\estwth_k$, \ie $\norm{\Delta \mv{u}} \le \overline{p}\sqrt{l_k+1}\norm{\estwth_k} - \underline{u}$.
+% The boundedness of $\estwth_k$ should be guaranteed to ensure the boundedness of $\Delta\mv{u}$, which is required to guarantee the UUB of $\mv{e}$.
+
+% To evaluate the boundedness of $\estwth_k$, by substituting $\norm{\Delta \mv{u}} \le \overline{p}\sqrt{l_k+1}\norm{\estwth_k} - \underline{u}$ into \eqref{eq:V2:dot:1}, we have
+% \begin{align} \label{eq:V2:dot:2}
+%     \ddtt V_2
+%     \le&
+%     -\underline{p}
+%     \norm{\mv{e}}^2
+%     -\sigma_k \norm{\estwth_k}^2
+%     \\ \nonumber
+%     &
+%     +
+%     \norm{\mv{e}}
+%     \left[
+%         \overline{p}
+%         \left(
+%             \overline{\theta}_k^*
+%             \sqrt{l_{k}+1}
+%             +
+%             \overline{\epsilon}
+%         \right)
+%         +
+%         \overline{p}
+%         \sqrt{l_k+1}\norm{\estwth_k}
+%         -
+%         \underline{u}
+%     \right]
+%     \\ \nonumber
+%     \le&
+%     -\left(\underline{p}-1\right)
+%     \norm{\mv{e}}^2
+%     -\left(\sigma_k - \tfrac{\overline{p}^2(l_k+1)}{2} \right)
+%     \norm{\estwth_k}^2
+%     \\
+%     &
+%     +
+%     \left[
+%     \overline{p}
+%         \left(
+%             \overline{\theta}_k^*
+%             \sqrt{l_{k}+1}
+%             +
+%             \overline{\epsilon}
+%         \right)
+%         -
+%         \underline{u}
+%     \right]^2
+%     ,
+% \end{align}
+% which implies that $\mv{e}$ and $\estwth_k$ are UUB if $\underline{p} > 1$ and $\sigma_k > \tfrac{\overline{p}^2(l_k+1)}{2}$, respectively.
+% In other words, when input saturation occurs, $\sigma_k$ should increase larger than $\tfrac{\overline{p}^2(l_k+1)}{2}$ by violation of weight constraint $c_{k}^{\theta}$, to guarantee the UUB of $\mv{e}$ and $\estwth_k$.
+
+% The stability until $\sigma_k$ reaches $\tfrac{\overline{p}^2(l_k+1)}{2}$ is analyzed, as follows.
+% We analyze by evaluating the finiteness of the reaching time of $\sigma_k$ to $\tfrac{\overline{p}^2(l_k+1)}{2}$, and ensuring $\norm{\mv{e}}$ and $\norm{\estwth_k}$ are bounded in the finite time.
+
+% First, we only considers that $\estwth_k$ increased to violate the weight constraint $c_{k}^{\theta}$, since, if not, $\estwth_k$ is bounded under its limit $\overline{\theta}_k$, thus the ultimate boundedness of $\mv{e}$ is bounded by $\norm{\Delta\mv{u}}$.
+% Let us assume that the average constraint violation is strictly positive, such that $\tfrac{1}{T} \int_{t_0}^{t_0+T} \beta^{\theta}_k c_k^{\theta}(\estwth_k) \, \der t \ge \beta^{\theta}_k \underline{c}^{\theta}_k > 0$.
+% Then, the time taken for $\sigma_k$ to reach $\tfrac{\overline{p}^2 (l_k+1)}{2}$ is bounded by $\tfrac{\overline{p}^2 (l_k+1)}{\beta^{\theta}_k \underline{c}_k}$, \ie $\sigma_k(t_0+T)-\sigma_k(t_0) = \sigma_k(t_0+T) = \int_{t_0}^{t_0+T} \myproj_{\sigma_k\ge0}\left(\beta^{\theta}_k c_k^{\theta}(\estwth_k)\right) \, \der t \ge \int_{t_0}^{t_0+T} \beta^{\theta}_k c_k^{\theta}(\estwth_k)\, \der t \ge \beta^{\theta}_k \underline{c}^{\theta}_k T$.
+% This implies that there exists a finite time $T$ such that $\sigma_k$ reaches $\tfrac{\overline{p}^2 (l_k+1)}{2}$, which guarantees the boundedness of $\estwth_k$ and thus the UUB of $\mv{e}$ after the finite time $T$.
+
+% In addition, the boundedness of $\mv{e}$ and $\estwth_k$ in time interval $[t_0, t_0+T]$ are guaranteed, using locally Lipschitz continuity of the system dynamics and adaptation law of $\estwth_k$.
+% According to the definitions of the system, and adaptation law, and assumptions of the desired trajectory, $\mv{e}$ and $\estwth_k$ are coupled, but locally Lipschitz continuous, such that $\norm{\mv{z}(t)} \le \norm{\mv{z}(t_0)} + L_z \int_{t_0}^t \norm{\mv{z}(\tau)} \, \der \tau$, where $\mv{z} := \left(\mv{e}^\top , \estwth_k^\top\right)^\top\in\R^{n+\Xi_k}$, and $L_z$ is the Lipschitz constant of $\mv{z}$.
+% This implies that linear growth of $\norm{\mv{z}(t)}$ is guaranteed, which satisfies the condition of Gronwall-Bellman inequality, leading to $\norm{\mv{z}(t)} \le \norm{\mv{z}(t_0)} \exp(L_z (t-t_0))$, see \cite[pp. 651-652, Lemma A.1]{Khalil:2002aa}.
+% Therefore, invoking $\norm{\estwth_k} \le \norm{\mv{z}}$, $\norm{\estwth_k}$ and $\norm{\mv{e}}$ are bounded in the finite time interval $[t_0, t_0+T]$, by choosing $t=t_0+T$,
 
 % \hfill
 
@@ -1317,6 +1412,9 @@ In this section, the performance and feasibility of the proposed CONAC are valid
 
 \subsection{Validation Setup}
 
+For validations, the two-link robot manipulator (Fig.~\ref{fig:robot:model}) under control input saturation (Fig.~\ref{fig:robot:sat}) was considered. 
+The model parameters of the manipulator is listed in Table.~\ref{table:system:params}.
+
 \begin{table}[t]
     \renewcommand{\arraystretch}{1.3}
     \caption{Two-link robotic manipulator's parameters.}
@@ -1338,6 +1436,34 @@ In this section, the performance and feasibility of the proposed CONAC are valid
     \end{tabular}
     \label{table:system:params}
 \end{table}
+
+% ------------------------------------
+% desired trajectory
+% ------------------------------------
+The desired trajectory is designed with 4 segments which move the system from 
+$
+    \mv{q}_d^{(0)}
+    :=
+    \left(-\tfrac{1}{3}\pi,\tfrac{1}{3}\pi\right)^\top    
+$
+to 
+$
+    \mv{q}_d^{(1)}
+    :=
+    \left(
+        \tfrac{1}{4}\pi,-\tfrac{1}{2}\pi
+    \right)
+$, then to 
+$
+    \mv{q}_d^{(2)}
+    :=
+    \left(-\tfrac{1}{4}\pi,\tfrac{1}{4}\pi\right)^\top
+$, as illustrated in Fig.~\ref{fig:robot:model}.
+Each segment is designed using a quintic ($5$th-order) polynomial trajectory to ensure the smoothness of the desired trajectory, with zero initial and final velocities.
+The time duration of the segments is defined as $3$ s.
+To demonstrate the learning capability of the DNN, the desired trajectory was applied twice. 
+The first and second repetitions of the desired trajectory are referred to as Episode $1$ and Episode $2$, respectively.
+% ------------------------------------
 
 
 \subsection{Comparative Study via Numerical Simulations} \label{sec:val:sub:sim}
@@ -1390,6 +1516,14 @@ In this section, the performance and feasibility of the proposed CONAC are valid
 
 \subsection{Feasibility Study via Real-Time Experiments} \label{sec:val:sub:exp}
 
+To validate the feasibility of the real-time implementation of the proposed CONAC, a real-time experiment was conducted on a two-link robotic manipulator, as shown in Fig.~\ref{fig:ctrl:exp:set}. 
+The OpenCR1.0 board \cite{opencr} with a 32-bit ARM Cortex and a 216 MHz clock frequency was used.
+The two-link robotic manipulator was actuated by two Cubemars AK10-90 servo motors. 
+The servos were controlled using the OpenCR1.0 board, which transmits the torque reference to the corresponding servo via controller area network (CAN) communication.
+Since the measured and/or estimated system parameters are used for the numerical validation in Section~\ref{sec:val:sub:sim}, system parameters for the real-time experiment can be found in Table~\ref{table:system:params}, as well.
+
+Same scenario including desired trajectories and constraints were used and (C$_1$) and (C$_4$) were implemented.
+
 \begin{figure}[t]
     \centering
         \includegraphics[width=.99\linewidth]
@@ -1402,6 +1536,70 @@ In this section, the performance and feasibility of the proposed CONAC are valid
     }
     \label{fig:ctrl:exp:set}
 \end{figure}
+
+\hfill
+
+The feasibility of real-time implementation of the proposed CONAC is analyzed.
+
+
+\begin{figure*}[t]
+    \centering
+    \subfloat[Tracking performance of $1$st joint angle $q_1$.]{
+    %   \includegraphics
+        \includegraphics[width=\figSizeTwoCol\linewidth]
+        {
+        % fig/Fig1.pdf
+        \src/measurement/figures/compare/Fig1.eps
+        }%
+        \label{fig:ctrl:result:q1}}
+    \hfill
+    % \vfill
+    \subfloat[Tracking performance of $2$nd joint angle $q_2$.]{
+        \includegraphics[width=\figSizeTwoCol\linewidth]
+        {
+        % \src/measurement/figures/compare/Fig11.eps
+        \src/measurement/figures/compare/Fig2.eps
+        }%
+        \label{fig:ctrl:result:q2}}
+    \vfill
+    \subfloat[Control input of the $1$st joint $\tau_1$.]{
+    \includegraphics[width=\figSizeTwoCol\linewidth]
+        {
+            \src/measurement/figures/compare/Fig3.eps
+        }%
+        \label{fig:ctrl:result:tau:1}}
+    \hfill
+    % \vfill
+        \subfloat[Control input of the 2nd joint $\tau_2$.]{
+        \includegraphics[width=\figSizeTwoCol\linewidth]
+        {
+            \src/measurement/figures/compare/Fig4.eps
+        }%
+        \label{fig:ctrl:result:tau:2}}
+    \vfill
+    \subfloat[Norm of the joint torque input $\rbu$.]{
+        \includegraphics[width=\figSizeTwoCol\linewidth]
+        {
+            \src/measurement/figures/compare/Fig5.eps
+        }%
+        \label{fig:ctrl:result:tau:norm}}
+    \hfill
+    % \vfill
+    \subfloat[Norm of DNN weights ${\estwth}_i$.]{
+        % \includegraphics
+        \includegraphics[width=\figSizeTwoCol\linewidth]
+        {
+            % fig/Fig7.pdf
+            \src/measurement/figures/compare/Fig7.eps
+        }%
+        \label{fig:ctrl:result:weight}}        
+    \caption{
+        Real-time implementation results of (C$_1$) \protect\colorLine{blue}{solid}, (C$_2$) \protect\colorLine{cyan}{solid}, (C$_3$) \protect\colorLine{gray}{solid}, (C$_4$) \protect\colorLine{magenta}{solid}, and desired trajectory $\qd$ \protect\colorLine{red}{dashed}.
+        % \vspace{-5mm}
+    }
+\label{fig:ctrl:result}
+\end{figure*}
+
 
 % ------------------------------------
 %       SECTION CONCLUSION
