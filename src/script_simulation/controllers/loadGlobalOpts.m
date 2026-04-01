@@ -47,6 +47,10 @@ function opt = loadGlobalOpts(dt, CONTROL_NUM)
         %   where auxiliary state z and input saturation \Delta u.
         opt.A_zeta = -10 * eye(2);     % stable matrix
         opt.B_zeta = 1000 * eye(2);    % input gain matrix
+
+    elseif CONTROL_NUM == 3
+        % for complex auxiliary control
+        
     end
     
     %% PASSIVE NUMBER

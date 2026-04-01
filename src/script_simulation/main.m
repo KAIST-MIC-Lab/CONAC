@@ -39,6 +39,10 @@ if CONTROL_NUM == 1    % CoNAC
     ctrl_path = "CoNAC";
 elseif CONTROL_NUM == 2 % Aux.
     ctrl_path = "CoNAC-AUX";
+elseif CONTROL_NUM == 3 % Complex Aux.
+    ctrl_path = "CoNAC-AUX-Comp";
+else
+    error("Invalid CONTROL_NUM. Must be 1, 2, or 3.");
 end
 
 addpath("controllers/"+ctrl_path);
