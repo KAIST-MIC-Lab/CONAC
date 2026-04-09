@@ -4,6 +4,7 @@ font_size = 16;
 line_width = 2;
 lgd_size = 12;
 fig_height = 210; fig_width = 450;
+% fig_height = 210*4; fig_width = 450*2;
 
 %% DATA EXTRACTION
 cstr = opt.cstr;
@@ -35,8 +36,9 @@ elseif CONTROL_NUM == 2
 end
 
 %% 
-if CONTROL_NUM == 1
-    plotter1
-elseif CONTROL_NUM == 2
-    plotter2
-end
+plotter_long_1
+% if CONTROL_NUM == 1
+%     plotter_long_1
+% elseif CONTROL_NUM == 2
+%     plotter2
+% end

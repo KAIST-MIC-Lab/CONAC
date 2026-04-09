@@ -1,4 +1,4 @@
-function opt = loadGlobalOpts(dt, CONTROL_NUM)
+function opt = loadGlobalOpts(dt, CONTROL_NUM, OPT_NUM)
     opt.dt = dt;                        % control sampling time
 
     opt.Lambda = diag([5 15]) * 1;      % filtered error gain
@@ -13,16 +13,16 @@ function opt = loadGlobalOpts(dt, CONTROL_NUM)
                                         %   -> W0, W1, W2 weight matrices with sizes
                                         %       (6+1)x4, (4+1)x4, (4+1)x2 (with bias)
 
-    opt.alpha = .5;                     % learning rate (for NNs)
+    opt.alpha = .2;                     % learning rate (for NNs)
     opt.e_size = 2;                     % error size (number of error signals)
 
     opt.e_tol = 0e-3;                   % error tolerance (not used)
     opt.rho = opt.alpha*0e-2;           % sigma-modification gain (not used)
     opt.W = diag([1 1]);                % feedback error weighting matrix (not used)
 
-    opt.cstr.th_max = [11;12;13] * 1e0; % NN weight L2 norm constraints 
-    opt.cstr.u_ball = 11.5;             % control input L2 norm constraint (ball constraint)   
-    opt.cstr.uMax2 = 4;                 % control input 2 max constraint (box constraint)
+    opt.cstr.th_max = [6;6;6] * 1e1; % NN weight L2 norm constraints 
+    opt.cstr.u_ball = 11;             % control input L2 norm constraint (ball constraint)   
+    opt.cstr.uMax2 = 3.5;                 % control input 2 max constraint (box constraint)
     opt.cstr.uMax1 = sqrt(opt.cstr.u_ball^2 - opt.cstr.uMax2^2);
                                         % control input 1 max constraint 
                                         %       (box constraint, calculated from ball constraint and control input 2 max constraint)
@@ -30,10 +30,10 @@ function opt = loadGlobalOpts(dt, CONTROL_NUM)
     if CONTROL_NUM == 1
         % beta is Lagrange multiplier update gain for each constraint;
         %   \dot{lambda} = beta * c, where c is the constraint violation
-        opt.beta(1:3) = [1 1 1] * 1e-3; % NN weight constraints
+        opt.beta(1:3) = [1 1 1] * 0e0; % NN weight constraints
         opt.beta(4) = 1e1;              % control input ball
         opt.beta(5) = 0e2;              % control input 1 Max
-        opt.beta(6) = 1e4;              % control input 2 Max
+        opt.beta(6) = 7.5e2;              % control input 2 Max
         opt.beta(7) = opt.beta(5);      % control input 1 Min
         opt.beta(8) = opt.beta(6);      % control input 2 Min
         % opt.beta = opt.beta/opt.alpha;
@@ -46,11 +46,11 @@ function opt = loadGlobalOpts(dt, CONTROL_NUM)
         %   \dot{z} = A_zeta * z + B_zeta * \Delta u,
         %   where auxiliary state z and input saturation \Delta u.
         opt.A_zeta = -10 * eye(2);     % stable matrix
-        opt.B_zeta = 1000 * eye(2);    % input gain matrix
+        opt.B_zeta = 10000 * eye(2);    % input gain matrix
 
     elseif CONTROL_NUM == 3
         % for complex auxiliary control
-        
+
     end
     
     %% PASSIVE NUMBER
@@ -62,5 +62,23 @@ function opt = loadGlobalOpts(dt, CONTROL_NUM)
         opt.th_size_list(idx) = (opt.NN_size(idx)+1) * opt.NN_size(idx+1);
     end
     opt.th_size = sum(opt.th_size_list);        % total weight number
+
+    %% OPTIONAL: OVERWRITE OPT WITH VAR_OPTS
+    switch CONTROL_NUM
+        case 1
+            % CoNAC
+            switch OPT_NUM
+                case 1
+                    opt.alpha = .5;
+                case 2
+                    opt.beta(4) = 2e2;
+                case 3
+                    opt.beta(4:end) = 0;
+        case 2
+            % Auxiliary Control
+        case 3
+            % Complex Auxiliary Control
+    end
+
 
 end

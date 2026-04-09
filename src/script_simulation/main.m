@@ -6,30 +6,32 @@ addpath("models");
 
 fprintf("                                   \n");
 fprintf("***********************************\n");
-fprintf("*    Optimization based NN Ctrl   *\n");
+fprintf("* Numerical Validation for CONAC   *\n");
 fprintf("***********************************\n");
 
 FIGURE_PLOT_FLAG    = 1;    
-RESULT_SAVE_FLAG    = 0;
+RESULT_SAVE_FLAG    = 1;
 CONTROL_NUM         = 1;    % 1: CoNAC, 2: Aux.
+OPT_NUM             = 2;    % parameter options
 
-seed = 18; rng(seed);
+seed = 1000; rng(seed);
 
 %% SIMULATION SETTING
 ctrl_dt = 1/250;            % control sampling time
-% ctrl_dt = 1/1000;
 dt = 1/1000;                % simulation time step
-% dt = ctrl_dt * 1/10;
-T = 12 * 2;                 % total simulation time
-                            %   (ref. applied twice)
-t = 0:dt:T;
 rpt_dt = 4;                 % report time step (for printing simulation progress)
+
+% T = 12 * 2;                 % total simulation time
+%                             %   (ref. applied twice)
+% T = 35+12;                       % with warmup time
+T = 42;                       % with warmup time
+
+t = 0:dt:T;
 
 %% SYSTEM DECLARE
 grad_x = model1_load();     % system dynamics (grad_x = f(x,u,t))
 r_func = ref4_load();       % ref. signal 
 
-% x1 = [0;0];  
 x1 = [deg2rad(-90);0];      % initial state (link angle)
 x2 = [0;0];                 % initial state (link angular velocity)
 u = [0;0];                  % initial control input (torque)   
@@ -41,8 +43,6 @@ elseif CONTROL_NUM == 2 % Aux.
     ctrl_path = "CoNAC-AUX";
 elseif CONTROL_NUM == 3 % Complex Aux.
     ctrl_path = "CoNAC-AUX-Comp";
-else
-    error("Invalid CONTROL_NUM. Must be 1, 2, or 3.");
 end
 
 addpath("controllers/"+ctrl_path);
@@ -50,7 +50,7 @@ addpath(genpath('controllers/'+ctrl_path));
 
 % opt = loadOpts(ctrl_dt);
 addpath("controllers");
-opt = loadGlobalOpts(ctrl_dt, CONTROL_NUM);
+opt = loadGlobalOpts(ctrl_dt, CONTROL_NUM, OPT_NUM);
 
 initControl;
 
@@ -106,13 +106,14 @@ if RESULT_SAVE_FLAG
     fprintf("[INFO] Result Saving...\n");
     whatTimeIsIt = string(datetime('now','Format','d-MMM-y_HH-mm-ss'));
 
-    if CONTROL_NUM == 1
+    if CONTROL_NUM == 1 
         % [~,~] = mkdir("sim_result/"+whatTimeIsIt);
         save("sim_result/"+whatTimeIsIt+".mat", ...
             "t", "x1_hist", "x2_hist", "xd1_hist", "xd2_hist", ...
             "u_hist", "uSat_hist", "lbd_hist", "th_hist", ...
             "opt", "T" ...
             );
+        fprintf("Saved: \n%s\n", whatTimeIsIt)
     elseif CONTROL_NUM == 2
         % [~,~] = mkdir("sim_result/"+whatTimeIsIt);
         save("sim_result/"+whatTimeIsIt+".mat", ...
@@ -120,6 +121,7 @@ if RESULT_SAVE_FLAG
             "u_hist", "uSat_hist", "zeta_hist", "th_hist", ...
             "opt", "T" ...
             );
+        fprintf("Saved: \n%s\n", whatTimeIsIt)
     end
 
     fprintf("Saved: \n%s\n", whatTimeIsIt)
