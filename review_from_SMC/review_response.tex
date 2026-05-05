@@ -11,6 +11,14 @@
 %\usepackage{newcent} % different font
 %\usepackage[scaled]{beramono} % different monospace font
 
+%%
+\usepackage{xcolor}
+\definecolor{airforceblue}{rgb}{0.36, 0.54, 0.66}
+\definecolor{awesome}{rgb}{1.0, 0.13, 0.32}
+\newcommand{\ctxt}[2]{{\color{#1}{#2}\color{black}}}
+\newcommand{\cred}[1]{{\ctxt{awesome}{#1}}}
+\newcommand{\cblue}[1]{{\ctxt{airforceblue}{#1}}}
+
 \usepackage{kotex}
 
 \usepackage{hyperref}
@@ -87,11 +95,22 @@
 	\begin{itemize}
 		\item 기존 방법과의 차별성을 더 명확히 보이는 것이 중요해 보임.
 		\item BLF, Projection algorithm과의 차이점 및 장점을 구체적으로 설명 및 실험 비교.
+		\item \cred{가중치에 대한 스코프를 옮기고 프로젝션은 사전 연구에 있음}
 	\end{itemize}
 \end{howtoanswer}
 
 \begin{revresponse}
-	We ...
+	We agree that the previous version did not sufficiently clarify why weight constraints and input constraints should be considered simultaneously, nor did it clearly distinguish the proposed method from BLF-based methods, projection algorithms, and our prior work.
+
+	In the revised manuscript, we have substantially revised the Introduction and the contribution statement.
+	We now explicitly explain that weight constraints and input constraints serve different purposes in NAC: weight constraints regulate the learning dynamics of the neural approximator and prevent excessive growth of adaptive weights, whereas input constraints represent actuator feasibility and safety-related admissible control regions. 
+	Existing methods usually address these constraints separately. Projection algorithms mainly restrict the adaptive weights but do not directly encode actuator constraints, whereas auxiliary-system-based and saturation-function-based approaches mainly handle input saturation but are typically tailored to element-wise box constraints. BLF-based methods are more commonly used for state, output, or tracking-error constraints and do not directly provide a unified mechanism for multiple convex input constraints in the DNN adaptation law.
+
+To clarify the novelty, we added a new discussion in Section I comparing CONAC with projection algorithms, BLF-based methods, auxiliary-system-based NAC, and optimization-based methods. We also revised the contribution statement to emphasize that the proposed CONAC formulates the DNN weight adaptation as a constrained optimization problem in which both weight constraints and multiple convex input constraints are incorporated as inequality constraints and handled through primal-dual adaptation laws.
+
+We further clarified the distinction from our previous studies. Compared with our prior work, the present manuscript extends the framework from shallow neural networks and norm-type constraints to DNNs under multiple convex input constraints, generalizes the admissible input set to the intersection of continuously differentiable convex constraint functions, and validates the proposed method through real-time implementation on a two-link robotic manipulator.
+	
+
 	\begin{changes}
 		This really important sentence was added to the paper.
 	\end{changes}
@@ -209,6 +228,8 @@
 	\begin{itemize}
 		\item Reviewer 1의 코멘트와 유사하게 기존연구를 추가 비교하며 장단점 비교.
 		\item 추가로 실험을 더 가혹하게 할 필요성이 있음.
+		\item \cred{soft constraint, 2nd system}
+		\item \cred{한계는 결론에서 해주기}
 	\end{itemize}
 \end{howtoanswer}
 
