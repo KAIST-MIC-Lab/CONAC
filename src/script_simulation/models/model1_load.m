@@ -13,7 +13,11 @@ end
 
 % ********************************************************
 function f = model_wrapper(q, u, t)
-    [M, C, G, F ] = model1(q, u, t);
+    % [M, C, G, F ] = model1(q, u, t);
+
+    dof = 2;
+    p = config_robot(dof);
+    [M, C, G, F] = robot_dyn(q(1:2), q(3:4), p, dof);
     
     del_M = zeros(2,2); 
     % del_C = [
@@ -40,20 +44,6 @@ function f = model_wrapper(q, u, t)
     
     f = [f1 ; f2];
 end
-
-% function x = forward_kinematics(q, L1, L2)
-
-%     J = calculate_jacobian(q(1), q(2), L1, L2);
-%     x = [L1*cos(q(1)) + L2*cos(q(1) + q(2));
-%          L1*sin(q(1)) + L2*sin(q(1) + q(2));
-%          J * q(3:4)];
-% end
-
-% function J = calculate_jacobian(q1, q2, L1, L2)
-
-%     J = [(-L1*sin(q1) - L2*sin(q1 + q2)), -L2*sin(q1 + q2);
-%           (L1*cos(q1) + L2*cos(q1 + q2)),  L2*cos(q1 + q2)];
-% end
 
 
 

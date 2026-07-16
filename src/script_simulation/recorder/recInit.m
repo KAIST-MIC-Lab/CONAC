@@ -33,7 +33,7 @@ if CONTROL_NUM == 1
     % CoNAC
     lbd_hist = zeros(length(opt.beta), num_t); lbd_hist(:,1) = zeros(length(opt.beta),1);
     th_hist = zeros(opt.l_size-1, num_t); th_hist(:, 1) = nnWeightNorm(nn.th, opt);
-elseif CONTROL_NUM == 2
+elseif CONTROL_NUM == 2 || CONTROL_NUM == 3
     % Aux.
     th_hist = zeros(opt.l_size-1, num_t); th_hist(:, 1) = nnWeightNorm(nn.th, opt);
     zeta_hist = zeros(num_u, num_t); zeta_hist(:, 1) = z;

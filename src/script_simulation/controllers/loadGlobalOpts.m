@@ -14,6 +14,7 @@ function opt = loadGlobalOpts(dt, CONTROL_NUM, OPT_NUM)
                                         %       (6+1)x4, (4+1)x4, (4+1)x2 (with bias)
 
     opt.alpha = .2;                     % learning rate (for NNs)
+    % opt.alpha = 2;                     % learning rate (for NNs)
     opt.e_size = 2;                     % error size (number of error signals)
 
     opt.e_tol = 0e-3;                   % error tolerance (not used)
@@ -22,8 +23,11 @@ function opt = loadGlobalOpts(dt, CONTROL_NUM, OPT_NUM)
 
     opt.cstr.th_max = [6;6;6] * 1e1; % NN weight L2 norm constraints 
     opt.cstr.u_ball = 11;             % control input L2 norm constraint (ball constraint)   
+    % opt.cstr.uMax1 = 10;                 % control input 2 max constraint (box constraint)
     opt.cstr.uMax2 = 3.5;                 % control input 2 max constraint (box constraint)
     opt.cstr.uMax1 = sqrt(opt.cstr.u_ball^2 - opt.cstr.uMax2^2);
+    % opt.cstr.uMax2 = opt.cstr.u_ball/sqrt(2);
+    % opt.cstr.uMax1 = opt.cstr.u_ball/sqrt(2);
                                         % control input 1 max constraint 
                                         %       (box constraint, calculated from ball constraint and control input 2 max constraint)
 
@@ -50,6 +54,8 @@ function opt = loadGlobalOpts(dt, CONTROL_NUM, OPT_NUM)
 
     elseif CONTROL_NUM == 3
         % for complex auxiliary control
+        opt.alp_prev = zeros(2,1);
+        opt.fil_alp = zeros(2,1);
 
     end
     
@@ -69,9 +75,9 @@ function opt = loadGlobalOpts(dt, CONTROL_NUM, OPT_NUM)
             % CoNAC
             switch OPT_NUM
                 case 1
-                    opt.alpha = .5;
+                    % opt.alpha = .5;
                 case 2
-                    opt.beta(4) = 2e2;
+                    % opt.beta(4) = 2e2;
                 case 3
                     opt.beta(4:end) = 0;
         case 2

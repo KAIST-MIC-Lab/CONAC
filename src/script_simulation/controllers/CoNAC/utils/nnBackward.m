@@ -16,8 +16,10 @@ function [nn, opt] = nnBackward(nn, opt, e, u_NN)
     % active set check
     [c, cd] = nnCstr(nn, opt, u_NN, nnGrad);
 
-    % ActSet  = double(c>0);
-    lbd  = opt.lbd;
+    ActSet  = double(c>0);
+    ActSet = ones(size(ActSet)); % ignore constraints for now
+    % ActSet = zeros(size(ActSet)); % ignore constraints for now
+    lbd  = opt.lbd .* ActSet;
 
     % find gradient; theta, lambda
     th_grad = - opt.alpha * (nnGrad'*opt.W*e + cd'*lbd);

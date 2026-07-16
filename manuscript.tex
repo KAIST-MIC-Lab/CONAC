@@ -114,7 +114,7 @@ In parallel, another challenge in engineering systems is uncertain dynamics or e
 Although adaptive control provides a systematic mechanism for online adaptation of controllers \cite{Ioannou:2006aa}, conventional formulations often rely on structural assumptions on the uncertain or unknown dynamics, which may not be available in practice.
 Neuro-adaptive control (NAC) alleviates this limitation by using neural networks (NNs) to approximate the dynamics in a structured and parameterized representation \cite{Farrell:2006aa,Patil:2022aa}.
 Like adaptive control, NAC methods ensure closed-loop stability using Lyapunov theory, and the NN weights are adapted online without prior knowledge of the system dynamics.
-The NAC methods have shown promising results in various real-world applications, including flexible robotic manipulators \cite{Gao:2026aa}, active suspensions \cite{Zhao:2016aa}, synchronous machine drives \cite{Ryu:2025aa}, and swarm control of mobile robots \cite{Yu:2022aa}.
+The NAC methods have shown promising results in various real-world applications, including vehicle control \cite{Zhao:2016aa,You:2023aa}, flexible robotic manipulators \cite{Gao:2026aa}, synchronous machine drives \cite{Ryu:2025aa}, and swarm control of mobile robots \cite{Yu:2022aa}.
 
 Because multiple convex input constraints and uncertain or unknown dynamics often coexist in real-world applications, incorporating input constraint handling into NAC is essential.
 This motivates a review of existing input constraint handling methods in NAC and related constrained control frameworks.
@@ -128,8 +128,8 @@ This motivates a review of existing input constraint handling methods in NAC and
 \subsubsection{Structural Methods for Input Constraint Handling in NAC}
 
 In NAC, structural methods have been mainly developed for input constraint handling, because they preserve the continuous-time controller structure and are amenable to Lyapunov stability analysis.
-Auxiliary-system-based approaches are the most widely used method owing to their simplicity and effectiveness \cite{Esfandiari:2014aa,Esfandiari:2015aa,Chen:2011aa,He:2016aa,Zhao:2016aa,Gao:2026aa,Yu:2022aa,Liu:2025aa,Ma:2025aa}.
-When input saturation occurs, the auxiliary state is excited and evolves according to the auxiliary system, whose dynamics is linear \cite{Yu:2022aa}, nonlinear \cite{Chen:2011aa,Gao:2026aa,Ma:2025aa} or fixed-time-inspired \cite{Liu:2025aa}.
+Auxiliary-system-based approaches are the most widely used method owing to their simplicity and effectiveness \cite{Esfandiari:2014aa,Esfandiari:2015aa,Chen:2011aa,He:2016aa,Zhao:2016aa,Gao:2026aa,Yu:2022aa,Ma:2025aa,Liu:2025aa,Liu:2024aa,Sun:2023aa}.
+When input saturation occurs, the auxiliary state is excited and evolves according to the auxiliary system, whose dynamics is linear \cite{Yu:2022aa,Esfandiari:2014aa,Esfandiari:2015aa,Sun:2023aa}, nonlinear \cite{Chen:2011aa,Gao:2026aa,Ma:2025aa,He:2016aa} or fixed-time-inspired \cite{Liu:2025aa,Liu:2024aa}.
 Typically, the excited auxiliary state is directly fed back into the control law as additional compensation terms.
 
 However, from a learning perspective, introducing additional compensation terms into the control law can interfere with the NN adaptation process.
@@ -322,7 +322,7 @@ By Assumption~\ref{assum:sat}, the saturation function $\mysat(\mv{u})$ can repr
 \end{figure}
 
 
-% According to locally Lipschitz continuity of $\mv{f}(\cdot)$ and $\mm{B}(\cdot)$, and the boundedness of the saturation function $\mysat(\cdot)$ as defined in Assumption \ref{assum:sat}, the system \eqref{eq:sys} is locally Lipschitz continuous.
+% According to locally Lipschitz continuity of $\mv{f}(\cdot)$ and $\mm{B}(\cdot)$, and the boundedness of the saturation function $\mysat(\cdot)$ as defined in Assumption~\ref{assum:sat}, the system \eqref{eq:sys} is locally Lipschitz continuous.
 
 Additionally, the desired trajectory $\mv{x}_d(t):\R_{\ge0}\to\R^n$ is assumed to be given and satisfies the following assumption.
 
@@ -395,7 +395,7 @@ The following proposition will be used in the subsequent sections:
 %     See \cite[pp. 689--660]{Khalil:2002aa}.
 % \end{proof}
 
-% Based on the Comparison Lemma (Lemma \ref{lem:comp}), the following lemma establishes the uniform ultimate boundedness (UUB) of the state vector $\mv{z}(t):\R_{\ge0}\to\R^n$ within the constrained set $\mathcal{Z}:=\left\{\mv{z}\in\R^n : \norm{\mv{z}}\le\overline{z}\in\R_{>0}\right\}$.
+% Based on the Comparison Lemma (Lemma~\ref{lem:comp}), the following lemma establishes the uniform ultimate boundedness (UUB) of the state vector $\mv{z}(t):\R_{\ge0}\to\R^n$ within the constrained set $\mathcal{Z}:=\left\{\mv{z}\in\R^n : \norm{\mv{z}}\le\overline{z}\in\R_{>0}\right\}$.
 
 % \begin{lem} \label{lem:comp:compact}
 %     Consider a scalar continuous function $V(\mv{z})$, such that $\gamma_1\norm{\mv{z}}^2 \le V(\mv{z}) \le \gamma_2\norm{\mv{z}}^2$, where $\gamma_1,\gamma_2\in\R_{>0}$.
@@ -478,7 +478,7 @@ The following proposition will be used in the subsequent sections:
 
 % \begin{proof}
 %     % Using Comparison Lemma \cite[pp. 689--660, Lemma 3.4]{Khalil:2002aa}, the proof is straightforward.
-%     Using Comparison Lemma (Lemma \ref{lem:comp}), the proof is straightforward, and thus omitted for brevity.
+%     Using Comparison Lemma (Lemma~\ref{lem:comp}), the proof is straightforward, and thus omitted for brevity.
 % \end{proof}
 
 \begin{figure}[t]
@@ -719,7 +719,7 @@ $.
 %     \overline{u}^2
 %     ,
 % $
-% which concludes that, according to Lemma \ref{lem:comp:compact}, if $\underline{p} > 1$, the tracking error $\mv{e}$ is bounded within a compact set $\Omega_e := \left\{\mv{e} : \norm{\mv{e}}\le\overline{e}\in\R_{>0}\right\}$, where 
+% which concludes that, according to Lemma~\ref{lem:comp:compact}, if $\underline{p} > 1$, the tracking error $\mv{e}$ is bounded within a compact set $\Omega_e := \left\{\mv{e} : \norm{\mv{e}}\le\overline{e}\in\R_{>0}\right\}$, where 
 % $
 %     \sqrt{
 %         \tfrac{\overline{b}}{\underline{b}}
@@ -825,7 +825,7 @@ Inequality constraints of weight boundedness $c^{\theta}_i(\estwth_i),\ \forall 
 Specifically, the input constraints used in \eqref{eq:opt:prob:const2} are the same convex constraint functions that characterize the admissible input set in Assumption~\ref{assum:sat}.
 With a slight abuse of notation, the composed input constraint is denoted by
 $c_j^u(\estwth):=c_j^u(\mv u(\estwth))=c_j^u(\mm P\NN(\NNin;\estwth)),\ \forall j\in\mathcal I$, to explicitly represent the dependence of the input constraints on the DNN weights $\estwth$.
-Additionally, all active constraints are assumed to satisfy the linear independence constraint qualification (LICQ) to avoid degeneracy \cite[pp. 465--467]{Nocedal:2006aa}.
+Additionally, all active constraints are assumed to satisfy the Linear Independence Constraint Qualification (LICQ) to avoid degeneracy \cite[pp. 465--467]{Nocedal:2006aa}.
 
 The Lagrangian function $L:=L(\mv{e},\estwth,[\sigma_i]_{i\in\mathcal{K}},[\lambda_j]_{j\in\mathcal I})$ is defined as
 \begin{equation}
@@ -1014,7 +1014,7 @@ Thus, the equilibria characterizes candidates for locally optimal solutions of t
 % \begin{remark}[Locally Lipschitz Continuity of the Adaptation Law] \label{rem:adap:lip}
 %     The approximated adaptation law \eqref{eq:adap:th:approx} is locally Lipschitz continuous under the stated regularity assumptions.
 %     Specifically, the error dynamics are locally Lipschitz, the DNN Jacobian $\pptfrac{\estNN}{\estwth}$ is locally bounded due to the use of $\tanh(\cdot)$ activation functions, and the input constraints $c_j^u(\mv{u})$ are $\mathcal{C}^1$ with respect to $\estwth$, while $\mv u=\mv P\estNN(\cdot;\estwth)$ is smooth in $\estwth$.
-%     This property, in conjunction with the boundedness of signals established via subsequent Lyapunov analysis in Section \ref{sec:stability:analysis}, precludes the finite escape time of the closed-loop system under the proposed CONAC
+%     This property, in conjunction with the boundedness of signals established via subsequent Lyapunov analysis in Section~\ref{sec:stability:analysis}, precludes the finite escape time of the closed-loop system under the proposed CONAC
 % \end{remark}
 
 \begin{algorithm}[!t]
@@ -2035,15 +2035,38 @@ Additionally, we introduce the following remarks regarding the initialization an
 % ------------------------------------
 \section{Validations} \label{sec:val}
 
-In this section, the performance and feasibility of the proposed CONAC are validated via numerical simulations and real-time experiments on a two-link robotic manipulator in Section~\ref{sec:val:sub:sim} and \ref{sec:val:sub:exp}, respectively.
+In this section, the performance and feasibility of the proposed CONAC are validated via real-time experiments on a two-link robotic manipulator.
 
 \subsection{Validation Setup}
 
 \begin{figure}[t]
-  \centering
-  \includegraphics[width=0.5\linewidth]{\src/figures/RobotModel.drawio.pdf}
-  \caption{Two-link robotic manipulator.}
-  \label{fig:robot}
+    \centering
+        \includegraphics[width=.99\linewidth]
+        % \includegraphics[width=\figSizeOneCol\linewidth]
+        {
+            \src/figures/expSet.drawio.png
+        }%
+    \caption{
+        Experimental setup of the two-link robotic manipulator used for real-time validation.
+    }
+    \label{fig:exp:real:set}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \subfloat[Two-link robotic manipulator.]{
+        \includegraphics[width=0.45\linewidth]{\src/figures/RobotModel.drawio.pdf}
+        \label{fig:exp:robot:diagram}
+    }
+    \subfloat[Imposed input Saturation.]{
+        % \includegraphics[width=0.45\linewidth]{\src/figures/inputFuncProp.drawio.pdf}
+        \fbox{\rule{0pt}{0.4\linewidth} \rule{0.4\linewidth}{0pt}}
+        \label{fig:exp:robot:sat}
+    }
+    \caption{
+        The two-link robotic manipulator and the imposed input saturation for real-time validation.
+    }
+    \label{fig:exp:robot}
 \end{figure}
 
 \begin{table}[t]
@@ -2065,18 +2088,42 @@ In this section, the performance and feasibility of the proposed CONAC are valid
     $I_1,I_2$  & Inertia of the links & \qty{0.069}{\kilo\gram\meter\squared} \\
   \hline
   \end{tabular}
-  \label{table:system:params}
+  \label{table:exp:system:params}
 \end{table}
+
+% -------------------------------------
+% Experiment Setup
+% -------------------------------------
+To validate the proposed CONAC, a real-time experiment was conducted on a two-link robotic manipulator, as shown in Fig.~\ref{fig:exp:real:set}. 
+The OpenCR1.0 board \cite{opencr} with a 32-bit ARM Cortex and a $\qty{216}{\mega\hertz}$ clock frequency was used.
+The two-link robotic manipulator was actuated by two Cubemars AK10-90 servo motors. 
+The servos were controlled using the OpenCR1.0 board, which transmits the torque reference to the corresponding servo via controller area network (CAN) communication at a sampling rate of $\qty{250}{\hertz}$ using a PCAN-USB interface.
+The system parameters of the system were identified and their values are summarized in Table~\ref{table:exp:system:params}.
+The diagram of the system is illustrated in Fig.~\ref{fig:exp:robot:diagram}.
 
 % -------------------------------------
 % Robot System
 % -------------------------------------
-For validations, the two-link robot manipulator (Fig.~\ref{fig:robot}) under control input saturation (Fig.~\ref{fig:saturation:prop:multi}) was considered. 
-The model parameters of the manipulator is listed in Table.~\ref{table:system:params}.
-To apply CONAC, the two-link robotic manipulator's dynamics is reformulated into the form of \eqref{eq:sys}, by defining the state as $\mv{x} := \mv{q}$, and the control input as $\mv{u} := \mv{\tau}$, where $q_i$ and $\tau_i$ are the $i$-th joint angle and torque, respectively.
+The two-link robotic manipulator's dynamics is described by the following Euler-Lagrange systems:
+\begin{equation} \label{eq:robot:dynamics}
+    \mv{M}(\mv{q})\ddot{\mv{q}}
+    +
+    \mv{C}(\mv{q},\dot{\mv{q}})\dot{\mv{q}}
+    +
+    \mv{G}(\mv{q})
+    =
+    \mysat
+    (
+    \mv{\tau}
+    )
+    ,
+\end{equation}
+where $\mv{q} := \left(q_1,q_2\right)^\top \in \R^2$ is the joint angle vector, $\mv{\tau} := \left(\tau_1,\tau_2\right)^\top \in \R^2$ is the joint torque vector, $\mv{M}(\mv{q}) \in \R^{2\times2}$ is the inertia matrix, $\mv{C}(\mv{q},\dot{\mv{q}}) \in \R^{2\times2}$ is the Coriolis matrix, and $\mv{G}(\mv{q}) \in \R^2$ is the gravity vector.
+The inertia matrix $\mv{M}(\mv{q})$ whose inverse is control effectiveness matrix, is symmetric positive definite matrix according to the physical properties of Euler-Lagrange systems, \cite[Lemma 3.1]{Ji:2025aa}.
+To apply CONAC, the two-link robotic manipulator's dynamics is reformulated into the form of \eqref{eq:sys}, by defining the state as $\mv{x} := \mv{q}$, and the control input as $\mv{u} := \mv{\tau}$.
 
-In the input saturation, the torque of the second joint, $\tau_2$, is saturated in $\underline{\tau}_2:=\underline{u}_2 = \qty{-3.5}{\newton\meter}$ to $\overline{\tau}_2:=\overline{u}_2 = \qty{3.5}{\newton\meter}$, and the norm of the control input, $\norm{\mv{\tau}}$, is bounded by $\overline{\tau} := \overline{u} = \qty{11}{\newton\meter}$.
-These saturation can be physically interpreted as the torque limit of the second joint actuator and the power source, respectively, and are denoted by
+In the input saturation, the torque of the second joint $\tau_2$ is saturated in $\underline{\tau}_2:=\underline{u}_2 = \qty{-3.5}{\newton\meter}$ to $\overline{\tau}_2:=\overline{u}_2 = \qty{3.5}{\newton\meter}$, and the norm of the control input $\norm{\mv{\tau}}$ is bounded by $\overline{\tau} := \overline{u} = \qty{11}{\newton\meter}$, as illustrated in Fig.~\ref{fig:exp:robot:sat}.
+These saturation can be physically interpreted as the torque limit of the second joint and the power source, respectively, and are denoted by
 \begin{equation} \label{eq:val:cstr:input}
   c^u_{\overline{\tau}_2}(\mv{\tau}) 
   := 
@@ -2102,21 +2149,37 @@ The desired trajectory is designed with 4 segments which move the system from
 $
     \mv{q}_d^{(0)}
     :=
-    \left(-\tfrac{1}{3}\pi,\tfrac{1}{3}\pi\right)^\top    
+    \left(
+        % -\tfrac{1}{3}\pi
+        -\qty{60}{\degree}
+        ,
+        % \tfrac{1}{3}\pi
+        \qty{60}{\degree}
+    \right)^\top    
 $
 to 
 $
     \mv{q}_d^{(1)}
     :=
     \left(
-        \tfrac{1}{4}\pi,-\tfrac{1}{2}\pi
+        % \tfrac{1}{4}\pi
+        \qty{45}{\degree}
+        ,
+        % -\tfrac{1}{2}\pi
+        -\qty{90}{\degree}
     \right)
 $, then to 
 $
     \mv{q}_d^{(2)}
     :=
-    \left(-\tfrac{1}{4}\pi,\tfrac{1}{4}\pi\right)^\top
-$, as illustrated in Fig.~\ref{fig:robot}.
+    \left(
+        % -\tfrac{1}{4}\pi
+        -\qty{45}{\degree}
+        ,
+        % \tfrac{1}{4}\pi
+        \qty{45}{\degree}
+    \right)^\top
+$, as illustrated in Fig.~\ref{fig:exp:robot:diagram}.
 Each segment is designed using a quintic ($5$th-order) polynomial trajectory to ensure the smoothness of the desired trajectory, with zero initial and final velocities.
 The time duration of the segments is defined as $\qty{3}{\second}$.
 To demonstrate the learning capability of the DNN, the desired trajectory was applied twice. 
@@ -2124,7 +2187,18 @@ The first and second repetitions of the desired trajectory are referred to as Ep
 
 Additionally, as mentioned in Remark~\ref{rem:init}, the system is initialized at $\mv{q}(0) = \mv{q}_d^{(0)}$ to ensure a small initial tracking error, and the DNN weights are initialized with small random values.
 To avoid the instability caused by the initial poor performance of DNN, a warm-up phase was introduced prior to applying the desired trajectory.
-In the warm-up phase, the manipulator was initially positioned at a stable equilibrium point, denoted as ${\qd}^{\rm{origin}} = \left(-\tfrac{1}{2}\pi, 0\right)^\top$, with zero initial error, \ie $\mv{e}(0) = \mv{0}$.
+In the warm-up phase, the manipulator was initially positioned at a stable equilibrium point, denoted as 
+$
+    {\qd}^{\rm{origin}} 
+    := 
+    \left(
+        % -\tfrac{1}{2}\pi
+        -\qty{90}{\degree}
+        , 
+        % 0
+        \qty{0}{\degree}
+    \right)^\top
+$, with zero initial error, \ie $\mv{e}(0) = \mv{0}_{2\times 1}$.
 Subsequently, a conservative reference trajectory was applied to gently excite the system, which is designed as a quintic polynomial trajectory that moves the system from ${\qd}^{\rm{origin}}$ to $\mv{q}_d^{(0)}$ in $\qty{3}{\second}$, and remains at $\mv{q}_d^{(0)}$ for the next $\qty{8}{\second}$, before applying the desired trajectory.
 % ------------------------------------
 
@@ -2139,8 +2213,9 @@ For comparative analysis, four controllers were implemented, with their properti
 % - 우리는 structural methods를 기반으로힘
 % - point-wise constraint handling이 아닌 adaptation 
 
-In the comparative study, optimization-based methods, such as MPC and CBF-QP, are not included because the focus is on NAC-based controllers.
+In the comparative study, optimization-based methods, such as MPC and CBF-QP, and BLF-based methods, are not included because the focus is on NAC-based controllers that handle input constraints.
 This choice isolates the proposed contribution, namely the integration of multiple convex input constraints into the online adaptation law of NAC while retaining a Lyapunov-based stability analysis.
+Moreover, among the structural methods, the comparison is limited to auxiliary-system-based methods, since they can provide more precise correction of the control input, compared to the smooth saturation function-based methods, which may introduce conservative behavior due to the smooth approximation of the saturation function, as reported in \cite{Min:2021aa}.
 
 \begin{table}[t]
   \renewcommand{\arraystretch}{1.3}
@@ -2150,7 +2225,7 @@ This choice isolates the proposed contribution, namely the integration of multip
   \begin{tabular}{m{.7cm} m{3.8cm} l}
   % \begin{tabular}{c l l}
   \hline
-    &\bf{Description}&\bf{Input Constraint}\\
+    &\bf{Description and parameters}&\bf{Input constraint}\\
   \hline
   \hline
     \multirow{3}{*}{
@@ -2159,11 +2234,12 @@ This choice isolates the proposed contribution, namely the integration of multip
         \\
         \protect\colorLine{blue}{solid}
       }
-    }& CONAC with & $c^u_{\overline{\tau}_2}$ with $\overline{\tau}_2 = 3.5$, 
+    }& Proposed CONAC  & $-\overline{\tau}_2 \le \tau_2 \le \overline{\tau}_2$, 
     \\
-    & large update rate. & $c^u_{\underline{\tau}_2}$ with $\underline{\tau}_2 = -3.5$, 
+    & $\beta_{\overline{\tau}_2},\beta_{\underline{\tau}_2}=100$, $\beta_{\rbu}=10$ & 
+    $\norm{\mv{\tau}} \le \overline{\tau}$,
     \\
-    & ($\beta_{\overline{\tau}_2},\beta_{\underline{\tau}_2}=100$, $\beta_{\rbu}=10$) & $c^u_{\overline{\tau}}$ with $\overline{\tau}=11$, \eqref{eq:val:cstr:input}. 
+    & $\mm{P} = \mm{I}_2$ & ($\overline{\tau}_2=3.5, \overline{\tau}=11$)
     \\
   \hline
     \multirow{3}{*}{
@@ -2172,38 +2248,104 @@ This choice isolates the proposed contribution, namely the integration of multip
         \\
         \protect\colorLine{cyan}{solid}
       }
-    }& CONAC with & $c^u_{\overline{\tau}_2}$ with $\overline{\tau}_2 = 3.5$, 
+    }& NAC with auxiliary system & $-\overline{\tau}_1 \le \tau_1 \le \overline{\tau}_1$, 
     \\
-    & small update rate, $\beta_j, \forall j\in\mathcal{I}$. & $c^u_{\underline{\tau}_2}$ with $\underline{\tau}_2 = -3.5$, 
+    &  & $-\overline{\tau}_2 \le \tau_2 \le \overline{\tau}_2$, 
     \\
-    & ($\beta_{\overline{\tau}_2}=\beta_{\underline{\tau}_2}=1$, $\beta_{\rbu}=0.1$) & $c^u_{\overline{\tau}}$ with $\overline{\tau}=11$, \eqref{eq:val:cstr:input}. 
-    \\
-  \hline
-    \multirow{2}{*}{
-    \shortstack{  
-      (C$_3$) 
-      \\
-      \protect\colorLine{gray}{solid}
-    }
-    }& NAC without & No input constraints \\
-    & input constraints \cite{Patil:2022aa}. &  is imposed.
+    &  & ($\overline{\tau}_1=10.4, \overline{\tau}_2=3.5$)
     \\
 \hline
     \multirow{2}{*}{
       \shortstack{  
-      (C$_4$)
+      (C$_3$)
       \\
       \protect\colorLine{magenta}{solid}
       }
     }& NAC with auxiliary system & $\overline{\tau}_1=-\underline{\tau}_1=10.428$, \\
-    & \cite{Chen:2011aa,Gao:2026aa,Ma:2025aa}. & $\overline{\tau_2}=-\underline{\tau_2}=3.5$. \\    
+    & \cite{Chen:2011aa,Gao:2026aa,Ma:2025aa}. & $\overline{\tau_2}=-\underline{\tau_2}=3.5$. 
+    \\
   \hline
+    \multirow{2}{*}{
+    \shortstack{  
+      (C$_4$) 
+      \\
+      \protect\colorLine{gray}{solid}
+    }
+    }& NAC without & The input is \\
+    & input constraints \cite{Patil:2022aa}. & unconstrained.
+    \\    
+\hline
+    DNN
+    &
+    $l_0=6,l_1=4,l_2=4,l_3=2,\alpha=0.2$
+    \\
+\hline
   \end{tabular}
   \label{table:controllers}
 \end{table}
 
+% \begin{table}[t]
+%   \renewcommand{\arraystretch}{1.3}
+%   \caption{Controllers used for numerical simulations.}
+%   \label{table:controller}
+%   \centering
+%   \begin{tabular}{m{.7cm} m{3.8cm} l}
+%   % \begin{tabular}{c l l}
+%   \hline
+%     &\bf{Description}&\bf{Input Constraint}\\
+%   \hline
+%   \hline
+%     \multirow{3}{*}{
+%       \shortstack{
+%         {(C$_1$)}
+%         \\
+%         \protect\colorLine{blue}{solid}
+%       }
+%     }& CONAC with & $c^u_{\overline{\tau}_2}$ with $\overline{\tau}_2 = 3.5$, 
+%     \\
+%     & large update rate. & $c^u_{\underline{\tau}_2}$ with $\underline{\tau}_2 = -3.5$, 
+%     \\
+%     & ($\beta_{\overline{\tau}_2},\beta_{\underline{\tau}_2}=100$, $\beta_{\rbu}=10$) & $c^u_{\overline{\tau}}$ with $\overline{\tau}=11$, \eqref{eq:val:cstr:input}. 
+%     \\
+%   \hline
+%     \multirow{3}{*}{
+%       \shortstack{
+%         {(C$_2$)}
+%         \\
+%         \protect\colorLine{cyan}{solid}
+%       }
+%     }& CONAC with & $c^u_{\overline{\tau}_2}$ with $\overline{\tau}_2 = 3.5$, 
+%     \\
+%     & small update rate, $\beta_j, \forall j\in\mathcal{I}$. & $c^u_{\underline{\tau}_2}$ with $\underline{\tau}_2 = -3.5$, 
+%     \\
+%     & ($\beta_{\overline{\tau}_2}=\beta_{\underline{\tau}_2}=1$, $\beta_{\rbu}=0.1$) & $c^u_{\overline{\tau}}$ with $\overline{\tau}=11$, \eqref{eq:val:cstr:input}. 
+%     \\
+%   \hline
+%     \multirow{2}{*}{
+%     \shortstack{  
+%       (C$_3$) 
+%       \\
+%       \protect\colorLine{gray}{solid}
+%     }
+%     }& NAC without & No input constraints \\
+%     & input constraints \cite{Patil:2022aa}. &  is imposed.
+%     \\
+% \hline
+%     \multirow{2}{*}{
+%       \shortstack{  
+%       (C$_4$)
+%       \\
+%       \protect\colorLine{magenta}{solid}
+%       }
+%     }& NAC with auxiliary system & $\overline{\tau}_1=-\underline{\tau}_1=10.428$, \\
+%     & \cite{Chen:2011aa,Gao:2026aa,Ma:2025aa}. & $\overline{\tau_2}=-\underline{\tau_2}=3.5$. \\    
+%   \hline
+%   \end{tabular}
+%   \label{table:controllers}
+% \end{table}
+
 % ------------------------------------
-% Controllers: CONAC with large beta 
+% Controllers: CONAC 
 % ------------------------------------
 \subsubsection*{Controller 1 \normalfont{(C$_1$)}—\textit{CONAC with a large update rate $\beta^u_j$ for $\lambda_j,\ \forall j\in\mathcal{I}$}}
 
@@ -2213,14 +2355,6 @@ As described in \eqref{eq:ctrl:NN:actual}, the input (torque) corresponds to the
 
 The update rates of the Lagrange multipliers for the weight norm constraints were set to $\beta_{\theta_i}=1,\ \forall i\in\mathcal{K}$.
 For the input constraints, large update rates were used: $\beta_{\overline{\tau}_2} = \beta_{\underline{\tau}_2} = 100$ and $\beta_{\rbu} = 10$, to investigate the effect of large update rates.
-
-% ------------------------------------
-% Controllers: CONAC with small beta
-% ------------------------------------
-\subsubsection*{Controller 2 \normalfont{(C$_2$)}—\textit{CONAC with a small update rate $\beta^u_j$ for $\lambda_j,\ \forall j\in\mathcal{I}$}}
-
-The proposed CONAC was implemented with the same input constraints as in (C$_1$), but with update rates for the input constraints reduced by a factor of $100$: $\beta_{\overline{\tau}_2}=\beta_{\underline{\tau}_2}=1$ and $\beta_{\rbu}=0.1$.
-All other properties and parameters were kept identical to those of (C$_1$).
 
 % ------------------------------------
 % Controllers: NAC without ctrl cstr
@@ -2277,6 +2411,16 @@ The parameters of auxiliary system were chosen as $\mu = 0.1$ and $\mm{K} = \myd
 }
 All other properties and parameters were kept the same as in (C$_1$) and (C$_2$).
 
+
+% % ------------------------------------
+% % Controllers: CONAC with small beta
+% % ------------------------------------
+% \subsubsection*{Controller 2 \normalfont{(C$_2$)}—\textit{CONAC with a small update rate $\beta^u_j$ for $\lambda_j,\ \forall j\in\mathcal{I}$}}
+
+% The proposed CONAC was implemented with the same input constraints as in (C$_1$), but with update rates for the input constraints reduced by a factor of $100$: $\beta_{\overline{\tau}_2}=\beta_{\underline{\tau}_2}=1$ and $\beta_{\rbu}=0.1$.
+% All other properties and parameters were kept identical to those of (C$_1$).
+
+
 \hfill
 
 % ------------------------------------
@@ -2321,60 +2465,6 @@ The tracking performance was quantitatively evaluated using the $L_2$-norm of th
 \subsubsection{KKT-like Optimality of CONAC}
 
 \cred{제약조건을 지속적으로 위반되더라도 최적점을 찾아가는 것}
-
-\begin{figure}[t]
-    \centering
-    \subfloat[Control results of Comparative Controllers.]{
-    %   \includegraphics
-        \includegraphics[width=\figSizeOneCol\linewidth]
-        {
-        % fig/Fig1.pdf
-        \src/script_simulation/figures/compare/Fig1.eps
-        }%
-        \label{fig:val:sim:general}}
-    \vfill
-    \subfloat[Control inputs in time interval from 29.5 to 31.5 seconds.]{
-        \includegraphics[width=\figSizeOneCol\linewidth]
-        {
-        % \src/measurement/figures/compare/Fig11.eps
-        \src/script_simulation/figures/compare/Fig2.eps
-        }%
-        \label{fig:val:sim:interested}}     
-    \caption{
-        Real-time implementation results of (C$_1$) \protect\colorLine{blue}{solid}, (C$_2$) \protect\colorLine{cyan}{solid}, (C$_3$) \protect\colorLine{gray}{solid}, (C$_4$) \protect\colorLine{magenta}{solid}, and desired trajectory $\qd$ \protect\colorLine{red}{dashed}.
-        % \vspace{-5mm}
-    }
-\label{fig:val:sim}
-\end{figure}
-
-\subsection{Feasibility Study via Real-Time Experiments} \label{sec:val:sub:exp}
-
-
-To validate the feasibility of the real-time implementation of the proposed CONAC, a real-time experiment was conducted on a two-link robotic manipulator, as shown in Fig.~\ref{fig:ctrl:exp:set}. 
-The OpenCR1.0 board \cite{opencr} with a 32-bit ARM Cortex and a $\qty{216}{\mega\hertz}$ clock frequency was used.
-The two-link robotic manipulator was actuated by two Cubemars AK10-90 servo motors. 
-The servos were controlled using the OpenCR1.0 board, which transmits the torque reference to the corresponding servo via controller area network (CAN) communication at a sampling rate of $\qty{250}{\hertz}$ using a PCAN-USB interface.
-Since the measured and/or estimated system parameters are used for the numerical validation in Section~\ref{sec:val:sub:sim}, system parameters for the real-time experiment can be found in Table~\ref{table:system:params}, as well.
-
-Same scenario including desired trajectories and constraints were used and (C$_1$) and (C$_2$) were implemented.
-
-\begin{figure}[t]
-    \centering
-        \includegraphics[width=.99\linewidth]
-        % \includegraphics[width=\figSizeOneCol\linewidth]
-        {
-            \src/figures/expSet.drawio.png
-        }%
-    \caption{
-        Experimental setup of the two-link robotic manipulator used for real-time validation.
-    }
-    \label{fig:ctrl:exp:set}
-\end{figure}
-
-\hfill
-
-The feasibility of real-time implementation of the proposed CONAC is analyzed.
-
 
 \begin{figure*}[t]
     \centering

@@ -13,40 +13,43 @@ fprintf("***********************************\n");
 FIGURE_PLOT_FLAG    = 1;    
 RESULT_SAVE_FLAG    = 1;
 
-seed = 18; rng(seed);
 
 %% SIMULATION SETTING
 ctrl_dt = 1/250;            % control sampling time
-dt = 1/1000;                % simulation time step
+dt = ctrl_dt/4;                % simulation time step
 rpt_dt = 4;                 % report time step (for printing simulation progress)
-T = 42;                       % with warmup time
+T = 11+12*3;                       % with warmup time
+% T = 23;
 t = 0:dt:T;
 
 %%
-% CONAC VARIATION SETTINGS (individual variable settings for ablation study)
-%   - alp \in \{ 0.1, 0.5, 1.0 \}
-%   - beta_4 \in \{ 1e0, 1e1, 1e2 \}
-
-VAR_OPTS = {
-    struct("CTRL_NUM", 1, "alpha", 0.1, ...
-            "SAVE_NAME", "CoNAC_alpha_1e-1"), ...
-    struct("CTRL_NUM", 1, "alpha", 0.5, ...
-            "SAVE_NAME", "CoNAC_alpha_5e-1"), ...
-    struct("CTRL_NUM", 1, "alpha", 1.0, ...
-            "SAVE_NAME", "CoNAC_alpha_1e0"), ...
-    struct("CTRL_NUM", 1, "beta_4", 1e0, ...
-            "SAVE_NAME", "CoNAC_beta4_1e0"), ...
-    struct("CTRL_NUM", 1, "beta_4", 1e1, ...
-            "SAVE_NAME", "CoNAC_beta4_1e1"), ...
-    struct("CTRL_NUM", 1, "beta_4", 1e2, ...
-            "SAVE_NAME", "CoNAC_beta4_1e2") ...
+CTRL_LIST = {
+    % struct("CTRL_NUM", 1, "OPT_NUM", 3, ...
+    %     "SAVE_NAME", "NAC", ...
+    %     "Color", "#808080"), ...
+    struct("CTRL_NUM", 3, "OPT_NUM", 1, ...
+        "SAVE_NAME", "AUX", ...
+            "Color", "magenta"), ...
+    struct("CTRL_NUM", 1, "OPT_NUM", 2, ...
+            "SAVE_NAME", "CONAC_LOW", ...
+                "Color", "blue") ...
+    % struct("CTRL_NUM", 1, "OPT_NUM", 1, ...
+    %     "SAVE_NAME", "CONAC_HIGH", ...
+    %     "Color", "blue"), ...
 };
 
+dataSet = cell(length(CTRL_LIST), 1);
 
-%%
-for var_idx = 1:1:length(VAR_OPTS)
-    CTRL_VAR = VAR_OPTS{var_idx};
-    CONTROL_NUM = CTRL_VAR.CTRL_NUM;
+for ctrl_idx = 1:1:length(CTRL_LIST)
+    seed = 1000; rng(seed);
+
+    CTRL_INFO = CTRL_LIST{ctrl_idx};
+    data = struct();
+    data.CTRL_INFO = CTRL_INFO;
+
+    fprintf("Running Simulation for Control Method:\n");
+    fprintf(" %s, Option: %d\n", ...
+        CTRL_INFO.SAVE_NAME, CTRL_INFO.OPT_NUM);
 
     %% SYSTEM DECLARE
     grad_x = model1_load();     % system dynamics (grad_x = f(x,u,t))
@@ -56,12 +59,22 @@ for var_idx = 1:1:length(VAR_OPTS)
     x2 = [0;0];                 % initial state (link angular velocity)
     u = [0;0];                  % initial control input (torque)   
 
+    num_x = length(x1); num_u = length(u); num_t = length(t);
+    data.x1_hist = zeros(num_x, num_t); data.x1_hist(:, 1) = x1;
+    data.x2_hist = zeros(num_x, num_t); data.x2_hist(:, 1) = x2;
+    data.xd1_hist = zeros(num_x, num_t); data.xd2_hist = zeros(num_x, num_t);
+    [xd1,xd2] = r_func(0);
+    data.xd1_hist(:, 1) = xd1; data.xd2_hist(:, 1) = xd2;
+    data.r_hist = zeros(num_x, num_t); data.r_hist(:, 1) = zeros(num_x, 1);
+    data.u_hist = zeros(num_u, num_t); data.u_hist(:, 1) = u;
+    data.uSat_hist = zeros(num_u, num_t); data.uSat_hist(:, 1) = u;
+
     %% CONTROLLER LOAD
-    if CONTROL_NUM == 1    % CoNAC
+    if CTRL_INFO.CTRL_NUM == 1    % CoNAC
         ctrl_path = "CoNAC";
-    elseif CONTROL_NUM == 2 % Aux.
+    elseif CTRL_INFO.CTRL_NUM == 2 % Aux.
         ctrl_path = "CoNAC-AUX";
-    elseif CONTROL_NUM == 3 % Complex Aux.
+    elseif CTRL_INFO.CTRL_NUM == 3 % Complex Aux.
         ctrl_path = "CoNAC-AUX-Comp";
     else
         error("Invalid CONTROL_NUM. Must be 1, 2, or 3.");
@@ -72,26 +85,19 @@ for var_idx = 1:1:length(VAR_OPTS)
 
     % opt = loadOpts(ctrl_dt);
     addpath("controllers");
-    opt = loadGlobalOpts(ctrl_dt, CONTROL_NUM, -999);
-
-    %% OVERWRITE OPT WITH VAR_OPTS
-    for field_idx = 1:length(fieldnames(CTRL_VAR))
-        field_names = fieldnames(CTRL_VAR);
-        if field_names{field_idx} == "CTRL_NUM" || field_names{field_idx} == "SAVE_NAME"
-            continue
-        elseif field_names{field_idx} == "alpha"
-            opt.alpha = CTRL_VAR.(field_names{field_idx});
-        elseif startsWith(field_names{field_idx}, "beta_")
-            beta_idx = str2double(extractAfter(field_names{field_idx}, "beta_"));    
-            opt.beta(beta_idx) = CTRL_VAR.(field_names{field_idx});
-        end
-    end
-
+    opt = loadGlobalOpts(ctrl_dt, CTRL_INFO.CTRL_NUM, CTRL_INFO.OPT_NUM);
     initControl;
 
     %% RECORDER INITIALIZATION
-    addpath("recorder");
-    recInit;
+    if CTRL_INFO.CTRL_NUM == 1
+        % CoNAC
+        data.lbd_hist = zeros(length(opt.beta), num_t); data.lbd_hist(:,1) = zeros(length(opt.beta),1);
+        data.th_hist = zeros(opt.l_size-1, num_t); data.th_hist(:, 1) = nnWeightNorm(nn.th, opt);
+    elseif CTRL_INFO.CTRL_NUM == 2 || CTRL_INFO.CTRL_NUM == 3
+        % Aux.
+        data.th_hist = zeros(opt.l_size-1, num_t); data.th_hist(:, 1) = nnWeightNorm(nn.th, opt);
+        data.zeta_hist = zeros(num_u, num_t); data.zeta_hist(:, 1) = z;
+    end
 
     %% MAIN SIMULATION
     % ********************************************************
@@ -111,7 +117,7 @@ for var_idx = 1:1:length(VAR_OPTS)
         end
 
         % control input saturation
-        u_sat = sat(u, opt, CONTROL_NUM);
+        u_sat = sat(u, opt, CTRL_INFO.CTRL_NUM);
 
         % error check
         if isnan(norm(u))
@@ -120,11 +126,35 @@ for var_idx = 1:1:length(VAR_OPTS)
         end
         
         % step forward
-        grad = grad_x([x1;x2], u_sat, t(t_idx));
-        x1 = x1 + grad(1:2) * dt;
-        x2 = x2 + grad(3:4) * dt;
+        % grad = grad_x([x1;x2], u_sat, t(t_idx));
+        % x1 = x1 + grad(1:2) * dt;
+        % x2 = x2 + grad(3:4) * dt;
+        k1 = grad_x([x1;x2], u_sat, t(t_idx));
+        k2 = grad_x([x1;x2] + k1*dt/2, u_sat, t(t_idx) + dt/2);
+        k3 = grad_x([x1;x2] + k2*dt/2, u_sat, t(t_idx) + dt/2);
+        k4 = grad_x([x1;x2] + k3*dt, u_sat, t(t_idx) + dt);
+        del_x = (k1 + 2*k2 + 2*k3 + k4)/6*dt;
+        x1 = x1 + del_x(1:2);
+        x2 = x2 + del_x(3:4);
 
-        recRecord;
+        % 
+        data.x1_hist(:, t_idx) = x1;
+        data.x2_hist(:, t_idx) = x2;
+        data.xd1_hist(:, t_idx) = xd1;
+        data.xd2_hist(:, t_idx) = xd2;
+        data.u_hist(:, t_idx) = u;
+        data.uSat_hist(:, t_idx) = u_sat;
+        data.th_hist(:, t_idx) = nnWeightNorm(nn.th, opt);
+        data.r_hist(:, t_idx) = r;
+        if CTRL_INFO.CTRL_NUM == 1
+            data.lbd_hist(:, t_idx) = opt.lbd;
+        elseif CTRL_INFO.CTRL_NUM == 2 || CTRL_INFO.CTRL_NUM == 3
+            data.zeta_hist(:, t_idx) = z;
+        end
+
+% cpx_list(t_idx) = cpx_;
+% bsc_hist(:,t_idx) =BSC_e2;
+% bsc_hist(:,t_idx) = u_fix;
 
         % simulation report
         if rem(t(t_idx)/dt, rpt_dt/dt) == 0
@@ -135,36 +165,13 @@ for var_idx = 1:1:length(VAR_OPTS)
     fprintf("Simulation End\n");
     fprintf("\n");
 
-    if FIGURE_PLOT_FLAG
-        addpath("utils");
-        plot_wrapper;
-    end
-
-    if RESULT_SAVE_FLAG
-        fprintf("[INFO] Result Saving...\n");
-        whatTimeIsIt = string(datetime('now','Format','d-MMM-y_HH-mm-ss'));
-
-        % save_name = whatTimeIsIt;
-        save_name = CTRL_VAR.SAVE_NAME;
-
-        [~,~] = mkdir("sim_result/"+sim_start_time);
-
-        if CONTROL_NUM == 1
-            save("sim_result/"+sim_start_time+"/"+save_name+".mat", ...
-                "t", "x1_hist", "x2_hist", "xd1_hist", "xd2_hist", ...
-                "u_hist", "uSat_hist", "lbd_hist", "th_hist", ...
-                "opt", "T" ...
-                );
-        elseif CONTROL_NUM == 2
-            % [~,~] = mkdir("sim_result/"+whatTimeIsIt);
-            save("sim_result/"+sim_start_time+"/"+save_name+".mat", ...
-                "t", "x1_hist", "x2_hist", "xd1_hist", "xd2_hist", ...
-                "u_hist", "uSat_hist", "zeta_hist", "th_hist", ...
-                "opt", "T" ...
-                );
-        end
-
-        fprintf("Saved: \n%s\n", "sim_result/"+sim_start_time+"/"+save_name+".mat")
-    end
+    dataSet{ctrl_idx} = data;
+    dataSet{ctrl_idx}.opt = opt;
+    dataSet{ctrl_idx}.T = T;
+    dataSet{ctrl_idx}.t = t;
 
 end
+
+newnew_plotter
+figure(8);clf;
+plot(bsc_hist(1,:), "LineWidth", 2);

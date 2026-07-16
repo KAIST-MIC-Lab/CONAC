@@ -6,6 +6,8 @@ function [M, C, G, F, J] = model1(q, u, t)
 
 m1 = 2.465;             % [kg]
 m2 = 2.465;             % [kg]
+% m2 = m2 + 1;
+
 % m2 = 1.093;
 L1 = .2;             % [m]
 L2 = .2;             % [m]
@@ -87,40 +89,47 @@ f_thr = 1e-3;
 Fc1 = fc1*qd1;
 Fc2 = fc2*qd2;
 
+tau_eff1 = u(1) - Gmat1;
+tau_eff2 = u(2) - Gmat2;
 
-
-if abs(qd1) < f_thr 
-    if abs(u(1)) < fs1
-        Fmat1 = u(1)-Gmat1;
+%% Joint 1 friction
+if abs(qd1) < f_thr
+    % 정지 또는 거의 정지한 상태
+    if abs(tau_eff1) < fs1
+        % 유효 토크가 최대 정지 마찰보다 작음: sticking
+        Fmat1 = tau_eff1;
     else
-        if u(1)-Gmat1 >= 0
-            Fmat1 = b1*qd1+fc1;
+        % 정지 마찰 한계를 넘어 운동이 시작되는 방향
+        if tau_eff1 >= 0
+            Fmat1 = fc1 + b1*qd1;
         else
-            Fmat1 = b1*qd1-fc1;
+            Fmat1 = -fc1 + b1*qd1;
         end
     end
 else
-    if qd1 >=0 
+    % 이미 운동 중인 상태
+    if qd1 >= 0
         Fmat1 = fc1 + b1*qd1;
-    elseif q(3) < 0
+    else
         Fmat1 = -fc1 + b1*qd1;
     end
 end
 
-if abs(qd2) < f_thr 
-    if abs(u(2)) < fs2
-        Fmat2 = u(2)-Gmat2;
+%% Joint 2 friction
+if abs(qd2) < f_thr
+    if abs(tau_eff2) < fs2
+        Fmat2 = tau_eff2;
     else
-        if u(2)-Gmat2 >= 0
-            Fmat2 = b2*qd2+fc2;
+        if tau_eff2 >= 0
+            Fmat2 = fc2 + b2*qd2;
         else
-            Fmat2 = b2*qd2-fc2;
+            Fmat2 = -fc2 + b2*qd2;
         end
     end
 else
-    if qd2 >=0 
+    if qd2 >= 0
         Fmat2 = fc2 + b2*qd2;
-    elseif qd2 < 0
+    else
         Fmat2 = -fc2 + b2*qd2;
     end
 end

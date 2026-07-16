@@ -1,10 +1,10 @@
 
 %% PREPARE
-font_size = 16;
+font_size = 8;
 line_width = 2;
 lgd_size = 12;
-fig_height = 210; fig_width = 450;
-% fig_height = 210*4; fig_width = 450*2;
+% fig_height = 210; fig_width = 450;
+fig_height = 210*4; fig_width = 450*2;
 
 %% DATA EXTRACTION
 cstr = opt.cstr;

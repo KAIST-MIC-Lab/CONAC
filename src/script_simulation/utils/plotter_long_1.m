@@ -2,8 +2,8 @@
 
 figure(1); clf
 tl = tiledlayout(6, 2);
-hF = gcf; 
-hF.Position(3:4) = [fig_width, fig_height];
+% hF = gcf; 
+% hF.Position(3:4) = [fig_width, fig_height];
 
 start_t = 7.5;
 
@@ -133,3 +133,26 @@ xlim([start_t, t(end)])
 ylim([0, max(cstr.th_max) * 1.25])
 % ylim([0, max(th, [], 'all') * 1.25])
 % ylim([0, max(th, [], 'all')+20])
+
+%% Aux Sys
+figure(2);clf
+plot(t, zeta_hist(1,:), "Color", "blue", "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$x_1$"); hold on
+plot(t, zeta_hist(2,:), "Color", "red", "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$r_1$"); hold on
+maxVal = max([x1; r1], [], 'all');
+minVal = min([x1; r1], [], 'all');
+xlabel("Time $[\rm s]$", "Interpreter", "latex")
+ylabel(" $q_1$ $[\rm rad]$", "Interpreter","latex")
+set(gca, 'FontSize', font_size, 'FontName', 'Times New Roman')
+grid on
+% ylim([min(r1) * 0.75, max(r1) * 1.25])
+% ylim([-0.5, 2.5])
+% lgd = legend;
+% lgd.Interpreter = 'latex';
+% lgd.FontSize = lgd_size;
+% lgd.FontWeight = "bold";
+% lgd.Location = "northwest";
+
+
+xlim([start_t, t(end)])
+len = maxVal - minVal;
+if len ~= 0; ratio = 0.25; ylim([minVal-len*ratio, maxVal+len*ratio]); end

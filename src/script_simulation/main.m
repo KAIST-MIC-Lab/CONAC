@@ -11,7 +11,7 @@ fprintf("***********************************\n");
 
 FIGURE_PLOT_FLAG    = 1;    
 RESULT_SAVE_FLAG    = 1;
-CONTROL_NUM         = 1;    % 1: CoNAC, 2: Aux.
+CONTROL_NUM         = 1;    % 1: CoNAC, 2: Aux, 3: Aux-Comp
 OPT_NUM             = 2;    % parameter options
 
 seed = 1000; rng(seed);
@@ -25,6 +25,7 @@ rpt_dt = 4;                 % report time step (for printing simulation progress
 %                             %   (ref. applied twice)
 % T = 35+12;                       % with warmup time
 T = 42;                       % with warmup time
+% T = 20;                       
 
 t = 0:dt:T;
 
@@ -82,9 +83,16 @@ for t_idx = 2:1:num_t
     assert(~isnan(norm(u)));
     
     % step forward
-    grad = grad_x([x1;x2], u_sat, t(t_idx));
+    k1 = grad_x([x1;x2], u_sat, t(t_idx));
+    k2 = grad_x([x1;x2] + k1*dt/2, u_sat, t(t_idx) + dt/2);
+    k3 = grad_x([x1;x2] + k2*dt/2, u_sat, t(t_idx) + dt/2);
+    k4 = grad_x([x1;x2] + k3*dt, u_sat, t(t_idx) + dt);
+    grad = (k1 + 2*k2 + 2*k3 + k4)/6;
     x1 = x1 + grad(1:2) * dt;
     x2 = x2 + grad(3:4) * dt;
+    % grad = grad_x([x1;x2], u_sat, t(t_idx));
+    % x1 = x1 + grad(1:2) * dt;
+    % x2 = x2 + grad(3:4) * dt;
 
     recRecord;
 

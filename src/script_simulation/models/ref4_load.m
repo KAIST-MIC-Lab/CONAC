@@ -23,12 +23,13 @@ function [r1, r2] = epi_gen1(t)
 
     t = mod(t, CYCLE_TIME);
 
-    x0 = [-1/3*pi; 1/3*pi];  
-    xd1 = [1/4*pi; -1/2*pi];
-    xd2 = [-1/4*pi; 1/4*pi];
-    % x0 = deg2rad([-90;0]);  
-    % xd1 = deg2rad([45;-90]);
-    % xd2 = deg2rad([-45;45]);
+    % x0 = [-1/3*pi; 1/3*pi];  
+    % xd1 = [1/4*pi; -1/2*pi];
+    % xd2 = [-1/4*pi; 1/4*pi];
+    % xd3 = xd1;
+    x0 = deg2rad([-60;60]);  
+    xd1 = deg2rad([45;-90]);
+    xd2 = deg2rad([-45;45]);
     % xd3 = deg2rad([-50;-145]);
     xd3 = xd1;
 
@@ -42,7 +43,7 @@ function [r1, r2] = epi_gen2(t)
 
     INIT_X = [-1/2*pi; 0]; % initial state for warmup (link angle)
     WARMUP_X = [-1/3*pi; 1/3*pi]; % same as x0
-    UNREACHABLE_X = [deg2rad(90); 0];
+    UNREACHABLE_X = deg2rad([45; -90]);
 
     if t < WARMUP_T
         [r1, r2] = poly_filter(INIT_X, WARMUP_X, WARMUP_T, t);
