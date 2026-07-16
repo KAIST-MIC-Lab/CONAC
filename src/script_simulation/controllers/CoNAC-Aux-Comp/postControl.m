@@ -1,41 +1,76 @@
 % ---------------------------------------------
 % Linear auxiliary system update
 % ---------------------------------------------
-K1 = diag([1 1]) * 7e0;
-K2 = diag([1 1]) * 12e0;
-K3 = diag([1 1]) * -diag([000, 400]);
+K1 = diag([9 6]) * 1e0;
+K2 = diag([10 5]) * 1e0;
+K3 = diag([1 1]) * -diag([000, 3]);
 % K3 = K3 * 0;
 
 M0 = diag([1 1]) * 1;
 
 % virtual control
-alp = xd2 - K1 * e1;
-fil_alp_grad = (alp - opt.fil_alp) / 0.1;
-opt.fil_alp = opt.fil_alp + fil_alp_grad * ctrl_dt;
-% opt.fil_alp = alp; fil_alp = [0;0];
-BSC_e2 = x2-opt.fil_alp;
-% u = -e1-K2*BSC_e2-K3*z -M0*( - fil_alp_grad);
-u = -e1-K2*BSC_e2-K3*z -M0*( -u_NN- fil_alp_grad);
+K = diag([10 5]) * 1e-2;
+u = u_NN - K * z;
 
 % auxiliary system update
 del_u(1,1) = min(max(u(1), -opt.cstr.uMax1), opt.cstr.uMax1) - u(1);
 del_u(2,1) = min(max(u(2), -opt.cstr.uMax2), opt.cstr.uMax2) - u(2);
+del_u = -del_u;
 
 % NONLINEAR AUXILIARY SYSTEM UPDATE
-A_z = 10e0*eye(2); B_z = 1e0*eye(2);
-
+A_z = 1e1*eye(2); B_z = 1e4*eye(2);
 z_grad = ...
     - A_z * z ...
     + B_z * del_u;    
 
-z = z + z_grad * ctrl_dt;
+% z = z + z_grad * ctrl_dt;
 
 % exact discretization
-% Ad_z = expm(-A_z*ctrl_dt);
-% z = Ad_z * z + -A_z \ (Ad_z - eye(2)) * B_z*del_u;
+Ad_z = expm(-A_z*ctrl_dt);
+z = Ad_z * z + -A_z \ (Ad_z - eye(2)) * B_z*del_u;
 
 % NN backward propagation, update NN weights
-[nn, opt] = nnBackward(nn, opt, BSC_e2, u_NN);
+[nn, opt] = nnBackward(nn, opt, r+1*z, u_NN);
+
+
+% % ---------------------------------------------
+% % Linear auxiliary system update
+% % ---------------------------------------------
+% K1 = diag([9 6]) * 1e0;
+% K2 = diag([10 5]) * 1e0;
+% K3 = diag([1 1]) * -diag([000, 3]);
+% % K3 = K3 * 0;
+% 
+% M0 = diag([1 1]) * 1;
+% 
+% % virtual control
+% alp = xd2 - K1 * e1;
+% fil_alp_grad = (alp - opt.fil_alp) / 0.5;
+% opt.fil_alp = opt.fil_alp + fil_alp_grad * ctrl_dt;
+% opt.fil_alp = alp; fil_alp = [0;0];
+% BSC_e2 = x2-opt.fil_alp;
+% % u = -e1-K2*BSC_e2-K3*z -M0*( - fil_alp_grad);
+% u = -e1-K2*BSC_e2-K3*z -M0*( -u_NN- fil_alp_grad);
+% 
+% % auxiliary system update
+% del_u(1,1) = min(max(u(1), -opt.cstr.uMax1), opt.cstr.uMax1) - u(1);
+% del_u(2,1) = min(max(u(2), -opt.cstr.uMax2), opt.cstr.uMax2) - u(2);
+% 
+% % NONLINEAR AUXILIARY SYSTEM UPDATE
+% A_z = 1e1*eye(2); B_z = 1.5e2*eye(2);
+% 
+% z_grad = ...
+%     - A_z * z ...
+%     + B_z * del_u;    
+% 
+% % z = z + z_grad * ctrl_dt;
+% 
+% % exact discretization
+% Ad_z = expm(-A_z*ctrl_dt);
+% z = Ad_z * z + -A_z \ (Ad_z - eye(2)) * B_z*del_u;
+% 
+% % NN backward propagation, update NN weights
+% [nn, opt] = nnBackward(nn, opt, BSC_e2-1*z, u_NN);
 
 % ---------------------------------------------
 % FIXED TIME
