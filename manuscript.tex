@@ -7,7 +7,7 @@
 \allowdisplaybreaks
 
 \newcommand*{\figSizeTwoCol}{.49}
-\newcommand*{\figSizeOneCol}{0.98}
+\newcommand*{\figSizeOneCol}{0.98} 
 
 \newcommand{\NNin}{\mv{x}_{nn}}
 
@@ -38,11 +38,10 @@
 %% Abstract
 \begin{abstract}
   This study presents a constrained optimization-based neuro-adaptive control (CONAC) for unknown systems subject to multiple convex input constraints. 
-  A deep neural network (DNN) is employed to approximate the ideal stabilizing control law while handling multiple convex input constraints within a unified constrained optimization framework.
-  The adaptive variables including the DNN weights and Lagrange multipliers are updated through adaptation laws derived from the formulated constrained optimization problem, yielding KKT-like first-order optimality conditions at equilibrium.
+  A deep neural network (DNN) is employed to approximate the ideal control law while handling multiple convex input constraints within a unified constrained optimization framework.
+  The adaptive variables including the DNN weights and Lagrange multipliers are updated through adaptation laws derived from the formulated constrained optimization problem, yielding Karush-Kuhn-Tucker (KKT)-like first-order optimality conditions at equilibrium.
   The controller's stability is rigorously analyzed using Lyapunov theory, guaranteeing uniformly ultimately bounded tracking errors, and adaptive variables.
-  The proposed controller is compared with existing methods in numerical simulations, highlighting its capability to handle multiple convex input constraints.
-  Additionally, the feasibility and effectiveness of CONAC in real-world applications are validated through a real-time implementation on a 2-DOF robotic manipulator.
+  The proposed controller is compared with existing methods in real-time implementation on a 2-degree-of-freedom (DOF) robotic manipulator, highlighting superior capability in handling input saturation and feasibility in real-time applications.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -98,25 +97,20 @@ Finally, $\mm I_n$ denotes the $n\times n$ identity matrix, and $\mm 0_{n\times 
 
 \subsection{Background}
 
-\IEEEPARstart{F}{rom} a practical perspective, many engineering systems are constrained by multiple safety requirements, actuator limitations, and physical restrictions \cite{Ji:2025aa}.
+\IEEEPARstart{F}{rom} a practical perspective, many engineering systems are constrained by various safety requirements, actuator limitations, and physical restrictions \cite{Ji:2025aa}.
 These constraints often manifest as convex input constraints, which can be in the form of nonlinear constraints rather than simple box constraints that limit each input independently.
 For example, under road friction limits, the admissible global force and moment of vehicles can be characterized by weighted norm bound, which yields convex ellipsoidal constraint \cite{Chen:2024aa}.
-% \MSRY{전력원의 한계로 인해서 토크 놈에 대해서 제약조건을 주는게 명시적으로 논문에 나온게 없더라구요.. 그래서 아래 문장은 삭제되어야 할 것 같습니다.}
-% \cred{
-% For instance, due to power limitations for actuators, robotic manipulators may have constraints on the upper bounds on the norm of the joint torques.
-% }
 In motor drive systems, the feasible voltage region is often represented by circular \cite{Ryu:2025aa} or hexagonal sets \cite{Monzen:2026aa}.
-% More recently, input constraints induced by state constraints using control barrier functions (CBFs) \cite{Ames:2019aa} are inherently nonlinear and complex.
 Furthermore, admissible input sets may be determined by multiple constraints that must hold simultaneously, such as component-wise bounds combined with norm constraints, which can be represented as the intersection of multiple convex sets.
 Therefore, addressing these multiple convex input constraints is crucial for ensuring the safety and reliability of control systems in real-world applications.
 
-In parallel, another challenge in engineering systems is uncertain dynamics or even completely unknown dynamics, which can arise from modeling errors, unmodeled dynamics, and external disturbances.
-Although adaptive control provides a systematic mechanism for online adaptation of controllers \cite{Ioannou:2006aa}, conventional formulations often rely on structural assumptions on the uncertain or unknown dynamics, which may not be available in practice.
-Neuro-adaptive control (NAC) alleviates this limitation by using neural networks (NNs) to approximate the dynamics in a structured and parameterized representation \cite{Farrell:2006aa,Patil:2022aa}.
+In parallel, engineering systems often involve uncertain or even unknown dynamics due to modeling errors, unmodeled dynamics, and external disturbances.
+Although adaptive control provides a systematic mechanism for online adaptation of controllers \cite{Ioannou:2006aa}, conventional formulations often rely on structural assumption on the uncertain or unknown dynamics, which may not be available in practice.
+Neuro-adaptive control (NAC) alleviates this assumption by using neural networks (NNs) to approximate the dynamics in a structured and parameterized representation \cite{Farrell:2006aa,Patil:2022aa}.
 Like adaptive control, NAC methods ensure closed-loop stability using Lyapunov theory, and the NN weights are adapted online without prior knowledge of the system dynamics.
-The NAC methods have shown promising results in various real-world applications, including vehicle control \cite{Zhao:2016aa,You:2023aa}, flexible robotic manipulators \cite{Gao:2026aa}, synchronous machine drives \cite{Ryu:2025aa}, and swarm control of mobile robots \cite{Yu:2022aa}.
+The NAC methods have shown promising results in various real-world applications, including vehicle control \cite{You:2023aa}, and flexible robotic manipulators \cite{Gao:2026aa}.
 
-Because multiple convex input constraints and uncertain or unknown dynamics often coexist in real-world applications, incorporating input constraint handling into NAC is essential.
+Because multiple convex input constraints and uncertain or unknown dynamics often coexist in real-world applications, incorporating multiple input constraint handling into NAC is essential.
 This motivates a review of existing input constraint handling methods in NAC and related constrained control frameworks.
 
 \subsection{Literature Review}
@@ -127,29 +121,30 @@ This motivates a review of existing input constraint handling methods in NAC and
 
 \subsubsection{Structural Methods for Input Constraint Handling in NAC}
 
-In NAC, structural methods have been mainly developed for input constraint handling, because they preserve the continuous-time controller structure and are amenable to Lyapunov stability analysis.
-Auxiliary-system-based approaches are the most widely used method owing to their simplicity and effectiveness \cite{Esfandiari:2014aa,Esfandiari:2015aa,Chen:2011aa,He:2016aa,Zhao:2016aa,Gao:2026aa,Yu:2022aa,Ma:2025aa,Liu:2025aa,Liu:2024aa,Sun:2023aa}.
-When input saturation occurs, the auxiliary state is excited and evolves according to the auxiliary system, whose dynamics is linear \cite{Yu:2022aa,Esfandiari:2014aa,Esfandiari:2015aa,Sun:2023aa}, nonlinear \cite{Chen:2011aa,Gao:2026aa,Ma:2025aa,He:2016aa} or fixed-time-inspired \cite{Liu:2025aa,Liu:2024aa}.
-Typically, the excited auxiliary state is directly fed back into the control law as additional compensation terms.
+Since the NAC framework is based on Lyapunov theory, structural methods have been widely studied for handling input constraints in NAC.
+In \cite{Ji:2025aa}, Ji \etal categorized the literature on input constraint handling into two strategies: anti-saturation designs and direct design.
+We review these two strategies in the context of NAC.
 
-However, from a learning perspective, introducing additional compensation terms into the control law can interfere with the NN adaptation process.
-This occurs because the adaptation law typically depends on the feedback error, which may become less informative for updating the NN weights when the additional terms dominate the closed-loop response.
-To address this issue, some studies incorporated the auxiliary state into the feedback error used in adaptation laws \cite{Esfandiari:2014aa,Esfandiari:2015aa}.
-This approach allows the NN weights to adapt not only for approximating the ideal control law but also for compensating the effect of input saturation.
+In anti-saturation designs, a virtual auxiliary system is mainly introduced to compensate for the effects of input saturation \cite{Gao:2026aa,Yang:2021aa,Liu:2024aa,Liu:2025aa,Esfandiari:2014aa,Esfandiari:2015aa,Yu:2022aa,Chen:2011aa,He:2016aa,Zhao:2016aa,Ma:2025aa,Sun:2023aa}.
+Owing to the high flexibility of the auxiliary system design, the auxiliary system has been adopted in various control design.
+For example, auxiliary systems have been incorporated into backstepping-based NAC \cred{[..]} and sliding mode control (SMC)-based NAC \cred{[..]} to mitigate the effects of input saturation.
+Furthermore, the auxiliary systems have been integrated into reinforcement learning (RL)-based NAC designs \cite{Gao:2026aa} and barrier Lyapunov function (BLF)-based NAC designs \cite{Yang:2021aa}.
+To achieve fixed-time convergence, novel fixed-time \cite{Liu:2024aa,Liu:2025aa} auxiliary systems have been proposed.
 
-Additionally, several other structural methods have been introduced for handling input constraints in NAC. 
-For instance, in \cite{Gao:2006aa}, the saturated amount of control input is estimated using NNs and compensated in the control law.
+Generally, the auxiliary system is excited when the control input reaches the saturation limit, and the auxiliary state is fed back into the control law as additional compensation terms.
+However, from a learning perspective, if the auxiliary state is not incorporated into the feedback error used in the adaptation law, the NN weights may generate excessive control input, since the saturation effect is not considered in the adaptation process.
+Hence, the auxiliary state is often considered in the adaptation law  \cite{Esfandiari:2014aa,Esfandiari:2015aa,Liu:2024aa,Liu:2025aa,Yu:2022aa}.
+This ensures that the NN weights adapt not only for approximating the ideal control law but also for compensating the effect of input saturation.
+
+On the other hand, in direct design, the saturation effects are directly incorporated into the controller design and stability analysis \cred{[...]}.
+Typically, the saturation function is approximated by a smooth function, such as $\tanh(\cdot)$, and mean-value theorem is used to analyze the closed-loop stability \cred{[..]}.
 In \cite{Li:2024aa}, the control law is augmented with a smooth saturation function, such as $\tanh(\cdot)$, to accommodate input saturation effects, while the closed-loop stability is analyzed using Lyapunov theory.
-For strict-feedback systems, command filters have also been used to limit the magnitude and rate of virtual control inputs in backstepping-based NAC designs \cite{Chen:2011aa}, thereby indirectly handling input constraints.
+However, as reported in \cite{Min:2021aa}, the smooth approximation of the saturation function may introduce conservative behavior and performance degradation, especially when the control input is close to the saturation limit.
 
-Furthermore, barrier functions have been getting attention for handling system constraints.
-In NAC literature, Barrier Lyapunov function (BLF)-based approaches have been studied \cite{Zhao:2025aa,Yang:2021aa}.
-BLF-based methods are particularly effective for enforcing state-, output-, or error-related constraints.
-When input saturation is considered, they are often combined with auxiliary systems or additional compensation mechanisms.
-For instance, in \cite{Yang:2021aa}, the auxiliary system is additionally incorporated into the BLF-based NAC design to handle input saturation.
-
-Despite their effectiveness, most structural NAC methods that explicitly address input saturation are limited to simple box input constraints, such as symmetric or asymmetric bounds on each input.
+Despite their effectiveness, most structural methods are limited to simple box input constraints, such as symmetric or asymmetric bounds on each input.
 Thus, extending them to admissible input sets described by multiple convex constraints is not straightforward.
+
+% For instance, in \cite{Gao:2006aa}, the saturated amount of control input is estimated using NNs and compensated in the control law.
 
 % ================================
 % OPTIMIZATION-BASED METHODS
@@ -339,13 +334,12 @@ The control objectives are to design a NAC for the unknown system \eqref{eq:sys}
 \section{Proposed CONAC Framework} \label{sec:main:result}
 
 \begin{figure}[!t]
-    \centering
-    \includegraphics[width=.79\linewidth]{\src/figures/Controller.drawio.pdf}
-    \caption{
-        \cred{(draft figure)}
-        Architecture of the proposed constrained optimization-based neuro-adaptive controller (CONAC).
-    }
-    \label{fig:ctrl:diagram}
+  \centering
+  \includegraphics[width=.99\linewidth]{\src/figures/Controller.drawio.pdf}
+  \caption{
+    Diagram of the proposed constrained optimization-based neuro-adaptive control (CONAC).
+  }
+  \label{fig:ctrl:diagram}
 \end{figure}
 
 The architecture of the proposed CONAC consists of a DNN that functions as a NAC and a adaptation process for the adaptive variables, as illustrated in Fig.~\ref{fig:ctrl:diagram}.
@@ -739,7 +733,7 @@ $.
 % which only holds if $\mv{e}$ is initialized within certain bounds, $\norm{e}(0)\le\sqrt{\tfrac{\underline{b}}{\overline{b}}\overline{e}^2 - \tfrac{\overline{u}^2}{\underline{p}-1}}$.
 % This implies that $\mv{x}$ remains in a compact set $\Omega_x := \left\{\mv{x} : \norm{\mv{x}}\le \overline{e} + \overline{x}_d\right\}$, since $\mv{x}_d$ is bounded in $\Omega_{x_d}$, and the compact set $\Omega_x$ can be interpreted as physically limited domain of the system states in practice.
 
-Since the ideal control law \eqref{eq:ctrl:ideal} contains unknown functions $\beta(\mv{x})$, $\mv{f}$ and $\mm{B}$, we employ a DNN $\NN(\NNin;\wth)$ in \eqref{eq:dnn:def} to approximate $\mv{u}_d$, where the DNN input vector is defined as $\NNin := \left(\mv{x}^\top , \mv{x}_d^\top , \ddtt{\mv{x}}_d^\top, 1 \right)^\top\in\R^{3n+1}$.
+Since the ideal control law \eqref{eq:ctrl:ideal} contains unknown functions $\beta(\mv{x})$, $\mv{f}$ and $\mm{B}$, we employ a DNN $\NN(\NNin;\wth)$ in \eqref{eq:dnn:def} to approximate $\mv{u}_d$, where the DNN input vector is defined as $\NNin := \left(\mv{x}_d^\top , \ddtt{\mv{x}}_d^\top, \mv{x}^\top , 1 \right)^\top\in\R^{3n+1}$.
 Then, we have 
 \begin{equation} \label{eq:ctrl:NN:ideal}
     \mv{u}_d
@@ -2059,14 +2053,23 @@ In this section, the performance and feasibility of the proposed CONAC are valid
         \label{fig:exp:robot:diagram}
     }
     \subfloat[Imposed input Saturation.]{
-        % \includegraphics[width=0.45\linewidth]{\src/figures/inputFuncProp.drawio.pdf}
-        \fbox{\rule{0pt}{0.4\linewidth} \rule{0.4\linewidth}{0pt}}
+        \includegraphics[width=0.45\linewidth]{\src/figures/saturation.drawio.pdf}
+        % \fbox{\rule{0pt}{0.4\linewidth} \rule{0.4\linewidth}{0pt}}
         \label{fig:exp:robot:sat}
     }
     \caption{
         The two-link robotic manipulator and the imposed input saturation for real-time validation.
     }
     \label{fig:exp:robot}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\linewidth]{\src/figures/desired_traj.drawio.pdf}
+    \caption{
+        The desired trajectory for Episode 1 and Episode 2.
+    }
+    \label{fig:exp:des:traj}
 \end{figure}
 
 \begin{table}[t]
@@ -2179,7 +2182,7 @@ $
         % \tfrac{1}{4}\pi
         \qty{45}{\degree}
     \right)^\top
-$, as illustrated in Fig.~\ref{fig:exp:robot:diagram}.
+$, as illustrated in Fig.~\ref{fig:exp:des:traj}.
 Each segment is designed using a quintic ($5$th-order) polynomial trajectory to ensure the smoothness of the desired trajectory, with zero initial and final velocities.
 The time duration of the segments is defined as $\qty{3}{\second}$.
 To demonstrate the learning capability of the DNN, the desired trajectory was applied twice. 
@@ -2215,11 +2218,10 @@ For comparative analysis, four controllers were implemented, with their properti
 
 In the comparative study, optimization-based methods, such as MPC and CBF-QP, and BLF-based methods, are not included because the focus is on NAC-based controllers that handle input constraints.
 This choice isolates the proposed contribution, namely the integration of multiple convex input constraints into the online adaptation law of NAC while retaining a Lyapunov-based stability analysis.
-Moreover, among the structural methods, the comparison is limited to auxiliary-system-based methods, since they can provide more precise correction of the control input, compared to the smooth saturation function-based methods, which may introduce conservative behavior due to the smooth approximation of the saturation function, as reported in \cite{Min:2021aa}.
 
 \begin{table}[t]
   \renewcommand{\arraystretch}{1.3}
-  \caption{Controllers used for numerical simulations.}
+  \caption{Controllers and parameters used for real-time validation.}
   \label{table:controller}
   \centering
   \begin{tabular}{m{.7cm} m{3.8cm} l}
@@ -2255,14 +2257,17 @@ Moreover, among the structural methods, the comparison is limited to auxiliary-s
     &  & ($\overline{\tau}_1=10.4, \overline{\tau}_2=3.5$)
     \\
 \hline
-    \multirow{2}{*}{
+    \multirow{3}{*}{
       \shortstack{  
       (C$_3$)
       \\
       \protect\colorLine{magenta}{solid}
       }
-    }& NAC with auxiliary system & $\overline{\tau}_1=-\underline{\tau}_1=10.428$, \\
-    & \cite{Chen:2011aa,Gao:2026aa,Ma:2025aa}. & $\overline{\tau_2}=-\underline{\tau_2}=3.5$. 
+    }& NAC with smooth saturation approximation& $-\overline{\tau}_1 \le \tau_1 \le \overline{\tau}_1$, 
+    \\
+    &  & $-\overline{\tau}_2 \le \tau_2 \le \overline{\tau}_2$, 
+    \\
+    &  & ($\overline{\tau}_1=10.4, \overline{\tau}_2=3.5$)
     \\
   \hline
     \multirow{2}{*}{
@@ -2273,11 +2278,20 @@ Moreover, among the structural methods, the comparison is limited to auxiliary-s
     }
     }& NAC without & The input is \\
     & input constraints \cite{Patil:2022aa}. & unconstrained.
-    \\    
+    \\  
 \hline
-    DNN
+    \multirow{2}{*}{
+        $\NN(\cdot)$
+    }
+    & 
+    \multicolumn{2}{m{6.9cm}}{
+        DNN parameters for all controllers
+    }
+    \\
     &
-    $l_0=6,l_1=4,l_2=4,l_3=2,\alpha=0.2$
+    \multicolumn{2}{m{6.9cm}}{
+        $l_0=6,l_1=4,l_2=4,l_3=2,\alpha=0.2$
+    }
     \\
 \hline
   \end{tabular}
@@ -2347,69 +2361,75 @@ Moreover, among the structural methods, the comparison is limited to auxiliary-s
 % ------------------------------------
 % Controllers: CONAC 
 % ------------------------------------
-\subsubsection*{Controller 1 \normalfont{(C$_1$)}—\textit{CONAC with a large update rate $\beta^u_j$ for $\lambda_j,\ \forall j\in\mathcal{I}$}}
+\subsubsection*{Controller 1 \normalfont{(C$_1$)}—\textit{Proposed CONAC}}
 
 To handle all imposed input saturations, the proposed CONAC was implemented with the input bound constraints $c^u_{\overline\tau_2}$ and $c^u_{\underline\tau_2}$ for the second link, and the input norm constraint $c^u_{\rbu}$ defined in \eqref{eq:val:cstr:input}, which allows to fully utilize the authority of the actuator.
 Additionally, the weight norm constraints $c^\theta_{i},\ \forall i\in \mathcal{K}$, defined in \eqref{eq:opt:prob:const1}, were also incorporated into the CONAC framework with $\overline\theta_0=\overline\theta_1=\overline\theta_2=6$.
 As described in \eqref{eq:ctrl:NN:actual}, the input (torque) corresponds to the output of the DNN, and the adaptation law is defined in \eqref{eq:adap}.
-
-The update rates of the Lagrange multipliers for the weight norm constraints were set to $\beta_{\theta_i}=1,\ \forall i\in\mathcal{K}$.
-For the input constraints, large update rates were used: $\beta_{\overline{\tau}_2} = \beta_{\underline{\tau}_2} = 100$ and $\beta_{\rbu} = 10$, to investigate the effect of large update rates.
-
-% ------------------------------------
-% Controllers: NAC without ctrl cstr
-% ------------------------------------
-\subsubsection*{Controller 3 \normalfont{(C$_3$)}—\textit{NAC without input constraints \cite{Patil:2022aa}}}
-
-The third controller was employed from \cite{Patil:2022aa} which does not handle input constraints.
-The controller structure is identical to (C$_1$) and (C$_2$), except that the input constraints were removed and weight boundedness was handled using the projection operator.
-All other properties and parameters, $\overline{\theta}_i,\ \forall i\in\mathcal{K}$, were kept the same as in (C$_1$) and (C$_2$).
+The update rates of the Lagrange multipliers were set to $\beta_{\theta_i}=1,\ \forall i\in\mathcal{K}$, and $\beta_{\overline{\tau}_2} = \beta_{\underline{\tau}_2} = 100$ and $\beta_{\rbu} = 10$, for the weight and input constraints, respectively.
 
 % ------------------------------------
 % Controllers: Aux. system in CONAC-AUX
 % ------------------------------------
-\subsubsection*{Controller 4 \normalfont{(C$_4$)}—\textit{NAC with auxiliary system (conventional method)}}
+\subsubsection*{Controller 2 \normalfont{(C$_2$)}—\textit{NAC with auxiliary system}}
 
-As a baseline for comparison in handling input constraints, the auxiliary system-based approach with nonlinear auxiliary dynamics from \cite{Chen:2011aa,Gao:2026aa,Ma:2025aa} was implemented.
+As a baseline for comparison in handling input constraints, the auxiliary system used in \cred{[???]} was adopted in the proposed CONAC framework.
 The auxiliary system is defined by 
 \begin{equation}
-  \ddtt \mv{\zeta} =
-  \begin{cases}
-    -\mm{K}\mv{\zeta}
-    -
-    \tfrac{
-      \vert 
-        \mv{\zeta}^\top 
-        \Delta^\zeta \mv{u} 
-      \vert
-      + 
-      \tfrac{1}{2} 
-      \Delta^\zeta \mv{u}^\top 
-      \Delta^\zeta \mv{u}
-    }{\norm{\mv{\zeta}}^2}
-    \mv{\zeta}
-    +
-    \Delta^\zeta \mv{u}
-    , 
-    & 
-    \norm{\mv{\zeta}} \ge \mu
-    ,
-    \\
-    \mv{0}
-    , 
-    & 
-    \norm{\mv{\zeta}} < \mu
-    ,
-  \end{cases}
+  \ddtt \mv{\zeta} 
+  =
+  -
+  \mm{A}_{\zeta}
+  \mv{\zeta}
+  +
+  \mm{B}_{\zeta}
+  \Delta_{\zeta} \mv{u}
+  ,
+  \quad
+  \zeta(0) 
+  = 
+  \mv{0}_{2\times 1}
+  ,
 \end{equation}
-where $\mv{\zeta}\in\R^2$ denotes the auxiliary state which is initialized to zero, $\mm{K}\in\R_{>0}^{2\times 2}$ is a positive definite gain matrix, and $\Delta^\zeta$ represents the overflow amount of the each control input, and $\mu > 0$ is a small positive constant.
-It should be noted that $\Delta^\zeta\mv{u}$ denotes element-wise input overflow, which is defined as $\Delta^\zeta u_i = u_i - \max(\underline{u}_i, \min(\overline{u}_i, u_i)),\ \forall i\in\{1,2\}$, and thus only accounts for the element-wise input saturation, without considering the input norm constraint.
+where $\mv{\zeta}\in\R^2$ denotes the auxiliary state which is initialized to zero, $\mm{A}_{\zeta}\in\R_{>0}^{2\times 2}$ is a stable matrix, and $\mm{B}_{\zeta}\in\R^{2\times 2}$ is a gain matrix.
+Unlike $\Delta\mv{u}=\mv{u}-\mysat{\mv{u}}$, which represents the input saturation, $\Delta_{\zeta}\mv{u}$ is defined as the element-wise input overflow, described as $\Delta_{\zeta} u_i = u_i - \max(\underline{u}_i, \min(\overline{u}_i, u_i)),\ \forall i\in\{1,2\}$.
+This represents that the auxiliary system is limited to element-wise input saturation, rather than the general nonlinear input saturation, such as the input norm constraint.
 The limits of the control input are set as $\underline{u}_1=-\overline{u}_1=10.428$ and $\underline{u}_2=-\overline{u}_2=3.5$, to approximate the input norm constraint $\overline{\tau} = 11$.
-This auxiliary state was incorporated into the control input, $\mv{u}\leftarrow \mv{u} + \mv{\zeta}$.
-\cred{
-The parameters of auxiliary system were chosen as $\mu = 0.1$ and $\mm{K} = \mydiag(10,10)$, to balance the responsiveness to input overflow with the convergence speed of the auxiliary dynamics.
-}
+The auxiliary state was used in the control input and the adaptation law by introducing a modified control error $\mv{e}_\zeta := \mv{e} + \mv{\zeta}$, to compensate for the input saturation.
+The parameters of auxiliary system were chosen as $\mm{A}_{\zeta} = \mydiag(1,1)$ and $\mm{B}_{\zeta} = \mydiag(1,1)$, to balance the responsiveness to input overflow with the convergence speed of the auxiliary dynamics.
 All other properties and parameters were kept the same as in (C$_1$) and (C$_2$).
+
+% ------------------------------------
+% Controllers: Smooth saturation approximation in NAC
+% ------------------------------------
+\subsubsection*{Controller 3 \normalfont{(C$_3$)}—\textit{NAC with smooth saturation approximation}}
+
+Another baseline for comparison in handling input constraints is the smooth saturation approximation method used in \cred{[....]}.
+
+
+
+% ------------------------------------
+% Controllers: NAC without ctrl cstr
+% ------------------------------------
+\subsubsection*{Controller 4 \normalfont{(C$_4$)}—\textit{NAC without input constraints \cite{Patil:2022aa}}}
+
+The fourth controller was adopted from \cite{Patil:2022aa} which does not handle input constraints.
+The controller structure is identical to (C$_1$) and (C$_2$), except that the input constraints were removed and weight boundedness was handled using the projection operator, as follows:
+\begin{equation}
+    \ddtt\estwth
+    =
+    \myproj_{\norm{\estwth}\le\overline{\theta}}
+    \left(
+        -\alpha
+        \pptfrac{\estwth}{\estwth}^\top
+        \mm{P}
+        \mv{e}
+    \right)
+    .
+\end{equation}
+
+
+All other properties and parameters, $\overline{\theta}_i,\ \forall i\in\mathcal{K}$, were kept the same as in (C$_1$) and (C$_2$).
 
 
 % % ------------------------------------
