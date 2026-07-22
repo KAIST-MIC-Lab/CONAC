@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36">
   <diagram name="Page-1" id="qDGQDkPgU14C5JTouNm-">
-    <mxGraphModel dx="393" dy="236" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="1" shadow="0">
+    <mxGraphModel dx="190" dy="114" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="1" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" style="locked=1;" value="Robot" />
@@ -106,7 +106,7 @@
         <mxCell id="huqLMEuDd-iwsDeeU7Vt-73" parent="huqLMEuDd-iwsDeeU7Vt-9" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" value="$${l_c}_2$$" vertex="1">
           <mxGeometry height="30" width="80" x="386" y="425" as="geometry" />
         </mxCell>
-        <mxCell id="huqLMEuDd-iwsDeeU7Vt-27" parent="0" style="locked=0;" value="Axes" />
+        <mxCell id="huqLMEuDd-iwsDeeU7Vt-27" parent="0" style="locked=1;" value="Axes" />
         <mxCell id="huqLMEuDd-iwsDeeU7Vt-30" edge="1" parent="huqLMEuDd-iwsDeeU7Vt-27" style="endArrow=classic;startArrow=classic;html=1;rounded=0;" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
             <mxPoint x="300" y="480" as="sourcePoint" />

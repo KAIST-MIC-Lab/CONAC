@@ -1,33 +1,10 @@
-function r_func = ref4_load()
+function [r1, r2, r3] = ref_gen(t)
+% input: t (1 x 1) - time
+% output: r1 (2 x 1) - reference state
+%         r2 (2 x 1) - reference state derivative
+%         r3 (2 x 1) - reference state second derivative
 
-r_func = @(t) epi_gen2(t);
 
-end
-
-function [r1, r2, r3] = epi_gen1(t)
-    T = 3; % traj. duration
-    POINT_NUM = 4; % number of points in one cycle
-    CYCLE_TIME = T*POINT_NUM;
-    t = mod(t, CYCLE_TIME);
-
-    x0 = deg2rad([-60;60]);  
-    xd1 = deg2rad([45;-90]);
-    xd2 = deg2rad([-45;45]);
-    % xd3 = deg2rad([-50;-145]);
-    xd3 = xd1;
-
-    if t < T
-        [r1,r2,r3] = poly_filter(x0, xd1, T, t);
-    elseif t < 2*T
-        [r1,r2,r3] = poly_filter(xd1, xd2, T, (t-T));
-    elseif t < 3*T
-        [r1,r2,r3] = poly_filter(xd2, xd3, T, (t-2*T));
-    else
-        [r1,r2,r3] = poly_filter(xd3, x0, T, (t-3*T));
-    end
-end
-
-function [r1, r2, r3] = epi_gen2(t)
     WARMUP_T = 3; % warmup duration
     COOL_T = 8; % cool down duration after warmup (for smooth transition)
     UNREACHABLE_T = 3; % duration of unreachable desired state (for showing KKT satisfaction at s.s.)
@@ -43,7 +20,7 @@ function [r1, r2, r3] = epi_gen2(t)
         r2 = [0;0];
         r3 = [0;0];
     elseif t < WARMUP_T + COOL_T + 24 % (24s normal reference duration)
-        [r1, r2, r3] = epi_gen1(t-WARMUP_T-COOL_T);
+        [r1, r2, r3] = epi_gen(t-WARMUP_T-COOL_T);
     elseif t < WARMUP_T + COOL_T + 24 + UNREACHABLE_T
         [r1, r2, r3] = poly_filter( ...
             WARMUP_X, ...
@@ -55,6 +32,31 @@ function [r1, r2, r3] = epi_gen2(t)
         r3 = [0;0];
     end
 end
+
+function [r1, r2, r3] = epi_gen(t)
+    T = 3; % traj. duration
+    POINT_NUM = 4; % number of points in one cycle
+    CYCLE_TIME = T*POINT_NUM;
+
+    x0 = deg2rad([-60;60]);  
+    xd1 = deg2rad([45;-90]);
+    xd2 = deg2rad([-45;45]);
+    % xd3 = deg2rad([-50;-145]);
+    xd3 = xd1;
+
+    t = mod(t, CYCLE_TIME);
+
+    if t < T
+        [r1,r2,r3] = poly_filter(x0, xd1, T, t);
+    elseif t < 2*T
+        [r1,r2,r3] = poly_filter(xd1, xd2, T, (t-T));
+    elseif t < 3*T
+        [r1,r2,r3] = poly_filter(xd2, xd3, T, (t-2*T));
+    else
+        [r1,r2,r3] = poly_filter(xd3, x0, T, (t-3*T));
+    end
+end
+
 
 function [r1, r2, r3] = poly_filter(x0, xd, T, t)
 

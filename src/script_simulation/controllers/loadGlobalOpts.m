@@ -1,10 +1,11 @@
 function opt = loadGlobalOpts(dt, CONTROL_NUM, OPT_NUM)
     opt.dt = dt;                        % control sampling time
 
-    opt.Lambda = diag([5 15]) * 1;      % filtered error gain
+    % opt.Lambda = diag([5 15]) * 1;      % filtered error gain
+    opt.Lambda = diag([1 1.5]);      % filtered error gain
     % r = e2 + Lambda * e1
     
-    opt.init_range = 1e-1;              % initial NN weight range
+    opt.init_range = 1e0;              % initial NN weight range
     opt.NN_size = [6,4,4,2];            % NN layer size (input, hiddens, output)
                                         %   e.g. [6,4,4,2] 
                                         %   ->  6 input nodes, 
@@ -13,7 +14,7 @@ function opt = loadGlobalOpts(dt, CONTROL_NUM, OPT_NUM)
                                         %   -> W0, W1, W2 weight matrices with sizes
                                         %       (6+1)x4, (4+1)x4, (4+1)x2 (with bias)
 
-    opt.alpha = .2;                     % learning rate (for NNs)
+    opt.alpha = 1.5;                     % learning rate (for NNs)
     % opt.alpha = 2;                     % learning rate (for NNs)
     opt.e_size = 2;                     % error size (number of error signals)
 
@@ -21,7 +22,7 @@ function opt = loadGlobalOpts(dt, CONTROL_NUM, OPT_NUM)
     opt.rho = opt.alpha*0e-2;           % sigma-modification gain (not used)
     opt.W = diag([1 1]);                % feedback error weighting matrix (not used)
 
-    opt.cstr.th_max = [6;6;6] * 1e1; % NN weight L2 norm constraints 
+    opt.cstr.th_max = [6;6;6] * 1e0; % NN weight L2 norm constraints 
     opt.cstr.u_ball = 11;             % control input L2 norm constraint (ball constraint)   
     % opt.cstr.uMax1 = 10;                 % control input 2 max constraint (box constraint)
     opt.cstr.uMax2 = 3.5;                 % control input 2 max constraint (box constraint)
@@ -34,10 +35,10 @@ function opt = loadGlobalOpts(dt, CONTROL_NUM, OPT_NUM)
     if CONTROL_NUM == 1
         % beta is Lagrange multiplier update gain for each constraint;
         %   \dot{lambda} = beta * c, where c is the constraint violation
-        opt.beta(1:3) = [1 1 1] * 0e0; % NN weight constraints
+        opt.beta(1:3) = [1 1 1] * 1e0; % NN weight constraints
         opt.beta(4) = 1e1;              % control input ball
         opt.beta(5) = 0e2;              % control input 1 Max
-        opt.beta(6) = 7.5e2;              % control input 2 Max
+        opt.beta(6) = 1e2;              % control input 2 Max
         opt.beta(7) = opt.beta(5);      % control input 1 Min
         opt.beta(8) = opt.beta(6);      % control input 2 Min
         % opt.beta = opt.beta/opt.alpha;
