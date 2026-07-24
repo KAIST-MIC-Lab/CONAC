@@ -1,12 +1,10 @@
-\documentclass[letterpaper, journal]{IEEEtran}
+\documentclass[letterpaper, journal, twoside]{IEEEtran}
 
 \def\cmt{true} % true for comments, false for no comments
 \def\pub{false} % true for publication, false for draft
 \newcommand*{\template}{template} 
 \input{\template/preamble/preamble_journal.tex}
 \allowdisplaybreaks
-
-\usepackage{capt-of}
 
 \newcommand*{\figSizeTwoCol}{.49}
 \newcommand*{\figSizeOneCol}{0.98} 
@@ -16,6 +14,60 @@
 \allowdisplaybreaks
 
 \newcommand{\src}{./src/archives} % source path for figures
+\newcommand{\resultFig}{./src/02_dataset/figures} % result figure path
+
+%%
+%
+% RMSE: 
+% -------------------------------
+% C NAC :
+% error q1 (1) 18.932, (2) 15.105 [imp: 0.202]
+% error q2 (1) 14.043, (2) 10.538 [imp: 0.250]
+% filter error   (1) 105.636, (2) 82.975 [imp: 0.215]
+
+\newcommand{\NACEpiOneAngOne}{18.932}
+\newcommand{\NACEpiOneAngTwo}{14.043}
+\newcommand{\NACEpiTwoAngOne}{15.105}
+\newcommand{\NACEpiTwoAngTwo}{10.538}
+\newcommand{\NACImpAngOne}{-20.212}
+\newcommand{\NACImpAngTwo}{-24.963}
+% -------------------------------
+% C AUX :
+% error q1 (1) 21.769, (2) 21.968 [imp: -0.009]
+% error q2 (1) 21.800, (2) 12.368 [imp: 0.433]
+% filter error   (1) 121.856, (2) 116.482 [imp: 0.044]
+
+\newcommand{\AUXEpiOneAngOne}{21.769}
+\newcommand{\AUXEpiOneAngTwo}{21.800}
+\newcommand{\AUXEpiTwoAngOne}{21.968}
+\newcommand{\AUXEpiTwoAngTwo}{12.368}
+\newcommand{\AUXImpAngOne}{0.914}
+\newcommand{\AUXImpAngTwo}{-43.265}
+% -------------------------------
+% C CONAClow :
+% error q1 (1) 19.783, (2) 14.884 [imp: 0.248]
+% error q2 (1) 10.596, (2) 7.187 [imp: 0.322]
+% filter error   (1) 108.611, (2) 81.135 [imp: 0.253]
+
+\newcommand{\CONAClowEpiOneAngOne}{19.783}
+\newcommand{\CONAClowEpiOneAngTwo}{10.596}
+\newcommand{\CONAClowEpiTwoAngOne}{14.884}
+\newcommand{\CONAClowEpiTwoAngTwo}{7.187}
+\newcommand{\CONAClowImpAngOne}{-24.763}
+\newcommand{\CONAClowImpAngTwo}{-32.173}
+% -------------------------------
+% C CONAChigh :
+% error q1 (1) 18.821, (2) 13.131 [imp: 0.302]
+% error q2 (1) 12.581, (2) 8.838 [imp: 0.298]
+% filter error   (1) 103.235, (2) 72.577 [imp: 0.297]
+
+\newcommand{\CONAChighEpiOneAngOne}{18.821}
+\newcommand{\CONAChighEpiOneAngTwo}{12.581}
+\newcommand{\CONAChighEpiTwoAngOne}{13.131}
+\newcommand{\CONAChighEpiTwoAngTwo}{8.838}
+\newcommand{\CONAChighImpAngOne}{-30.234}
+\newcommand{\CONAChighImpAngTwo}{-29.751}
+
 
 \begin{document}
 \bstctlcite{IEEEexample:BSTcontrol}
@@ -32,8 +84,10 @@
     This work was supported in part by a Korea Research Institute for Defense Technology planning and advancement (KRIT) grant funded by Korea government DAPA (Defense Acquisition Program Administration) (No. KRIT-CT-22-087, Synthetic Battlefield Environment based Integrated Combat Training Platform) and in part by the National Research Foundation of Korea (NRF) grant funded by the Korea government (MSIT) (RS-2025- 00554087). (Corresponding author: Kyunghwan Choi)
     }}
 
-\markboth{Journal of \LaTeX\ Class Files,~Vol.~18, No.~9, September~2020}%
-{How to Use the IEEEtran \LaTeX \ Templates}
+% \markboth{Journal of \LaTeX\ Class Files,~Vol.~18, No.~9, September~2020}%
+% {How to Use the IEEEtran \LaTeX \ Templates}
+\markboth{Submitted to IEEE Transactions on Systems, Man, and Cybernetics: Systems}%
+{Ryu \MakeLowercase{\textit{et al.}}: CONAC for Unknown Systems Under Multiple Convex Input Constraints}
 
 \maketitle
 
@@ -175,7 +229,7 @@ Thus, extending them to admissible input sets described by multiple convex const
   &
   MPC \cite{Greune:2011aa,Bemporad:1999aa,Berberich:2025aa,Draeger:1995aa,Vahidi-Moghaddam:2025aa,Mallick:2025aa,Khodaverdian:2025aa},
   &
-  Preliminary work of this study
+  Preliminary works of this study
   \\
   Literature
   &
@@ -285,7 +339,7 @@ The main contributions of this study are:
   % The admissible input set is represented by convex inequality constraints and embedded directly into the online adaptation law;
 
   \item
-  Any combination of convex input constraints can be handled, thereby significantly extending the applicability to real-world systems with complex input constraints;
+  Any combination of convex input constraints can be handled, thereby significantly extending the applicability of the structural methods to real-world systems with complex input constraints;
   
   \item 
   The adaptation laws for adaptive variables including the DNN weights and the Lagrange multipliers are systematically derived from the formulated constrained optimization problem. 
@@ -2207,7 +2261,7 @@ This choice isolates the proposed contribution, namely the integration of multip
     % }
     & 
     \multicolumn{2}{m{7.1cm}}{
-      DNN parameters for all controllers
+      DNN and other parameters for all controllers
     }
     \\
     &
@@ -2218,16 +2272,7 @@ This choice isolates the proposed contribution, namely the integration of multip
     &
     \multicolumn{2}{m{7.1cm}}{
       $\estwth(0)\sim\mathcal{U}\bigl([-0.1,0.1]^{\Xi}\bigr)$
-    }
-    \\
-\hline
-&
-    \multicolumn{2}{m{7.1cm}}{
-      Other parameters for all controllers 
-    }
-    \\
-    & 
-    \multicolumn{2}{m{7.1cm}}{
+      ,
       $\mm{\Lambda} = \mydiag(1,1)$
     }
     \\
@@ -2350,64 +2395,56 @@ with $\mv{e} := \mv{q} - \mv{q}_d$ and $\mm{\Lambda}=\mydiag(5,15)$.
 \subsection{Validation Results} \label{sec:val:results}
 
 \begin{figure*}[t]
-    \centering
-    \subfloat[Tracking performance of $1$st joint angle $q_1$.]{
-    %   \includegraphics
-        \includegraphics[width=\figSizeTwoCol\linewidth]
-        {
-        % fig/Fig1.pdf
-        \src/measurement/figures/compare/Fig1.eps
-        }%
-        \label{fig:ctrl:result:general:q1}}
-    \hfill
-    % \vfill
-    \subfloat[Tracking performance of $2$nd joint angle $q_2$.]{
-        \includegraphics[width=\figSizeTwoCol\linewidth]
-        {
-        % \src/measurement/figures/compare/Fig11.eps
-        \src/measurement/figures/compare/Fig2.eps
-        }%
-        \label{fig:ctrl:result:general:q2}}
-    \vfill
-    \subfloat[Control input of the $1$st joint $\tau_1$.]{
+  \centering
+  \subfloat[Tracking performance of $1$st joint angle $q_1$.]{
     \includegraphics[width=\figSizeTwoCol\linewidth]
-        {
-            \src/measurement/figures/compare/Fig3.eps
-        }%
-        \label{fig:ctrl:result:general:tau:1}}
-    \hfill
-    % \vfill
-        \subfloat[Control input of the 2nd joint $\tau_2$.]{
-        \includegraphics[width=\figSizeTwoCol\linewidth]
-        {
-            \src/measurement/figures/compare/Fig4.eps
-        }%
-        \label{fig:ctrl:result:general:tau:2}}
-    \vfill
-    \subfloat[Norm of the joint torque input $\rbu$.]{
-        \includegraphics[width=\figSizeTwoCol\linewidth]
-        {
-            \src/measurement/figures/compare/Fig5.eps
-        }%
-        \label{fig:ctrl:result:general:tau:norm}}
-    \hfill
-    % \vfill
-    \subfloat[Norm of DNN weights ${\estwth}_i$.]{
-        % \includegraphics
-        \includegraphics[width=\figSizeTwoCol\linewidth]
-        {
-            % fig/Fig7.pdf
-            \src/measurement/figures/compare/Fig7.eps
-        }%
-        \label{fig:ctrl:result:general:weight}}        
-    \caption{
-        Real-time implementation results of (C$_1$) \protect\colorLine{blue}{solid}, (C$_2$) \protect\colorLine{cyan}{solid}, (C$_3$) \protect\colorLine{magenta}{solid}, (C$_4$) \protect\colorLine{gray}{solid}, and desired trajectory $\qd$ \protect\colorLine{red}{dashed}.
-        % \vspace{-5mm}
-    }
+    {
+      \resultFig/Fig1.eps
+    }%
+    \label{fig:ctrl:result:general:q1}}
+  \hfill
+  \subfloat[Tracking performance of $2$nd joint angle $q_2$.]{
+    \includegraphics[width=\figSizeTwoCol\linewidth]
+    {
+      \resultFig/Fig2.eps
+    }%
+    \label{fig:ctrl:result:general:q2}}
+  \vfill
+  \subfloat[Control input of the $1$st joint $\tau_1$.]{
+  \includegraphics[width=\figSizeTwoCol\linewidth]
+    {
+      \resultFig/Fig5.eps
+    }%
+    \label{fig:ctrl:result:general:tau:1}}
+  \hfill
+    \subfloat[Control input of the 2nd joint $\tau_2$.]{
+    \includegraphics[width=\figSizeTwoCol\linewidth]
+    {
+      \resultFig/Fig6.eps
+    }%
+    \label{fig:ctrl:result:general:tau:2}}
+  \vfill
+  \subfloat[Norm of the joint torque input $\rbu$.]{
+    \includegraphics[width=\figSizeTwoCol\linewidth]
+    {
+      \resultFig/Fig7.eps
+    }%
+    \label{fig:ctrl:result:general:tau:norm}}
+  \hfill
+  % \vfill
+  \subfloat[Norm of DNN weights ${\estwth}_i$.]{
+    % \includegraphics
+    \includegraphics[width=\figSizeTwoCol\linewidth]
+    {
+      \resultFig/Fig10.eps
+    }%
+    \label{fig:ctrl:result:general:weight}}        
+  \caption{
+      Real-time implementation results of (C$_1$) \protect\colorLine{blue}{solid}, (C$_2$) \protect\colorLine{cyan}{solid}, (C$_3$) \protect\colorLine{magenta}{solid}, (C$_4$) \protect\colorLine{gray}{solid}, and desired trajectory $\qd$ \protect\colorLine{red}{dashed}.
+      % \vspace{-5mm}
+  }
 \label{fig:ctrl:result:general}
 \end{figure*}
-
-\subsubsection{Tracking Performance}
 
 \begin{table}[!t]
   \renewcommand{\arraystretch}{1.3}
@@ -2418,74 +2455,102 @@ with $\mv{e} := \mv{q} - \mv{q}_d$ and $\mm{\Lambda}=\mydiag(5,15)$.
   & \multicolumn{4}{c}{\textbf{Episode 1}} \\
   \hline
   \hline 
-  $\times 10^3$ / rad & {(C$_1$)} \protect\colorLine{blue}{solid} & {(C$_2$)} \protect\colorLine{cyan}{solid} & {(C$_3$)} \protect\colorLine{magenta}{solid} & {(C$_4$)} \protect\colorLine{gray}{solid} \\
+  \qty{}{\deg} & {(C$_1$)} \protect\colorLine{blue}{solid} & {(C$_2$)} \protect\colorLine{cyan}{solid} & {(C$_3$)} \protect\colorLine{magenta}{solid} & {(C$_4$)} \protect\colorLine{gray}{solid} \\
   \hline
     $q_1-{q_d}_1$
-    & $25.130$ & $21.719$ & $23.168$ & $24.195$ \\ 
+    & \CONAChighEpiOneAngOne & \CONAClowEpiOneAngOne & \AUXEpiOneAngOne & \NACEpiOneAngOne \\ 
   \hline
     $q_2-{q_d}_2$
-    & $25.016$ & $10.530$ & $13.061$ & $12.927$ \\
+    & \CONAChighEpiOneAngTwo & \CONAClowEpiOneAngTwo & \AUXEpiOneAngTwo & \NACEpiOneAngTwo \\
   \hline
     & \multicolumn{4}{c}{\textbf{Episode 2}} \\
   \hline
   \hline
-  $\times 10^3$ / rad & {(C$_1$)} \protect\colorLine{blue}{solid} & {(C$_2$)} \protect\colorLine{cyan}{solid} & {(C$_3$)} \protect\colorLine{magenta}{solid} & {(C$_4$)} \protect\colorLine{gray}{solid} \\
+  \qty{}{\deg} & {(C$_1$)} \protect\colorLine{blue}{solid} & {(C$_2$)} \protect\colorLine{cyan}{solid} & {(C$_3$)} \protect\colorLine{magenta}{solid} & {(C$_4$)} \protect\colorLine{gray}{solid} \\
 \hline
   \multirow{2}{*}{$q_1-{q_d}_1$} 
-    & $7.066$ & $8.021$ & $8.408$ & $19.721$ \\
-    & ($-71.6\%$) & ($-63.1\%$) & ($-63.7\%$) & ($-18.5\%$) \\
+    & \CONAChighEpiTwoAngOne & \CONAClowEpiTwoAngOne & \qty{\AUXEpiTwoAngOne}{\radian} & \NACEpiTwoAngOne \\
+    & (\CONAChighImpAngOne\%) & (\CONAClowImpAngOne\%) & (\AUXImpAngOne\%) & (\NACImpAngOne\%) \\
   \hline
   \multirow{2}{*}{$q_2-{q_d}_2$} 
-    & $2.198$ & $2.435$ & $3.554$ & $4.256$ \\
-    & ($-88.4\%$) & ($-76.9\%$) & ($-72.8\%$) & ($-67.1\%$) \\
+    & \CONAChighEpiTwoAngTwo & \CONAClowEpiTwoAngTwo & \AUXEpiTwoAngTwo & \NACEpiTwoAngTwo \\
+    & (\CONAChighImpAngTwo\%) & (\CONAClowImpAngTwo\%) & (\AUXImpAngTwo\%) & (\NACImpAngTwo\%) \\
   \hline
   \end{tabular}
   \label{table:results:tracking}
 \end{table}
 
-초기화 + 웜업 페이즈 + 일반적인 학습의 성능
+% --------------------------------------------
+% val. result: tracking performance
+% --------------------------------------------
 
-The tracking performance was quantitatively evaluated using the root mean square error (RMSE) of each joint angle's tracking error, defined as $\sqrt{\frac{1}{T}\int_0^T\norm{q_i - {q_d}_i(t)}^2\,\der t},\ \forall i\in\{1,2\}$, where $T\in\R_{>0}$ denotes the duration of each episode.
+\subsubsection{Tracking and Adaptation Performance}
+
+% 초기화 + 웜업 페이즈 + 일반적인 학습의 성능
+
+The real-time implementation results are illustrated in Fig.~\ref{fig:ctrl:result:general}.
+As shown in Fig.~\ref{fig:ctrl:result:general:q1} and Fig.~\ref{fig:ctrl:result:general:q2}, all controllers, except for (C$_4$), successfully tracked the desired trajectory, while (C$_4$) failed to track the desired trajectory.
+This is because (C$_4$) adopted its DNN weights without considering the input saturation, which led to excessive weight and input values, resulting in the failure of the adaptation.
+In contrast, (C$_1$)--(C$_3$) handled imposed input constraints, demonstrating the adaptation capability of the DNN during Episode $1$ and Episode $2$.
+
+Quantitative comparisons of the tracking performance are summarized in Table~\ref{table:results:tracking}, in terms of the root mean square error (RMSE) of the tracking error for each joint angle.
+All controllers except for (C$_4$) improved the tracking performance from Episode $1$ to Episode $2$, \cred{around ....}
+\cred{Specifically, (C$_1$) achieved the best tracking performance, with RMSE values,  }
+
+% --------------------------------------------
+% val. result: constraint performance
+% --------------------------------------------
 
 \subsubsection{Constraint Handling Performance}
 
 \begin{figure}[t]
   \centering
-  \subfloat[Trajectory of the control input in the two-dimensional input space.]{
-    \includegraphics[width=0.99\linewidth]{\src/measurement/figures/compare/Fig6.eps}
-    % \fbox{\rule{0pt}{0.6\linewidth} \rule{0.9\linewidth}{0pt}}
+  \subfloat[Trajectory of the control input in time interval {$[29.4, \qty{31.9}{\second}]$}.]{
+    \includegraphics[width=0.99\linewidth]
+    {
+      \resultFig/Fig8.eps
+    }
     \label{fig:ctrl:result:cstr:top:view}
   }
   \vfill
-  \subfloat[Lagrange multipliers associated with the input constraints of (C$_1$).]{
-    \includegraphics[width=0.99\linewidth]{\src/measurement/figures/compare/Fig8.eps}
+  \subfloat[Lagrange multipliers associated with the input constraints of (C$_1$) and (C$_2$) in time interval {$[29.4, \qty{31.9}{\second}]$}.]{
+    \includegraphics[width=0.99\linewidth]
+    {
+      \resultFig/Fig9.eps
+    }
     \label{fig:ctrl:result:cstr:multipliers}
   }
-  \caption{
-    Control input trajectories of (C$_1$) \protect\colorLine{blue}{solid}, (C$_2$) \protect\colorLine{cyan}{solid}, (C$_3$) \protect\colorLine{magenta}{solid}, (C$_4$) \protect\colorLine{gray}{solid}, and Lagrange multipliers associated with the input constraints of (C$_1$).
+  \caption{  
+    Control input trajectories of (C$_1$) \protect\colorLine{blue}{solid}, (C$_2$) \protect\colorLine{cyan}{solid}, (C$_3$) \protect\colorLine{magenta}{solid}, (C$_4$) \protect\colorLine{gray}{solid}, and Lagrange multipliers associated with the input constraints of (C$_1$) and (C$_2$), in time interval $[29.4, \qty{31.9}{\second}]$.
   }
   \label{fig:ctrl:result:cstr}
 \end{figure}
 
-여러 제약조건을 다루는 것에 대한 유연성
+% 여러 제약조건을 다루는 것에 대한 유연성
+% 제약조건을 지속적으로 위반되더라도 최적점을 찾아가는 것
 
-제약조건을 지속적으로 위반되더라도 최적점을 찾아가는 것
+In this section, the constraint handling performance of the controllers are analyzed.
+For detail analysis, we compared the control input trajectories of (C$_1$)--(C$_3$) and Lagrange multipliers associated with the input constraints of the proposed CONAC, (C$_1$), (C$_2$), in the time interval $[29.4, \qty{31.9}{\second}]$, as shown in Fig.~\ref{fig:ctrl:result:cstr:top:view}.
+
+
+% --------------------------------------------
+% val. result: real-time feasibility
+% --------------------------------------------
 
 \subsubsection{Feasibility of CONAC in Real-Time Implementation}
 
 \begin{figure}[t]
   \centering
-  % \includegraphics[width=0.9\linewidth]{figs/realTimeImplementation.drawio.pdf}
-  \includegraphics[width=0.99\linewidth]{\src/measurement/figures/compare/Fig10.eps}
+  \includegraphics[width=0.99\linewidth]{\resultFig/Fig12.eps}
   \caption{
     Computation time of (C$_1$) \protect\colorLine{blue}{solid}, (C$_2$) \protect\colorLine{cyan}{solid}, (C$_3$) \protect\colorLine{magenta}{solid}, and (C$_4$) \protect\colorLine{gray}{solid} on the OpenCR1.0 board.
   }
   \label{fig:ctrl:result:cmp:time}
 \end{figure}
 
-
-
-
+The feasibility of the real-time implementation is analyzed in terms of the computation time.
+As shown in Fig.~\ref{fig:ctrl:result:cmp:time}, the computation time of all controllers was consistently below the sampling time of \cred{$\qty{4}{\milli\second}$}, confirming the feasibility of CONAC in real-time applications.
+This is attributed to the fact that the proposed CONAC does not require solving an optimization problem at each time step, but rather continuously adapts the adaptive variables to solve the optimization problem in an online manner.
 
 % ------------------------------------
 %       SECTION CONCLUSION
