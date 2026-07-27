@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.2.2 Chrome/134.0.6998.178 Electron/35.1.2 Safari/537.36">
   <diagram name="Page-1" id="PFW9ROUeaLnqZc74HKiG">
-    <mxGraphModel dx="329" dy="198" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="1600" math="1" shadow="0">
+    <mxGraphModel dx="393" dy="236" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="1600" math="1" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="MBX01malY1h2GsCq4hsX-2" parent="0" value="Untitled Layer" />
@@ -153,7 +153,7 @@
         <mxCell id="M70aMv7GDixX80sg9IgD-34" parent="38fJi7SkvV0uXjDz1UZW-17" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;rounded=0;fillColor=none;fontSize=10;" value="&lt;span style=&quot;white-space: nowrap;&quot;&gt;$$c_{\underline{\tau}_2}^u(\boldsymbol{u})=-\tau_2-\overline{\tau}_2$$&lt;/span&gt;" vertex="1">
           <mxGeometry height="15" width="70" x="597" y="420" as="geometry" />
         </mxCell>
-        <mxCell id="M70aMv7GDixX80sg9IgD-35" parent="38fJi7SkvV0uXjDz1UZW-17" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;rounded=0;fillColor=none;fontSize=10;" value="&lt;span style=&quot;white-space: nowrap;&quot;&gt;$$c_{\underline{\tau}}^u(\boldsymbol{u})=\Vert\boldsymbol{\tau}\Vert^2-\overline{\tau}^2$$&lt;/span&gt;" vertex="1">
+        <mxCell id="M70aMv7GDixX80sg9IgD-35" parent="38fJi7SkvV0uXjDz1UZW-17" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;rounded=0;fillColor=none;fontSize=10;" value="&lt;span style=&quot;white-space: nowrap;&quot;&gt;$$c_{\overline{\tau}}^u(\boldsymbol{u})=\Vert\boldsymbol{\tau}\Vert^2-\overline{\tau}^2$$&lt;/span&gt;" vertex="1">
           <mxGeometry height="15" width="70" x="700" y="420" as="geometry" />
         </mxCell>
         <mxCell id="rJusXtyh8PGuxYcOzC3n-15" parent="0" style="locked=1;" value="points" />

@@ -13,8 +13,6 @@ function u = sat(u, opt, CONTROL_NUM)
         u = u/norm(u)*u_ball;
     end
 
-
-
 end
 
 

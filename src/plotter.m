@@ -1,49 +1,25 @@
-% 
-% epi_idx = find(t >= 11 & t <= 11 + 2*12);
-% 
-% xd1 = dataSet{1}.xd1_hist(:, epi_idx);
-% xd2 = dataSet{1}.xd2_hist(:, epi_idx);
-% xd3 = dataSet{1}.xd3_hist(:, epi_idx);
-% 
-% max_xd1 = max(xd1, [] ,2);
-% min_xd1 = min(xd1, [] ,2);
-% max_xd2 = max(xd2, [] ,2);
-% min_xd2 = min(xd2, [] ,2);
-% fprintf("xd1_1: %.3f ~ %.3f, xd1_2: %.3f ~ %.3f\n", min_xd1(1), max_xd1(1), min_xd1(2), max_xd1(2))
-% fprintf("xd2_1: %.3f ~ %.3f, xd2_2: %.3f ~ %.3f\n", min_xd2(1), max_xd2(1), min_xd2(2), max_xd2(2))
-% 
-% fil_xd = xd2 + diag([5 15])*xd1;
-% min_fil_xd = min(fil_xd, [] ,2);
-% max_fil_xd = max(fil_xd, [] ,2);
-% 
-% min_xd3 = min(xd3, [] ,2);
-% max_xd3 = max(xd3, [] ,2);
-% 
-% fprintf("fil_xd1: %.3f ~ %.3f, fil_xd2: %.3f ~ %.3f\n", min_fil_xd(1), max_fil_xd(1), min_fil_xd(2), max_fil_xd(2))
-% fprintf("xd3_1: %.3f ~ %.3f, xd3_2: %.3f ~ %.3f\n", min_xd3(1), max_xd3(1), min_xd3(2), max_xd3(2))
-% 
-% return
-clear
+
 
 %%
 % SIM = true;
 SIM = false;
 SAVE_FLAG = 1;
-POSITION_FLAG = 1; % it will plot fiugures in the same position
 
-uMax1 = sqrt(100 - 9);
-uMax2 = 3;
-u_ball = 10;
+uMax2 = 3.5;
+u_ball = 11;
+uMax1 = sqrt(u_ball^2 - uMax2^2);
 th_max = [6,6,6]*10;
 
 warmup_time = 11+3;
-ep_time = 12;
+ep_time = 2*4;
 
 global_start_t = warmup_time;
 % global_end_t = T;
 global_end_t = warmup_time + 2*ep_time;
-start_t = 26.2; 
-end_t   = 27.5;
+
+start_t = 26.6; 
+end_t   = 27.3;
+
 % start_t = 32.4; 
 % end_t   = 34.9;
 
@@ -63,10 +39,10 @@ if SIM
 else
     dataSet = cell(4,1);
 
-    data_path_1 = "20260723_233623";
-    data_path_2 = "20260723_230649";
-    data_path_3 = "20260723_212336";
-    data_path_4 = "20260723_221156";
+    data_path_4 = "20260724_150011"; % CONAC high - 1
+    data_path_3 = "20260724_150110"; % CONAC low - 2
+    data_path_2 = "20260724_151540"; % AUX - 3
+    data_path_1 = "20260724_150302"; % NAC - 4
 
     dataSet{1} = loadFromMeas("meas_result/"+data_path_1+"/"+data_path_1+".mat", 4);
     dataSet{2} = loadFromMeas("meas_result/"+data_path_2+"/"+data_path_2+".mat", 3);
@@ -84,7 +60,8 @@ else
     epi_end_t = find(t >= warmup_time + 2*ep_time, 1);
     epi_idx = find(t >= warmup_time & t <= warmup_time + 2*ep_time);
     ctrl_obs_idx = find(t >= start_t & t <= end_t);
-    ctrl_obs_idx2 = find(t >= start_t-1.5 & t <= end_t+1.5); %little longer
+    ctrl_obs_idx2 = find(t >= start_t-.5 & t <= end_t+.5); %little longer
+    % ctrl_obs_idx2 = ctrl_obs_idx
 end
 
 
@@ -95,17 +72,23 @@ color_list = [ ...
     "cyan";
     "blue";
 ];
-name_list = {
+tex_name_list = {
     "NAC";
     "AUX";
     "CONAClow";
     "CONAChigh";
 };
+name_list = {
+    "(C$_4$)";
+    "(C$_3$)";
+    "(C$_2$)";
+    "(C$_1$)";
+};
 
 %%
 font_size = 12;
 ax_font_size = 12;
-line_width = 1.5;
+line_width = 1;
 lgd_size = 16;
 
 fig_height = 200;
@@ -129,22 +112,23 @@ maxVals = [
     60
     rad2deg(3)
     rad2deg(3)
-    10
-    3
-    11
+    10.5
+    4
+    10.5
 ];
 minVals = [
     -60
     -90
     rad2deg(-3)
     rad2deg(-3)
-    6
-    0.1
+    6.5
+    0
     % -10.4
     % -3.5
-    0
+    6.5
 ];
-for f_idx = 1:1:7
+
+for f_idx = [1:1:7, 13, 14]
     fig = figure(f_idx); clf;
     ax = axes(fig);
     hold(ax, 'on');
@@ -206,10 +190,8 @@ for ctrl_idx = 1:1:length(dataSet)
     plot(ax_list{6}, t, uSat_hist(2,:),     "Color", color, "LineWidth", line_width, "LineStyle", "-.");
     plot(ax_list{7}, t, norm_func(u_hist),  "Color", color, "LineWidth", line_width, "LineStyle", "-"); 
     
-    % maxVal = [max(x1_hist(1,:)) max(x1_hist(2,:)) max(uSat_hist(1,:)) max(uSat_hist(2,:)), max(norm_func(u_hist))]';
-    % minVal = [min(x1_hist(1,:)) min(x1_hist(2,:)) min(uSat_hist(1,:)) min(uSat_hist(2,:)), min(norm_func(u_hist))]';
-    % maxVals = max(maxVals, maxVal);
-    % minVals = min(minVals, minVal);    
+    plot(ax_list{13}, t, x1_hist(1,:),       "Color", color, "LineWidth", line_width, "LineStyle", "-"); 
+    plot(ax_list{14}, t, x1_hist(2,:),       "Color", color, "LineWidth", line_width, "LineStyle", "-");  
 end
 
 % ============================
@@ -226,14 +208,31 @@ plot(ax_list{6}, [t(1) t(end)], [-1 -1]*uMax2, "Color", "black", "LineWidth", li
 plot(ax_list{7}, [t(1) t(end)], [+1 +1]*u_ball, "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
 plot(ax_list{7}, [t(1) t(end)], [-1 -1]*u_ball, "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
 
+yticks(ax_list{2}, [-90 0 90]);  % 실제 0, 90 위치에 눈금
+
+plot(ax_list{13}, t, rad2deg(dataSet{t_max_idx}.xd1_hist(1,:)), "Color", "red", "LineWidth", line_width, "LineStyle", "--"); 
+plot(ax_list{14}, t, rad2deg(dataSet{t_max_idx}.xd1_hist(2,:)), "Color", "red", "LineWidth", line_width, "LineStyle", "--");
+
+
 % 
+zoom_color = "#FF7F00"; % orange
 for f_idx = 1:1:7
-    plot(ax_list{f_idx}, [warmup_time, warmup_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
-    plot(ax_list{f_idx}, [warmup_time+ep_time, warmup_time+ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
-    plot(ax_list{f_idx}, [warmup_time+2*ep_time, warmup_time+2*ep_time], [-5e1 5e1], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
-    % text(ax_list{f_idx}, warmup_time + .2, minVals(f_idx), "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman')
-    % text(ax_list{f_idx}, warmup_time + ep_time + .2, minVals(f_idx), "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman')
-    % text(ax_list{f_idx}, warmup_time + 2*ep_time + .2, minVals(f_idx), "Episode 3", "FontSize", font_size, "FontName", 'Times New Roman')
+    % plot(ax_list{f_idx}, [warmup_time, warmup_time], [-5e2 5e2], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
+    plot(ax_list{f_idx}, [warmup_time+ep_time, warmup_time+ep_time], [-5e2 5e2], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
+    % plot(ax_list{f_idx}, [warmup_time+2*ep_time, warmup_time+2*ep_time], [-5e2 5e2], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
+    
+    plot(ax_list{f_idx}, [start_t, start_t], [-5e2 5e2], "Color", zoom_color, "LineWidth", line_width, "LineStyle", "-."); hold on
+    plot(ax_list{f_idx}, [end_t, end_t], [-5e2 5e2], "Color", zoom_color, "LineWidth", line_width, "LineStyle", "-."); hold on
+
+    if f_idx <= 4
+        text(ax_list{f_idx}, 0.02, 0.9, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman','Units','normalized')
+        text(ax_list{f_idx}, 0.52, 0.9, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman','Units','normalized')
+        text(ax_list{f_idx}, 0.835, 0.9, "(see, Fig. 10)", "FontSize", font_size-1, "FontName", 'Times New Roman','Units','normalized', 'Color', zoom_color)
+    else
+        text(ax_list{f_idx}, 0.02, 0.1, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman','Units','normalized')
+        text(ax_list{f_idx}, 0.52, 0.1, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman','Units','normalized')
+        text(ax_list{f_idx}, 0.835, 0.1, "(see, Fig. 10)", "FontSize", font_size-1, "FontName", 'Times New Roman','Units','normalized', 'Color', zoom_color)
+    end
 
     len = maxVals(f_idx)-minVals(f_idx); ratio = .3;
     if len~=0
@@ -258,7 +257,12 @@ ax_list{6}.YLabel.String = '$\tau_2$ / Nm';
 ax_list{7}.XLabel.String = 'Time / s';
 ax_list{7}.YLabel.String = '$\Vert\tau\Vert$ / Nm';
 
-for ax_idx = 1:1:7
+ax_list{13}.XLabel.String = 'Time / s';
+ax_list{13}.YLabel.String = '$q_1$ / deg';
+ax_list{14}.XLabel.String = 'Time / s';
+ax_list{14}.YLabel.String = '$q_2$ / deg';
+
+for ax_idx = [1:1:7, 13, 14]
     ax_list{ax_idx}.XLabel.Interpreter = 'latex';
     ax_list{ax_idx}.YLabel.Interpreter = 'latex';
 end
@@ -303,8 +307,9 @@ ax.XLabel.String = '$\tau_1$ / Nm'; ax.XLabel.Interpreter = 'latex';
 ax.YLabel.String = '$\tau_2$ / Nm'; ax.YLabel.Interpreter = 'latex';
 maxminX = [-u_ball, u_ball];
 maxminY = [-u_ball, u_ball];
-ax.XLim = [8.8 10.8];
-ax.YLim = [0 3.2];
+ax.XLim = [10.2 12];
+ax.XLim = [9.5 14.5];
+ax.YLim = [0 3.7];
 
 %% ============================
 % [CONAC] Multipliers
@@ -321,8 +326,8 @@ C2_u_ball_lbd = dataSet{3}.lbd_hist(4,:);
 C1_u2_max_lbd = dataSet{4}.lbd_hist(7,:);
 C2_u2_max_lbd = dataSet{3}.lbd_hist(7,:);
 
-semilogy(ax, dataSet{4}.t, C1_u_ball_lbd, "Color", color_list(4), "LineWidth", line_width, "LineStyle", "-", "DisplayName", '$\lambda_{\mbox{\boldmath $\tau$}}$'); hold on
-semilogy(ax, dataSet{3}.t, C2_u_ball_lbd, "Color", color_list(3), "LineWidth", line_width, "LineStyle", "-", "DisplayName", '$\lambda_{\mbox{\boldmath $\tau$}}$'); hold on
+semilogy(ax, dataSet{4}.t, C1_u_ball_lbd, "Color", color_list(4), "LineWidth", line_width, "LineStyle", "-", "DisplayName", '$\lambda_{\overline{\tau}}$'); hold on
+semilogy(ax, dataSet{3}.t, C2_u_ball_lbd, "Color", color_list(3), "LineWidth", line_width, "LineStyle", "-", "DisplayName", '$\lambda_{\overline{\tau}}$'); hold on
 % semilogy(ax, dataSet{4}.t, C1_u2_max_lbd, "Color", color_list(4), "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\lambda_{\overline{\tau}_2}$"); hold on
 % semilogy(ax, dataSet{3}.t, C2_u2_max_lbd, "Color", color_list(3), "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\lambda_{\overline{\tau}_2}$"); hold on
 
@@ -341,7 +346,7 @@ set(ax, 'FontSize', ax_font_size);
 set(ax, 'LineWidth', 1.1);
 set(ax, 'TickLabelInterpreter', 'latex');
 ax.XLabel.String = 'Time / s';
-ax.YLabel.String = '$\lambda_{\mbox{\boldmath $\tau$}}$';
+ax.YLabel.String = '$\lambda_{\overline{\tau}}$';
 ax.XLabel.Interpreter = 'latex';
 ax.YLabel.Interpreter = 'latex';
 
@@ -388,13 +393,13 @@ plot(ax, NaN, NaN, "Color", 'k', "LineWidth", line_width, "LineStyle", "--", "Di
 plot(ax, [0 T], [+1 +1]*th_max(1), "Color", "black", "LineWidth", line_width, "LineStyle", "-.", "HandleVisibility", "off"); hold on
 
 lgd = legend(ax);
-lgd.Location = 'northeast';
+lgd.Location = 'northwest';
 lgd.Interpreter = 'latex';
 lgd.FontSize = 10;
 lgd.NumColumns = 3;
 
 ax.XLim = [global_start_t global_end_t];
-ax.YLim = [0 15];
+ax.YLim = [0 10];
 ax.XLabel.String = 'Time / s';
 ax.YLabel.String = '$\Vert\widehat{\mbox{\boldmath $\theta$}}_i\Vert$';
 ax.XLabel.Interpreter = 'latex';
@@ -450,28 +455,181 @@ set(ax, 'TickLabelInterpreter', 'latex');
 
 for ctrl_idx = 1:1:length(dataSet)
     data = dataSet{ctrl_idx};
-    color = color_list(ctrl_idx)
+    color = color_list(ctrl_idx);
     
     t = data.t;
     comp_time_hist = data.comp_time_hist;
-    % comp_time_hist = zeros(size(t));
 
     plot(ax, t, comp_time_hist, "Color", color, "LineWidth", line_width, "LineStyle", "-"); hold on
 end
 
 ax.XLim = [global_start_t global_end_t];
 ax.XLabel.String = 'Time / s';
-ax.YLabel.String = 'Comp. Time / s';
+ax.YLabel.String = 'Comp. Time / $\mu$s';
 ax.XLabel.Interpreter = 'latex';
 ax.YLabel.Interpreter = 'latex';
 
+%%============================
+% % zoom (ctrl_obs_idx); q1, q2
+% %  ===========================
+ax_list{13}.XLim = [start_t end_t];
+ax_list{14}.XLim = [start_t end_t];
+
+maxVal1 = -inf; minVal1 = inf;
+maxVal2 = -inf; minVal2 = inf;
+for ctrl_idx = 1:1:length(dataSet)
+    data = dataSet{ctrl_idx};
+    x1_hist = rad2deg(data.x1_hist);
+    xd1_hist = rad2deg(data.xd1_hist);
+    maxVal1 = max(maxVal1, max(x1_hist(1,ctrl_obs_idx))); maxVal1 = max(maxVal1, max(xd1_hist(1,ctrl_obs_idx)));
+    minVal1 = min(minVal1, min(x1_hist(1,ctrl_obs_idx))); minVal1 = min(minVal1, min(xd1_hist(1,ctrl_obs_idx)));
+    maxVal2 = max(maxVal2, max(x1_hist(2,ctrl_obs_idx))); maxVal2 = max(maxVal2, max(xd1_hist(2,ctrl_obs_idx)));
+    minVal2 = min(minVal2, min(x1_hist(2,ctrl_obs_idx))); minVal2 = min(minVal2, min(xd1_hist(2,ctrl_obs_idx)));
+end
+ax_list{13}.YLim = [minVal1-5 maxVal1+5];
+ax_list{14}.YLim = [minVal2-5 maxVal2+5];
+
+%% ============================
+% % zoom (ctrl_obs_idx); e1, e2
+% %  ===========================
+fig1 = figure(15); clf;
+ax1 = axes(fig1);
+set(fig1, 'Units', 'centimeters');
+fig1.Position(3:4) = [figW figH];
+hold(ax1, 'on');
+grid(ax1, 'on');
+box(ax1, 'on');
+grid(ax1, 'minor');
+set(ax1, 'FontName', 'Times New Roman');
+set(ax1, 'FontSize', ax_font_size);
+set(ax1, 'LineWidth', 1.1);
+set(ax1, 'TickLabelInterpreter', 'latex');
+fig2 = figure(16); clf;
+ax2 = axes(fig2);
+set(fig2, 'Units', 'centimeters');
+fig2.Position(3:4) = [figW figH];
+hold(ax2, 'on');
+grid(ax2, 'on');
+box(ax2, 'on');
+grid(ax2, 'minor');
+set(ax2, 'FontName', 'Times New Roman');
+set(ax2, 'FontSize', ax_font_size);
+set(ax2, 'LineWidth', 1.1);
+set(ax2, 'TickLabelInterpreter', 'latex');
+
+maxVal1 = -inf; minVal1 = inf;
+maxVal2 = -inf; minVal2 = inf;
+for ctrl_idx = 1:1:length(dataSet)
+    data = dataSet{ctrl_idx};
+    x1_hist = rad2deg(data.x1_hist);
+    xd1_hist = rad2deg(data.xd1_hist);
+    e1_hist = x1_hist - xd1_hist;
+    e1_hist = abs(e1_hist);
+
+    t = data.t;
+
+    plot(ax1, t, e1_hist(1,:), "Color", color_list(ctrl_idx), "LineWidth", line_width, "LineStyle", "-"); hold on
+    plot(ax2, t, e1_hist(2,:), "Color", color_list(ctrl_idx), "LineWidth", line_width, "LineStyle", "-"); hold on
+
+
+    maxVal1 = max(maxVal1, max(e1_hist(1,ctrl_obs_idx))); 
+    minVal1 = min(minVal1, min(e1_hist(1,ctrl_obs_idx))); 
+    maxVal2 = max(maxVal2, max(e1_hist(2,ctrl_obs_idx))); 
+    minVal2 = min(minVal2, min(e1_hist(2,ctrl_obs_idx))); 
+end
+
+yline(ax1, 0, 'k--', 'LineWidth', line_width)
+yline(ax2, 0, 'k--', 'LineWidth', line_width)
+minVal1 = 0; minVal2 = 0;
+
+ax1.XLabel.String = 'Time / s';
+ax1.YLabel.String = '$\vert q_1-{q_d}_1\vert$ / deg';
+ax2.XLabel.String = 'Time / s';
+ax2.YLabel.String = '$\vert q_2-{q_d}_2\vert$ / deg';
+ax1.XLabel.Interpreter = 'latex';
+ax1.YLabel.Interpreter = 'latex';
+ax2.XLabel.Interpreter = 'latex';
+ax2.YLabel.Interpreter = 'latex';
+
+ax1.XLim = [start_t end_t];
+ax2.XLim = [start_t end_t];
+
+len1 = maxVal1 - minVal1; len2 = maxVal2 - minVal2;
+ax1.YLim = [minVal1-len1*.1 maxVal1+len1*.1];
+ax2.YLim = [minVal2-len2*.1 maxVal2+len2*.1];
+
+
+%% ============================
+% zoom Top view of the q
+% ============================
+fig = figure(16); clf;
+ax = axes(fig);
+hold(ax, 'on');
+grid(ax, 'on');
+grid(ax, 'minor');
+box(ax, 'on');
+
+set(fig, 'Units', 'centimeters');
+fig.Position(3:4) = [figW figH*1.5];
+set(ax, 'FontName', 'Times New Roman');
+set(ax, 'FontSize', ax_font_size);
+set(ax, 'LineWidth', 1.1);
+set(ax, 'TickLabelInterpreter', 'latex');
+ax.XLabel.String = '$q_1-{q_d}_1$ / deg'; ax.XLabel.Interpreter = 'latex';
+ax.YLabel.String = '$q_2-{q_d}_2$ / deg'; ax.YLabel.Interpreter = 'latex';
+
+maxminX = [inf 0]; maxminY = [inf -inf];
+for ctrl_idx = 1:1:length(dataSet)
+    data = dataSet{ctrl_idx};
+    CTRL_INFO = data.CTRL_INFO;
+
+    e1_hist = data.x1_hist-data.xd1_hist;
+    e1_hist = rad2deg(e1_hist);
+    e1_hist = [e1_hist, nan(2, length(t)-length(e1_hist))];
+    e1_hist = e1_hist(:, ctrl_obs_idx);
+    color = color_list(ctrl_idx);
+
+    plot(ax, e1_hist(1,:), e1_hist(2,:), "Color", color, "LineWidth", line_width, "LineStyle", "-");
+    % marker_idx = round(linspace(1, length(x1_hist), 5));
+    % plot(ax, x1_hist(1,marker_idx), x1_hist(2,marker_idx), "Color", color, "Marker", "o", "MarkerSize", 6, "LineStyle", "none");
+
+    maxminX = [min(maxminX(1), min(e1_hist(1,:))) max(maxminX(2), max(e1_hist(1,:)))];
+    maxminY = [min(maxminY(1), min(e1_hist(2,:))) max(maxminY(2), max(e1_hist(2,:)))];
+end
+len = maxminX(2)-maxminX(1); ratio = .1;
+ax.XLim = [maxminX(1)-len*ratio maxminX(2)+len*ratio];
+len = maxminY(2)-maxminY(1); ratio = .1;
+ax.YLim = [maxminY(1)-len*ratio maxminY(2)+len*ratio];
+
+for ctrl_idx = 1:1:length(dataSet)
+    data = dataSet{ctrl_idx};
+    CTRL_INFO = data.CTRL_INFO;
+
+    e1_hist = data.x1_hist-data.xd1_hist;
+    e1_hist = rad2deg(e1_hist);
+    e1_hist = [e1_hist, nan(2, length(t)-length(e1_hist))];
+    e1_hist = e1_hist(:, ctrl_obs_idx);
+    color = color_list(ctrl_idx);
+
+    drawArrow(ax,...
+        e1_hist(1,end-10), e1_hist(2,end-10),...
+        e1_hist(1,end), e1_hist(2,end),...
+        color);
+    hold on
+end
+
+yline(ax, 0, 'k--', 'LineWidth', line_width);
+xline(ax, 0, 'k--', 'LineWidth', line_width);
+
+%%
+bar_plotter
 
 %% SAVE FIGURES
 if SAVE_FLAG
     FIG_SAVE_PATH = "figures";
     [~,~] = mkdir(FIG_SAVE_PATH);
 
-    for idx = 1:1:12
+    for idx = [1:1:16, 21]
 
         f_name = FIG_SAVE_PATH + "/Fig" + string(idx);
 
@@ -519,7 +677,7 @@ for c_idx = 1:1:length(dataSet)
     data = dataSet{c_idx};
 
     if data.t(end) < warmup_time + 2*ep_time
-        fprintf("%% C %s : failed to control\n", name_list{c_idx})
+        fprintf("%% C %s : failed to control\n", tex_name_list{c_idx})
         continue
     end
 
@@ -533,12 +691,12 @@ for c_idx = 1:1:length(dataSet)
     r_ep1  = r_hist(ep1_idx);
     r_ep2  = r_hist(ep2_idx);
 
-    ctrl_name = name_list{c_idx};
+    ctrl_name = tex_name_list{c_idx};
 
     fprintf("%% -------------------------------\n")
     fprintf("%% C %s :\n", ctrl_name)
-    fprintf("%% error position (1) %.3f, (2) %.3f [imp: %.3f]\n", RMSE(e1_ep1), RMSE(e2_ep1), 1-RMSE(e2_ep1)/RMSE(e1_ep1))
-    fprintf("%% error velocity (1) %.3f, (2) %.3f [imp: %.3f]\n", RMSE(e1_ep2), RMSE(e2_ep2), 1-RMSE(e2_ep2)/RMSE(e1_ep2))
+    fprintf("%% error q1 (1) %.3f, (2) %.3f [imp: %.3f]\n", RMSE(e1_ep1), RMSE(e1_ep2), 1-RMSE(e1_ep2)/RMSE(e1_ep1))
+    fprintf("%% error q2 (1) %.3f, (2) %.3f [imp: %.3f]\n", RMSE(e2_ep1), RMSE(e2_ep2), 1-RMSE(e2_ep2)/RMSE(e2_ep1))
     fprintf("%% filter error   (1) %.3f, (2) %.3f [imp: %.3f]\n", RMSE(r_ep1), RMSE(r_ep2), 1-RMSE(r_ep2)/RMSE(r_ep1))
     fprintf("\n")
 
@@ -549,11 +707,16 @@ for c_idx = 1:1:length(dataSet)
     fprintf("\\newcommand{\\%sImpAngOne}{%.3f}\n", ctrl_name, (RMSE(e1_ep2)/RMSE(e1_ep1)-1)*100)
     fprintf("\\newcommand{\\%sImpAngTwo}{%.3f}\n", ctrl_name, (RMSE(e2_ep2)/RMSE(e2_ep1)-1)*100)
 end
+
+    fprintf("%% -------------------------------\n")
+    fprintf("\\newcommand{\\zoomStartTime}{%.1f}\n", start_t)
+    fprintf("\\newcommand{\\zoomEndTime}{%.1f}\n", end_t)
 beep()
 
 function data = loadFromMeas(data_path, CTRL_INFO)
     data_orig = load(data_path);
 
+    
     data = struct();
     data.CTRL_INFO.CTRL_NUM = CTRL_INFO;
     
@@ -561,7 +724,10 @@ function data = loadFromMeas(data_path, CTRL_INFO)
     xd1_hist = data_orig.r(1:2, :);
     ref_start_idx = find(isnan(xd1_hist(1,:))==0, 1);
     ref_end_idx = find(isnan(xd1_hist(1,:))==0, 1, 'last');
-        
+    
+    TRUE_CTRL_NUM = data_orig.conac_controller_id(ref_start_idx);
+    fprintf("TRUE_CTRL_NUM: %d\n", TRUE_CTRL_NUM)
+    
     % data mapping
     data.x1_hist = data_orig.q(1:2, ref_start_idx:ref_end_idx);
     data.x2_hist = data_orig.qdot(1:2, ref_start_idx:ref_end_idx);
@@ -575,9 +741,46 @@ function data = loadFromMeas(data_path, CTRL_INFO)
     data.th_hist = data_orig.Vn(:, ref_start_idx:ref_end_idx);
     data.zeta_hist = data_orig.zeta(:, ref_start_idx:ref_end_idx);
     
-    data.comp_time_hist = data_orig.comp_time(ref_start_idx:ref_end_idx);
+    if isfield(data_orig, 'conac_computation_time_us')
+        data.comp_time_hist = data_orig.conac_computation_time_us(ref_start_idx:ref_end_idx);
+    else
+        data.comp_time_hist = zeros(1, ref_end_idx-ref_start_idx+1);
+    end
 
     t = data_orig.t(ref_start_idx:ref_end_idx);
     data.t = t - t(1);
     data.T = data.t(end);
+end
+
+function drawArrow(ax, x1, y1, x2, y2, color)
+
+    % axes position (normalized in figure)
+    axPos = ax.Position;
+
+    % axis limits
+    xl = xlim(ax);
+    yl = ylim(ax);
+
+    % data -> normalized axes
+    xn1 = (x1-xl(1))/(xl(2)-xl(1));
+    yn1 = (y1-yl(1))/(yl(2)-yl(1));
+
+    xn2 = (x2-xl(1))/(xl(2)-xl(1));
+    yn2 = (y2-yl(1))/(yl(2)-yl(1));
+
+    % axes -> figure
+    xf1 = axPos(1) + xn1*axPos(3);
+    yf1 = axPos(2) + yn1*axPos(4);
+
+    xf2 = axPos(1) + xn2*axPos(3);
+    yf2 = axPos(2) + yn2*axPos(4);
+
+    annotation(gcf,'arrow',...
+        [xf1 xf2],...
+        [yf1 yf2],...
+        'Color',color,...
+        'LineWidth',1.5,...
+        'HeadLength',14,...
+        'HeadWidth',14);
+
 end
