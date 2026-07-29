@@ -663,6 +663,61 @@ end
 yline(ax, 0, 'k--', 'LineWidth', line_width);
 xline(ax, 0, 'k--', 'LineWidth', line_width);
 
+% %% ============================
+% % [Zoom] weight norm
+% %   ============================
+% fig = figure(17); clf;
+% ax = axes(fig);
+% set(fig, 'Units', 'centimeters');
+% fig.Position(3:4) = [figW figH];
+% hold(ax, 'on');
+% grid(ax, 'on');
+% box(ax, 'on');
+% grid(ax, 'minor');
+% set(ax, 'FontName', 'Times New Roman');
+% set(ax, 'FontSize', ax_font_size);
+% set(ax, 'LineWidth', 1.1);
+% set(ax, 'TickLabelInterpreter', 'latex');   
+
+% for ctrl_idx = 1:1:length(dataSet)
+%     data = dataSet{ctrl_idx};
+%     CTRL_INFO = data.CTRL_INFO;
+%     color = color_list(ctrl_idx);
+    
+%     t = data.t;
+%     th_hist = data.th_hist;
+%     th0 = th_hist(1,:);
+%     th1 = th_hist(2,:);
+%     th2 = th_hist(3,:);
+
+%     % th = [th0; th1; th2];
+%     % del_th = th(2:end,:) - th(1:end-1,:);
+%     % norm_th = vecnorm(del_th, 2, 1);
+%     % plot(ax, t, norm_th, "Color", color, "LineWidth", line_width, "LineStyle", "-"); hold on
+
+%     plot(ax, t, th0, "Color", color, "LineWidth", line_width, "LineStyle", "-", "HandleVisibility", "off"); hold on
+%     plot(ax, t, th1, "Color", color, "LineWidth", line_width, "LineStyle", "-.", "HandleVisibility", "off"); hold on
+%     plot(ax, t, th2, "Color", color, "LineWidth", line_width, "LineStyle", "--", "HandleVisibility", "off"); hold on
+% end
+% % dummy for legend (not plotted)
+% % plot(ax, NaN, NaN, "Color", 'k', "LineWidth", line_width, "LineStyle", "-", "DisplayName", "$\Vert\widehat{\mbox{\boldmath $\theta$}}_0\Vert$"); hold on
+% % plot(ax, NaN, NaN, "Color", 'k', "LineWidth", line_width, "LineStyle", "-.", "DisplayName", "$\Vert\widehat{\mbox{\boldmath $\theta$}}_1\Vert$"); hold on
+% % plot(ax, NaN, NaN, "Color", 'k', "LineWidth", line_width, "LineStyle", "--", "DisplayName", "$\Vert\widehat{\mbox{\boldmath $\theta$}}_2\Vert$"); hold on
+% % plot(ax, [0 T], [+1 +1]*th_max(1), "Color", "black", "LineWidth", line_width, "LineStyle", "-.", "HandleVisibility", "off"); hold on
+% % lgd = legend(ax);
+% % lgd.Location = 'northwest';
+% % lgd.Interpreter = 'latex';
+% % lgd.FontSize = 10;
+% % lgd.NumColumns = 3;
+
+% ax.XLim = [start_t end_t];
+% ax.YLim = [2 4];
+% ax.XLabel.String = 'Time / s';
+% ax.YLabel.String = '$\Vert\widehat{\mbox{\boldmath $\theta$}}\Vert$';
+% ax.XLabel.Interpreter = 'latex';
+% ax.YLabel.Interpreter = 'latex';
+
+
 %%
 bar_plotter
 
