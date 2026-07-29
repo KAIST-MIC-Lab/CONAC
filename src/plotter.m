@@ -3,9 +3,9 @@
 %%
 % SIM = true;
 SIM = false;
-SAVE_FLAG = 1;
+SAVE_FLAG = 0;
 
-uMax2 = 3.5;
+uMax2 = 3.8;
 u_ball = 11;
 uMax1 = sqrt(u_ball^2 - uMax2^2);
 th_max = [6,6,6]*10;
@@ -39,10 +39,10 @@ if SIM
 else
     dataSet = cell(4,1);
 
-    data_path_4 = "20260724_150011"; % CONAC high - 1
-    data_path_3 = "20260724_150110"; % CONAC low - 2
-    data_path_2 = "20260724_151540"; % AUX - 3
-    data_path_1 = "20260724_150302"; % NAC - 4
+    data_path_4 = "20260728_161911"; % CONAC high - 1
+    data_path_3 = "20260728_162454"; % CONAC low - 2
+    data_path_2 = "20260728_151903"; % AUX - 3
+    data_path_1 = "20260728_141636"; % NAC - 4
 
     dataSet{1} = loadFromMeas("meas_result/"+data_path_1+"/"+data_path_1+".mat", 4);
     dataSet{2} = loadFromMeas("meas_result/"+data_path_2+"/"+data_path_2+".mat", 3);
@@ -215,23 +215,23 @@ plot(ax_list{14}, t, rad2deg(dataSet{t_max_idx}.xd1_hist(2,:)), "Color", "red", 
 
 
 % 
-zoom_color = "#FF7F00"; % orange
+zoom_color = "#008602"; % orange
 for f_idx = 1:1:7
     % plot(ax_list{f_idx}, [warmup_time, warmup_time], [-5e2 5e2], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
     plot(ax_list{f_idx}, [warmup_time+ep_time, warmup_time+ep_time], [-5e2 5e2], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
     % plot(ax_list{f_idx}, [warmup_time+2*ep_time, warmup_time+2*ep_time], [-5e2 5e2], "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
     
-    plot(ax_list{f_idx}, [start_t, start_t], [-5e2 5e2], "Color", zoom_color, "LineWidth", line_width, "LineStyle", "-."); hold on
-    plot(ax_list{f_idx}, [end_t, end_t], [-5e2 5e2], "Color", zoom_color, "LineWidth", line_width, "LineStyle", "-."); hold on
+    plot(ax_list{f_idx}, [start_t, start_t], [-5e2 5e2], "Color", zoom_color, "LineWidth", line_width, "LineStyle", "--"); hold on
+    plot(ax_list{f_idx}, [end_t, end_t], [-5e2 5e2], "Color", zoom_color, "LineWidth", line_width, "LineStyle", "--"); hold on
 
     if f_idx <= 4
         text(ax_list{f_idx}, 0.02, 0.9, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman','Units','normalized')
         text(ax_list{f_idx}, 0.52, 0.9, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman','Units','normalized')
-        text(ax_list{f_idx}, 0.835, 0.9, "(see, Fig. 10)", "FontSize", font_size-1, "FontName", 'Times New Roman','Units','normalized', 'Color', zoom_color)
+        text(ax_list{f_idx}, 0.845, 0.9, "see, Fig. 10", "FontSize", font_size, "FontName", 'Times New Roman','Units','normalized', 'Color', zoom_color)
     else
         text(ax_list{f_idx}, 0.02, 0.1, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman','Units','normalized')
         text(ax_list{f_idx}, 0.52, 0.1, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman','Units','normalized')
-        text(ax_list{f_idx}, 0.835, 0.1, "(see, Fig. 10)", "FontSize", font_size-1, "FontName", 'Times New Roman','Units','normalized', 'Color', zoom_color)
+        text(ax_list{f_idx}, 0.845, 0.1, "see, Fig. 10", "FontSize", font_size, "FontName", 'Times New Roman','Units','normalized', 'Color', zoom_color)
     end
 
     len = maxVals(f_idx)-minVals(f_idx); ratio = .3;
@@ -255,7 +255,7 @@ ax_list{5}.YLabel.String = '$\tau_1$ / Nm';
 ax_list{6}.XLabel.String = 'Time / s';
 ax_list{6}.YLabel.String = '$\tau_2$ / Nm';
 ax_list{7}.XLabel.String = 'Time / s';
-ax_list{7}.YLabel.String = '$\Vert\tau\Vert$ / Nm';
+ax_list{7}.YLabel.String = '$\Vert\mbox{\boldmath $\tau$}\Vert$ / Nm';
 
 ax_list{13}.XLabel.String = 'Time / s';
 ax_list{13}.YLabel.String = '$q_1$ / deg';
@@ -284,20 +284,54 @@ set(ax, 'FontSize', ax_font_size);
 set(ax, 'LineWidth', 1.1);
 set(ax, 'TickLabelInterpreter', 'latex');
 
+p = ax.Position;
+axInset = axes( ...
+    'Parent', fig, ...
+    'Units', 'normalized', ...
+    'Position', ...
+    [p(1) + 0.50*p(3), ...
+    p(2) + 0.50*p(4), ...
+    0.45*p(3), ...
+    0.43*p(4)]);
+
+hold(axInset, 'on');
+grid(axInset, 'on');
+grid(axInset, 'minor');
+box(axInset, 'on');
+
+set(axInset, 'FontName', 'Times New Roman');
+set(axInset, 'FontSize', ax_font_size);
+set(axInset, 'LineWidth', 1.1);
+set(axInset, 'TickLabelInterpreter', 'latex');
+
 maxminX = [-inf inf]; maxminY = [-inf inf];
-for ctrl_idx = 1:1:length(dataSet)
+% for ctrl_idx = 1:1:length(dataSet)
+for ctrl_idx = [2, 3, 4, 1]
     data = dataSet{ctrl_idx};
     CTRL_INFO = data.CTRL_INFO;
 
     u_hist = data.u_hist;
     u_hist = [u_hist, nan(2, length(t)-length(u_hist))];
-    u_hist = u_hist(:, ctrl_obs_idx2);
+    u_hist = u_hist(:, ctrl_obs_idx);
     color = color_list(ctrl_idx);
 
-    plot(ax, u_hist(1,:), u_hist(2,:), "Color", color, "LineWidth", line_width, "LineStyle", "-");
+    if ctrl_idx == 1
+        plot(axInset, u_hist(1,:), u_hist(2,:), "Color", color, "LineWidth", line_width, "LineStyle", "-");
 
-    maxminX = [min(u_hist(1,:)) max(u_hist(1,:))];
-    maxminY = [min(u_hist(2,:)) max(u_hist(2,:))];
+        maxValX = [min(u_hist(1,:)) max(u_hist(1,:))];
+        maxValY = [min(u_hist(2,:)) max(u_hist(2,:))];
+        lenX = maxValX(2)-maxValX(1); lenY = maxValY(2)-maxValY(1);
+        ratio = 0.1;
+        axInset.XLim = [maxValX(1)-lenX*ratio maxValX(2)+lenX*ratio];
+        axInset.YLim = [maxValY(1)-lenY*ratio maxValY(2)+lenY*ratio];
+
+
+    else
+        plot(ax, u_hist(1,:), u_hist(2,:), "Color", color, "LineWidth", line_width, "LineStyle", "-");
+
+        maxminX = [min(u_hist(1,:)) max(u_hist(1,:))];
+        maxminY = [min(u_hist(2,:)) max(u_hist(2,:))];
+    end
 end
 plot(ax, u_ball*cos(0:0.01:2*pi), u_ball*sin(0:0.01:2*pi), "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
 plot(ax, [-1000 1000], [+1 +1]*uMax2, "Color", "black", "LineWidth", line_width, "LineStyle", "-."); hold on
@@ -307,9 +341,12 @@ ax.XLabel.String = '$\tau_1$ / Nm'; ax.XLabel.Interpreter = 'latex';
 ax.YLabel.String = '$\tau_2$ / Nm'; ax.YLabel.Interpreter = 'latex';
 maxminX = [-u_ball, u_ball];
 maxminY = [-u_ball, u_ball];
-ax.XLim = [10.2 12];
 ax.XLim = [9.5 14.5];
-ax.YLim = [0 3.7];
+ax.XLim = [10 13];
+ax.YLim = [0 4.2];
+
+axInset.XLabel.String = '$\tau_1$ / Nm'; axInset.XLabel.Interpreter = 'latex';
+axInset.YLabel.String = '$\tau_2$ / Nm'; axInset.YLabel.Interpreter = 'latex';
 
 %% ============================
 % [CONAC] Multipliers
@@ -336,11 +373,11 @@ grid(ax, 'on');
 box(ax, 'on');
 grid(ax, 'minor');
 
-lgd = legend(ax);
-lgd.Location = 'southeast';
-lgd.Interpreter = 'latex';
-lgd.FontSize = 10;
-lgd.NumColumns = 2;
+% lgd = legend(ax);
+% lgd.Location = 'southeast';
+% lgd.Interpreter = 'latex';
+% lgd.FontSize = 10;
+% lgd.NumColumns = 2;
 set(ax, 'FontName', 'Times New Roman');
 set(ax, 'FontSize', ax_font_size);
 set(ax, 'LineWidth', 1.1);
@@ -399,7 +436,7 @@ lgd.FontSize = 10;
 lgd.NumColumns = 3;
 
 ax.XLim = [global_start_t global_end_t];
-ax.YLim = [0 10];
+ax.YLim = [0 14];
 ax.XLabel.String = 'Time / s';
 ax.YLabel.String = '$\Vert\widehat{\mbox{\boldmath $\theta$}}_i\Vert$';
 ax.XLabel.Interpreter = 'latex';
@@ -601,6 +638,8 @@ ax.XLim = [maxminX(1)-len*ratio maxminX(2)+len*ratio];
 len = maxminY(2)-maxminY(1); ratio = .1;
 ax.YLim = [maxminY(1)-len*ratio maxminY(2)+len*ratio];
 
+backstep_list = [7,60,10,10];
+
 for ctrl_idx = 1:1:length(dataSet)
     data = dataSet{ctrl_idx};
     CTRL_INFO = data.CTRL_INFO;
@@ -611,9 +650,12 @@ for ctrl_idx = 1:1:length(dataSet)
     e1_hist = e1_hist(:, ctrl_obs_idx);
     color = color_list(ctrl_idx);
 
+    backstep_for_arrow = backstep_list(ctrl_idx);
+    smoothen_traj = smoothdata(e1_hist, 2, 'movmean', 10);
+    % e1_hist(1,end-backstep_for_arrow), e1_hist(2,end-backstep_for_arrow),...
     drawArrow(ax,...
-        e1_hist(1,end-10), e1_hist(2,end-10),...
-        e1_hist(1,end), e1_hist(2,end),...
+        smoothen_traj(1,end-backstep_for_arrow), smoothen_traj(2,end-backstep_for_arrow),...
+        smoothen_traj(1,end), smoothen_traj(2,end),...
         color);
     hold on
 end

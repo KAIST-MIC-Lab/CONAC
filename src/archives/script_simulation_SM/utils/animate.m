@@ -8,7 +8,7 @@ accel = 100;
 
 if AINMATION_SAVE_FLAG
     v = VideoWriter("sim_result/"+ctrl_name, 'MPEG-4');
-    % v.Quality = 100;
+    v.Quality = 100;
     v.FrameRate = 1/dt/accel; 
     open(v);
 end
