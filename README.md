@@ -1,53 +1,27 @@
 # Constrained Optimization-Based Neuro-Adaptive Control (CONAC)
 
-- Paper Name: TBD
-- State: TBD
-- Template Version: Robot Branch
+- Paper Name: Constrained Optimization-Based Neuro-Adaptive Control (CONAC) for Unknown Systems Under Multiple Convex Input Constraints
+- State: Draft
+- Template Version: TBD
 
 > [!Note]
-> This paper will be submitted to [IEEE Transactions on Cybernetics](https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=6221036).
+> This paper will be submitted to [IEEE Transactions on Systems, Man, and Cybernetics: Systems](https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=6221021).
 
 You can find papers here:
 
 - First submission: 
 <!-- - Final submission: [still working](./manuscript.pdf) -->
 
-## About this Research
+## Research Abstract
 
-The objective of this research is to design neuro-adaptive controller using constrained optimization theory. 
-The main features are as follows.
-
-- Stability of controller is ensured in the sense of Lyapunov.
-- Weights of neural network and tracking error are bounded over time.
-- Constraints are satisfied while adaptation (learning)
-    - Weight norm constraint.
-    - Control input saturation constraint (which is convex).
-
-
+This study presents a constrained optimization-based neuro-adaptive control (CONAC) for a class of unknown multi-input-multi-output (MIMO) systems subject to multiple convex input constraints. 
+A deep neural network (DNN) is employed to approximate the ideal control law while handling multiple convex input constraints within a unified constrained optimization framework.
+The adaptive variables, including the DNN weights and Lagrange multipliers are updated through adaptation laws derived from the formulated constrained optimization problem, yielding Karush-Kuhn-Tucker (KKT)-like first-order optimality conditions at equilibrium.
+The controller's stability is rigorously analyzed using Lyapunov theory, establishing the uniform ultimate boundedness (UUB) of the tracking errors and adaptive variables.
+The proposed controller is compared with existing methods through real-time experiments on a 2-degree-of-freedom (DOF) robotic manipulator, highlighting its superior capability to handle input saturation and its feasibility in real-time implementation.
 
 ## Authors
 
 - [Myeongseok Ryu](https://github.com/DDingR)
 - Donghwa Hong
 - Kyunghwan Choi
-
-# Gantt Chart
-
-```mermaid
-gantt
-    title CONAC
-    dateFormat  YYYY-MM-DD
-    axisFormat  CW%U
-    section Writing
-    Introduction: w1, 2025-04-14, 7d
-    Method: w2, after w1, 27d
-    section Validation
-    Measurement: v1,  2025-05-03, 28d
-    section Submission
-    Test and evaluation: t1,   2025-05-31, 5d
-```
-
-
-
-
-
