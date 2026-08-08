@@ -1,4 +1,7 @@
 \documentclass[letterpaper, journal, twoside]{IEEEtran}
+%DIF LATEXDIFF DIFFERENCE FILE
+%DIF DEL tmp2.tex   Sun Aug  9 02:03:08 2026
+%DIF ADD tmp1.tex   Sun Aug  9 02:03:08 2026
 
 \def\cmt{true} % true for comments, false for no comments
 \def\pub{false} % true for publication, false for draft
@@ -8,7 +11,13 @@
 
 % --------------------------------
 %      Manuscript version
-\newcommand{\version}{0.9.3} % version of the manuscript
+%DIF 11-13c11
+%DIF < % 0.9: 
+%DIF < % 0.91
+%DIF < \newcommand{\version}{0.9.2} % version of the manuscript
+%DIF -------
+\newcommand{\version}{0.9.3} % version of the manuscript %DIF > 
+%DIF -------
 % --------------------------------
 
 \newcommand{\resultFig}{./src/figures} % result figure path
@@ -70,6 +79,46 @@
 % ================================
 % Document starts from here
 % ===============================
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdel}[1]{{\protect\color{red}\sout{#1}}} %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+\providecommand{\DIFmodbegin}{} %DIF PREAMBLE
+\providecommand{\DIFmodend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF COLORLISTINGS PREAMBLE %DIF PREAMBLE
+\RequirePackage{listings} %DIF PREAMBLE
+\RequirePackage{color} %DIF PREAMBLE
+\lstdefinelanguage{DIFcode}{ %DIF PREAMBLE
+%DIF DIFCODE_UNDERLINE %DIF PREAMBLE
+  moredelim=[il][\color{red}\sout]{\%DIF\ <\ }, %DIF PREAMBLE
+  moredelim=[il][\color{blue}\uwave]{\%DIF\ >\ } %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstdefinestyle{DIFverbatimstyle}{ %DIF PREAMBLE
+	language=DIFcode, %DIF PREAMBLE
+	basicstyle=\ttfamily, %DIF PREAMBLE
+	columns=fullflexible, %DIF PREAMBLE
+	keepspaces=true %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim}[1][]{\lstset{style=DIFverbatimstyle}}{} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim*}[1][]{\lstset{style=DIFverbatimstyle,showspaces=true}}{} %DIF PREAMBLE
+\lstset{extendedchars=\true,inputencoding=utf8}
+
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+
 \begin{document}
 \bstctlcite{IEEEexample:BSTcontrol}
 
@@ -81,7 +130,7 @@
   Myeongseok Ryu, Donghwa Hong, and Kyunghwan Choi
 \thanks{
   Myeongseok Ryu, Donghwa Hong and Kyunghwan Choi are with the Cho Chun Shik Graduate School of Mobility, Korea Advanced Institute of Science and Technology (KAIST), Daejeon 34051, Korea (e-mail: \{dding\_98, fairytale, kh.choi\}@kaist.ac.kr).
-  
+
   This work was supported in part by a Korea Research Institute for Defense Technology planning and advancement (KRIT) grant funded by Korea government DAPA (Defense Acquisition Program Administration) (No. KRIT-CT-22-087, Synthetic Battlefield Environment based Integrated Combat Training Platform) and in part by the National Research Foundation of Korea (NRF) grant funded by the Korea government (MSIT) (RS-2025- 00554087). (Corresponding author: Kyunghwan Choi)
   }}
 
@@ -96,7 +145,7 @@
 \begin{abstract}
   This study presents a constrained optimization-based neuro-adaptive control (CONAC) for a class of unknown multi-input-multi-output (MIMO) systems subject to multiple convex input constraints. 
   A deep neural network (DNN) is employed to approximate the ideal control law while handling multiple convex input constraints within a unified constrained optimization framework.
-  The adaptive variables, including the DNN weights and Lagrange multipliers are updated through adaptation laws derived from the formulated constrained optimization problem, yielding Karush-Kuhn-Tucker (KKT) optimality conditions at equilibrium.
+  The adaptive variables, including the DNN weights and Lagrange multipliers are updated through adaptation laws derived from the formulated constrained optimization problem, yielding Karush-Kuhn-Tucker (KKT) \DIFdelbegin \DIFdel{-like first-order }\DIFdelend optimality conditions at equilibrium.
   The controller's stability is rigorously analyzed using Lyapunov theory, establishing the uniform ultimate boundedness (UUB) of the tracking errors and adaptive variables.
   The proposed controller is compared with existing methods through real-time experiments on a 2-degree-of-freedom (DOF) robotic manipulator, highlighting its superior capability to handle input saturation and its feasibility in real-time implementation.
 \end{abstract}
@@ -113,16 +162,17 @@
 
 \subsection{Background}
 
-\IEEEPARstart{M}{any} control systems are constrained by various safety requirements, actuator limitations, and physical restrictions \cite{Ji:2025aa}.
-These constraints often manifest as convex input constraints, which can be in the form of nonlinear constraints rather than the element-wise (symmetric or asymmetric) constraints, \ie 
-simple box constraints that limit each input independently, \ie $\underline{u}_i\le u_i\le\overline{u}_i$, $\forall i\in\{1,\cdots,n\}$, where $\underline{u}_i,\overline{u}_i\in\R$ denote the lower and upper bounds of the $i$th input $u_i$, respectively.
-\MSRY{여기서 element-wise를 먼저 언급하였습니다; 마찬가지로 문헌에서 많이 쓰이는 symmetric/asymmetric도 언급하였습니다.}
-For example, under road friction limits, the admissible global force and moment of vehicles can be characterized by a weighted norm bound, which yields a convex ellipsoidal constraint \cite{Chen:2024aa}.
+\DIFdelbegin %DIFDELCMD < \IEEEPARstart{F}{rom} %%%
+\DIFdel{a practical perspective, many engineering }\DIFdelend \DIFaddbegin \IEEEPARstart{M}{any} \DIFadd{control }\DIFaddend systems are constrained by various safety requirements, actuator limitations, and physical restrictions \cite{Ji:2025aa}.
+These constraints often manifest as convex input constraints, which can be in the form of nonlinear constraints rather than \DIFaddbegin \DIFadd{the element-wise (symmetric or asymmetric) constraints, }\ie 
+\DIFaddend simple box constraints that limit each input independently, \ie $\underline{u}_i\le u_i\le\overline{u}_i$, $\forall i\in\{1,\cdots,n\}$, where $\underline{u}_i,\overline{u}_i\in\R$ denote the lower and upper bounds of the $i$th input $u_i$, respectively.
+\DIFaddbegin \MSRY{여기서 element-wise를 먼저 언급하였습니다; 마찬가지로 문헌에서 많이 쓰이는 symmetric/asymmetric도 언급하였습니다.}
+\DIFaddend For example, under road friction limits, the admissible global force and moment of vehicles can be characterized by a weighted norm bound, which yields a convex ellipsoidal constraint \cite{Chen:2024aa}.
 In motor drive systems, the feasible voltage region is often represented by circular \cite{Ryu:2025aa} or hexagonal sets \cite{Monzen:2026aa}.
-Furthermore, admissible input sets may be determined by multiple constraints that must hold simultaneously, such as element-wise constraints combined with norm constraints, which can be represented as the intersection of convex sets.
+Furthermore, admissible input sets may be determined by multiple constraints that must hold simultaneously, such as \DIFdelbegin \DIFdel{box }\DIFdelend \DIFaddbegin \DIFadd{element-wise }\DIFaddend constraints combined with norm constraints, which can be represented as the intersection of convex sets.
 Therefore, addressing these multiple convex input constraints is crucial for ensuring the safety and reliability of control systems in real-world applications.
 
-In parallel, control systems often involve uncertain or even unknown dynamics due to modeling errors, unmodeled dynamics, and external disturbances.
+In parallel, \DIFdelbegin \DIFdel{engineering }\DIFdelend \DIFaddbegin \DIFadd{control }\DIFaddend systems often involve uncertain or even unknown dynamics due to modeling errors, unmodeled dynamics, and external disturbances.
 Although adaptive control provides a systematic mechanism for online adaptation of controllers \cite{Ioannou:2006aa}, conventional formulations often rely on structural assumptions about the uncertain or unknown dynamics, which may not be available in practice.
 Neuro-adaptive control (NAC) alleviates this assumption by using neural networks (NNs) to approximate the dynamics in a structured and parameterized representation \cite{Farrell:2006aa,Patil:2022aa}.
 Like adaptive control, NAC methods ensure closed-loop stability using Lyapunov theory, and the NN weights are adapted online without prior knowledge of the system.
@@ -142,10 +192,11 @@ In subsequent subsections, these methods are reviewed, highlighting their advant
 
 \subsubsection{Structural Methods for Input Constraint Handling in NAC}
 
-% Since the NAC framework is based on Lyapunov theory, structural methods have been widely studied for input constraint handling.
-Since the NAC framework is based on Lyapunov theory, input constraints have been primarily handled using structural methods in the NAC literature.
-\MSRY{NAC는 Lyapunov에 기반 $\to$ 입력제약을 구조적 방법으로 처리하면 Lyapunov로 해석 가능 $\to$ NAC가 구조적 방법으로 입력제약을 처리; 라는 흐름을 하고 싶었습니다; 단순히 NAC $\to$ 구조적 방법 (X) NAC $\to$ 입력제약을 구조적방법으로 처리 (O)}
-In \cite{Ji:2025aa}, Ji \etal categorized the literature on the structural methods into two strategies: anti-saturation design and direct design.
+%DIF >  Since the NAC framework is based on Lyapunov theory, structural methods have been widely studied for input constraint handling.
+Since the NAC framework is based on Lyapunov theory, \DIFdelbegin \DIFdel{structural methods have been widely studied for input constraint handling.
+}\DIFdelend \DIFaddbegin \DIFadd{input constraints have been primarily handled using structural methods in the NAC literature.
+}\MSRY{NAC는 Lyapunov에 기반 $\to$ 입력제약을 구조적 방법으로 처리하면 Lyapunov로 해석 가능 $\to$ NAC가 구조적 방법으로 입력제약을 처리; 라는 흐름을 하고 싶었습니다; 단순히 NAC $\to$ 구조적 방법 (X) NAC $\to$ 입력제약을 구조적방법으로 처리 (O)}
+\DIFaddend In \cite{Ji:2025aa}, Ji \etal categorized the literature on the structural methods into two strategies: anti-saturation design and direct design.
 We review these strategies in the context of NAC.
 
 In anti-saturation design, a virtual auxiliary system is mainly constructed to compensate for the effects of input saturation \cite{Ma:2025aa,Gao:2026aa,Yang:2021aa,Jia:2020aa,Liu:2024aa,Liu:2025aa,Gao:2017aa,Esfandiari:2014aa,Esfandiari:2015aa,Yu:2022aa,Rezaei:2025aa,He:2016aa,He:2019aa,Zhao:2016aa,Peng:2020aa}.
@@ -163,7 +214,7 @@ On the other hand, in direct design, the saturation effects are directly incorpo
 Typically, the saturation function is approximated by a smooth function, such as $\tanh(\cdot)$, and the mean value theorem is used to transform it into affine form \cite{Wang:2013aa,Cui:2014aa,Li:2024aa}.
 However, as reported in \cite{Min:2021aa}, the smooth approximation of the saturation function may introduce conservative behavior and performance degradation, especially when the control input is close to the saturation limit, compared to the auxiliary system-based anti-saturation design.
 
-Despite their effectiveness, the aforementioned structural methods are limited to element-wise input constraints, such as symmetric or asymmetric bounds on each input.
+Despite their effectiveness, the aforementioned structural methods are limited to \DIFdelbegin \DIFdel{simple box }\DIFdelend \DIFaddbegin \DIFadd{element-wise }\DIFaddend input constraints, such as symmetric or asymmetric bounds on each input.
 Thus, extending them to admissible input sets described by multiple convex constraints is not straightforward.
 
 % For instance, in \cite{Gao:2006aa}, the saturated amount of control input is estimated using NNs and compensated in the control law.
@@ -239,7 +290,7 @@ Thus, extending them to admissible input sets described by multiple convex const
   \\
   handling capability
   &
-  (symmetric or asymmetric) input constraints
+  \DIFaddbeginFL \DIFaddFL{(symmetric or asymmetric) }\DIFaddendFL input constraints
   &
   (convex/non-convex constraints)
   &
@@ -305,7 +356,7 @@ Therefore, complex nonlinear (even non-convex) input constraints can be systemat
 Even though they solve constrained optimization problems at each time instant, the computational burden may not necessarily be significant for small-scale QPs or MPC problems with short horizons and simple constraints.
 However, it can increase substantially when multiple constraints must be handled simultaneously, nonlinear constraints are introduced, or the resulting problem is non-convex.
 In such cases, real-time implementation may require iterative numerical solvers, suitable initialization, and careful control of the problem dimension and solver convergence.
-In this regard, some studies \cite{Vahidi-Moghaddam:2025aa,Mallick:2025aa,Khodaverdian:2025aa} trained the optimal constrained control policy offline using deep NNs (DNNs) to reduce online computation.
+In this regard, some studies \cite{Vahidi-Moghaddam:2025aa,Mallick:2025aa,Khodaverdian:2025aa} trained the optimal constrained control policy offline using \DIFdelbegin \DIFdel{DNNs }\DIFdelend \DIFaddbegin \DIFadd{deep NNs (DNNs) }\DIFaddend to reduce online computation.
 
 Moreover, closed-loop stability guarantees generally rely on additional analytical conditions specific to the selected optimization framework.
 For MPC, these conditions commonly include recursive feasibility, appropriate terminal ingredients, sufficiently long prediction horizons, and computational tractability \cite{Greune:2011aa}.
@@ -343,18 +394,19 @@ The main contributions of this study are:
 
   \item
   Any combination of convex input constraints can be handled, thereby significantly extending the applicability of the NAC to real-world systems with complex input constraints;
-  
-  \item 
-  The adaptation laws for adaptive variables, including the DNN weights and the Lagrange multipliers are systematically derived from the formulated constrained optimization problem, and the Karush-Kuhn-Tucker (KKT) optimality conditions are satisfied at an equilibrium of the adaptation dynamics \cite[Chap. 12, Thm. 12.1]{Nocedal:2006aa}; and
 
   \item 
-  The closed-loop stability under the proposed Constrained Optimization-Based Neuro-Adaptive Control (CONAC) is rigorously analyzed using Lyapunov theory, ensuring the uniform ultimate boundedness (UUB) of the tracking error and adaptive variables.
+  The adaptation laws for adaptive variables, including the DNN weights and the Lagrange multipliers are systematically derived from the formulated constrained optimization problem, and the \DIFdelbegin \DIFdel{KKT-like first-order }\DIFdelend \DIFaddbegin \DIFadd{Karush-Kuhn-Tucker (KKT) }\DIFaddend optimality conditions are satisfied at an equilibrium of the adaptation dynamics \cite[Chap. 12, Thm. 12.1]{Nocedal:2006aa}; and
+
+  \item 
+  The closed-loop stability under the proposed \DIFdelbegin \DIFdel{CONAC }\DIFdelend \DIFaddbegin \DIFadd{Constrained Optimization-Based Neuro-Adaptive Control (CONAC) }\DIFaddend is rigorously analyzed using Lyapunov theory, ensuring the \DIFdelbegin \DIFdel{UUB }\DIFdelend \DIFaddbegin \DIFadd{uniform ultimate boundedness (UUB) }\DIFaddend of the tracking error and adaptive variables.
+%DIF <  The effectiveness and feasibility are validated through simulations and real-time experiments on a 2-DOF robotic manipulator.
 
 \end{itemize}
 
 This study extends our preliminary work in \cite{Ryu:2025ab,Ryu:2025aa}, which introduced inequality constraints on the weight and input norms within a constrained optimization framework for NAC using single-hidden-layer NNs. 
 In the present work, the same framework is generalized to accommodate multiple convex input constraints and extended to DNNs, while still ensuring Lyapunov-based stability guarantees.
-Furthermore, unlike the previous study, which was limited to numerical simulations, the proposed CONAC is experimentally validated through real-time implementation on a 2-degree-of-freedom (DOF) robotic manipulator.
+Furthermore, unlike the previous study, which was limited to numerical simulations, the proposed CONAC is experimentally validated through real-time implementation on a \DIFdelbegin \DIFdel{2-DOF }\DIFdelend \DIFaddbegin \DIFadd{2-degree-of-freedom (DOF) }\DIFaddend robotic manipulator.
 
 \subsection{Organization}
 
@@ -387,7 +439,7 @@ Finally, $\mm I_n$ denotes the $n\times n$ identity matrix, and $\mm 0_{n\times 
 % ------------------------------------
 \section{Problem Formulation} \label{sec:problem:formulation}
 
-We consider an unknown multi-input multi-output (MIMO) system modeled as 
+We consider an unknown \DIFdelbegin \DIFdel{MIMO }\DIFdelend \DIFaddbegin \DIFadd{multi-input multi-output (MIMO) }\DIFaddend system modeled as 
 \begin{equation} \label{eq:sys}
   \ddtt\mv{x} 
   = 
@@ -491,7 +543,7 @@ The system \eqref{eq:sys} is subject to the following assumptions.
 % \end{assum}
 % The saturation function $\mysat(\cdot)$ satisfies $\mysat(\mv u)=\mv u$ for $\mv u\in\Omega_u$ and, for $\mv u\notin\Omega_u$, $\mysat(\mv u)$ lies on the ray from the origin through $\mv u$, as illustrated in Fig.~\ref{fig:saturation}.
 
-By Assumption~\ref{assum:sat}, the saturation function $\mysat(\mv{u})$ can represent any combination of multiple convex input constraints, rather than simple element-wise constraints which are conventionally considered in the NAC literature, as illustrated in Fig.~\ref{fig:saturation}.
+By Assumption~\ref{assum:sat}, the saturation function $\mysat(\mv{u})$ can represent any combination of multiple convex input constraints, rather than simple \DIFdelbegin \DIFdel{box }\DIFdelend \DIFaddbegin \DIFadd{element-wise }\DIFaddend constraints which are conventionally considered in the NAC literature, as illustrated in Fig.~\ref{fig:saturation}.
 
 \begin{figure}[t]
     \centering
@@ -508,8 +560,8 @@ By Assumption~\ref{assum:sat}, the saturation function $\mysat(\mv{u})$ can repr
     }
     \caption{
       Comparison of conventionally considered input constraints in the NAC literature and the proposed multiple convex input constraints.
-      \MSRY{문헌에서 box라고 표현하지 않고 symmetric/asymmetric라고 표현하기에 그에 맞게 표현하였습니다.}
-      % In Fig.~\ref{fig:saturation:conv:box}, symmetric and asymmetric box constraints are illustrated.
+      \DIFaddbeginFL \MSRY{문헌에서 box라고 표현하지 않고 symmetric/asymmetric라고 표현하기에 그에 맞게 표현하였습니다.}
+      \DIFaddendFL % In Fig.~\ref{fig:saturation:conv:box}, symmetric and asymmetric box constraints are illustrated.
       % In Fig.~\ref{fig:saturation:prop:multi}, a combination of symmetric and norm constraint are illustrated.
     }
     \label{fig:saturation}
@@ -518,7 +570,7 @@ By Assumption~\ref{assum:sat}, the saturation function $\mysat(\mv{u})$ can repr
 Additionally, the desired trajectory $\mv{x}_d(t):\R_{\ge0}\to\R^n$ is assumed to be given and satisfies the following assumption.
 
 \begin{assum} \label{assum:xd}
-    The desired trajectory $\mv{x}_d(t)$ is sufficiently smooth, and $\mv{x}_d$ and $\ddtt\mv{x}_d$ are bounded.
+    The desired trajectory $\mv{x}_d(t)$ is sufficiently smooth\DIFaddbegin \DIFadd{, and $\mv{x}_d$ }\DIFaddend and \DIFdelbegin \DIFdel{$\mv{x}_d,\ddtt\mv{x}_d$ }\DIFdelend \DIFaddbegin \DIFadd{$\ddtt\mv{x}_d$ }\DIFaddend are bounded.
     % The desired trajectory $\mv{x}_d(t)$ is sufficiently smooth and bounded, such that $\mv{x}_d\in\Omega_{x_d}:=\left\{\mv{x}_d\in\R^n : \norm{\mv{x}_d}\le \overline{x}_d\right\}$ and $\ddtt\mv{x}_d$ is bounded in a compact set $\Omega_{dx_d}$, as well.
 \end{assum}
 
@@ -538,8 +590,8 @@ Then, the controller is presented in Section~\ref{sec:main:result:sub:ctrl:desig
   \includegraphics[width=.9999\linewidth]{figs/Controller.drawio.pdf}
   \caption{
     Overall architecture of the proposed CONAC.
-    \MSRY{키워봤습니다.}
-  }
+    \DIFaddbeginFL \MSRY{키워봤습니다.}
+  \DIFaddendFL }
   \label{fig:ctrl:diagram}
 \end{figure}
 
@@ -1037,8 +1089,9 @@ The control objectives defined in Section~\ref{sec:problem:formulation} can be f
   \end{align}%
 \end{subequations}
 where $J(\mv{e};\estwth)$ is the objective function.
-In the optimization problem, inequality constraints of weight boundedness $c^{\theta}_i(\estwth_i),\ \forall i\in\mathcal{K},$ and input constraints $c^{u}_j(\estwth),\ \forall j\in\mathcal{I},$ are imposed.
-\MSRY{inequality constraints of input constraints인데 괜찮을까요? 제가 의도한건 inequality constraints of weight boundedness and input saturation이긴했습니다.}
+In the optimization problem, inequality constraints of weight boundedness $c^{\theta}_i(\estwth_i),\ \forall i\in\mathcal{K},$ and input \DIFdelbegin \DIFdel{saturation }\DIFdelend \DIFaddbegin \DIFadd{constraints }\DIFaddend $c^{u}_j(\estwth),\ \forall j\in\mathcal{I},$ are imposed.
+\DIFaddbegin \MSRY{inequality constraints of input constraints인데 괜찮을까요? 제가 의도한건 inequality constraints of weight boundedness and input saturation이긴했습니다.}
+\DIFaddend 
 
 Specifically, the input constraints used in \eqref{eq:opt:prob:const2} are the same convex constraint functions that characterize the admissible input set in Assumption~\ref{assum:sat}.
 With a slight abuse of notation, the composed input constraints are denoted by
@@ -1213,8 +1266,8 @@ Consequently, the adaptation law in \eqref{eq:adap:th} becomes:
   \label{eq:adap:th:approx}
 \end{equation}
 
-Additionally, the adaptation laws \eqref{eq:adap} provides an optimality interpretation at equilibrium.
-At an equilibrium of \eqref{eq:adap}, where $\ddtt{\estwth}=\mv{0}$, $\ddtt\sigma_i=0$, and $\ddtt\lambda_j=0$, the resulting equilibrium conditions correspond to KKT conditions, \ie $\pptfrac{L}{\estwth}=0$, $c^{\theta}_i,c^{u}_j \le 0$, $\sigma_i,\lambda_j \ge 0$, and $\sigma_i c^{\theta}_i=0$, and $\lambda_j c^{u}_j=0,\ \forall i\in\mathcal{K},j\in\mathcal{I}$.
+Additionally, the adaptation \DIFdelbegin \DIFdel{law \eqref{eq:adap:th} }\DIFdelend \DIFaddbegin \DIFadd{laws \eqref{eq:adap} }\DIFaddend provides an optimality interpretation at equilibrium.
+At an equilibrium of \DIFdelbegin \DIFdel{the adaptation laws }\DIFdelend \eqref{eq:adap}, where \DIFdelbegin \DIFdel{$\ddtt{\estwth}=0$}\DIFdelend \DIFaddbegin \DIFadd{$\ddtt{\estwth}=\mv{0}$}\DIFaddend , $\ddtt\sigma_i=0$, and $\ddtt\lambda_j=0$, the resulting equilibrium conditions correspond to KKT\DIFdelbegin \DIFdel{-like}\DIFdelend  conditions, \ie \DIFdelbegin \DIFdel{$\pptfrac{L}{\estwth}\approx0$}\DIFdelend \DIFaddbegin \DIFadd{$\pptfrac{L}{\estwth}=0$}\DIFaddend , $c^{\theta}_i,c^{u}_j \le 0$, $\sigma_i,\lambda_j \ge 0$, and $\sigma_i c^{\theta}_i=0$, and $\lambda_j c^{u}_j=0,\ \forall i\in\mathcal{K},j\in\mathcal{I}$.
 Thus, the equilibria characterize candidates for locally optimal solutions of the formulated constrained adaptation problem.
 
 % \begin{remark}[Verification of Approximated Adaptation Law]
@@ -1254,7 +1307,7 @@ Thus, the equilibria characterize candidates for locally optimal solutions of th
 
       \STATE Compute $\pptfrac{\NN}{\estwth^{(r)}}$ as defined in \eqref{eq:gradient:phi}
       \STATE Compute $c^{\theta}_i,c^{u}_j$ and $\pptfrac{c^{u}_{j}}{\estwth^{(r)}}$ for all $i\in\mathcal{K}, j\in\mathcal{I}$
-      
+
       \STATE Update $\estwth^{(r+1)}$, $\sigma_i^{(r+1)},\ \forall i\in\mathcal{K}$, and $\lambda_j^{(r+1)},\ \forall j\in\mathcal{I}$ using \eqref{eq:adap:th:approx}, \eqref{eq:adap:sig}, and \eqref{eq:adap:lbd}, respectively.
     \ENDFOR
   \end{algorithmic}
@@ -1460,8 +1513,8 @@ $
 $ and $\sigma_k^o\in\R_{>0}$ will be determined later.
 The Lyapunov function $V_k:=V_k(\mv{z}_k)$ is lower bounded and radially unbounded with respect to $\mv{z}_k$.
 In the following analysis, we consider the case where the output layer weight constraint is violated, \ie $c_k^{\theta}(\estwth_k)>0$.
-% If this condition does not hold, then $c_k^{\theta}(\estwth_k)\le0$ implies $\norm{\estwth_k}\le\overline{\theta}_k$, and the boundedness of $\estwth_k$ follows directly.
-This is because the boundedness of $\estwth_k$ directly follows when the output layer weight constraint is not violated, \ie $c_k^{\theta}(\estwth_k)\le0$.
+\DIFdelbegin \DIFdel{If this condition does not hold, then $c_k^{\theta}(\estwth_k)\le0$ implies $\norm{\estwth_k}\le\overline{\theta}_k$, and }\DIFdelend %DIF >  If this condition does not hold, then $c_k^{\theta}(\estwth_k)\le0$ implies $\norm{\estwth_k}\le\overline{\theta}_k$, and the boundedness of $\estwth_k$ follows directly.
+\DIFaddbegin \DIFadd{This is because }\DIFaddend the boundedness of $\estwth_k$ \DIFdelbegin \DIFdel{follows directly }\DIFdelend \DIFaddbegin \DIFadd{directly follows when the output layer weight constraint is not violated, }\ie \DIFadd{$c_k^{\theta}(\estwth_k)\le0$}\DIFaddend .
 
 The time derivative of $V_{k}$ can be analyzed as follows:
 \begin{align} \label{eq:Vk:dot:1} \nonumber
@@ -2292,15 +2345,15 @@ In addition, among the structural methods, the auxiliary system-based NAC was in
         }
       }
     \\
-    & $\beta^{u}_{\overline{\tau}_2}=\beta^{u}_{\underline{\tau}_2}=1000$, $\beta^{u}_{\rbu}=100,$ & 
+    & $\beta^{u}_{\overline{\tau}_2}=\beta^{u}_{\underline{\tau}_2}=1000$, \DIFdelbeginFL \DIFdelFL{$\beta^{u}_{\rbu}=100$ }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{$\beta^{u}_{\rbu}=100,$ }\DIFaddendFL & 
     \\
     & 
-    $\overline{\theta}_i=15,\beta_i^\theta=1,\forall i\in\{0,1,2\}$,
-    & 
+    \DIFdelbeginFL \DIFdelFL{$\mm{P} = \mm{I}_2, \overline{\theta}_0=\overline{\theta}_1=\overline{\theta}_2=15$ }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{$\overline{\theta}_i=15,\beta_i^\theta=1,\forall i\in\{0,1,2\}$,
+    }\DIFaddendFL & 
     \\
     & 
-    $\mm{P} = \mm{I}_2$
-    &
+    \DIFdelbeginFL \DIFdelFL{$\beta^{\theta}_0=\beta^{\theta}_1=\beta^{\theta}_2=1$ }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{$\mm{P} = \mm{I}_2$
+    }\DIFaddendFL &
     \\
   \hline
     \multirow{3}{*}{
@@ -2311,22 +2364,40 @@ In addition, among the structural methods, the auxiliary system-based NAC was in
       }
     }& Proposed CONAC (smaller $\beta_j$) &  
     \\
-    & $\beta^{u}_{\overline{\tau}_2}=\beta^{u}_{\underline{\tau}_2}=50$, $\beta^{u}_{\rbu}=10,$ & same as (C$_1$) 
+    & $\beta^{u}_{\overline{\tau}_2}=\beta^{u}_{\underline{\tau}_2}=50$, \DIFdelbeginFL \DIFdelFL{$\beta^{u}_{\rbu}=10$ }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{$\beta^{u}_{\rbu}=10,$ }\DIFaddendFL & same as (C$_1$) 
     \\ 
     & Others: same as (C$_1$) & 
     \\
 \hline
-    \multirow{5}{*}{
+    \DIFdelbeginFL %DIFDELCMD < \multirow{4}{*}{
+%DIFDELCMD <       \shortstack{  
+%DIFDELCMD <       (C$_3$)
+%DIFDELCMD <       \\
+%DIFDELCMD <       \protect\colorLine{magenta}{solid}
+%DIFDELCMD <       }
+%DIFDELCMD <     }
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \multirow{5}{*}{
       \shortstack{  
       (C$_3$)
       \\
       \protect\colorLine{magenta}{solid}
       }
     }
-    & 
+    \DIFaddendFL & 
       NAC with auxiliary system 
     &
-      \multirow{5}{*}{
+      \DIFdelbeginFL %DIFDELCMD < \multirow{4}{*}{
+%DIFDELCMD <         \shortstack[l]{  
+%DIFDELCMD <         $-\overline{\tau}_1 \le \tau_1 \le \overline{\tau}_1$,
+%DIFDELCMD <         \\
+%DIFDELCMD <         $-\overline{\tau}_2 \le \tau_2 \le \overline{\tau}_2$, 
+%DIFDELCMD <         \\
+%DIFDELCMD <         ($\overline{\tau}_1=10.32, \overline{\tau}_2=3.8$)
+%DIFDELCMD <         }
+%DIFDELCMD <       }
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \multirow{5}{*}{
         \shortstack[l]{  
         $-\overline{\tau}_1 \le \tau_1 \le \overline{\tau}_1$,
         \\
@@ -2335,7 +2406,7 @@ In addition, among the structural methods, the auxiliary system-based NAC was in
         ($\overline{\tau}_1=10.32, \overline{\tau}_2=3.8$)
         }
       }
-    \\
+    \DIFaddendFL \\
     & 
     \cite{Rezaei:2025aa,Liu:2025aa,Yu:2022aa} 
     & 
@@ -2345,13 +2416,14 @@ In addition, among the structural methods, the auxiliary system-based NAC was in
     & 
     \\
     & 
-    $\mm{B}_{\zeta} = \mydiag(5\times10^3,5\times10^3),$ 
-    &
+    \DIFdelbeginFL \DIFdelFL{$\mm{B}_{\zeta} = \mydiag(5\times10^3,5\times10^3)$ 
+    }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{$\mm{B}_{\zeta} = \mydiag(5\times10^3,5\times10^3),$ 
+    }\DIFaddendFL &
     \\
-    &
-    $\overline{\theta}_i=15,\beta_i^\theta=1,\forall i\in\{0,1,2\}$
-    \\
-  \hline
+    \DIFaddbeginFL &
+    \DIFaddFL{$\overline{\theta}_i=15,\beta_i^\theta=1,\forall i\in\{0,1,2\}$
+    }\\
+  \DIFaddendFL \hline
     \multirow{2}{*}{
     \shortstack{  
       (C$_4$) 
@@ -2370,13 +2442,18 @@ In addition, among the structural methods, the auxiliary system-based NAC was in
     }
     \\
     \multicolumn{3}{m{8.1cm}}{
+      \DIFdelbeginFL \DIFdelFL{$
+        l_0=6,l_1=4,l_2=4,l_3=2,
+        \alpha=0.2,
+        \estwth(0)\sim\mathcal{U}\bigl([-0.5,0.5]^{\Xi}\bigr)
       $
+    }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{$
         l_0=6,l_1=4,l_2=4,l_3=2,
         \alpha=0.2,
         \estwth(0)\sim\mathcal{U}\bigl([-0.5,0.5]^{\Xi}\bigr)
         ,
       $
-    }
+    }\DIFaddendFL }
     \\
     \multicolumn{3}{m{8.1cm}}{
       $\NNin = 
@@ -2420,8 +2497,8 @@ All other properties and parameters were kept identical to those of (C$_1$).
 
 As a baseline for comparison in handling input constraints, the auxiliary system used in \cite{Rezaei:2025aa,Liu:2025aa,Yu:2022aa} was adopted.
 % Gao:2017aa,Esfandiari:2014aa,Esfandiari:2015aa,Liu:2024aa,Liu:2025aa,Yu:2022aa,Rezaei:2025aa
-It should be noted that the auxiliary system is limited to handling only the element-wise input bound constraints.
-The auxiliary system is defined by 
+\DIFaddbegin \DIFadd{It should be noted that the auxiliary system is limited to handling only the element-wise input bound constraints.
+}\DIFaddend The auxiliary system is defined by 
 \begin{equation}
   \ddtt \mv{\zeta} 
   =
@@ -2661,7 +2738,7 @@ This result confirms the trade-off discussed in Remark~\ref{rem:tuning}.
 
 Additionally, the nearly constant value of $\lambda_{\overline{\tau}}$ in Fig.~\ref{fig:ctrl:result:detail:multipliers} and the small oscillations of $c_{\overline{\tau}}^u$ in Fig.~\ref{fig:ctrl:result:detail:u:top:view} of (C$_2$) suggest that the adaptation dynamics remain near an equilibrium characterized by a nonzero Lagrange multiplier.
 This behavior is qualitatively consistent with the KKT-like optimality conditions discussed in Section~\ref{sec:main:result:sub:adap:laws}, according to which, at an equilibrium, the positive Lagrange multiplier $\lambda_{\overline{\tau}}$ is associated with active constraint satisfying $c_{\overline{\tau}}^u=0$ through the complementary slackness relation $\lambda_{\overline{\tau}}c_{\overline{\tau}}^u=0$.
-Although the adaptation dynamics do not converge exactly to a stationary KKT equilibrium because of the practical limitations in the real-time implementation, the observed behavior can be interpreted as a near-equilibrium behavior.
+Although the adaptation dynamics do not converge exactly to a stationary KKT\DIFdelbegin \DIFdel{-like}\DIFdelend  equilibrium because of the practical limitations in the real-time implementation, the observed behavior can be interpreted as a near-equilibrium behavior.
 
 % --------------------------------------------
 % val. result: real-time feasibility
@@ -2684,7 +2761,10 @@ This is attributed to the fact that the proposed CONAC does not require solving 
 
 \subsection{Reproducibility and Video Demonstration}
 
-For reproducibility, the source code and the experimental data are available in \cite{Ryu2026Software}.
+For reproducibility, the source code and the experimental data are available \DIFdelbegin \DIFdel{at }%DIFDELCMD < \url{https://github.com/KAIST-MIC-Lab/CONAC}%%%
+\DIFdelend \DIFaddbegin \DIFadd{in \mbox{%DIFAUXCMD
+\cite{Ryu2026Software}}\hskip0pt%DIFAUXCMD
+}\DIFaddend .
 A supplementary video demonstrating the experimental results is provided with this paper.
 
 % ------------------------------------
@@ -2695,13 +2775,13 @@ A supplementary video demonstrating the experimental results is provided with th
 This paper proposed CONAC for unknown MIMO systems, addressing multiple convex input constraints within a unified constrained optimization framework. 
 The adaptation laws were derived from the constrained optimization problem, which was formulated to minimize the tracking error while satisfying the multiple convex input constraints.
 The stability of CONAC was analyzed using Lyapunov theory, demonstrating the boundedness of the tracking errors and adaptive variables, including the DNN weights and Lagrange multipliers.
-By deriving adaptation laws from the constrained optimization problem, CONAC ensured weight convergence in accordance with the KKT optimality conditions, thereby ensuring both stability and optimality.
+By deriving adaptation laws from the constrained optimization problem, CONAC ensured weight convergence in accordance with the KKT\DIFdelbegin \DIFdel{-like}\DIFdelend  optimality conditions, thereby ensuring both stability and optimality.
 
-Real-time implementation demonstrated the capability of CONAC in handling multiple convex input constraints simultaneously, while achieving superior tracking performance compared to other NAC methods.
-Moreover, the parametric study revealed the effect of the update rates of the Lagrange multipliers on the enforcement of input constraints.
+Real-time implementation demonstrated the \DIFdelbegin \DIFdel{flexibility }\DIFdelend \DIFaddbegin \DIFadd{capability }\DIFaddend of CONAC in handling multiple convex input constraints simultaneously, \DIFdelbegin \DIFdel{and }\DIFdelend \DIFaddbegin \DIFadd{while achieving superior tracking performance compared to other NAC methods.
+Moreover, the parametric study }\DIFaddend revealed the effect of the update rates of the Lagrange multipliers on the enforcement of input constraints.
 In addition, the experiments validated the feasibility of CONAC in real-time implementation.
 
-Future work may extend this approach to include constraints ons system states, and minimize the infinite horizon error cost, thereby further enhancing the capability and optimality of NAC systems within constrained optimization frameworks.
+Future work may extend this approach to include constraints ons system states, and minimize the infinite horizon error cost, thereby further enhancing the \DIFdelbegin \DIFdel{flexibility }\DIFdelend \DIFaddbegin \DIFadd{capability }\DIFaddend and optimality of NAC systems within constrained optimization frameworks.
 
 % -------------------------------------
 % Appendix
