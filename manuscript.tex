@@ -1,7 +1,7 @@
-\documentclass[letterpaper, journal, twoside]{IEEEtran}
+\documentclass[letterpaper, journal]{IEEEtran}
 
-\def\cmt{true} % true for comments, false for no comments
-\def\pub{false} % true for publication, false for draft
+\def\cmt{false} % true for comments, false for no comments
+\def\pub{true} % true for publication, false for draft
 \newcommand*{\template}{template} 
 \input{\template/preamble/preamble_journal.tex}
 \allowdisplaybreaks
@@ -77,18 +77,21 @@
   Constrained Optimization-Based Neuro-Adaptive Control (CONAC) for Unknown Systems Under Multiple Convex Input Constraints
 } %% Article title
 
-\author{
-  Myeongseok Ryu, Donghwa Hong, and Kyunghwan Choi
-\thanks{
-  Myeongseok Ryu, Donghwa Hong and Kyunghwan Choi are with the Cho Chun Shik Graduate School of Mobility, Korea Advanced Institute of Science and Technology (KAIST), Daejeon 34051, Korea (e-mail: \{dding\_98, fairytale, kh.choi\}@kaist.ac.kr).
+\author{}
+% \author{
+%   Myeongseok Ryu, Donghwa Hong, and Kyunghwan Choi
+% \thanks{
+%   Myeongseok Ryu, Donghwa Hong and Kyunghwan Choi are with the Cho Chun Shik Graduate School of Mobility, Korea Advanced Institute of Science and Technology (KAIST), Daejeon 34051, Korea (e-mail: \{dding\_98, fairytale, kh.choi\}@kaist.ac.kr).
   
-  This work was supported in part by a Korea Research Institute for Defense Technology planning and advancement (KRIT) grant funded by Korea government DAPA (Defense Acquisition Program Administration) (No. KRIT-CT-22-087, Synthetic Battlefield Environment based Integrated Combat Training Platform) and in part by the National Research Foundation of Korea (NRF) grant funded by the Korea government (MSIT) (RS-2025- 00554087). (Corresponding author: Kyunghwan Choi)
-  }}
+%   This work was supported in part by a Korea Research Institute for Defense Technology planning and advancement (KRIT) grant funded by Korea government DAPA (Defense Acquisition Program Administration) (No. KRIT-CT-22-087, Synthetic Battlefield Environment based Integrated Combat Training Platform) and in part by the National Research Foundation of Korea (NRF) grant funded by the Korea government (MSIT) (RS-2025- 00554087). (Corresponding author: Kyunghwan Choi)
+%   }}
 
 % \markboth{Journal of \LaTeX\ Class Files,~Vol.~18, No.~9, September~2020}%
 % {How to Use the IEEEtran \LaTeX \ Templates}
-\markboth{\cred{\textit{(Version \version)}} Submitted to IEEE Transactions on Systems, Man, and Cybernetics: Systems}%
-{\cred{\textit{(Version \version)}} Ryu \MakeLowercase{\textit{et al.}}: CONAC for Unknown Systems Under Multiple Convex Input Constraints}
+\markboth{Submitted to IEEE Transactions on Systems, Man, and Cybernetics: Systems}%
+{}
+% \markboth{\cred{\textit{(Version \version)}} Submitted to IEEE Transactions on Systems, Man, and Cybernetics: Systems}%
+% {\cred{\textit{(Version \version)}} Ryu \MakeLowercase{\textit{et al.}}: CONAC for Unknown Systems Under Multiple Convex Input Constraints}
 
 \maketitle
 
@@ -2719,24 +2722,24 @@ Future work may extend this approach to include constraints ons system states, a
 % Biography
 % ------------------------------------
 % \vspace{-10mm}
-\begin{IEEEbiography}[{
-    \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/msRyu.jpg}}]{Myeongseok Ryu}
-    received the B.S. degree in Mechanical Engineering from Incheon National University, South Korea, in 2023, and the M.S. degree in Mechanical Engineering from GIST, South Korea, in 2025. 
-    He is currently pursuing the Ph.D. degree in the Cho Chun Shik Graduate School of Mobility at Korea Advanced Institute of Science and Technology (KAIST), South Korea.
-    His research interests include neuro-adaptive control, online optimization, and contraction theory.
-    % \vspace{-10mm}
-\end{IEEEbiography}
+% \begin{IEEEbiography}[{
+%     \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/msRyu.jpg}}]{Myeongseok Ryu}
+%     received the B.S. degree in Mechanical Engineering from Incheon National University, South Korea, in 2023, and the M.S. degree in Mechanical Engineering from GIST, South Korea, in 2025. 
+%     He is currently pursuing the Ph.D. degree in the Cho Chun Shik Graduate School of Mobility at Korea Advanced Institute of Science and Technology (KAIST), South Korea.
+%     His research interests include neuro-adaptive control, online optimization, and contraction theory.
+%     % \vspace{-10mm}
+% \end{IEEEbiography}
 
-\begin{IEEEbiography}[{
+% \begin{IEEEbiography}[{
 
-\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/dhHong.jpg}}]{Donghwa Hong}
-    received his B.S. degree in Physics and Engineering Physics from Yonsei University, Wonju, South Korea, in 2023, and the M.S. degree in Mechanical and Robotics Engineering from GIST, Gwangju, South Korea, in 2026. Following his M.S., he is working in the Cho Chun Shik Graduate School of Mobility at KAIST as a researcher. His research interests include online learning and model identification. 
-    % \vspace{-10mm}
-\end{IEEEbiography}
+% \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/dhHong.jpg}}]{Donghwa Hong}
+%     received his B.S. degree in Physics and Engineering Physics from Yonsei University, Wonju, South Korea, in 2023, and the M.S. degree in Mechanical and Robotics Engineering from GIST, Gwangju, South Korea, in 2026. Following his M.S., he is working in the Cho Chun Shik Graduate School of Mobility at KAIST as a researcher. His research interests include online learning and model identification. 
+%     % \vspace{-10mm}
+% \end{IEEEbiography}
 
-\begin{IEEEbiography}[{
-    \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/khChoi.jpg}}]{Kyunghwan Choi}
-    received his B.S., M.S., and Ph.D. degrees in Mechanical Engineering from KAIST, Daejeon, South Korea, in 2014, 2016, and 2020, respectively. Following his Ph.D., he worked at the Center for Eco-Friendly \& Smart Vehicles at KAIST as a Postdoctoral Fellow and later as a Research Assistant Professor. In 2022, he joined GIST as an Assistant Professor in the Department of Mechanical and Robotics Engineering. Currently, he serves as an Assistant Professor at the Cho Chun Shik Graduate School of Mobility at KAIST, where he is also the Director of the Mobility Intelligence and Control Laboratory. His research focuses on optimal and learning-based control for connected, automated, and electrified vehicles (CAEVs).
-\end{IEEEbiography}
+% \begin{IEEEbiography}[{
+%     \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\template/people/khChoi.jpg}}]{Kyunghwan Choi}
+%     received his B.S., M.S., and Ph.D. degrees in Mechanical Engineering from KAIST, Daejeon, South Korea, in 2014, 2016, and 2020, respectively. Following his Ph.D., he worked at the Center for Eco-Friendly \& Smart Vehicles at KAIST as a Postdoctoral Fellow and later as a Research Assistant Professor. In 2022, he joined GIST as an Assistant Professor in the Department of Mechanical and Robotics Engineering. Currently, he serves as an Assistant Professor at the Cho Chun Shik Graduate School of Mobility at KAIST, where he is also the Director of the Mobility Intelligence and Control Laboratory. His research focuses on optimal and learning-based control for connected, automated, and electrified vehicles (CAEVs).
+% \end{IEEEbiography}
 
 \end{document}
