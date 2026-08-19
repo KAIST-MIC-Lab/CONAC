@@ -73,6 +73,8 @@ Response to the second reviewer
 
 The `generalcomment` environment is meant for general comments given by the
 editor and reviewers.
+You can also set a custom title with an optional argument, for example
+`\begin{generalcomment}[Editor Summary]`.
 
 
 
