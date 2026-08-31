@@ -16,8 +16,12 @@
 %\usepackage[scaled]{beramono} % different monospace font
 
 % Keep KOMA-Script headings in the same serif family as the body text.
-\setkomafont{section}{\normalfont\bfseries}
-\setkomafont{subsection}{\normalfont\bfseries}
+\setkomafont{section}{\rmfamily\bfseries}
+\setkomafont{subsection}{\rmfamily\bfseries}
+
+%% math
+\usepackage{amsmath,amsfonts}
+\usepackage{amssymb}
 
 %%
 \usepackage{xcolor}
@@ -30,6 +34,14 @@
 \usepackage{kotex}
 
 \usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,  % false: boxed links; true: colored links
+  linkcolor=black,  % color of internal links (change box color with linkbordercolor)
+  citecolor=black,  % color of links to bibliography
+  filecolor=black,  % color of file links
+  urlcolor=black,   % color of external links
+  backref=page,     % add a backlink in the bibliography
+}
 \usepackage{cleveref}
 
 
@@ -80,8 +92,11 @@
   }
 }
 \author{
-	Myeongseok Ryu, Donghwa Hong, and Kyunghwan Choi
+	\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 }
+% \author{
+% 	Myeongseok Ryu, Donghwa Hong, and Kyunghwan Choi
+% }
 \journal{
 	IEEE Transactions on Systems, Man and Cybernetics: Systems
 }
@@ -115,7 +130,7 @@
 
 \begin{revresponse}[]
   We appreciate the Editor's candid assessment of our previous submission. 
-  We took this overall concern seriously and undertook a comprehensive revision of the manuscript, as summarized in the overview of major changes below.
+  We took this overall concern seriously and undertook a comprehensive revision of the manuscript, as summarized in the \textbf{Overview of Major Changes} below.
   We believe that these revisions have substantially strengthened the technical rigor, significance, and presentation of the manuscript.
 
   \vspace{1.2em}
@@ -124,17 +139,37 @@
 
   According to the reviewers' comments, we have checked our manuscript and addressed them in the following way:
   \begin{enumerate}
+
     \item \textbf{Title and contribution clarification:} 
-      The main contributions of the paper have been clarified as multiple convex input constraints instead of weight and input constraints.
-      Target system is generalized from unknown Euler-Lagrange systems to unknown systems.
+      The main contributions of the paper have been clarified as the capability to handle multiple convex input constraints instead of weight and input constraints.
+      Moreover, target system is generalized from unknown Euler-Lagrange systems to unknown systems.
+      According to these changes, the title of the manuscript has been revised to clearly reflect the content and scope of the paper.
+
     \item \textbf{Literature review and comparison:} 
-      We have added a more detailed literature review and comparison with existing methods to highlight the novelty and significance of our proposed approach.
+      We have added a more detailed literature review to enhance the presentation of the challenges and gaps addressed by the proposed method.
+      In addition, we have discussed the selection of comparative methods in the validation section.
+      % Particularly, literature has been categorized in Table I in the revised manuscript, to clearly show the advantages and limitations of the existing methods and the novelty of the proposed method, as shown below:
+      % \begin{center}
+      %   \centering
+      %   \includegraphics[width=0.99\linewidth]{figs/e_1.png}
+      % \end{center}
+
+      % Moreover, to demonstrate the effectiveness of the proposed method, we discussed the selection of comparative methods in Lines 670-681 of the revised manuscript as shown below:
+      % \begin{center}
+      %   \centering
+      %   \includegraphics[width=0.65\linewidth]{figs/e_2.png}
+      % \end{center}
+      % According to the discussion, we have selected the NAC without input constraint handling and the auxiliary system-based NAC as comparative methods, which is representative structural methods in the NAC literature.
+
     \item \textbf{Rigorous stability analysis:} 
       We have improved and clarified the stability analysis, providing conditions for the stability of the proposed method.
+
     \item \textbf{Additional remarks on initialization and tuning:} 
       We have added additional remarks to explain recommendations for initialization and tuning of the proposed method.
+
     \item \textbf{Notation improvements:} 
       We have improved the notation throughout the manuscript to enhance clarity and consistency.
+
   \end{enumerate}
 
 \end{revresponse}
@@ -153,20 +188,69 @@
 % 명확한 기여 주장 - 기존 방법에 비해 어떤 점이 개선되었나
 % 추가로 이전 나의 논문과의 차별정
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[1]{}
+\begin{revcomment}[1][1]{}
 	The main contribution lacks clarity. The paper claims to handle both weight and input constraints simultaneously, but it fails to explain why this is necessary or how it improves upon existing constrained adaptive control methods (e.g., barrier Lyapunov functions, projection algorithms). The novelty over the authors’ prior work \cite{Ryu:2025aa}, \cite{Ryu:2025ab} is not sufficiently justified.
 \end{revcomment}
 
 \begin{revresponse}
   We concur with the reviewer that the main contribution of the paper was not clearly articulated in the previous submission. 
   In the previous version, the contribution was stated as handling both weight and convex input constraints simultaneously in a unified constrained optimization framework.
-  However, we acknowledge that, over the previous stated contribution, the significance of the proposed method is to incorporate multiple convex input constraints into the neuro-adaptive control framework, which typically only considers the element-wise input constraints.
-  We provide a comparative illustration of the typical element-wise input constraints and the proposed multiple convex input constraints in Fig.~1 of the revised manuscript, as shown below.
+  However, we acknowledge that, over the previous stated contribution, the significance of the proposed method is to incorporate multiple convex input constraints into the NAC framework, which typically considers only the element-wise input constraints, as compared in Fig.~1 of the revised manuscript.
 
-  \begin{figure}[t]
+  \begin{center}
     \centering
-    \includegraphics[width=0.85\linewidth]{figs/r1c1_1.png}
-  \end{figure}
+    \includegraphics[width=0.65\linewidth]{figs/r1c1_1.png}
+  \end{center}
+
+  Moreover, to clarify the novelty of the proposed method, we have categorized the existing input-constraint handling approaches into two methods: Structural Methods and Optimization-Based Methods in Introduction section, as shown in Table~I.
+  \begin{center}
+    \centering
+    \includegraphics[width=0.99\linewidth]{figs/r1c1_2.png}
+    % \smallskip
+    % {\small\itshape Excerpt from the revised manuscript: Table I.}
+  \end{center}
+  The pros and cons of each method are discussed, and the novelty of the proposed method is clearly stated as follows:
+  \begin{itemize}
+
+    \item 
+      Rigorous stability analysis using Lyapunov-friendly structure like structural methods.
+
+    \item 
+      Capability to handle multiple convex input constraints simultaneously, which is not possible with existing structural methods.
+
+    \item 
+      Continuous adaptation without requiring numerical solver, resulting in typically low computational burden.
+
+  \end{itemize}
+  
+  \bigskip
+
+  Specifically, since our main focus is on the input saturation problem, barrier lyapunov function (BLF)-based methods are not considered in the comparison.
+  In the literature, BLF-based methods are typically used to handle state constraints, and incorporate the structural methods such as auxiliary system or smooth approximation methods to handle input constraints, as well.
+  Moreover, projection methods were not included in the comparison because the input-feasible set induced in the full DNN-weight space is generally highly nonlinear owing to the nonlinear dependence of the DNN output on its hidden-layer weights.
+  Consequently, the projection methods are not typically employed in the NAC literature, and the comparison with the projection methods is not straightforward.
+
+  \bigskip
+
+  The justification of the novelty over our prior work \cite{Ryu:2025aa}, \cite{Ryu:2025ab} is also clarified in lines 200-210 of the revised manuscript, as follows:
+  \begin{itemize}
+    \item 
+      The input constraints considered in the previous work \cite{Ryu:2025aa} were limited to norm constraints, which are a specific type of convex constraint.
+      In contrast, the revised manuscript generalized the input constraints to multiple convex constraints, which can represent a wider range of practical saturations on the control input.
+
+    \item 
+      Previously, the validations were conducted only on numerical simulations.
+      In the revised manuscript, we have conducted real-time experimental validations on a 2-link robotic manipulator system, which demonstrates the applicability in real-world scenarios.
+
+    \item 
+      Due to the high mathematical complexity of the DNN, the previous work \cite{Ryu:2025aa}, \cite{Ryu:2025ab} employed a single hidden layer NN, while the revised manuscript employs DNN with multiple hidden layers.
+      Moreover, the rigorous stability analysis has been extended to accommodate the DNN structure.
+      
+  \end{itemize}
+
+  \vspace{1.2em}
+
+  We hope that these revisions provide a clearer and more focused presentation of the contributions and novelty of our work.
 
 \end{revresponse}
 
@@ -175,36 +259,54 @@
 %
 % Lagrange multiplier의 수렴성 혹은 boundedness에 대한 분석이 필요함
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[1]{}
+\begin{revcomment}[1][1]{}
 	The adaptation law (16a) relies on Lagrange multipliers generated from constraints, yet the convergence analysis does not establish whether the multipliers remain bounded or converge to optimal values. Without such guarantees, the claim of "bounded DNN weights" is incomplete and potentially misleading.
 \end{revcomment}
 
 \begin{revresponse}
-	We 
+	We appreciate the reviewer's comment regarding the boundedness of the Lagrange multipliers in the adaptation law (16a). 
+  In the revised manuscript, we have re-conducted the stability analysis and provided a rigorous proof of the boundedness of system in Section~IV of the revised manuscript.
+
+  Specifically, the Lyapunov function of output-layer $V_k$ and inner-layer $V_i,\ \forall i\in\{0,\dots,k-1\}$ are defined using tracking errors and adaptive variables including the Lagrange multipliers, as shown below:
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r1c2_1.png}
+    \includegraphics[width=0.55\linewidth]{figs/r1c2_2.png}
+  \end{center}
+  where $V_c$ is Lyapunov function regarding the tracking error, and $\sigma_i,\ \forall i\in\{0,\dots,k-1\},$ are Lagrange multipliers for weight boundedness constraints and $\lambda_j,\ \forall j\in\mathcal{I},$ are Lagrange multipliers for input constraints, with $\mathcal{I}$ being the index set of the input constraints.
+
+  \bigskip
+
+  In the stability analysis, we show that the tracking error and the adaptive variables, including the DNN weights and Lagrange multipliers, are bounded under the proposed adaptation laws, depending on the initial conditions.
+  However, we acknowledge that the exact stable initial conditions for the control system are not explicitly stated, since some unknown constants are involved in the stability analysis.
+  Therefore, we have added Remark~2 in the end of Section~IV to provide additional guidance on the initialization of the control system, encouraging the use of small initial values for the adaptive variables to ensure boundedness and stability, as shown below:
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r1c2_3.png}
+  \end{center}
+
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Reviewer 1 Comment 3
 % 
 % LICQ 조건 엄밀한 증명
-% DNN gradient derivation 엄밀한 증명
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[2]{}
+\begin{revcomment}[2][1]{}
 	Equation (35) and the linear independence claim in the paragraph below require verification. The gradient expressions appear inconsistent with standard chain-rule derivation for DNNs. A rigorous derivation must be provided to ensure correctness.
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item 추천된 제약조건들의 선형독립성에 대한 엄밀한 증명 추가.
-		\item 사실 필수적이지 않아서 제거하는 것도 고려 가능.
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+  We appreciate the reviewer's comment regarding the verification of the linear independence claim and the gradient expressions of the input constraint.
+  
+  In the revised manuscript, we analyzed the linear independence of the gradient of the considered input constraints, and provided the detailed proof in Lines 640-647, as shown below:
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r1c3_1.png}
+  \end{center}
+
+  We hope this addresses the reviewer's concern regarding the correctness of the gradient expressions and the linear independence claim.
+  
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -212,21 +314,34 @@
 % 
 % 비교군이 다 저자의 것
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[1]{}
+\begin{revcomment}[1][1]{}
 	The simulation and experiment compare only four controllers, all designed by the authors. No comparison with established neuro-adaptive or model predictive control methods under the same constraints is included. This undermines the claimed superiority of CONAC.
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item \cref{rev:r1c4}에서 언급한 BLF, Proj. alg. 와 여기서 추천된 Neuro-adaptive MPC를 추가 비교 대상으로 선정.
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+	% 실제로는 이전 논문도 다른 것들과 비교한 것
+  % 하지만 비교 하는게 전체가 아닌 부가적인 장치 느낌이라 내꺼에 적용한 것임
+  % 관련된 선정 내용은 첨부됨
+  % 특별히, 다른 MPC와 관련된 기법은 unknown system인 점과 MCU에 적용한 점에서 비교가 어려움
+  
+  We appreciate the reviewer's comment regarding the comparative study in the previous submission.
+
+  In the revised manuscript, we clearly state the rationale for the selection of the comparative methods in Lines 670-681 of Section~V.A, as follows:
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r1c4_1.png}
+  \end{center}
+  As shown above, since the main focus of the proposed method is input constraint handling in NAC, we chosen baseline methods among the structural methods, not optimization-based methods including MPC and CBF.
+  It should be noted that, the optimization-based methods typically require the knowledge of the system dynamics and relatively high computational burden, which makes them less suitable for application to unknown systems or real-time implementation with limited computational resources, such as the MCU used in our experimental setup.
+
+  Specifically, the auxiliary system from \cite{Rezaei:2025aa,Liu:2025aa,Yu:2022aa} is selected rather than smooth approximation methods, since the auxiliary system is reported to be better in terms of tracking performance \cite{Min:2021aa}.
+  To show the importance of input constraint handling, NAC without input constraint handling is also included in the comparison from \cite{Patil:2022aa}.
+  The selected controllers are listed in Table~III of the revised manuscript, as shown below:
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r1c4_2.png}
+  \end{center}
+
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -234,22 +349,17 @@
 % 
 % Notation 및 문법 오류
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[3]{}
+\begin{revcomment}[3][1]{}
 	The manuscript contains notation inconsistencies and grammatical errors that hinder readability. A thorough revision for technical accuracy and language quality is required.
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item 전반적인 오타 및 문법 오류 수정.
-		\item 수식 표기법 통일.
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+	We thank the reviewer for pointing out the notation inconsistencies and grammatical errors. 
+  We have carefully revised the manuscript to correct these issues, ensuring that the notation is consistent throughout and that the language is clear and precise.
+  
+  For example, the Lagrange multiplier notation has been distinguished between weight boundedness constraints and input constraints, as $\sigma_i$ and $\lambda_j$, respectively, to avoid confusion.
+  In addition, for consistency, the update rate of the Lagrange multipliers and constraints have been defined in the same manner for both types of constraints, but with different superscripts to indicate their respective roles, as $\beta_i^\theta, c_i^\theta$ for weight boundedness constraints and $\beta_j^u, c_j^u$ for input constraints, respectively.
+
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -257,6 +367,7 @@
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{concludingresponse}[]
 	Thank you for your valuable comments on our manuscript. 
+  Through your comments, the manuscript has been substantially improved in terms of clarity, technical rigor, and presentation.
 \end{concludingresponse}
 
 % ══════════════════════════════════
@@ -273,22 +384,25 @@
 % Introduction이 너무 얕음. 
 % 기존연구의 어려움과 그 간극을 제안방법으로 줄이는 내용으로
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[1]{}
+\begin{revcomment}[1][1]{}
 	The introduction needs to be enhanced. Although the authors have incorporated much literature, the writing is superficial. It is important to demonstrate the challenge of the research investigated and the gap closed by the proposed work.
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item Reviewer 1의 코멘트와 유사하게 기존연구, BLF, Proj. alg. 등과의 차별성 및 장점을 구체적으로 설명.
-		\item 기존 연구들의 한계점 및 문제점들을 명확히 제시.
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+	We agree with the reviewer that the introduction in the previous submission was not sufficiently detailed to clearly convey the challenges and gaps addressed by the proposed work. 
+  As we mentioned in \textbf{Overview of Major Changes}, we have revised the title of the manuscript to clearly reflect the main contribution of the proposed method, which is the capability to handle multiple convex input constraints in the NAC framework.
+
+  \bigskip
+
+  Considering this change, the literature review in the introduction has been expanded to provide a more comprehensive overview of the existing methods for input constraint handling in NAC and general constrained control methods.
+  In particular, we have surveyed the advantages and limitations of the existing methods, and clearly stated the research gap that the proposed method addresses, as shown below:
+  \begin{center}
+    \centering
+    \includegraphics[width=0.99\linewidth]{figs/r2c1_1.png}
+  \end{center}
+  As summarized in Table~I of the revised manuscript, the existing methods have limitations in terms of the types of input constraints they can handle, the computational burden, and the stability guarantees.
+  We have clearly stated that the proposed method addresses these limitations by providing a unified framework that can handle multiple convex input constraints with rigorous stability guarantees and low computational burden.
+
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -296,24 +410,26 @@
 % 
 % 제안 방법의 장단점 조사
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[1]{}
+\begin{revcomment}[1][1]{}
 	The authors should survey more about the advantages and disadvantages of the proposed algorithm.
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item Reviewer 1의 코멘트와 유사하게 기존연구를 추가 비교하며 장단점 비교.
-		\item 추가로 실험을 더 가혹하게 할 필요성이 있음.
-		\item \cred{soft constraint, 2nd system}
-		\item \cred{한계는 결론에서 해주기}
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+	We appreciate the reviewer's comment regarding absence of discussion on the advantages and disadvantages of the proposed method in the previous submission.
+  In a subsection of validation section of the revised manuscript, we discussed about the advantages and limitations of the proposed method, as shown below:
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r2c2_1.png}
+  \end{center}
+
+  We are aware of that even proposed method had demonstrated its capability to handle multiple convex input constraints through the real-time implementation, it is only able to handle the constraints in a soft manner, meaning that the constraints may be violated during the adaptation process.
+  Therefore, we mentioned that extending our approach to tackle hard constraints to ensure safety, is very important.
+  Currently, many methods to incorporate hard constraints are being reviewed, and we are planning to incorporate them into the proposed method in the future, as stated in the conclusion section of the revised manuscript.
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r2c2_2.png}
+  \end{center}
+
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -321,46 +437,63 @@
 % 
 % DNN 가중치의 문제가 발생하는 이상적인 상황에 대한 분석 필요
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[2]{}
+\begin{revcomment}[2][1]{}
 	The authors must thoroughly examine the ideal circumstances for addressing the issue of DNN weights.
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item DNN이 발산하는 과정을 보여주는 것도 좋을 것으로 보임.
-		\item 추가로 기존의 방법으로 한계를 명확히 보여주는 것이 필요.
-		\begin{itemize}
-			\item Proj. 는 투영되는 순간부터 제어가 안되는거 보이기.
-			\item Modf. 는 편향되어 제어가 안되는거 확실히 보이기.
-		\end{itemize}
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We appre
+	We agree with that the requirements for the DNN weights to remain bounded were not clearly stated in the previous version.
+  In the validations of the revised manuscript, we have provided regarding analysis with the case of NAC without input constraint handling to demonstrate the importance of weight boundedness guarantees in the presence of input constraints.
+
+  \bigskip
+
+  Similarly to typical unconstrained control methods, the DNN weights (which can be considered as adaptive variables or integral errors) grows unboundedly when the input is saturated, as shown in Fig.~7 of the revised manuscript, which is presented below:
+  \begin{center}
+    \centering
+    \includegraphics[width=0.99\linewidth]{figs/r2c3_1.png}
+  \end{center}
+
+  In Fig.~7(f), the DNN weights of (C$_4$) which does not consider input constraints, grows unboundedly when the input is saturated, while the DNN weights of other controllers which consider input constraints, remains bounded.
+  This demonstrates the importance of weight boundedness guarantees in the presence of input constraints.
+
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Reviewer 2 Comment 4
 % 
-% 
+% Singularity 문제에 대한 분석 필요(?)
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[2]{}
+\begin{revcomment}[2][1]{}
 	In the designed control signal, there is no occurrence of singularity problem in the control signal.
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item 이건 무슨 의미인지 잘 모르겠음. 추가 설명 필요.
-		\item Null space 없을 텐데..
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+	We thank the reviewer's comment.
+  We are not entirely certain whether the reviewer intended to confirm that the actual control law or a function to be approximated by the DNN is free from singularities, or to request an additional analysis of a particular potential singularity.
+  
+  \bigskip
+
+  We have interpreted the comment as a request to clarify whether a singularity may occur in the proposed control signal or in the function to be approximated by the DNN.
+  Under this interpretation, we clarify that, since the DNN weights are bounded according to the stability analysis, the control signal is guaranteed to be bounded and free from singularities.
+  Furthermore, the function approximated did not involve any matrix inversion in the previous submission.
+  In the revised manuscript, the function actually contains a matrix inversion of the control effectiveness matrix $\boldsymbol{B}$, as shown below:
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r2c4_1.png}
+  \end{center}
+
+  \bigskip
+
+  However, by Assumption~2, the control effectiveness matrix $\boldsymbol{B}$ is guaranteed to be invertible, and therefore the function is well-defined and free from singularities.
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r2c4_2.png}
+  \end{center}
+
+  \bigskip
+
+  If the reviewer intended a different source or type of singularity, we would be grateful for further clarification regarding the specific equation or term of concern.
+
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -368,92 +501,130 @@
 % 
 % 오차 유계에 대한 엄밀한 분석
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[2]{}
+\begin{revcomment}[2][1]{}
 	The authors should perform a more comprehensive analysis concerning the evaluation of error bounds.
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item 이론적으로 error bound를 구하고 실험적으로도 확인할 수 있도록 노력.
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+  We agree with the reviewer that the error bounds required a more comprehensive analysis.
+  In the revised manuscript, we have derived compact ultimate-bound sets for the tracking error and the adaptive variables, including the DNN weights and Lagrange multipliers, as given in (28) and (33) of the revised manuscript.
+  We have also constructed the corresponding positively invariant sublevel sets in (29) and (34), based on which Theorem~1 establishes uniform ultimate boundedness.
+
+  \bigskip
+
+  The derived sets provide an analytical characterization of the ultimate bounds. However, their exact sizes cannot generally be evaluated numerically a priori because they depend on unknown quantities, including the bounds on the DNN approximation error and arbitrary constants from using Young's inequality.
+  We have explicitly clarified this limitation in the revised manuscript. 
+  Furthermore, we have added Remarks~2--4 to provide practical guidance on initialization, desired trajectory design, and parameter selection, which increases the likelihood that the initial condition requirements of the stability analysis are satisfied.
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Reviewer 2 Comment 6
 % 
-% 
+% 입력제약조건 한계에 도달할 때의 특성
+% Lyapunov 함수로 해석이 되는가?
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[1]{}
+\begin{revcomment}[1][1]{}
 	What will the control signal represent at the extremes of these bounds? It will correspond to the Lyapunov function. How does it prevent breaches of constraints?
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item 제약조건 (특별히 입력제약조건)에 도달하였을때 생성하는 제어 신호의 특성 분석 필요.
-		\item 단순히 투영시키는게 아닌 feasible한 제어신호를 생성하는지 확인 필요.
-		\item 이를 비교하기 위해서 MPC를 사용하는 것도 고려 가능.
-		\begin{itemize}
-			\item MPC는 모든 시스템을 알고있다고 가정하고 제약조건을 만족하는 최적 제어신호를 생성.
-		\end{itemize}
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+  We appreciate this observation.
+  As we mentioned in previous response regarding the advantages and limitations of the proposed method, it handles the constraints in a soft manner.
+  Therefore, since the DNN weights are adapted continuously, abrupt changes in the control signal are typically avoided, and the constraints will be eventually satisfied.
+
+  \bigskip
+
+  However, the control signal potentially exhibits high-frequency oscillations at the extremes of the bounds, as discussed in Remark~4 of the revised manuscript, according to the parameters of the adaptation laws, $\alpha$ and $\beta_i,\beta_j$.
+  This is because $\alpha$ determines the entire adaptation rate of the DNN weights, while the update rates of the Lagrange multipliers are directly related to the constraints handling, and therefore the control signal.
+  We provided a parametric study on the update rate of input norm constraint to investigate the effect of the update rate on the control signal.
+  In the study, we observed that a higher update rate of the Lagrange multipliers leads to more aggressive adaptation of the DNN weights to satisfy the constraints, which can result in high-frequency oscillations in the control signal at the extremes of the bounds, as shown in Figs.~9(b) and (c) of the revised manuscript, which is presented below:
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r2c6_1.png}
+  \end{center}
+  where (C$_1$) had the higher update rate of the Lagrange multiplier for the input norm constraint, than (C$_2$), and therefore (C$_1$) exhibited more high-frequency oscillations in the corresponding Lagrange multiplier and the control signal at the extremes of the bounds than (C$_2$).
+
+  \bigskip
+
+  In addition, the Lyapunov function is only used to prove the stability of the closed-loop system, therefore the analysis of control signal at the extremes of the bounds is not directly related to the Lyapunov function.
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Reviewer 2 Comment 7
+% 
+% 튜닝을 어떻게 했는지에 대하여
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[2]{}
-	It is important to clarify whether these values were tuned experimentally, optimized based on system characteristics, or derived analytically. A brief subsection or table detailing the parameter tuning methodology would improve reproducibility and technical transparency.
+\begin{revcomment}[2][1]{}
+	It is important to clarify whether these values were tuned experimentally, optimized based on system characteristics, or derived analytically. 
+  A brief subsection or table detailing the parameter tuning methodology would improve reproducibility and technical transparency.
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item 튜닝한 순서를 설명할 필요성 존재.
-		\item 최적화 기반으로 찾는건 너무 내용이 커질 것으로 보임.
-		\item 대략적으로: 1. DNN 구조 선정, 2. 제약조건 고려 없는 상태에서 gain 튜닝, 3. 제약조건 고려하면서 gain 재튜닝.
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+	We appreciate the reviewer's comment regarding the parameter tuning methodology.
+  As mentioned in the previous response, since there are some unknown constants in the analysis, the exact guidelines for the parameter tuning is difficult to provide.
+  However, we have provided practical guidance on the selection of the parameters and the DNNs architecture in the revised manuscript.
+
+  \bigskip
+
+  First, as a guidance of the tuning of the parameters including the adaptation gain $\alpha$ and the update rates $\beta_i,\beta_j$ of Lagrange multipliers, we have provided Remark~4 which is mentioned in the previous response.
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r2c7_1.png}
+  \end{center}
+  The remark provides practical guidance on the selection of the parameters, as follows:
+  \begin{itemize}
+    \item
+      Higher values of the parameters lead to faster adaptation of the DNN weights and satisfaction of the constraints, but may also result in high-frequency oscillations in the control signal at the extremes of the bounds.
+
+    \item
+      However, with lower values of the parameters, the adaptation of the DNN weights and satisfaction of the constraints may be slower.
+
+    \item
+      Therefore, the parameters should be selected to balance the trade-off between adaptation speed and control signal smoothness, considering the specific requirements of the application.
+
+  \end{itemize}
+
+  \bigskip
+
+  Additionally, in the revised manuscript, we have added a statement regarding the selection of the architecture of the DNNs in Line 727-729, as follows:
+  \begin{quotation}
+    "
+    Specifically, the architecture of the DNNs are empirically chosen considering the approximation capability and computational efficiency.
+    "
+  \end{quotation}
+  The resulted architecture of the DNNs are summarized in Table~III of the revised manuscript, as shown below (see, last row of Table~III):
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r2c7_2.png}
+  \end{center}
+  
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Reviewer 2 Comment 8
+% 
+% 초기값이 좋지 않을때의 반응
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[2]{}
+\begin{revcomment}[2][1]{}
 	To showcase the effective functioning of the proposed controller, it is essential to evaluate large initial conditions for the system.
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item 실험 환경을 다르게 하여 초기조건을 더 크게 설정하는 방안 고려.
-		\item 하지만, 고려해야할 점이 이 제어기는 신경망을 사용하기 떄문에 0 초기 오차에서 시작하여 작은 학습률로 여러번 시나리오를 반복하여 학습함.
-		\item 이것을 감안하여 설명할 필요성 존재.
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+
+  We appreciate the reviewer's comment regarding the evaluation under large initial conditions. 
+  We understand this comment as referring to a large initial tracking error. 
+  In the intended implementation of the proposed controller, the system is initialized at a stable equilibrium point, and the warm-up trajectory is designed to gradually excite the system around the equilibrium point, as described in Remark~3 of the revised manuscript.  
+  \begin{center}
+    \includegraphics[width=0.65\linewidth]{figs/r2c8_1.png}
+  \end{center}
+  Thus, the initial tracking error is kept small by design. 
+  This is because the DNN is not pre-trained, and therefore careful initial excitation is important for successful adaptation.
+  
+  \bigskip
+
+  Accordingly, we did not add an experiment involving an artificially large initial tracking error, since such a condition would not follow the prescribed initialization procedure of the proposed controller. 
+  We have clarified that this initialization and warm-up procedure constitutes an integral part of the proposed implementation. 
+
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -461,7 +632,7 @@
 % 
 % Suspension system에 적용해보기?
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[2]{}
+\begin{revcomment}[2][1]{}
 	The authors ought to elaborate further on the execution of the suspension system and the associated challenges.
 \end{revcomment}
 
@@ -469,6 +640,8 @@
 	We thank the reviewer for this comment. 
   However, we were unable to identify a suspension system or a corresponding discussion in either the previous or the resubmitted manuscript. 
   Our study focuses on a nonlinear multi-input multi-output (MIMO) system with same number of inputs and states, and 2-link robotic manipulator system was used in the real-time experimental validation.
+
+  \bigskip
   
   We therefore respectfully wonder whether this comment may refer to a different system or manuscript. 
   We would be grateful for further clarification regarding the specific aspect of our work that the reviewer intended to address.
@@ -476,29 +649,48 @@
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Reviewer 2 Comment 10
+% 
+% 천이구간에 대한 해석이 없다.
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[2]{}
+\begin{revcomment}[2][1]{}
 	The influence of state variable errors on the system's transient response is inadequately depicted.
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item 초기오차를 없이 제어하는 것이 기본이기 떄문에 추가적인 설명 필요.
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+  We thank the reviewer for this comment. 
+  We understand the "state variable errors" as referring to the state tracking errors and their evolution during online adaptation.
+
+  Because the proposed controller learns online over repeated executions of the same desired trajectory, its learning-dependent transient behavior was evaluated by comparing Episode~1 and Episode~2. 
+  In these episodes, the same desired trajectory was repeated while the adapted DNN weights were retained. 
+  This comparison illustrates how online adaptation influences the tracking response under the same reference conditions.
+
+  \begin{center}
+    \includegraphics[width=0.65\linewidth]{figs/r2c10_1.png}
+    \includegraphics[width=0.65\linewidth]{figs/r2c10_2.png}
+  \end{center}
+
+  As shown above, the tracking errors of the controllers except for (C$_4$) which does not consider input constraints, were substantially smaller in Episode~2 than in Episode~1. 
+  For a quantitative comparison, the root-mean-square (RMS) tracking errors in the two episodes are summarized in Fig.~8 of the revised manuscript, which is reproduced below.
+  \begin{center}
+    \includegraphics[width=0.65\linewidth]{figs/r2c10_3.png}
+  \end{center}
+
+  In particular, the proposed CONAC implementations, (C$_1$) and (C$_2$), achieved larger reductions in the RMS tracking errors than (C$_3$). 
+  This difference arises because CONAC directly incorporates the combined admissible input set into its adaptation process and can therefore utilize the available control authority more effectively. 
+  In contrast, the auxiliary-system design of (C$_3$) handles only element-wise input overflow and consequently exhibits more conservative control behavior.
+
+  We acknowledge that the comparison between Episode~1 and Episode~2 does not provide a complete classical transient-response characterization. 
+  Because the DNN weights evolve continuously and the desired trajectory is time-varying, conventional transient measures for a fixed closed-loop system, such as step-response overshoot and settling time, are not directly applicable. 
+  We therefore characterize the learning-dependent transient behavior through the tracking-error trajectories and RMS values over repeated executions.
+
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Concluding Response to Reviewer 2
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{concludingresponse}[]
-	Thank you for your valuable comments on our manuscript. 
+	We thank you for the valuable comments on our manuscript. 
+  The manuscript has been substantially improved in terms of clarity, additional guidance on parameter tuning, and presentation of the advantages and limitations of the proposed method.
 \end{concludingresponse}
 
 % ══════════════════════════════════
@@ -514,32 +706,31 @@
 % 
 % Convex saturation에 대한 명확한 정의
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[2]{}
+\begin{revcomment}[2][1]{}
 	In the control design, the design and improvement of convex input constraint do not provide a clear explanation. It is suggested to elaborate in detail from the perspectives of theoretical analysis and control implementation.
 \end{revcomment}
 
 \begin{revresponse}
 	We appreciate the reviewer's comment to clarify the definition of considered convex input constraints.
   In the view of theoretical analysis, we have added a more detailed explanation of the convex input constraints in Assumption~3 of the revised manuscript, as follows:
-
-  \begin{figure}[h]
+  \begin{center}
     \centering
     \includegraphics[width=0.65\linewidth]{figs/r3c1_1.png}
-  \end{figure}
+  \end{center}
 
   In Section~V of the revised manuscript, the convex input constraints which are imposed on the validation are specifically defined as follows:
-
-  \begin{figure}[h]
+  \begin{center}
     \centering
     \includegraphics[width=0.65\linewidth]{figs/r3c1_2.png}
-  \end{figure}
+  \end{center}
 
   Furthermore, the saturation function is illustrated in Fig.~5(b), as shown below:
-
-  \begin{figure}[h]
+  \begin{center}
     \centering
     \includegraphics[width=0.35\linewidth]{figs/r3c1_3.png}
-  \end{figure}
+  \end{center}
+
+  We hope this clarifies the definition of the considered convex input constraints and their implementation in the proposed control design.
 
 \end{revresponse}
 
@@ -549,21 +740,43 @@
 % Weight adaptation law에 대한 명확한 설명 
 % (이해를 위한)
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[2]{}
+\begin{revcomment}[2][1]{}
 	In the section of weight adaptation laws, the reviewer is unable to clearly understand the results of the optimization design process of this weight adaptive law.
 \end{revcomment}
 
-\begin{howtoanswer}
-	As we recognized the unclear and confusing notation in the previous manuscript, we have revised the notation and added a more detailed explanation of the weight adaptation law in Section~IV of the revised manuscript.
-  For example, 
-
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+  We appreciate the reviewer's comment regarding the clarity of the weight adaptation law.
+  We have added a more detailed explanation of the weight adaptation law in Section~III.C of the revised manuscript.
+
+  \bigskip
+
+  First, the tracking error minimization problem under the input constraints with bounded DNN weights is formulated as a constrained optimization problem, as shown below:
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r3c2_1.png}
+  \end{center}
+  Then, Lagrangian function is defined as follows:
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r3c2_2.png}
+  \end{center}
+
+  To solve the constrained optimization problem, the primal-dual problem is formulated using the Lagrangian function, as follows:
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r3c2_3.png}
+  \end{center}
+
+  Finally, the weight adaptation law is derived from the primal-dual problem, as shown below:
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r3c2_4.png}
+  \end{center}
+
+  \bigskip
+
+  We hope that this additional explanation clarifies the derivation and understanding of the weight adaptation law in the proposed control design.
+
 \end{revresponse}	
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -572,15 +785,16 @@
 % 논문 구성 및 논리적 흐름 개선 필요
 % (특별히 렘마와 가정)
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[3]{}
+\begin{revcomment}[3][1]{}
 	The organization and logic of the manuscript need to be further improved. For example, in the sections of II-IV, the assumptions and lemmas all exist. Such an organization really confuses me. This makes one feel that assumptions and preliminaries are readily available and can be applied at any time.
 \end{revcomment}
 
 \begin{revresponse}
 	We appreciate the reviewer's comment to improve the organization and logic of the manuscript.
   In the revised manuscript, we have reorganized the assumptions, preliminaries, and lemmas.
-  The assumptions in the revised manuscript reflect the necessary conditions for the system, and located in Section~II, while the preliminaries regarding DNN features are provided in Section~III.A.
-  All required lemmas for the stability analysis are presented in Section~IV with the corresponding proofs.
+  The assumptions in the revised manuscript reflect the necessary conditions for the system, and located in the problem formulation section (Section~II), while the preliminaries regarding DNN features are provided in the first section of the control design section (Section~III.A).
+  All required lemmas for the stability analysis are presented in the stability analysis section (Section~IV) with the corresponding proofs.
+
   We believe that this reorganization improves the clarity and logical flow of the manuscript, making it easier for readers to follow the theoretical development and understand the application of assumptions and lemmas in the context of the proposed control design.
 \end{revresponse}
 
@@ -589,21 +803,24 @@
 % 
 % 논문 기여가 너무 많지 않나?
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[3]{}
+\begin{revcomment}[3][1]{}
 	Authors identify six key contributions in this manuscript. However, for a scientific paper, how could there be such a significant innovation? If so, why would one submit their work to top-tier journals like nature or science?
 \end{revcomment}
 
 \begin{revresponse}
 	We appreciate the reviewer's comment regarding the number of contributions listed in the previous manuscript.
-  In the revised manuscript, we have made a more concise and focused statement of the contributions.
+  As mentioned in \textbf{Overview of Major Changes}, in the revised manuscript, we have made a more concise and focused statement of the contributions.
   The contributions in Section~I.D of the revised manuscript is as follows:
-  \begin{figure}[h]
+  \begin{center}
     \centering
     \includegraphics[width=0.65\linewidth]{figs/r3c4_1.png}
-  \end{figure}
+  \end{center}
+
+  Among the listed contributions, the first three contributions are the main technical contributions of the proposed method.
+  As reviewed in the introduction of the revised manuscript, the existing methods have limitations in terms of the types of input constraints they can handle, the computational burden, and the stability guarantees.
+  The proposed method addresses these limitations by providing a unified framework that can handle multiple convex input constraints with rigorous stability guarantees and low computational burden.
 
   We hope that these revisions provide a clearer and more focused presentation of the contributions of our work.
-  
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -611,15 +828,14 @@
 % 
 % 기호에 대한 문제
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[3]{}
+\begin{revcomment}[3][1]{}
 	The manuscript has many issues with symbol definitions. The author should conduct a comprehensive review and eliminate these unnecessary flaws.
 \end{revcomment}
 
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+  We thank the reviewer for pointing out the issues with the symbol definitions. 
+  We have carefully reviewed the entire manuscript and corrected inconsistent, ambiguous, and previously undefined notation. 
+  We have also ensured that all symbols are defined at their first occurrence and used consistently throughout the manuscript.
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -629,22 +845,32 @@
 % 특별히 Fig.6의 목적이 불분명함
 % (특정 시간에서 보는거임)
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[1]{}
+\begin{revcomment}[1][1]{}
 	The simulation section does not sufficiently highlight the key contributions of the manuscript. Furthermore, the motivations behind some of the simulation results are unclear. For example, what is the purpose of Figure 6?
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item Reviewer 1,2의 코멘트와 유사하게 기존연구, BLF, Proj. alg. 등과의 차별성 및 장점을 구체적으로 설명.
-		\item Fig. 6의 목적 설명은 충분한 것 같으나 더 명확히 할 수 있는 방법 고민 필요.
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+	We thank the reviewer for this comment regarding the simulation section.
+  In the revised manuscript, as the main contribution of the proposed method is the capability to handle multiple convex input constraints in the NAC framework, the validation results are focused on demonstrating this capability.
+
+  \bigskip
+
+  We zoomed in the experiment results on the time interval of 26.6 s to 27.3 s in Fig.~9 (which corresponds to Fig.~6 in the previous submission) to clearly illustrate the behavior of the control signal and the satisfaction of the input constraints during a period when the control signal approaches the boundaries of the convex input constraints.
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r3c6_1.png}
+  \end{center}
+  As shown in Fig.9(b), the control signal of the proposed CONAC implementations, (C$_1$) and (C$_2$), fully utilized the control authority while satisfying the input constraints, whereas the control signal of (C$_3$) was more conservative and did not fully utilize the available control authority, since it only handled element-wise input overflow according to the auxiliary-system design.
+  The corresponding tracking errors on the same time interval are shown in Fig.9(a).
+  With larger control authority utilization, the proposed methods, (C$_1$) and (C$_2$), achieved better tracking performance than (C$_3$) during this period.
+  For the case of (C$_4$) which does not consider input constraints, the control signal exceeded the input constraints and resulted in a large tracking error.
+
+  The remaining figure, Fig.~9(c), shows the parametric study on the update rate of input norm constraint to investigate the effect of the update rate on the control signal, which demonstrates the trade-off between constraint-handling speed and control signal smoothness.
+
+  \bigskip
+
+  We hope this demonstrates the key contributions of the proposed method and clarifies the purpose of the simulation results, particularly Fig.~9 (previously Fig.~6).
+
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -652,6 +878,7 @@
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{concludingresponse}[]
 	Thank you for your valuable comments on our manuscript. 
+  Specifically, the clear definition of the convex input constraints, the reorganization of the assumptions and lemmas, and the clarification of the contributions have substantially improved the clarity and logical flow of the manuscript.
 \end{concludingresponse}
 
 % ══════════════════════════════════
@@ -664,131 +891,178 @@
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Reviewer 4 Comment 1
+% 
+% 두번쨰 논문에 적응법칙 근사 시 행렬부호 불명확
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[3]{}
-	Both papers need to calculate the gradient of the tracking error with respect to the control input to derive the adaptation law. However, due to the unknown system dynamics, this gradient is approximated as an identity matrix. Only the first paper mentions that the approximation is based on the known positive definiteness of the inertia matrix M, while the second paper directly defaults to this approximation without providing any theoretical basis or error analysis.
+\begin{revcomment}[3][1]{}
+	Both papers need to calculate the gradient of the tracking error with respect to the control input to derive the adaptation law. 
+  However, due to the unknown system dynamics, this gradient is approximated as an identity matrix. 
+  Only the first paper mentions that the approximation is based on the known positive definiteness of the inertia matrix M, while the second paper directly defaults to this approximation without providing any theoretical basis or error analysis.
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item 2번 논문에도 L 행렬의 양의 정부호성을 사용했는데 리뷰어가 놓친 것으로 보임.
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+  We sincerely thank the reviewer for carefully reviewing submitted manuscript and our previous conference papers.
+  We would first like to clarify that the second document, \textit{“Constrained optimization-based neuro-adaptive control (CONAC) for synchronous machine drives under voltage constraints”} is our previously published conference paper and was provided solely as related reference material to transparently disclose its relationship with the present manuscript. 
+  It is not a second manuscript under consideration in the current review.
+
+  \bigskip
+
+  Nevertheless, because the reviewer's comment concerns the theoretical relationship between the previous paper and the present manuscript, we would like to clarify the following point. 
+  The previous conference paper also states the positive definiteness of the inverse of the differential inductance matrix $\boldsymbol{L}_rm{s}^{dq}$ in Fact 1 of Section~II.A, which is analogous to the positive definiteness of the control effectiveness matrix $\boldsymbol{B}$.
+  Thus, the identity-matrix approximation in that paper was not introduced without information regarding the sign of the relevant gradient. 
+  We acknowledge that the previous conference paper did not provide a separate quantitative analysis of the approximation error.
+  However, as clarified above, the approximation itself was based on the known positive definiteness of the corresponding control-effectiveness matrix.
+
+  \bigskip
+
+  For the resubmitted manuscript, we have added similar clarifications regarding the positive definiteness of the control effectiveness matrix $\boldsymbol{B}$ in Assumption~1, as shown below:
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r4c1_1.png}
+  \end{center}
+  In addition, we have explicitly stated that the identity-matrix approximation is based on this property in Lines 392-408 on Section~III.C.
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Reviewer 4 Comment 2
+% 
+% 신경망 구조 선정에 대한 정량적 분석 부족
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[2]{}
+\begin{revcomment}[2][1]{}
 	The first paper lacks quantitative analysis for the selection of the DNN architecture: the paper uses a DNN with 2 hidden layers and 4 nodes in each hidden layer, but fails to explain why 4 nodes are the optimal choice.
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item 실험적으로 선정한 것임.
-		\item \cref{rev:r2c7}와 유사한 코멘트.
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+  We thank the reviewer for pointing out that the rationale for selecting the DNN architecture was not sufficiently explained. 
+  We agree that the previous manuscript did not provide quantitative evidence establishing four nodes as an optimal choice. 
+
+  \bigskip
+
+  However, since the exact analysis of the performance and stability of the proposed methods due to the nature of the DNN approximation, it is not straightforward to provide a theoretical analysis of the optimal number of nodes in the DNN architecture.
+  Thus, in the validations, the architecture of the DNNs was selected empirically by considering both approximation performance and the computational constraints of the target MCU. 
+  During implementation, we evaluated several candidate architectures with different numbers of hidden layers and nodes. 
+  Increasing the network size beyond two hidden layers with four nodes per layer resulted in only a marginal improvement in tracking performance, while increasing the inference time and memory requirements. 
+  Conversely, smaller architectures resulted in a noticeable deterioration in approximation/tracking performance. 
+  Therefore, the architecture was selected as a practical trade-off that provided adequate performance while satisfying the real-time computational requirements of the MCU.
+
+  \bigskip
+
+  As shown in Fig.~11 of the revised manuscript, the computational times across the implemented controllers were observed to be smaller than the sampling time of 2 ms, which confirms that the selected architecture is suitable for real-time implementation on the target MCU.
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r4c2_1.png}
+  \end{center}
+
+  \bigskip 
+
+  In addition, in the revised manuscript, we have added a statement regarding the selection of the architecture of the DNNs in Line 727-729, as follows:
+  \begin{quotation}
+    "
+    Specifically, the architecture of the DNNs are empirically chosen considering the approximation capability and computational efficiency.
+    "
+  \end{quotation}
+  to clarify that the architecture was selected as a practical trade-off rather than a theoretically optimal configuration.
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Reviewer 4 Comment 3
+% 
+% 산업적 시나리오에 대한 고려 부족
+% 외란, 불확실성 검증 없음
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[2]{}
+\begin{revcomment}[2][1]{}
 	The first paper mainly evaluates performance through the tracking error of the norm and the satisfaction of constraints, but it lacks analysis of key indicators in industrial scenarios and does not test the system's performance under system disturbances or parameter uncertainties.
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item 시나리오 추가 고려.
-		\item 외란은 충분히 추가할 수 있음.
-		\item 불확실성은 이미 시스템을 모른다고 가정했기 떄문에 추가할 필요는 없어 보임.
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+  We thank the reviewer for this comment regarding the evaluation of the proposed method under industrial scenarios.
+  In terms of industrial scenarios, the validation scenario in the manuscript considers physically meaningful input constraints rather than arbitrary constraints.
+  Specifically, the upper and lower torque limit of the second link of the robotic manipulator can be considered as a typical limitation in the manipulator's actuator, because the actuator in the second link is generally smaller than the actuator in the first link, and therefore has a smaller torque limit.
+  The remaining input constraint is induced by the maximum voltage limit of the power source, which is a typical limitation in industrial applications.
+
+  \bigskip
+
+  Regarding system uncertainties, since the proposed method is NAC method which requires no prior knowledge of the system dynamics, it is inherently robust to parametric uncertainties.
+  However, we acknowledge that the current validation does not include additional disturbances or uncertainties beyond the inherent parametric uncertainties of the system.
+  Therefore, in Lines 856-861 of the conclusion in the revised manuscript, we have added a statement to clarify that the consideration of industrial scenarios, disturbances, and uncertainties is left for future work, as follows:
+  \begin{center}
+    \centering
+    \includegraphics[width=0.65\linewidth]{figs/r2c2_2.png}
+  \end{center}
+
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Reviewer 4 Comment 4
+% 
+% 실험 시나리오가 단순함
+% (하지만 IECON 논문임)
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[2]{}
+\begin{revcomment}[2][1]{}
 	The experimental scenario of the second paper is simplistic: the verification is only conducted at the rated speed (240.855 rad/s), and low-speed, high-speed, or sudden speed change scenarios are not tested.
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item 2번 논문은 다른 논문임.
-		\item 다른 실험 환경을 사용하기 때문에 가혹한 조건을 추가하는 것으로 충분할 것으로 보임.
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+  We thank the reviewer for carefully examining the submitted manuscript and the related conference paper. 
+  As clarified in our response to Comment~1, the document entitled \textit{``Constrained Optimization-Based Neuro-Adaptive Control (CONAC) for Synchronous Machine Drives Under Voltage Constraints''} is a previously published conference paper that was provided solely as related reference material. It is not a second manuscript under consideration in the current review.
+
+  \bigskip
+
+  The requested low-speed, high-speed, and sudden-speed-change tests pertain specifically to the synchronous-machine drive system considered in that conference paper. 
+  The present manuscript concerns a two-link robotic manipulator and does not involve the rated-speed operating scenarios of the synchronous-machine drive. 
+  Since the conference paper has already been published and is not part of the current submission, we have not added these additional operating scenarios to the present revision.
+  
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Reviewer 4 Comment 5
+% 
+% 참조 전류 파형이 단순함
+% (하지만 IECON 논문임)
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[2]{}
+\begin{revcomment}[2][1]{}
 	The reference current waveform in the simulation scenario of the second paper is composed of step signals, and no other forms of signals are used for analytical experiments.
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item 상동.
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+  We thank the reviewer for this comment. 
+  As clarified in our response to the previous comment, the reference-current waveform mentioned by the reviewer pertains to the previously published conference paper on synchronous-machine drives, which was provided solely as related reference material and is not the manuscript under consideration.
+
+  The present manuscript does not employ a reference-current waveform. 
+  Its validation is conducted on a two-link robotic manipulator using smooth desired joint trajectories composed of quintic polynomial segments. 
+  Therefore, the requested evaluation using alternative reference-current waveforms is specific to the previously published conference paper and has not been included in the present revision.
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Reviewer 4 Comment 6
+% 
+% IFT 사용에 대한 엄밀한 분석 필요
+% 포화 도달시 편미분항이 singular해지는 문제
+% (하지만 IECON 논문임)
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{revcomment}[2]{}
+\begin{revcomment}[2][1]{}
 	In the paper on synchronous machines, the "Implicit Function Theorem" is used to prove the existence of the ideal control input u*, but a key prerequisite is ignored: the Implicit Function Theorem requires that "the partial derivative is non-singular and continuously differentiable". However, the voltage saturation function is non-differentiable at the saturation point. When the control input is close to saturation, the existence of the partial derivative cannot be guaranteed, leading to the failure of the existence of u* near the saturation point, which directly undermines the theoretical foundation of the controller design.
 \end{revcomment}
 
-\begin{howtoanswer}
-	\begin{itemize}
-		\item 위와 같이 다른 논문에 대한 이야기임.
-		\item 하지만 본 논문에 IFT을 사용하고 관련된 지적을 해결하는 식으로 답변 가능할 것으로 보임.
-	\end{itemize}
-\end{howtoanswer}
-
 \begin{revresponse}
-	We ...
-	\begin{changes}
-		This really important sentence was added to the paper.
-	\end{changes}
+  We thank the reviewer for identifying this important theoretical issue. 
+  We agree that the application of the Implicit Function Theorem in the previously published conference paper was not sufficiently qualified. 
+  For an ideal hard-saturation function, differentiability fails at the saturation boundary. 
+  Therefore, the Implicit Function Theorem cannot be directly invoked to establish the existence of the ideal control input at that boundary.
+  We acknowledge that this limitation was not clearly stated in the previous conference paper, and we appreciate the reviewer for bringing this issue to our attention.
+
+  \bigskip
+
+  We emphasize, however, that the conference paper was provided solely as related reference material and that the present manuscript does not rely on its Implicit-Function-Theorem-based existence argument. 
+  In the present manuscript, the ideal control law is defined directly under the assumed nonsingularity of the control-effectiveness matrix, and the effect of input saturation is treated separately in the closed-loop stability analysis. 
+  Therefore, the identified limitation of the previous conference paper does not affect the theoretical results established in the present manuscript.
+
 \end{revresponse}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Reviewer 4 Comment 7
+% 
+% 참조한 논문들과 비교
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{revcomment}[1]{}
 	The paper focuses on the Constrained Optimization control, but what is the difference between it and the following latest achievements: "Adaptive critic design for safety-optimal FTC of unknown nonlinear systems with asymmetric constrained-input", "Reinforcement learning-based secure tracking control for nonlinear interconnected systems: An event-triggered solution approach", "A lightweight network enhanced by attention-guided cross-scale interaction for underwater object detection", and "Observer based fault tolerant control design for saturated nonlinear systems with full state constraints via a novel event-triggered mechanism "? The discussion and analysis between them may help improve the quality and persuasiveness of the paper's innovation.
@@ -819,6 +1093,7 @@
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \begin{concludingresponse}[]
 	Thank you for your valuable comments on our manuscript. 
+  Especially, the careful review of the submitted manuscript and the related conference papers has helped us clarify the theoretical foundations of the proposed method and its relationship to prior work.
 \end{concludingresponse}
 
 

@@ -3,7 +3,7 @@
 %%
 % SIM = true;
 SIM = false;
-SAVE_FLAG = 0;
+SAVE_FLAG = 1;
 
 uMax2 = 3.8;
 u_ball = 11;
@@ -577,6 +577,8 @@ end
 
 yline(ax1, 0, 'k--', 'LineWidth', line_width)
 yline(ax2, 0, 'k--', 'LineWidth', line_width)
+xline(ax1, warmup_time+ep_time, 'k--', 'LineWidth', line_width)
+xline(ax2, warmup_time+ep_time, 'k--', 'LineWidth', line_width)
 minVal1 = 0; minVal2 = 0;
 
 ax1.XLabel.String = 'Time / s';
@@ -588,18 +590,25 @@ ax1.YLabel.Interpreter = 'latex';
 ax2.XLabel.Interpreter = 'latex';
 ax2.YLabel.Interpreter = 'latex';
 
-ax1.XLim = [start_t end_t];
-ax2.XLim = [start_t end_t];
+% ax1.XLim = [start_t end_t];
+% ax2.XLim = [start_t end_t];
+ax1.XLim = [global_start_t global_end_t];
+ax2.XLim = [global_start_t global_end_t];
 
 len1 = maxVal1 - minVal1; len2 = maxVal2 - minVal2;
 ax1.YLim = [minVal1-len1*.1 maxVal1+len1*.1];
 ax2.YLim = [minVal2-len2*.1 maxVal2+len2*.1];
 
+text(ax1, 0.02, 0.9, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman','Units','normalized')
+text(ax2, 0.02, 0.9, "Episode 1", "FontSize", font_size, "FontName", 'Times New Roman','Units','normalized')
+text(ax1, 0.52, 0.9, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman','Units','normalized')
+text(ax2, 0.52, 0.9, "Episode 2", "FontSize", font_size, "FontName", 'Times New Roman','Units','normalized')
+
 
 %% ============================
 % zoom Top view of the q
 % ============================
-fig = figure(16); clf;
+fig = figure(17); clf;
 ax = axes(fig);
 hold(ax, 'on');
 grid(ax, 'on');
@@ -726,7 +735,7 @@ if SAVE_FLAG
     FIG_SAVE_PATH = "figures";
     [~,~] = mkdir(FIG_SAVE_PATH);
 
-    for idx = [1:1:16, 21]
+    for idx = [1:1:17, 21]
 
         f_name = FIG_SAVE_PATH + "/Fig" + string(idx);
 

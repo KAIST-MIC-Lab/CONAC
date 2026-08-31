@@ -8,6 +8,8 @@
 \newif\ifreviewresponselevel
 \reviewresponseleveltrue
 
+\newif\ifreviewresponsecompleted
+
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrartcl}}
 \ProcessOptions\relax
 \LoadClass{scrartcl}
@@ -15,6 +17,7 @@
 
 \RequirePackage[breakable,skins]{tcolorbox}
 \RequirePackage{xcolor}
+\RequirePackage{xparse}
 
 
 \newcommand*{\journal}[1]{\renewcommand*{\@journal}{#1}}
@@ -24,6 +27,7 @@
 \newcommand*{\manuscript}[1]{\renewcommand*{\@manuscript}{#1}}
 \newcommand*{\@manuscript}{}
 
+\newcommand*{\thejournal}{\@journal}
 \newcommand*{\thetitle}{\@title}
 \newcommand*{\theauthor}{\@author}
 \newcommand*{\thedate}{\@date}
@@ -35,9 +39,12 @@
 \newcommand{\listprioL}{}
 
 %%% Colors
-\definecolor{colorcommentfg}{RGB}{0,63,87}
-\definecolor{colorcommentbg}{HTML}{e0f0f6}
-\definecolor{colorcommentframe}{RGB}{0,112,155}
+% \definecolor{colorcommentfg}{RGB}{0,63,87}
+\definecolor{colorcommentfg}{RGB}{0,0,0}
+% \definecolor{colorcommentbg}{HTML}{e0f0f6}
+\definecolor{colorcommentbg}{HTML}{f0f0f0}
+% \definecolor{colorcommentframe}{RGB}{0,112,155}
+\definecolor{colorcommentframe}{RGB}{0,0,0}
 
 \colorlet{colorchangebg}{black!2}
 \colorlet{colorchangeframe}{black!20}
@@ -157,9 +164,20 @@
 	\fi
 }
 
+\newcommand*{\reviewresponse@setcompletedstyle}[1]{%
+	\reviewresponsecompletedfalse
+	\ifnum#1=1
+		\reviewresponsecompletedtrue
+	\fi
+	\ifreviewresponsecompleted
+		\colorlet{\reviewresponse@priorityframe}{black!30}
+		\colorlet{\reviewresponse@prioritybg}{black!6}
+	\fi
+}
+
 \renewcommand{\therevcomment}{\the\value{reviewer}.\the\value{revcomment}}
 
-\newenvironment{revcomment}[2][3]{% 
+\NewDocumentEnvironment{revcomment}{ O{3} O{0} m }{% 
     \refstepcounter{revcomment}
     
     \edef\currentrevno{\the\value{reviewer}}
@@ -169,12 +187,25 @@
     \def\currlabel{rev:r\currentrevno c\currentcomno}
     \label{\currlabel}
     
-    \addcontentsline{toc}{subsection}{Comment \currentcomno}
-
 	\reviewresponse@setprioritystyle{#1}
+	\reviewresponse@setcompletedstyle{#2}
 
 	\ifreviewresponselevel
-		\def\reviewresponse@commenttitle{Reviewer \currentrevno{} Comment \currentcomno{} \hfill [\reviewresponse@prioritytitle]}
+		\ifreviewresponsecompleted
+			\addcontentsline{toc}{subsection}{Comment \currentcomno{} - Done!}
+		\else
+			\addcontentsline{toc}{subsection}{Comment \currentcomno}
+		\fi
+	\else
+		\addcontentsline{toc}{subsection}{Comment \currentcomno}
+	\fi
+
+	\ifreviewresponselevel
+		\ifreviewresponsecompleted
+			\def\reviewresponse@commenttitle{Reviewer \currentrevno{} Comment \currentcomno{} \hfill [\reviewresponse@prioritytitle{} - Done!]}
+		\else
+			\def\reviewresponse@commenttitle{Reviewer \currentrevno{} Comment \currentcomno{} \hfill [\reviewresponse@prioritytitle]}
+		\fi
 	\else
 		\def\reviewresponse@commenttitle{Reviewer \currentrevno{} Comment \currentcomno{}}
 	\fi
@@ -186,7 +217,7 @@
 		colframe={\reviewresponse@priorityframe},
         coltitle={white}, 
         bookmark={Reviewer \currentrevno{} Comment \currentcomno},
-        #2
+		#3
     ]
 }{\end{tcolorbox}}
 
@@ -194,7 +225,7 @@
 	\textbf{How to answer:} #1\par
 }{\vspace{1em plus 0.2em minus 1.5em}}
 
-\newenvironment{revresponse}[1][{Thank you for the comment.}]{%
+\newenvironment{revresponse}[1][]{%
 	\textbf{Response:} #1\par
 }{\vspace{4em plus 0.2em minus 1.5em}}
 
